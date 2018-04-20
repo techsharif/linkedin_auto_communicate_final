@@ -10,4 +10,4 @@ mysqlclient 1.3.12
 
 ## Authors
 
-* **Vasily Jin** - *main work* - [Vasily Jin](https://github.com/vajin1125)
+* **Vasily Jin** - *main work* - [vajin1125](https://github.com/vajin1125)
