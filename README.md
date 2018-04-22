@@ -1,6 +1,6 @@
 # Project Title
 
-Web Platform to clone JetBuzz
+Linkedin Tool
 
 ## Installing
 
