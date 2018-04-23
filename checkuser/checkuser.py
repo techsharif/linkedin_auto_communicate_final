@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options
 
 from getpass import getpass
 import sys
@@ -49,8 +50,11 @@ if __name__ == '__main__':
     
     user_email = raw_input("Enter email address:")
     user_password = getpass("Enter password:")
-    
-    driver = webdriver.Firefox()
+
+    options = Options()
+    options.add_argument('--headless')
+
+    driver = webdriver.Firefox(options=options)
     driver.get("https://www.linkedin.com")
     wait = WebDriverWait(driver, 5)
 
