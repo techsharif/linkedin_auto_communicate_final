@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.options import Options  
 
 from getpass import getpass
 import sys
@@ -24,14 +24,12 @@ def exist_user():
         print (no_exist_user_alert)
         return False
     except Exception as e:
-        login_success_desc = 'Login successful! that is an existing user.'
-        print(login_success_desc)
         return True
 
 
 def suspended_user():
     pass
-    # suspended_account = driver.findElement(By.xpath("//*[contains(.,'account suspended')]"))
+    # suspended_account = driver.findElements(By.xpath("//*[contains(.,'account suspended')]"))
     # if (suspended_account == null):
     #     return False
     # else:
@@ -39,11 +37,25 @@ def suspended_user():
 
 def limited_user():
     pass
-    # restricted_account = driver.findElement(By.xpath("//*[contains(.,'temporarily restricted')]"))
+    # restricted_account = driver.findElements(By.xpath("//*[contains(.,'temporarily restricted')]"))
     # if (restricted_account == null):
     #     return False
     # else:
     #     return True
+
+def pinverify():
+    try:
+        pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
+        pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
+        print("Please check your email address to verify.....")
+        pincode = raw_input("Enter pin code:")
+        pin_input_box.clear()
+        pin_input_box.send_keys(pincode)
+        pin_submit_btn.click()
+        return True
+    except Exception as e:
+        return False
+    
 
 
 if __name__ == '__main__':
@@ -53,7 +65,7 @@ if __name__ == '__main__':
 
     options = Options()
     options.add_argument('--headless')
-
+    
     driver = webdriver.Firefox(options=options)
     driver.get("https://www.linkedin.com")
     wait = WebDriverWait(driver, 5)
@@ -84,7 +96,7 @@ if __name__ == '__main__':
     else:
         print("That user is not exist in Linkedin.")
 
-    # # check if user is suspended
+    # check if user is suspended
     # if suspended_user():
     #     print("That user is suspended.")
     # else:
@@ -94,4 +106,13 @@ if __name__ == '__main__':
     # if limited_user():
     #     print("That user has been restricted.")
     # else:
+    
     #     print("Thank user is not restricted.")
+
+    # pin code verification
+    if pinverify():
+        print("Success to verify!")
+    else:
+        print("sucessfull login without pin code verification!")
+
+    
