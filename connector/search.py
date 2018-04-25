@@ -30,21 +30,11 @@ def exist_user():
 
 def suspended_user():
     pass
-    # suspended_account = driver.findElements(By.xpath("//*[contains(.,'account suspended')]"))
-    # if (suspended_account == null):
-    #     return False
-    # else:
-    #     return True
 
 
 def limited_user():
     pass
-    # restricted_account = driver.findElements(By.xpath("//*[contains(.,'temporarily restricted')]"))
-    # if (restricted_account == null):
-    #     return False
-    # else:
-    #     return True
-
+    
 
 def pinverify():
     try:
