@@ -32,6 +32,28 @@ def exist_user():
         print(login_success_desc)
         return True
 
+def compose_new_message(driver, message):
+    driver.get("https://www.linkedin.com/messaging/compose/")
+    wait = WebDriverWait(driver, 5)
+
+    lookup_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.msg-connections-lookup__search-field.msg-connections-lookup__search-field--no-recipients")))
+
+    print("------pass lookup_input_box---------")
+
+    lookup_input_box.clear()
+    lookup_input_box.send_keys('s')
+
+    time.sleep(5)
+
+    select_result_button = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button.display-flex.flex-row.align-items-center.msg-connections-lookup__search-result.msg-connections-lookup__search-result--selected")))
+
+    select_result_button.click()
+
+    time.sleep(5)
+
+    send_message(driver, message)
+
+
 def get_message_contract_list(driver):
     driver.get("https://www.linkedin.com/messaging/")
     wait = WebDriverWait(driver, 5)
@@ -51,7 +73,6 @@ def select_message_send_contract(driver, contract_a_elements):
         print("Exception[select_message_send_contract] %s" % e.message)
         return None
 
-
 def send_message(driver, message):
     wait = WebDriverWait(driver, 10)
     try:
@@ -68,6 +89,8 @@ def send_message(driver, message):
     except Exception as e:
         print("Exception[send_message] %s" % e.message)
         return None
+
+
 
 
 def login_linkedIn(user_email, user_password):
@@ -111,7 +134,9 @@ if __name__ == '__main__':
     user_message = raw_input("Enter message:")
 
     driver = login_linkedIn(user_email, user_password)
-    contract_a_elements = get_message_contract_list(driver)
-    if contract_a_elements:
-        select_message_send_contract(driver, contract_a_elements)
-        send_message(driver, user_message)
+    compose_new_message(driver, user_message)    
+
+    # contract_a_elements = get_message_contract_list(driver)
+    # if contract_a_elements:
+    #     select_message_send_contract(driver, contract_a_elements)
+    #     send_message(driver, user_message)
