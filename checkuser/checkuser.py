@@ -114,5 +114,23 @@ if __name__ == '__main__':
         print("Success to verify!")
     else:
         print("sucessfull login without pin code verification!")
-
     
+    # search connection
+    search_input = driver.find_element_by_xpath("/html/body/nav/div/form/div/div/div/artdeco-typeahead-deprecated/artdeco-typeahead-deprecated-input/input")
+    keyword = raw_input("Input keyword:")
+    search_input.clear()
+    search_input.send_keys(keyword)
+    search_input.send_keys(Keys.ENTER)
+    # search_input.submit()
+    print("-------click search button-----------")
+
+    for i in range(100):
+        time.sleep(3)
+        driver.execute_script("window.scrollBy(0, 1000);")
+        time.sleep(3)
+        actor_name_lists = driver.find_elements_by_class_name("actor-name")
+        for actor_name_list in actor_name_lists:
+            actor_name = actor_name_list.text
+            print actor_name.encode("utf-8")
+
+        driver.find_element_by_class_name("next").click()
