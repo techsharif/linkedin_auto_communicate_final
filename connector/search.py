@@ -103,19 +103,6 @@ if __name__ == '__main__':
     else:
         print("That user is not exist in Linkedin.")
 
-    # check if user is suspended
-    # if suspended_user():
-    #     print("That user is suspended.")
-    # else:
-    #     print("That user is not suspended.")
-
-    # # check if user is has any limitation
-    # if limited_user():
-    #     print("That user has been restricted.")
-    # else:
-
-    #     print("Thank user is not restricted.")
-
     # pin code verification
     if pinverify():
         print("Success to verify!")
