@@ -81,18 +81,21 @@
 			</tr>
 			</thead>
 			<tbody>
-						<tr id="ctct_1" class="contact">
+			{% for people in peoples %}
+
+			<tr id="ctct_{{people.id}}" class="contact">
 			  <td><input type="checkbox" /></td>
-			  <td>Chetna Ind</td>
-			  <td>Collexa</td>
-			  <td>Computer & Network Security</td>
-			  <td>Senior Software Engineer</td>
-			  <td>Bhopal Area, India</td>
-			  <td>04/25/2018 @ 07&#58;42</td>
+			  <td>{{people.name}}</td>
+			  <td>{{people.company}}</td>
+			  <td>{{people.industry}}</td>
+			  <td>{{people.title}}</td>
+			  <td>{{people.location}}</td>
+			  <td>{{people.latest_acitvity}}</td>
 			  <td><span class="btn bg-teal btn-block" data-click="change_status" data-toggle="tooltip" data-html="true" title="<strong>Test1</strong><br>Message sent to prospect<br><i>Click on status to change it manually</i>">Message</span>
-</td>
+			  </td>
 			</tr>
-						</tbody>
+			{% endfor %}
+			</tbody>
 		  </table>
 		  </div>
 		</div>

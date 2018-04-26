@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 
 
 # local imports
-from messenger.models import Campaign
+from messenger.models import *
 
 # @login_required
 def messenger_home(request, account_id):
@@ -52,7 +52,11 @@ def campaigns(request, account_id):
 def getcampaigns(request, account_id, campaign_id):
     response = {}
     campaign = Campaign.objects.get(pk=campaign_id)
+    peoples = Contact.objects.filter(campaign_id=campaign_id)
+    steps = CampaignSetp.objects.filter(campaign_id=campaign_id)
     response = {
-        'campaign': campaign
+        'campaign': campaign,
+        'peoples':peoples,
+        'steps': steps
     }
     return render(request, 'messenger/campaign.html', response)
