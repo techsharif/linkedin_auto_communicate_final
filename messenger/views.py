@@ -22,3 +22,13 @@ def messenger_home(request, account_id):
     campaigns = Campaign.objects.all()
     response = {'campaigns': campaigns}
     return render(request, 'messenger/messenger.html', response)
+
+
+def campaigns(request, account_id):
+    response = {}
+    return render(request, 'messenger/campaigns.html', response)
+
+
+def getcampaigns(request, account_id, campaign_id):
+    response = {}
+    return render(request, 'messenger/campaign.html', response)
