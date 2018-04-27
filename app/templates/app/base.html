@@ -13,6 +13,7 @@
         }
         li{
             display: inline-block;
+            margin-right: 30px;
         }
     </style>
 </head>
@@ -22,9 +23,11 @@
         {% if user.is_authenticated %}
         <li><a href="/account/">Account</a></li>
         <li><a href="/logout/">Log out</a></li>
+        <li><a href="/search/">Search</a></li>
         {% else %}
         <li><a href="/login/">Log in</a></li>
         <li><a href="/signup/">Sign Up</a></li>
+        <li><a href="/search/">Search</a></li>
         {% endif %}
     </ul>
 
