@@ -92,25 +92,27 @@ def send_message(driver, message):
 
 
 def get_profile_info(driver, profile_url):
-    response = {}
+    response = {
+        'profile_url' : profile_url
+        'name' : '',
+        'title' : '',
+        'location' : '',
+        'company' : '',
+    }
     driver.get(profile_url)
     wait = WebDriverWait(driver, 5)
 
     try:
-    
         name = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1.pv-top-card-section__name"))).text
+        response['name'] = name
         title = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h2.pv-top-card-section__headline"))).text
+        response['title'] = title
         location = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h3.pv-top-card-section__location"))).text
+        response['location'] = location
         company = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "span.lt-line-clamp__line.lt-line-clamp__line--last"))).text
-        response = {
-            'name' : name,
-            'title' : title,
-            'location' : location,
-            'company' : company,
-        }
+        response['company'] = company
     except Exception as e:
         print("Exception[get_profile_info] %s" % e.message)
-        return response
     return response
 
 

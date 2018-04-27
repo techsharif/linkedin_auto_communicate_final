@@ -37,7 +37,9 @@ class Contact(TimeStampedModel):
     industry = models.CharField(max_length=100, db_index=True, blank=True, null=True)
     location = models.CharField(max_length=100, db_index=True, blank=True, null=True)
     latest_acitvity = models.DateTimeField()
-    
+    profile_link = models.CharField(max_length=100, db_index=True, blank=True, null=True)
+    notes = models.TextField()
+
     def __str__(self):
         return force_text(str(self.account_id) + "  " + self.name)
 
@@ -58,3 +60,14 @@ class CampaignSetp(TimeStampedModel):
     class Meta():
         abstract = False
         # db_table = 'campaign_setps'
+
+
+class Message(TimeStampedModel):
+    id = models.AutoField(primary_key=True)
+    contact_id = models.IntegerField(db_index=True, blank=True, null=True)
+    text = models.TextField()
+    time = models.DateTimeField()
+
+    class Meta():
+        abstract = False
+        # db_table = 'message'
