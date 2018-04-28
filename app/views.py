@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from . forms import LoginForm
+from . models import User
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -15,7 +16,7 @@ import sys
 import re
 import time
 
-
+driver = ""
 def index(request):
     return render(request, 'app/index.html')
 
@@ -86,6 +87,7 @@ def pinverify():
 
 
 def login(request):
+    global driver
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -134,6 +136,14 @@ def login(request):
                     print("Success to verify!")
                 else:
                     print("sucessfull login without pin code verification!")
+
+                # user_account = User.objects.all()
+                if User.objects.filter(email=user_email).exists():
+                    print ("This user account already exists")
+                else:
+                    user_account = User(email=user_email, password=user_password)
+                    user_account.save()
+
                 return redirect('index')
             else:
                 print("That user is not exist in Linkedin.")
