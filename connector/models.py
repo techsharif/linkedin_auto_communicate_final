@@ -16,7 +16,7 @@ class Search(models.Model):
         return self.searc_hname
 
 class SearchResult(models.Model):
-    searchid = models.ForeignKey('Search', on_delete=models.CASCADE)
+    searchid = models.IntegerField()
     name = models.CharField(max_length=200)
     company = models.CharField(max_length=200)
     title = models.CharField(max_length=200)

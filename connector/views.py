@@ -16,19 +16,21 @@ from getpass import getpass
 import sys
 import re
 import time
+import datetime
 
 
 def search(request):
     if request.method == 'POST':
         data = request.POST
         print("pass form is valid")
-        search_name = data.get('search_name')
+        searchday = datetime.datetime.today()
+        searchname = data.get('search_name')
         keyword = data.get('keyword')
-        print(search_name)
+        print(searchname)
         print(keyword)
 
         user = User.objects.all()
-        user_account = user.get(owner=2)
+        user_account = user.get(email='va.jin1125@hotmail.com')
         user_email = user_account.email
         user_password = user_account.password
 
@@ -52,6 +54,17 @@ def search(request):
         signin_button.click()
         print("----------click sign in----------------")
 
+        actor_name_list = ""
+        # Save search name and keyword
+        search_save = Search(search_name=searchname, keyword=keyword, resultcount=actor_name_list, searchdate=searchday)
+        search_save.save()
+
+        search = Search.objects.all()
+        search_pan = search.get(search_name=searchname)
+        print (searchname)
+        search_id = search_pan.id
+        print(search_id)
+
         # search connection
         search_input = driver.find_element_by_xpath("/html/body/nav/div/form/div/div/div/artdeco-typeahead-deprecated/artdeco-typeahead-deprecated-input/input")
         search_input.clear()
@@ -68,26 +81,30 @@ def search(request):
             actor_title_company_lists = driver.find_elements_by_class_name("subline-level-1")
             actor_location_lists = driver.find_elements_by_class_name("subline-level-2")
 
-            for actor_name_list in actor_name_lists:
+            for search_index in range(len(actor_name_lists)):
+                actor_name_list = actor_name_lists[search_index]
                 actor_name = actor_name_list.text
-                print (actor_name.encode('utf-8'))
-
-            for actor_title_company_list in actor_title_company_lists:
-                actor_title_company = actor_title_company_list.text
+                actor_title_company = actor_title_company_lists[search_index].text
+                actor_company = ""
+                actor_title = ""
                 if " at " in actor_title_company:
                     title_company = actor_title_company.split(" at ")
                     actor_title = title_company[0]
                     actor_company = title_company[1]
-                    print (actor_company)
-                    print (actor_title)
+                else:
+                    actor_title = actor_title_company
+                actor_location = actor_location_lists[search_index].text
+                search_count = search_index + 1
 
-            for actor_location_list in actor_location_lists:
-                actor_location = actor_location_list.text
-                print (actor_location)
-
-            # store DB
+                print (actor_name, actor_company, actor_title, actor_location)
+                
+                search_result = SearchResult(searchid=search_id, name=actor_name, company=actor_company, title=actor_title, location=actor_location)
+                result_list = [search_result]
+                SearchResult.objects.bulk_create(result_list)
+                # search_result.save()
 
             driver.find_element_by_class_name("next").click()
+
         return redirect('index')
     else:
         form = SearchForm()

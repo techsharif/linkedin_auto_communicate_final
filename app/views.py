@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from . forms import LoginForm
+from . forms import LoginForm,PinForm
 from . models import User
 
 from selenium import webdriver
@@ -16,7 +16,7 @@ import sys
 import re
 import time
 
-driver = ""
+
 def index(request):
     return render(request, 'app/index.html')
 
@@ -91,7 +91,6 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            # form.save()
             user_email = form.cleaned_data.get('email')
             user_password = form.cleaned_data.get('password')
 
@@ -99,8 +98,7 @@ def login(request):
             # options.add_argument('--headless')
 
             # driver = webdriver.Firefox(options=options)
-            driver = webdriver.Firefox(
-                executable_path='D:\SQTechnology\Projects\development\geckodriver.exe')
+            driver = webdriver.Firefox(executable_path='D:\SQTechnology\Projects\development\geckodriver.exe')
 
             driver.get("https://www.linkedin.com")
             wait = WebDriverWait(driver, 5)
