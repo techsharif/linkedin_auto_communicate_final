@@ -54,34 +54,24 @@ def exist_user():
 
 def suspended_user():
     pass
-    # suspended_account = driver.findElements(By.xpath("//*[contains(.,'account suspended')]"))
-    # if (suspended_account == null):
-    #     return False
-    # else:
-    #     return True
 
 
 def limited_user():
     pass
-    # restricted_account = driver.findElements(By.xpath("//*[contains(.,'temporarily restricted')]"))
-    # if (restricted_account == null):
-    #     return False
-    # else:
-    #     return True
 
 
-def pinverify():
-    try:
-        pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
-        pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
-        print("Please check your email address to verify.....")
-        pincode = raw_input("Enter pin code:")
-        pin_input_box.clear()
-        pin_input_box.send_keys(pincode)
-        pin_submit_btn.click()
-        return True
-    except Exception as e:
-        return False
+# def pinverify():
+#     try:
+#         pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
+#         pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
+#         print("Please check your email address to verify.....")
+#         pincode = raw_input("Enter pin code:")
+#         pin_input_box.clear()
+#         pin_input_box.send_keys(pincode)
+#         pin_submit_btn.click()
+#         return True
+#     except Exception as e:
+#         return False
 
 #############################################################################
 
@@ -101,7 +91,7 @@ def login(request):
             driver = webdriver.Firefox(executable_path='D:\SQTechnology\Projects\development\geckodriver.exe')
 
             driver.get("https://www.linkedin.com")
-            wait = WebDriverWait(driver, 5)
+            wait = WebDriverWait(driver, 2)
 
             print("------working-----")
 
@@ -129,25 +119,46 @@ def login(request):
             # check if user is exist
             if exist_user():
                 print("That user is an existing user.")
-                # pin code verification
-                if pinverify():
-                    print("Success to verify!")
-                else:
-                    print("sucessfull login without pin code verification!")
-
-                # user_account = User.objects.all()
                 if User.objects.filter(email=user_email).exists():
                     print ("This user account already exists")
+                    print("--------pin code step----------")
+                    # pin code verification
+                    try:
+                        pincode_input = wait.until(EC.visibility_of_element_located(
+                            (By.CSS_SELECTOR, "input#verification-code")))
+                        return redirect('pinverify')
+                    except Exception as e:
+                        print("sucessfull login without pin code verification!")
+                    # if pincode_input != 'Null':
+                    #     return redirect('pinverify')
+                    # else:
+                    #     print("sucessfull login without pin code verification!")
                 else:
                     user_account = User(email=user_email, password=user_password)
                     user_account.save()
 
                 return redirect('index')
             else:
-                print("That user is not exist in Linkedin.")
+                print("That user is not exist in Linkedin.")        
     else:
         form = LoginForm()
     return render(request, 'app/login.html', {'form': form})
+
+
+def pinverify(request):
+    if request.method == 'POST':
+        form = PinForm(request.POST)
+        if form.is_valid():
+            pincode = form.cleaned_data.get(pincode)
+            pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
+            pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
+            pin_input_box.clear()
+            pin_input_box.send_keys(pincode)
+            pin_submit_btn.click()
+    else:
+        form = PinForm()
+    return render(request, 'app/pinverify.html', {'form': form})
+
 
 def logout():
     return render(request, 'app/login.html', {'form': form})
