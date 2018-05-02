@@ -4,7 +4,7 @@ class Search(models.Model):
     search_name = models.CharField(max_length=254)
     keyword = models.CharField(max_length=254)
     resultcount = models.CharField(max_length=10)
-    searchdate = models.DateField()
+    searchdate = models.DateTimeField()
 
     class Meta:
         db_table = 'connector_search'
@@ -14,6 +14,7 @@ class Search(models.Model):
 
     def __str__(self):
         return self.searc_hname
+        
 
 class SearchResult(models.Model):
     searchid = models.IntegerField()
@@ -30,3 +31,14 @@ class SearchResult(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ConnectorCampaign(models.Model):
+    connector_name = models.CharField(max_length=200)
+    copy_connector_id = models.IntegerField()
+    created_by_id = models.IntegerField()
+    created_at = models.DateTimeField()
+    status = models.BooleanField()
+
+    def __str__(self):
+        return self.connector_name

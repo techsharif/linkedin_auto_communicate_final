@@ -20,14 +20,14 @@
 <body>
     <ul>
         <li><a href="/">Home</a></li>
+        <li><a href="/search/">Search</a></li>
+        <li><a href="/connector/">Connector</a></li>
         {% if user.is_authenticated %}
         <li><a href="/account/">Account</a></li>
         <li><a href="/logout/">Log out</a></li>
-        <li><a href="/search/">Search</a></li>
         {% else %}
         <li><a href="/login/">Log in</a></li>
-        <li><a href="/signup/">Sign Up</a></li>
-        <li><a href="/search/">Search</a></li>
+        {% comment %} <li><a href="/signup/">Sign Up</a></li> {% endcomment %}
         {% endif %}
     </ul>
 

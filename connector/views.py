@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from . forms import SearchForm
-from . models import Search, SearchResult
+from . models import Search, SearchResult, ConnectorCampaign
 from app.models import User
 
 from selenium import webdriver
@@ -16,14 +16,14 @@ from getpass import getpass
 import sys
 import re
 import time
-import datetime
+from datetime import datetime
 
 
 def search(request):
     if request.method == 'POST':
         data = request.POST
         print("pass form is valid")
-        searchday = datetime.datetime.today()
+        searchday = datetime.now()
         searchname = data.get('search_name')
         keyword = data.get('keyword')
         print(searchname)
@@ -109,4 +109,40 @@ def search(request):
     else:
         form = SearchForm()
     return render(request, 'connector/search.html', {'form': form})
+
+
+def connector(request):
+    return render(request, 'connector/connector.html')
+
+
+def create_connector(request):
+    # Get the connector names for copying
+    connector_list = ConnectorCampaign.objects.all()
+    connector_name_list = []
+    for connector in connector_list:
+        exist_connector_name = connector.connector_name
+        connector_name_list.append(exist_connector_name)
+    
+    # Post form request
+    if request.method == 'POST':
+        data = request.POST
+        connector_name = data.get('connector_name')
+        copy_connector_name = data.get('copy_connector_name')
+        if len(copy_connector_name) != 0:    
+            copy_connector_filter = connector_list.get(connector_name=copy_connector_name)
+            copy_connector_id = copy_connector_filter.id
+        else:
+            copy_connector_id = 0
+        user = User.objects.all()
+        user_account = user.get(email='va.jin1125@hotmail.com')
+        created_by_id = user_account.id
+        created_at = datetime.now()
+        connector_status = 1
+
+        connector_save = ConnectorCampaign(connector_name=connector_name, copy_connector_id=copy_connector_id, created_by_id=created_by_id, created_at=created_at, status=connector_status)
+        connector_save.save()
+
+        return redirect('../connector')
+
+    return render(request, 'connector/create_connector.html', {'connector_name_list':connector_name_list})
             
