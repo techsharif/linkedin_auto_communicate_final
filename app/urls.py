@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^logout/$', views.logout, {'next_page': '/'}, name='logout'),
     url(r'^pinverify/$', views.pinverify, name='pinverify'),
     url(r'^account/$', views.account, name='account'),
-    # url(r'^signup/$', views.signup, name='signup'),
+    url(r'^register/$', views.register, name='register'),
 ]

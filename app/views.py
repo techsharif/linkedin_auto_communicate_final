@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from . forms import LoginForm,PinForm
+from . forms import RegisterForm, LoginForm, PinForm
 from . models import User
 
 from selenium import webdriver
@@ -15,6 +15,7 @@ from getpass import getpass
 import sys
 import re
 import time
+from datetime import datetime
 
 
 def index(request):
@@ -75,74 +76,102 @@ def limited_user():
 
 #############################################################################
 
-
 def login(request):
-    global driver
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get('email')
             user_password = form.cleaned_data.get('password')
-
-            # options = Options()
-            # options.add_argument('--headless')
-
-            # driver = webdriver.Firefox(options=options)
-            driver = webdriver.Firefox(executable_path='D:\SQTechnology\Projects\development\geckodriver.exe')
-
-            driver.get("https://www.linkedin.com")
-            wait = WebDriverWait(driver, 2)
-
-            print("------working-----")
-
-            email = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-email")))
-            print("------pass email---------")
-
-            password = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-password")))
-            print("------pass password---------")
-
-            signin_button = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-submit")))
-            print("------pass button---------")
-
-            email.clear()
-            password.clear()
-
-            email.send_keys(user_email)
-            password.send_keys(user_password)
-
-            signin_button.click()
-            print("----------click sign in----------------")
-
-            # check if user is exist
-            if exist_user():
-                print("That user is an existing user.")
-                if User.objects.filter(email=user_email).exists():
-                    print ("This user account already exists")
-                    print("--------pin code step----------")
-                    # pin code verification
-                    try:
-                        pincode_input = wait.until(EC.visibility_of_element_located(
-                            (By.CSS_SELECTOR, "input#verification-code")))
-                        return redirect('pinverify')
-                    except Exception as e:
-                        print("sucessfull login without pin code verification!")
-                    # if pincode_input != 'Null':
-                    #     return redirect('pinverify')
-                    # else:
-                    #     print("sucessfull login without pin code verification!")
+            if User.objects.filter(email=user_email).exists():
+                user_account = User.objects.get(email=user_email)
+                password = user_account.password
+                if password != user_password:
+                    print("---Password incorrect!---")
                 else:
-                    user_account = User(email=user_email, password=user_password)
-                    user_account.save()
-
-                return redirect('index')
+                    print("---Login Successful!---")
+                    return redirect('index')
             else:
-                print("That user is not exist in Linkedin.")        
+                print("---Unregister User! Please Register!---")
     else:
         form = LoginForm()
     return render(request, 'app/login.html', {'form': form})
+            
+    
+
+
+def register(request):
+    global driver
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data.get('email')
+            user_password = form.cleaned_data.get('password')
+            user_password_confirm = form.cleaned_data.get('confirmpassword')
+            if user_password != user_password_confirm:
+                print("----Password didn't confirm! Please enter password again.----")
+            else:
+                # options = Options()
+                # options.add_argument('--headless')
+
+                # driver = webdriver.Firefox(options=options)
+                driver = webdriver.Firefox(executable_path='D:\SQTechnology\Projects\development\geckodriver.exe')
+
+                driver.get("https://www.linkedin.com")
+                wait = WebDriverWait(driver, 2)
+
+                print("------working-----")
+
+                email = wait.until(EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "input#login-email")))
+                print("------pass email---------")
+
+                password = wait.until(EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "input#login-password")))
+                print("------pass password---------")
+
+                signin_button = wait.until(EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "input#login-submit")))
+                print("------pass button---------")
+
+                email.clear()
+                password.clear()
+
+                email.send_keys(user_email)
+                password.send_keys(user_password)
+
+                signin_button.click()
+                print("----------click sign in----------------")
+
+                # check if user is exist
+                if exist_user():
+                    print("That user is an existing user.")
+                    if User.objects.filter(email=user_email).exists():
+                        print ("---This user account already exists---")
+                        print("--------pin code step----------")
+                        # pin code verification
+                        try:
+                            pincode_input = wait.until(EC.visibility_of_element_located(
+                                (By.CSS_SELECTOR, "input#verification-code")))
+                            return redirect('pinverify')
+                        except Exception as e:
+                            print("---sucessfull login without pin code verification!---")
+                        # if pincode_input != 'Null':
+                        #     return redirect('pinverify')
+                        # else:
+                        #     print("sucessfull login without pin code verification!")
+                    else:
+                        latest_login = datetime.now()
+                        status = 1
+                        user_account = User(email=user_email, password=user_password, latest_login=latest_login, status=status)
+                        user_account.save()
+                        print("----Saved user-----")
+
+                    return redirect('index')
+                else:
+                    print("---That user is not exist in Linkedin.---")        
+    else:
+        form = RegisterForm()
+    return render(request, 'app/register.html', {'form': form})
 
 
 def pinverify(request):
