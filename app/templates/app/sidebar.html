@@ -19,7 +19,11 @@
                                     color: rgb(51, 51, 51)
                                 }
                             </style>
+<<<<<<< HEAD
                             <div class="pull-right" style="margin-top: -12px; margin-right: 11px;"> <a class="btn btn-link btn-custom-link" type="button" href="{% url 'account-settings' %}" title="Account Settings"><em class="icon-settings"></em></a></div>
+=======
+                            <div class="pull-right" style="margin-top: -12px; margin-right: 11px;"> <a class="btn btn-link btn-custom-link" type="button" href="{% static 'account-settings.html' %}" title="Account Settings"><em class="icon-settings"></em></a></div>
+>>>>>>> 9fa8e3b11249a16c19da6d1976682aca389eacd0
                             <div class="user-block-picture">
                                 <div class="user-block-status"> <img src="{% static 'images/10.jpg' %}" alt="Jonathan Korkol" width="60" height="60" class="img-thumbnail img-circle">
                                     <div class="circle circle-default circle-lg" title="Not logged in"></div>
@@ -31,11 +35,15 @@
                     </div>
                 </li>
                 <li class="False">
-                    <a href="{% static 'getting-started.php' %}" title="Getting Started"> <em class="icon-home"></em> <span>Getting Started</span> </a>
+                    <a href="{% static 'getting-started.html' %}" title="Getting Started"> <em class="icon-home"></em> <span>Getting Started</span> </a>
                 </li>
                 <li class="nav-heading"> <span>User Menu</span></li>
                 <li class="False">
+<<<<<<< HEAD
                     <a href="{% url 'index' %}" title="Dashboard"> <em class="icon-speedometer"></em> <span>Dashboard</span> </a>
+=======
+                    <a href="{% static 'index.html' %}" title="Dashboard"> <em class="icon-speedometer"></em> <span>Dashboard</span> </a>
+>>>>>>> 9fa8e3b11249a16c19da6d1976682aca389eacd0
                 </li>
                 <li class="False">
                     <a href="#campaigns" title="Campaigns" data-toggle="collapse">
@@ -43,28 +51,28 @@
                     <ul id="campaigns" class="nav sidebar-subnav collapse">
                         <li class="sidebar-subnav-header">Campaigns</li>
                         <li class="False" style="text-wrap:normal">
-                            <a href="{% static 'my-first-campaign.php' %}" title="My First Campaign"> <span>My First Campaign</span> </a>
+                            <a href="{% static 'my-first-campaign.html' %}" title="My First Campaign"> <span>My First Campaign</span> </a>
                         </li>
                         <li class="False">
-                            <a href="{% static 'add-new-campaign.php' %}" title="Add New Campaign"> <span><em class="fa fa-plus"></em>&nbsp;Add New Campaign</span> </a>
+                            <a href="{% static 'add-new-campaign.html' %}" title="Add New Campaign"> <span><em class="fa fa-plus"></em>&nbsp;Add New Campaign</span> </a>
                         </li>
                     </ul>
                 </li>
                 <li class="False">
-                    <a href="{% static 'connection-messages.php' %}" title="Connection Messages"> <em class="icon-speech"></em> <span>Connection Messages</span> </a>
+                    <a href="{% static 'connection-messages.html' %}" title="Connection Messages"> <em class="icon-speech"></em> <span>Connection Messages</span> </a>
                 </li>
                 <li class="False">
-                    <a href="{% static 'autoresponder.php' %}" title="Autoresponder"> <em class="icon-envelope"></em> <span>Autoresponder</span> </a>
+                    <a href="{% static 'autoresponder.html' %}" title="Autoresponder"> <em class="icon-envelope"></em> <span>Autoresponder</span> </a>
                 </li>
                 <li class="False">
                     <a href="#" title="External Integrations"> <em class="icon-vector"></em> <span>External Integrations</span> </a>
                 </li>
                 <li class="nav-heading"> <span>Global Menu</span></li>
                 <li class="False">
-                    <a href="{% static 'settings.php' %}" title="Settings"> <em class="icon-settings"></em> <span>Settings</span> </a>
+                    <a href="{% static 'settings.html' %}" title="Settings"> <em class="icon-settings"></em> <span>Settings</span> </a>
                 </li>
                 <li class="False">
-                    <a href="{% static 'settings.php' %}" title="Billing"> <em class="fa fa-usd"></em> <span>Billing</span> </a>
+                    <a href="{% static 'settings.html' %}" title="Billing"> <em class="fa fa-usd"></em> <span>Billing</span> </a>
                 </li>
                 <li class="False">
                     <a href="{% url 'login' %}" title="Log out"> <em class="icon-logout"></em> <span>Log out</span> </a>
