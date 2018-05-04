@@ -15,3 +15,20 @@ class User(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class Profile(models.Model):
+    account_id = models.IntegerField()
+    enable_proxy = models.BooleanField(default=0)
+    proxy_address = models.CharField(max_length=60, blank=True, null=True)
+    proxy_authentication_type = models.CharField(max_length=254)
+    proxy_username = models.CharField(max_length=254, blank=True, null=True)
+    proxy_password = models.CharField(max_length=254, blank=True, null=True)
+    license_type = models.CharField(max_length=254)
+
+    def __str__(self):
+        return self.account_id
+
+
+    
+        

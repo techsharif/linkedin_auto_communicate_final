@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from . forms import RegisterForm, LoginForm, PinForm
-from . models import User
+from . forms import RegisterForm, LoginForm, PinForm, ProfileSettingsForm
+from . models import User, Profile
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -22,26 +22,7 @@ def index(request):
     return render(request, 'app/index.html')
 
 
-def account(request):
-    return render(request, 'app/account.html')
-
-
-# def signup(request):
-#     if request.method == 'POST':
-#         form = SignUpForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(username=username, password=raw_password)
-#             login(request, user)
-#             return redirect('index')
-#     else:
-#         form = SignUpForm()
-#     return render(request, 'app/signup.html', {'form': form})
-
-
-#############################################################################
+##############################################################################################################################################
 
 def exist_user():
     try:
@@ -60,23 +41,12 @@ def suspended_user():
 def limited_user():
     pass
 
+###############################################################################################################################################
 
-# def pinverify():
-#     try:
-#         pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
-#         pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
-#         print("Please check your email address to verify.....")
-#         pincode = raw_input("Enter pin code:")
-#         pin_input_box.clear()
-#         pin_input_box.send_keys(pincode)
-#         pin_submit_btn.click()
-#         return True
-#     except Exception as e:
-#         return False
-
-#############################################################################
+user_email=""
 
 def login(request):
+    global user_email
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -89,6 +59,9 @@ def login(request):
                     print("---Password incorrect!---")
                 else:
                     print("---Login Successful!---")
+                    latest_login_time = datetime.now()
+                    User.objects.filter(email=user_email).update(latest_login=latest_login_time)
+
                     return redirect('index')
             else:
                 print("---Unregister User! Please Register!---")
@@ -96,11 +69,9 @@ def login(request):
         form = LoginForm()
     return render(request, 'app/login.html', {'form': form})
             
-    
 
 
 def register(request):
-    global driver
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -166,7 +137,7 @@ def register(request):
                         user_account.save()
                         print("----Saved user-----")
 
-                    return redirect('index')
+                    return redirect('login')
                 else:
                     print("---That user is not exist in Linkedin.---")        
     else:
@@ -191,3 +162,46 @@ def pinverify(request):
 
 def logout():
     return render(request, 'app/login.html', {'form': form})
+
+
+def account(request):
+    user_account = User.objects.get(email=user_email)
+    account_id = user_account.id
+    user_password = user_account.password
+    if Profile.objects.filter(account_id=account_id).exists():
+        user_profile = Profile.objects.get(account_id=account_id)
+        enable_proxy = user_profile.enable_proxy
+        proxy_address = user_profile.proxy_address
+        proxy_authentication_type = user_profile.proxy_authentication_type
+        proxy_username = user_profile.proxy_username
+        proxy_password = user_profile.proxy_password
+        license_type = user_profile.license_type
+
+        return render(request, 'app/account-settings.html', {'email': user_email, 'password': user_password, 'enable_proxy': enable_proxy, 'proxy_address': proxy_address, 'proxy_authentication_type': proxy_authentication_type, 'proxy_username': proxy_username, 'proxy_password': proxy_password, 'license_type': license_type})
+
+    else:
+        return render(request, 'app/account-settings.html', {'email': user_email, 'password': user_password})
+
+
+
+def save_account(request):
+    if request.method == 'POST':
+        form = ProfileSettingsForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data.get('email')
+            user_password = form.cleaned_data.get('password')
+            account_id = User.object.get(email=user_email).id
+            enable_proxy = form.cleaned_data.get('enable_proxy')
+            proxy_address = form.cleaned_data.get('proxy_address')
+            proxy_authentication_type = form.cleaned_data.get('proxy_authentication_type')
+            proxy_username = form.cleaned_data.get('proxy_username')
+            proxy_password = form.cleaned_data.get('proxy_password')
+            license_type = form.cleaned_data.get('license_type')
+            user_profile = Profile(account_id=account_id, enable_proxy=enable_proxy, proxy_address=proxy_address, proxy_authentication_type=proxy_authentication_type, proxy_username=proxy_username, proxy_assword=proxy_password, license_type=license_type)
+            user_profile.save()
+
+            return redirect('index')
+    else:
+        form = ProfileSettingsForm()
+    return render(request, 'app/account-settings.html', {'form': form})
+    
