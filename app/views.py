@@ -19,6 +19,8 @@ from datetime import datetime
 
 
 def index(request):
+    if request.session.get('useremail', 'none') == 'none':
+        return redirect('login')
     return render(request, 'app/index.html')
 
 
@@ -43,26 +45,30 @@ def limited_user():
 
 ###############################################################################################################################################
 
-user_email=""
-
 def login(request):
-    global user_email
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get('email')
             user_password = form.cleaned_data.get('password')
+            # remember_me = form.cleaned_data.get('remember')
             if User.objects.filter(email=user_email).exists():
                 user_account = User.objects.get(email=user_email)
                 password = user_account.password
                 if password != user_password:
-                    print("---Password incorrect!---")
+                    print("---Password incorrect!---") 
                 else:
                     print("---Login Successful!---")
+                    request.session['useremail'] = user_email
+
+                    if not request.POST.get('remember', None):
+                        request.session.set_expiry(0)
+
                     latest_login_time = datetime.now()
                     User.objects.filter(email=user_email).update(latest_login=latest_login_time)
 
                     return redirect('index')
+
             else:
                 print("---Unregister User! Please Register!---")
     else:
@@ -139,7 +145,7 @@ def register(request):
 
                     return redirect('login')
                 else:
-                    print("---That user is not exist in Linkedin.---")        
+                    print("---That user is not exist in Linkedin.---")
     else:
         form = RegisterForm()
     return render(request, 'app/register.html', {'form': form})
@@ -160,11 +166,16 @@ def pinverify(request):
     return render(request, 'app/pinverify.html', {'form': form})
 
 
-def logout():
-    return render(request, 'app/login.html', {'form': form})
+def logout(request):
+    try:
+        del request.session['useremail']
+    except KeyError:
+        pass
+    return redirect('login')
 
 
 def account(request):
+    user_email = request.session['useremail']
     user_account = User.objects.get(email=user_email)
     account_id = user_account.id
     user_password = user_account.password
@@ -185,9 +196,17 @@ def account(request):
 
 
 def save_account(request):
+    user_email = request.session['useremail']
+    user_account = User.objects.get(email=user_email)
+    account_id = user_account.id
+    user_password = user_account.password
+    print("---save account----")
     if request.method == 'POST':
+        print("---save first if ---")
         form = ProfileSettingsForm(request.POST)
+        print("aisinsins")
         if form.is_valid():
+            print("---second if --- ")
             user_email = form.cleaned_data.get('email')
             user_password = form.cleaned_data.get('password')
             account_id = User.object.get(email=user_email).id
@@ -197,11 +216,12 @@ def save_account(request):
             proxy_username = form.cleaned_data.get('proxy_username')
             proxy_password = form.cleaned_data.get('proxy_password')
             license_type = form.cleaned_data.get('license_type')
+
             user_profile = Profile(account_id=account_id, enable_proxy=enable_proxy, proxy_address=proxy_address, proxy_authentication_type=proxy_authentication_type, proxy_username=proxy_username, proxy_assword=proxy_password, license_type=license_type)
             user_profile.save()
-
+            print("-----Profile save-----")
             return redirect('index')
     else:
+        print("----else----")
         form = ProfileSettingsForm()
-    return render(request, 'app/account-settings.html', {'form': form})
-    
+    return render(request, 'app/account-settings.html', {'form': form, 'email':user_email, 'password':user_password})

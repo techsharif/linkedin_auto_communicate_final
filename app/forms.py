@@ -16,7 +16,7 @@ class PinForm(forms.Form):
     pincode = forms.CharField(max_length=6)
 
 
-class ProfileSettingsForm(object):
+class ProfileSettingsForm(forms.Form):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     enable_proxy = forms.BooleanField()
@@ -25,6 +25,6 @@ class ProfileSettingsForm(object):
     proxy_username = forms.CharField(max_length=254)
     proxy_password = forms.CharField(max_length=254)
     license_type = forms.CharField(max_length=254)
-
+    
     class Meta:
-        db_table = 'Profile'
+        model = 'Profile'

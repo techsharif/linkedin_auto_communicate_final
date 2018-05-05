@@ -11,7 +11,8 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form class="form-horizontal" method="post" role="form">
+                        <form action="{% url 'save-account' %}" class="form-horizontal" method="post" role="form">
+                        {% csrf_token %}
                             <input name="__RequestVerificationToken" type="hidden" value="E6JcAVBFkr4LvpiZ4ZYwPUwPuJIpZhbgaXhnF3yJ9a-qpKyvdvspTUUBZLWa-OQ_xiMqW1NGg2hkJgEyEQ4VvWT6mBs9DpP6bMFciTIcEab-D76XZ_ghvfgcJnZkCKrugrjgSqvPmvzm2jrV_B2dTQ2">
                             <input data-val="true" data-val-number="The field AccountId must be a number." id="AccountId" name="AccountId" type="hidden" value="19">
                             <fieldset>
@@ -34,7 +35,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="UseProxy">Enable Proxy</label>
                                     <div class="col-lg-10">
-                                        <input checked="checked" data-val="true" data-val-required="The Enable Proxy field is required." id="UseProxy" name="UseProxy" style="margin-top:10px;" type="checkbox" value="{{ enable_proxy }}">
+                                        <input checked="" data-val="true" data-val-required="The Enable Proxy field is required." id="UseProxy" name="enable_proxy" style="margin-top:10px;" type="checkbox" value="True">
                                         <input name="UseProxy" type="hidden" value="false">
                                     </div>
                                 </div>
@@ -42,14 +43,14 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="ProxyAddress">Proxy Address</label>
                                     <div class="col-lg-10">
-                                        <input class="form-control" id="ProxyAddress" name="ProxyAddress" placeholder="e.g. 123.45.67.89:12345" type="text" value="{{ proxy_address }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyAddress" data-valmsg-replace="true"></span></div>
+                                        <input class="form-control" id="ProxyAddress" name="proxy_address" placeholder="e.g. 123.45.67.89:12345" type="text" value="{{ proxy_address }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyAddress" data-valmsg-replace="true"></span></div>
                                     <br>
                                 </div>
                                 <br>
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="ProxyAuthType">Proxy Authentication Type</label>
                                     <div class="col-lg-10">
-                                        <select class="form-control" id="ProxyAuthType" name="ProxyAuthType">
+                                        <select class="form-control" id="ProxyAuthType" name="proxy_authentication_type">
                                             <option selected="selected" value="0">(none)</option>
                                             <option value="1">Plain Text Authentication</option>
                                             <option value="2">Basic Authentication Type</option>
@@ -59,13 +60,13 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="ProxyUsername">Proxy Username</label>
                                     <div class="col-lg-10">
-                                        <input class="form-control" id="ProxyUsername" name="ProxyUsername" type="text" value="{{ proxy_username }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyUsername" data-valmsg-replace="true"></span></div>
+                                        <input class="form-control" id="ProxyUsername" name="proxy_username" type="text" value="{{ proxy_username }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyUsername" data-valmsg-replace="true"></span></div>
                                 </div>
                                 <br>
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="ProxyPassword">Proxy Password</label>
                                     <div class="col-lg-10">
-                                        <input class="form-control" id="ProxyPassword" name="ProxyPassword" type="password" value="{{ proxy_password }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyPassword" data-valmsg-replace="true"></span></div>
+                                        <input class="form-control" id="ProxyPassword" name="proxy_password" type="password" value="{{ proxy_password }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="ProxyPassword" data-valmsg-replace="true"></span></div>
                                 </div>
                             </fieldset>
                             <fieldset>
@@ -73,7 +74,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">License Type <sup>*</sup></label>
                                     <div class="col-lg-6">
-                                        <select class="form-control required" disabled="" name="licensetype">
+                                        <select class="form-control required" disabled="" name="license_type">
                                             <option>14-days Free Trial Basic Subscription Plan</option>
                                             <option selected="">Basic Subscription Plan</option>
                                             <option>Pro Subscription Plan w/Sales Navigator</option>
@@ -85,7 +86,10 @@
                                 </div>
                             </fieldset>
                             <div class="text-center">
-                                <div class="btn-group"> <a href="{% url 'save-account' %}" class="btn btn-labeled btn-info col-lg-12"><span class="btn-label"><em class="fa fa-save"></em></span>Save</a></div><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <div class="btn-group"> 
+                                <button type="submit" class="btn btn-labeled btn-info col-lg-12"><span class="btn-label"><em class="fa fa-save"></em></span>Save</a></button>
+                                {% comment %} <a href="{% url 'save-account' %}" class="btn btn-labeled btn-info col-lg-12"><span class="btn-label"><em class="fa fa-save"></em></span>Save</a> {% endcomment %}
+                                </div><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <div class="btn-group">
                                     <button type="reset" class="btn btn-labeled btn-default col-lg-12" href="/AccountSettings"><span class="btn-label"><em class="fa fa-times"></em></span>Cancel</button>
                                 </div>
