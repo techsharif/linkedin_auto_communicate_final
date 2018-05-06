@@ -141,6 +141,23 @@ def register(request):
                         status = 1
                         user_account = User(email=user_email, password=user_password, latest_login=latest_login, status=status)
                         user_account.save()
+
+                        user_account = User.objects.get(email=user_email)
+                        account_id = user_account.id
+
+                        user_profile = Profile(
+                            account_id=account_id,
+                            enable_proxy=0,
+                            proxy_address=None,
+                            proxy_authentication_type=0,
+                            proxy_username=None,
+                            proxy_password=None,
+                            license_type=0
+                        )
+                        user_profile.save()
+                        print("----------Profile save--------")
+
+
                         print("----Saved user-----")
 
                     return redirect('login')
@@ -174,11 +191,13 @@ def logout(request):
     return redirect('login')
 
 
-def account(request):
+def update_account(request):
+    form = ProfileSettingsForm(request.POST)
     user_email = request.session['useremail']
     user_account = User.objects.get(email=user_email)
     account_id = user_account.id
     user_password = user_account.password
+    
     if Profile.objects.filter(account_id=account_id).exists():
         user_profile = Profile.objects.get(account_id=account_id)
         enable_proxy = user_profile.enable_proxy
@@ -188,40 +207,70 @@ def account(request):
         proxy_password = user_profile.proxy_password
         license_type = user_profile.license_type
 
-        return render(request, 'app/account-settings.html', {'email': user_email, 'password': user_password, 'enable_proxy': enable_proxy, 'proxy_address': proxy_address, 'proxy_authentication_type': proxy_authentication_type, 'proxy_username': proxy_username, 'proxy_password': proxy_password, 'license_type': license_type})
+        return render(request, 'app/account_form.html', {'email': user_email, 'password': user_password, 'enable_proxy': enable_proxy, 'proxy_address': proxy_address, 'proxy_authentication_type': proxy_authentication_type, 'proxy_username': proxy_username, 'proxy_password': proxy_password, 'license_type': license_type})
 
     else:
-        return render(request, 'app/account-settings.html', {'email': user_email, 'password': user_password})
+        form = ProfileSettingsForm()
+    return render(request, 'app/account_form.html', {'form': form, 'email': user_email, 'password': user_password})
 
 
 
-def save_account(request):
+def account(request):
     user_email = request.session['useremail']
     user_account = User.objects.get(email=user_email)
     account_id = user_account.id
     user_password = user_account.password
-    print("---save account----")
-    if request.method == 'POST':
-        print("---save first if ---")
-        form = ProfileSettingsForm(request.POST)
-        print("aisinsins")
-        if form.is_valid():
-            print("---second if --- ")
-            user_email = form.cleaned_data.get('email')
-            user_password = form.cleaned_data.get('password')
-            account_id = User.object.get(email=user_email).id
-            enable_proxy = form.cleaned_data.get('enable_proxy')
-            proxy_address = form.cleaned_data.get('proxy_address')
-            proxy_authentication_type = form.cleaned_data.get('proxy_authentication_type')
-            proxy_username = form.cleaned_data.get('proxy_username')
-            proxy_password = form.cleaned_data.get('proxy_password')
-            license_type = form.cleaned_data.get('license_type')
+    form = ProfileSettingsForm()
 
-            user_profile = Profile(account_id=account_id, enable_proxy=enable_proxy, proxy_address=proxy_address, proxy_authentication_type=proxy_authentication_type, proxy_username=proxy_username, proxy_assword=proxy_password, license_type=license_type)
-            user_profile.save()
-            print("-----Profile save-----")
-            return redirect('index')
+    if Profile.objects.filter(account_id=account_id).exists():
+        print("-------Exists--------------")
+        user_profile = Profile.objects.get(account_id=account_id)
+        enable_proxy = user_profile.enable_proxy
+        proxy_address = user_profile.proxy_address
+        proxy_authentication_type = user_profile.proxy_authentication_type
+        proxy_username = user_profile.proxy_username
+        proxy_password = user_profile.proxy_password
+        license_type = user_profile.license_type
+
+        if request.method == 'POST':
+            print("-------------submit-------------")
+            form = ProfileSettingsForm(request.POST)
+            if form.is_valid():
+                print("-----form valid---------")
+                enable_proxy = form.cleaned_data.get('enable_proxy')
+                proxy_address = form.cleaned_data.get('proxy_address')
+                proxy_authentication_type = form.cleaned_data.get('proxy_authentication_type')
+                proxy_username = form.cleaned_data.get('proxy_username')
+                proxy_password = form.cleaned_data.get('proxy_password')
+                license_type = form.cleaned_data.get('license_type')
+
+                Profile.objects.filter(account_id=account_id).update(
+                    enable_proxy=enable_proxy,
+                    proxy_address=proxy_address,
+                    proxy_authentication_type=proxy_authentication_type,
+                    proxy_username=proxy_username,
+                    proxy_password=proxy_password,
+                    license_type=license_type)
+                print("------Profile save---------")
+                
+                return redirect('index')
+            return render(request, 'app/account_form.html', {'form': form, 'email': user_email, 'password': user_password})
+
+        else:
+            print("-------No submit------------")
+            return render(request, 'app/account_form.html', {
+                'form': form,
+                'email': user_email,
+                'password': user_password,
+                'enable_proxy': enable_proxy,
+                'proxy_address': proxy_address,
+                'proxy_authentication_type': proxy_authentication_type,
+                'proxy_username': proxy_username,
+                'proxy_password': proxy_password,
+                'license_type': license_type
+            })
     else:
-        print("----else----")
         form = ProfileSettingsForm()
-    return render(request, 'app/account-settings.html', {'form': form, 'email':user_email, 'password':user_password})
+    return render(request, 'app/account_form.html', {'form': form, 'email': user_email, 'password': user_password})
+
+    

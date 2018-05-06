@@ -11,7 +11,7 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form action="{% url 'save-account' %}" class="form-horizontal" method="post" role="form">
+                        <form action="{% url 'update-account' %}" class="form-horizontal" method="post" role="form">
                         {% csrf_token %}
                             <input name="__RequestVerificationToken" type="hidden" value="E6JcAVBFkr4LvpiZ4ZYwPUwPuJIpZhbgaXhnF3yJ9a-qpKyvdvspTUUBZLWa-OQ_xiMqW1NGg2hkJgEyEQ4VvWT6mBs9DpP6bMFciTIcEab-D76XZ_ghvfgcJnZkCKrugrjgSqvPmvzm2jrV_B2dTQ2">
                             <input data-val="true" data-val-number="The field AccountId must be a number." id="AccountId" name="AccountId" type="hidden" value="19">
@@ -20,14 +20,14 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="Username">Username*</label>
                                     <div class="col-lg-10">
-                                        <input class="form-control" data-val="true" data-val-required="The Username* field is required." disabled="disabled" id="Username" name="Username" type="email" value="{{ email }}">
-                                        <input id="Username" name="Username" type="hidden" value=""> <span class="field-validation-valid text-danger small" data-valmsg-for="Username" data-valmsg-replace="true"></span></div>
+                                        <input class="form-control" data-val="true" data-val-required="The Username* field is required." disabled="disabled" id="Username" name="email" type="email" value="{{ email }}">
+                                        <input id="Username" name="email" type="hidden" value=""> <span class="field-validation-valid text-danger small" data-valmsg-for="Username" data-valmsg-replace="true"></span></div>
                                 </div>
                                 <br>
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="Password">Password*</label>
                                     <div class="col-lg-10">
-                                        <input class="form-control" data-val="true" data-val-required="The Password* field is required." id="Password" name="Password" type="password" value="{{ password }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="Password" data-valmsg-replace="true"></span></div>
+                                        <input class="form-control" data-val="true" data-val-required="The Password* field is required." id="Password" name="password" type="password" value="{{ password }}"> <span class="field-validation-valid text-danger small" data-valmsg-for="Password" data-valmsg-replace="true"></span></div>
                                 </div>
                             </fieldset>
                             <fieldset>
@@ -35,8 +35,8 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label" for="UseProxy">Enable Proxy</label>
                                     <div class="col-lg-10">
-                                        <input checked="" data-val="true" data-val-required="The Enable Proxy field is required." id="UseProxy" name="enable_proxy" style="margin-top:10px;" type="checkbox" value="True">
-                                        <input name="UseProxy" type="hidden" value="false">
+                                        <input checked="checked" data-val="true" data-val-required="The Enable Proxy field is required." id="UseProxy" name="enable_proxy" style="margin-top:10px;" type="checkbox" value="True">
+                                        {% comment %} <input name="UseProxy" type="hidden" value="false"> {% endcomment %}
                                     </div>
                                 </div>
                                 <br>
@@ -86,7 +86,7 @@
                                 </div>
                             </fieldset>
                             <div class="text-center">
-                                <div class="btn-group"> 
+                                <div class="btn-group">
                                 <button type="submit" class="btn btn-labeled btn-info col-lg-12"><span class="btn-label"><em class="fa fa-save"></em></span>Save</a></button>
                                 {% comment %} <a href="{% url 'save-account' %}" class="btn btn-labeled btn-info col-lg-12"><span class="btn-label"><em class="fa fa-save"></em></span>Save</a> {% endcomment %}
                                 </div><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

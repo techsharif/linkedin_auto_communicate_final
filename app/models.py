@@ -19,7 +19,7 @@ class User(models.Model):
 
 class Profile(models.Model):
     account_id = models.IntegerField()
-    enable_proxy = models.BooleanField(default=0)
+    enable_proxy = models.BooleanField(default=True)
     proxy_address = models.CharField(max_length=60, blank=True, null=True)
     proxy_authentication_type = models.CharField(max_length=254)
     proxy_username = models.CharField(max_length=254, blank=True, null=True)
