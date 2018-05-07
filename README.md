@@ -5,8 +5,11 @@ Linkedin Tool
 ## Installing
 
 Python 3.6
-Django 1.11.10
-mysqlclient 1.3.12
+Django 2.0.3
+
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 
 ## Run Checkuser 
 

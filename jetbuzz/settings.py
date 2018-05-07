@@ -36,8 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Application definition
 
 INSTALLED_APPS = [
-    'app',
-    'connector',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'app',
+    'connector',
+    'messenger',
 ]
 
 MIDDLEWARE = [
@@ -103,6 +105,7 @@ DATABASES = {
 }
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -147,3 +150,8 @@ STATICFILES_DIRS = [
 # Media files (image, video)
 MEDIA_ROOT = os.path.join(BASE_DIR,'static')
 MEDIA_URL = '/media/'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

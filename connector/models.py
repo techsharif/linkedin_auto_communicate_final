@@ -1,8 +1,19 @@
 from django.db import models
 
-class Search(models.Model):
+from app.models import LinkedInUser
+from messenger.models import CommonContactField, TimeStampedModel, \
+    CampaignStepField
+
+
+class Search(CommonContactField):
+    owner = models.ForeignKey(LinkedInUser, related_name='searches',
+                                on_delete=models.CASCADE, default=1)
     search_name = models.CharField(max_length=254)
-    keyword = models.CharField(max_length=254)
+    # how to deal with either of these 3 is null in form
+    keyword = models.CharField(max_length=254, blank=True, null=True)
+    url_search = models.URLField(blank=True, null=True)
+    sales_search = models.URLField(blank=True, null=True)
+    
     resultcount = models.CharField(max_length=10)
     searchdate = models.DateTimeField()
 
@@ -16,12 +27,13 @@ class Search(models.Model):
         return self.searc_hname
         
 
-class SearchResult(models.Model):
-    searchid = models.IntegerField()
+class SearchResult(CommonContactField):
+    owner = models.ForeignKey(LinkedInUser, related_name='searchresults',
+                                on_delete=models.CASCADE, default=1)
+    search = models.ForeignKey(Search, related_name='results',
+                               on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=200)
-    company = models.CharField(max_length=200)
-    title = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
+    # other fields are inherited from CommonContactField
 
     class Meta:
         db_table = 'connector_searchresult'
@@ -34,11 +46,22 @@ class SearchResult(models.Model):
 
 
 class ConnectorCampaign(models.Model):
+    owner = models.ForeignKey(LinkedInUser, related_name='connectorcampaigns',
+                                on_delete=models.CASCADE, default=1)
     connector_name = models.CharField(max_length=200)
-    copy_connector_id = models.IntegerField()
-    created_by_id = models.IntegerField()
+     
+    copy_connector = models.ForeignKey('self', on_delete=models.SET_NULL,
+                                       blank=True, null=True)
+    
     created_at = models.DateTimeField()
     status = models.BooleanField()
-
+    connectors = models.ManyToManyField(SearchResult)
+    
     def __str__(self):
         return self.connector_name
+    
+    
+class ConnectorStep(TimeStampedModel, CampaignStepField):
+    campaign = models.ForeignKey(ConnectorCampaign, related_name='campaignsteps',
+                                 on_delete=models.CASCADE)
+    

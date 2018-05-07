@@ -1,21 +1,21 @@
+from datetime import datetime
+from getpass import getpass
+import re
+import sys
+import time
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from . forms import RegisterForm, LoginForm, PinForm, ProfileSettingsForm
-from . models import User, Profile
-
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-from getpass import getpass
-import sys
-import re
-import time
-from datetime import datetime
+from . forms import RegisterForm, LoginForm, PinForm, ProfileSettingsForm
+from .models import LinkedInUser, Membership
 
 
 def index(request):
