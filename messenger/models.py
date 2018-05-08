@@ -31,6 +31,7 @@ class ContactStatus(object):
     CONNECT_REQUESTED = 'Connect Requested'
     DISCONNECTED = 'Disconnected'
     IN_QUEUE = 'In Queue'
+    CONNECT_REQ = 'Connect Req'
     
     WELCOME_MES = 'Welcome Mes'
     
@@ -42,6 +43,7 @@ class ContactStatus(object):
         (REPLIED, REPLIED),
         (TALKING, TALKING),
         (TALKING_REPLIED, TALKING_REPLIED),
+        (IN_QUEUE, IN_QUEUE),
         )
     
     IMPORTED = 'Imported'
@@ -68,6 +70,11 @@ class ContactStatus(object):
         (IN_QUEUE, IN_QUEUE),
         (WELCOME_MES, WELCOME_MES),
         )
+    
+    search_result_statuses = (
+        (IN_QUEUE, IN_QUEUE),
+        (CONNECT_REQ, CONNECT_REQ)
+        )
 
 class CommonContactField(models.Model):
     company = models.CharField(max_length=100, db_index=True, blank=True, 
@@ -91,13 +98,12 @@ class ContactField(CommonContactField):
     class Meta:
         abstract = True
 
+# this is not a real entity, the list inbox with is_connected = True
+"""
 class Contact(TimeStampedModel, ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='contacts',
                                 on_delete=models.CASCADE)
-    # source of this contact
-    connector_messenger = models.CharField(max_length=20, 
-                                           choices=ContactStatus.connector_messengers,
-                                           default=ContactStatus.IMPORTED)
+    
     status = models.CharField(max_length=20, 
                               choices=ContactStatus.contact_statues, 
                               default=ContactStatus.OLD_CONNECT)
@@ -109,13 +115,14 @@ class Contact(TimeStampedModel, ContactField):
     class Meta():
         abstract = False
         # db_table = 'contacts'
+"""
 
 class Campaign(TimeStampedModel):
     owner = models.ForeignKey(LinkedInUser, related_name='messegercampaigns',
                                 on_delete=models.CASCADE)
     title = models.CharField(max_length=100, db_index=True)
     status = models.BooleanField(default=True)
-    contacts = models.ManyToManyField(Contact)
+    contacts = models.ManyToManyField("Inbox")
     copy_campaign = models.ForeignKey('self', on_delete=models.SET_NULL,
                                        blank=True, null=True)
     
@@ -144,7 +151,7 @@ class CampaignStep(TimeStampedModel, CampaignStepField):
 class Message(TimeStampedModel):
     owner = models.ForeignKey(LinkedInUser, related_name='senders',
                               on_delete=models.CASCADE)
-    contact = models.ForeignKey(Contact, related_name='receivers',
+    contact = models.ForeignKey("Inbox", related_name='receivers',
                                on_delete=models.SET_NULL, null=True)
     text = models.TextField()
     time = models.DateTimeField()
@@ -158,3 +165,5 @@ class Inbox(ContactField):
     status = models.CharField(max_length=20, 
                               choices=ContactStatus.inbox_statuses, 
                               default=ContactStatus.OLD_CONNECT)
+    is_connected = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=True)

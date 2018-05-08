@@ -2,7 +2,7 @@ from django.db import models
 
 from app.models import LinkedInUser
 from messenger.models import CommonContactField, TimeStampedModel, \
-    CampaignStepField
+    CampaignStepField, ContactStatus, Inbox
 
 
 class Search(CommonContactField):
@@ -33,7 +33,10 @@ class SearchResult(CommonContactField):
     search = models.ForeignKey(Search, related_name='results',
                                on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=200)
-    # other fields are inherited from CommonContactField
+    status = models.CharField(max_length=20, 
+                              choices=ContactStatus.search_result_statuses, 
+                              default=ContactStatus.CONNECT_REQ)
+    
 
     class Meta:
         db_table = 'connector_searchresult'
@@ -55,7 +58,7 @@ class ConnectorCampaign(models.Model):
     
     created_at = models.DateTimeField()
     status = models.BooleanField()
-    connectors = models.ManyToManyField(SearchResult)
+    connectors = models.ManyToManyField(Inbox)
     
     def __str__(self):
         return self.connector_name
