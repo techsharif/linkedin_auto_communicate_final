@@ -19,9 +19,9 @@ from .models import LinkedInUser, Membership
 
 
 def index(request):
-    if request.session.get('useremail', 'none') == 'none':
-        return redirect('login')
-    return render(request, 'app/index.html')
+    #if request.session.get('useremail', 'none') == 'none':
+    #    return redirect('login')
+    return render(request, 'app/home.html')
 
 
 ##############################################################################################################################################
