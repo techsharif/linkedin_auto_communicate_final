@@ -52,13 +52,15 @@
 <body class="">
     <div class="wrapper">
 
-    {% include 'app/header.html' %}
-    {% include 'app/sidebar.html' %}
+    {% include 'app/includes/header.html' %}
+    {%block sidebar%}
+    	{% include 'app/includes/sidebar.html' %}
+    {%endblock%}
     
     {% block content %}   
     {% endblock content %}
 
-    {% include 'app/footer.html' %}
+    {% include 'app/includes/footer.html' %}
 
     </div>
 </body>

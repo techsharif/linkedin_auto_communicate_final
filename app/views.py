@@ -16,34 +16,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from . forms import RegisterForm, LoginForm, PinForm, ProfileSettingsForm
 from .models import LinkedInUser, Membership
+from django.views.generic.base import TemplateView
+from app.models import MembershipType
 
 
-def index(request):
-    #if request.session.get('useremail', 'none') == 'none':
-    #    return redirect('login')
-    return render(request, 'app/home.html')
-
-
-##############################################################################################################################################
-
-def exist_user():
-    try:
-        error_span = wait.until(EC.visibility_of_element_located((By.ID, "session_key-login-error")))
-        no_exist_user_alert = error_span.text
-        print (no_exist_user_alert)
-        return False
-    except Exception as e:
-        return True
-
-
-def suspended_user():
-    pass
-
-
-def limited_user():
-    pass
-
-###############################################################################################################################################
+class HomeView(TemplateView):
+    template_name = 'app/home.html'
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(HomeView, self).get_context_data(**kwargs)
+        for x in MembershipType.objects.all():
+            ctx[x.name] = x
+        print('ctx:', ctx)
+        return ctx
+    
 
 def login(request):
     if request.method == 'POST':

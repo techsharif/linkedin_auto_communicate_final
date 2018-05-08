@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # These are for user/page on our own
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.HomeView.as_view(), name='index'),
     #url(r'^login/$', views.login, name='login'),
     #url(r'^logout/$', views.logout, name='logout'),    
     # confirm email
