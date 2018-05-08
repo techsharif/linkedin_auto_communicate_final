@@ -15,6 +15,7 @@
                     <a href="#" data-trigger-resize="" data-toggle-state="aside-collapsed" class="hidden-xs"> <em class="fa fa-navicon"></em> </a>
                     <a href="#" data-toggle-state="aside-toggled" data-no-persist="true" class="visible-xs sidebar-toggle"> <em class="fa fa-navicon"></em> </a>
                 </li>
+                <!-- 
                 <li class="dropdown dropdown-list" title="Switch Accounts">
                     <a href="#" data-toggle="dropdown"> <em class="icon-people"></em> </a>
                     <ul class="dropdown-menu animated">
@@ -38,8 +39,11 @@
                         </li>
                     </ul>
                 </li>
+                -->
+                
             </ul>
             <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
                 <li class="dropdown dropdown-list">
                     <a href="#" data-toggle="dropdown"> <em class="icon-bell"></em> </a>
                     <ul class="dropdown-menu">
@@ -53,15 +57,20 @@
                 <li>
                     <a href="{% url 'logout' %}" title="Log out"> <em class="icon-logout"></em></a>
                 </li>
+                
+           {%else%}
+           
+          		 <li>
+                    <a href="{% url 'login' %}" title="Log In"> <em class="icon-login"></em></a>
+                </li>
+                <li>
+                    <a href="{% url 'register' %}" title="Register"> <em class="fa fa-user-plus"></em></a>
+                </li>
+           
+           {%endif%}
             </ul>
         </div>
-        <form role="search" action="#" class="navbar-form">
-            <div class="form-group has-feedback">
-                <input type="text" placeholder="Type and hit enter ..." class="form-control">
-                <div data-search-dismiss="" class="fa fa-times form-control-feedback"></div>
-            </div>
-            <button type="submit" class="hidden btn btn-default">Submit</button>
-        </form>
+        
     </nav>
 </header>
 
