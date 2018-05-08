@@ -8,3 +8,4 @@ db.sqlite3
 .pydevproject
 .settings
 local_settings.py
+jetbuzz/wsgi.py
