@@ -3,11 +3,11 @@ from smtplib import SMTPException
 from django.contrib.auth import get_user_model, login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import  HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.urls import reverse
-from django.urls.base import reverse_lazy
+
+from django.urls.base import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
@@ -109,6 +109,6 @@ class ActivateAccount(View):
                 membership.save()
                 membership.membership_type.add(membership_type)
                 profile.day_to_live = membership_type.day_to_live
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('home'))
         else:
             return render(request, self.template_name)
