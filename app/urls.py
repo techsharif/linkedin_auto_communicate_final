@@ -3,7 +3,6 @@ from django.contrib.auth import views as auth_views
 from . import views
 from . import accounts as acc_views
 
-
 urlpatterns = [
     # These are for user/page on our own
     url(r'^$', views.HomeView.as_view(), name='home'),
@@ -43,8 +42,9 @@ urlpatterns = [
         name='register_done'),
     url(r'^subscription/$', views.SubsriptionView.as_view(), name='subscription'),
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
-    
-    
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.ActivateAccount.as_view(), name='activate'),
+
     # these stuff will be for account on linkedIN
     url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
     url(r'^accounts/(?P<pk>[\d+])/$', acc_views.AccountDetail.as_view(), name='account-detail'),
@@ -52,14 +52,13 @@ urlpatterns = [
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
     #url(r'^accounts/remove/(?P<pk>[\d+])$', acc_views.update_account, name='add-account'),
     #url(r'^accounts/pinverify/(?P<pk>[\d+])$', acc_views.update_account, name='pinverify'),
-    
+
     url(r'^accounts/(?P<pk>[\d+])/network/$', acc_views.AccountNetwork.as_view(), name='account-network'),
     url(r'^accounts/(?P<pk>[\d+])/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
     url(r'^accounts/(?P<pk>[\d+])/campaigns/$', acc_views.AccountCampaign.as_view(), name='account-campaign'),
     url(r'^accounts/(?P<pk>[\d+])/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
     url(r'^accounts/(?P<pk>[\d+])/all/$', acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^accounts/(?P<pk>[\d+])/tasks/$', acc_views.AccountTask.as_view(), name='account-tasks'),
-    
     url(r'^accounts/(?P<pk>[\d+])/messenger/add$', acc_views.AccounMessengerCreate.as_view(), name='account-messenger-add'),
     url(r'^accounts/(?P<pk>[\d+])/campaigns/add$', acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
     
