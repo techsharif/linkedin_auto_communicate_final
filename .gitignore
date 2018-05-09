@@ -9,3 +9,5 @@ db.sqlite3
 .settings
 local_settings.py
 jetbuzz/wsgi.py
+venv/
+.idea/*
