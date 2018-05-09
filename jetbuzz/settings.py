@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['www.makju.com','127.0.0.1','localhost']
 LOGIN_REDIRECT_URL = 'index'
 
 #console email backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'jetbuzz.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sq_jetbuzz_db',
         'USER': 'root',
         'PASSWORD': '',
@@ -156,3 +156,11 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+# EMAIl credential
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
