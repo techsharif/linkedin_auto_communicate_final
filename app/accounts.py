@@ -33,7 +33,12 @@ class AccountInbox(TemplateView):
      
 class AccountTask(TemplateView):
     template_name = 'app/accounts_task.html'
+    
+class AccounMessengerCreate(TemplateView):
+    template_name = 'app/accounts_messenger_add.html'
 
+class AccountCampaignCreate(TemplateView):
+    template_name = 'app/accounts_campaign_add.html'
     
 """    
 def login(request):
