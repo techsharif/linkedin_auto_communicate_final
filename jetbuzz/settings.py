@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.conf.global_settings import LOGIN_URL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +30,7 @@ ALLOWED_HOSTS = ['www.makju.com','127.0.0.1','localhost']
 
 #Login Redirect URL
 LOGIN_REDIRECT_URL = 'accounts'
+LOGIN_URL = '/login'
 
 #console email backend
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

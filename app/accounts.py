@@ -1,42 +1,59 @@
-from django.views.generic.list import ListView
-from app.models import LinkedInUser
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+
+from app.models import LinkedInUser
 
 
+decorators = (login_required, )
+
+@method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
     template_name = 'app/accounts_list.html'
-    
+
+@method_decorator(decorators, name='dispatch')    
 class AccountDetail(TemplateView):
     template_name = 'app/accounts_detail.html'
-    
+
+@method_decorator(decorators, name='dispatch')    
 class AccountSettings(TemplateView):
     template_name = 'app/accounts_settings.html'
-
+    
+@method_decorator(decorators, name='dispatch')
 class AccountAdd(TemplateView):
     template_name = 'app/accounts_detail.html'
 
+@method_decorator(decorators, name='dispatch')
 class AccountNetwork(TemplateView):
     template_name = 'app/accounts_network.html'
 
+@method_decorator(decorators, name='dispatch')
 class AccounMessenger(TemplateView):
     template_name = 'app/accounts_messenger.html'
-     
+    
+@method_decorator(decorators, name='dispatch')     
 class AccountCampaign(TemplateView):
     template_name = 'app/accounts_campaign.html'
-     
+
+@method_decorator(decorators, name='dispatch')     
 class AccountSearch(TemplateView):
     template_name = 'app/accounts_search.html'
-     
+
+@method_decorator(decorators, name='dispatch')     
 class AccountInbox(TemplateView):
     template_name = 'app/accounts_inbox.html'
-     
+
+@method_decorator(decorators, name='dispatch')     
 class AccountTask(TemplateView):
     template_name = 'app/accounts_task.html'
-    
+
+@method_decorator(decorators, name='dispatch')    
 class AccounMessengerCreate(TemplateView):
     template_name = 'app/accounts_messenger_add.html'
 
+@method_decorator(decorators, name='dispatch')
 class AccountCampaignCreate(TemplateView):
     template_name = 'app/accounts_campaign_add.html'
     
