@@ -42,6 +42,11 @@
                 -->
                 
             </ul>
+            {%if account_menu%}
+            	{%include 'app/includes/header_account.html'%}
+            	
+            {%endif%}
+            
             <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
                 <li class="dropdown dropdown-list">
@@ -53,6 +58,12 @@
                             </div>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="{% url 'accounts' %}" title="My Accounts"> Accounts</a>
+                </li>
+                <li>
+                    <a href="{% url 'subscription' %}" title="My subscrpition"> Subscription</a>
                 </li>
                 <li>
                     <a href="{% url 'logout' %}" title="Log out"> <em class="icon-logout"></em></a>

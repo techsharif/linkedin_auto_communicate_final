@@ -27,6 +27,8 @@ class Profile(MemberShipField):
         
 
 class LinkedInUser(models.Model):
+    profile = models.ForeignKey(Profile, related_name='linkedusers',
+                                on_delete=models.CASCADE)
     email = models.CharField(max_length=254)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)

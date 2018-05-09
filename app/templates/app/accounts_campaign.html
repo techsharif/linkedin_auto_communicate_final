@@ -1,0 +1,85 @@
+
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{%block pagecss%}
+    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
+    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
+{%endblock%}
+    
+{% block title %}Home{% endblock title %}
+
+{%block header%}
+   {% include 'app/includes/header.html' with account_menu=1 %}
+{%endblock%}
+
+{%block sidebar%}
+   
+{%endblock%}
+
+
+{%block content%}
+<section class="content">
+   
+   	<div class="row">
+	<div class="col-sm-4 col-md-3">
+		<a class="btn btn-primary btn-block" href="/5386961/campaigns/?act=add">NEW CONNECTOR CAMPAIGN</a>
+	</div>
+	<div class="col-sm-8 col-md-9">
+		<div class="panel-group info">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" href="#collapse1">
+					<i class="glyphicon glyphicon-minus pull-right"></i>
+					Want to grow your network and find new leads? Start new Connector Campaign.
+					</a>
+				  </h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse in">
+				  <div class="panel-body">
+					<ul>
+						<li>Set up steps with personalized automated messages for connection requests or a follow-up messages to be sent a few hours or days after connecting, set another automated follow-up messages if no response is received in a few days. This is done by clicking on the <u>Steps</u> tab inside the Connector Campaign.</li>
+						<li>Search for new leads by keyword, location, industry, company, title. To start a new search, go to the <u>Search</u> page on the top menu, and click on 'Start new search' on the right side.</li>
+						<li>After the search is completed select people you would like to be added to Connector Campaign and click 'Add selected people to Connector Campaign', or add all new people found by clicking 'Add all new people to Connector Campaign'.</li>
+					</ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="box">
+	<div class="box-header with-border">
+	  <h3 class="box-title">Connector Campaigns</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body table-responsive no-padding" id="campaigns_list"><table class="table table-hover">
+	<thead>
+	<tr>
+	  <th>Title</th>
+	  <th>Status</th>
+	  <th>Contacts</th>
+	  <th>Connected</th>
+	  <th>Replied to<br>connection message</th>
+	  <th>Replied to<br>other messages</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr>
+	  <td><a href="https://jetbuzz.io/5386961/campaigns/3/">python developement</a></td>
+	  <td>
+					<span class="label bg-black">Inactive</span>
+				</td>
+	  <td>1</td>
+	  <td>0</td>
+	  <td>0</td>
+	  <td>0</td>
+	</tr>
+		</tbody>
+</table></div>
+</div>
+<!-- /.box -->	</section>
+
+{%endblock%}

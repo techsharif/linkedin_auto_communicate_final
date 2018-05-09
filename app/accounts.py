@@ -1,4 +1,41 @@
+from django.views.generic.list import ListView
+from app.models import LinkedInUser
+from django.views.generic.base import TemplateView
 
+
+class AccountList(ListView):
+    model = LinkedInUser
+    template_name = 'app/accounts_list.html'
+    
+class AccountDetail(TemplateView):
+    template_name = 'app/accounts_detail.html'
+    
+class AccountSettings(TemplateView):
+    template_name = 'app/accounts_settings.html'
+
+class AccountAdd(TemplateView):
+    template_name = 'app/accounts_detail.html'
+
+class AccountNetwork(TemplateView):
+    template_name = 'app/accounts_network.html'
+
+class AccounMessenger(TemplateView):
+    template_name = 'app/accounts_messenger.html'
+     
+class AccountCampaign(TemplateView):
+    template_name = 'app/accounts_campaign.html'
+     
+class AccountSearch(TemplateView):
+    template_name = 'app/accounts_search.html'
+     
+class AccountInbox(TemplateView):
+    template_name = 'app/accounts_inbox.html'
+     
+class AccountTask(TemplateView):
+    template_name = 'app/accounts_task.html'
+
+    
+"""    
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -227,4 +264,4 @@ def account(request):
         form = ProfileSettingsForm()
     return render(request, 'app/account_form.html', {'form': form, 'email': user_email, 'password': user_password})
 
-    
+"""
