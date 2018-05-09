@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from . import views
+from . import accounts as acc_views
 
 
 urlpatterns = [
     # These are for user/page on our own
-    url(r'^$', views.HomeView.as_view(), name='index'),
+    url(r'^$', views.HomeView.as_view(), name='home'),
     #url(r'^login/$', views.login, name='login'),
     #url(r'^logout/$', views.logout, name='logout'),    
     # confirm email
@@ -15,7 +16,9 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name='registration/login.html'),
         name='login'),
     url(r'^logout/$', 
-        auth_views.LogoutView.as_view(template_name='registration/logged_out.html'),
+        auth_views.LogoutView.as_view(
+            template_name='registration/logged_out.html',
+             next_page='/'),
         name='logout'),
     url(r'^forgotpw', 
         auth_views.PasswordResetView.as_view(
@@ -43,9 +46,20 @@ urlpatterns = [
     
     
     # these stuff will be for account on linkedIN
-    #url(r'^accounts/settings/(?P<pk>[\d+])$', views.account, name='account-settings'),
-    #url(r'^accounts/add/$', views.update_account, name='add-account'),
-    #url(r'^accounts/remove/(?P<pk>[\d+])$', views.update_account, name='add-account'),
-    #url(r'^accounts/pinverify/(?P<pk>[\d+])$', views.update_account, name='pinverify'),
+    url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+    url(r'^accounts/(?P<pk>[\d+])/$', acc_views.AccountDetail.as_view(), name='account-detail'),
+    url(r'^accounts/(?P<pk>[\d+])/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
+    url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
+    #url(r'^accounts/remove/(?P<pk>[\d+])$', acc_views.update_account, name='add-account'),
+    #url(r'^accounts/pinverify/(?P<pk>[\d+])$', acc_views.update_account, name='pinverify'),
+    
+    url(r'^accounts/(?P<pk>[\d+])/network/$', acc_views.AccountNetwork.as_view(), name='account-network'),
+    url(r'^accounts/(?P<pk>[\d+])/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
+    url(r'^accounts/(?P<pk>[\d+])/campaigns/$', acc_views.AccountCampaign.as_view(), name='account-campaign'),
+    url(r'^accounts/(?P<pk>[\d+])/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+    url(r'^accounts/(?P<pk>[\d+])/all/$', acc_views.AccountInbox.as_view(), name='account-all'),
+    url(r'^accounts/(?P<pk>[\d+])/tasks/$', acc_views.AccountTask.as_view(), name='account-tasks'),
+    
+    
     
 ]

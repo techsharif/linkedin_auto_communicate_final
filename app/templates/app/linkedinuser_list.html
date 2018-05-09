@@ -1,0 +1,98 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{%block pagecss%}
+    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
+    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
+{%endblock%}
+    
+{% block title %}Home{% endblock title %}
+
+{%block sidebar%}
+   
+{%endblock%}
+
+
+
+{% block content %}
+
+<div class="col-md-4 col-md-offset-4 mt-xl">
+		<div class="box box-default box-solid">
+			<div class="box-header with-border">
+				<h3 class="box-title"><i class="fa fa-fw fa-linkedin-square"></i> Accounts</h3>
+				<div class="box-tools"><a href="/accounts/add/" class="btn btn-box-tool add-account" data-toggle="tooltip" title="Add account"><i class="fa fa-user-plus"></i></a></div>
+			</div>
+			<div class="box-body">
+						<table class="table">
+				<tbody>
+				{%for item in object_list %}
+									<tr>
+						<td width="90%"><a href="{% url 'account-detail' pk=item.id %}">{{item.email}}</a></td>
+						<td>
+						<span class="label label-{%if item.status %}success{%else%}warning{%endif%}">{%if item.status%}Active{%else%}Inactive{%endif%}</span>
+						</td>
+						<td><a href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip" data-original-title="" title="">Settings</a></td>
+						<td><a href="#" title="Delete" data-toggle="tooltip" data-click="removeAccount" id="acc_{{item.id}}"><i class="fa fa-remove"></i></a></td>
+					</tr>
+				{%endfor%}
+			</tbody>
+								
+			
+			</table>
+						</div>
+			<div class="box-footer text-center">
+				<a href="/accounts/add/" class="add-account">Add LinkedIn account</a>
+			</div>
+		</div>
+	</div>
+	
+
+
+{%endblock%}
+
+
+{%block pagefooter%}
+
+<div id="add_account_modal" tabindex="-1" role="dialog" aria-labelledby="Add account" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"> <span aria-hidden="true">×</span> </button>
+                <h4 id="myModalLabel" class="modal-title">Add Linked Account</h4></div>
+            <div class="modal-body">
+                <form action="/accounts/add/" class="form-horizontal" id="modal-form" method="post" role="form">
+                    
+                    
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Email</label>
+                        <input class="form-control" id="eamil" name="email" type="email" value="{{user.email}}"> 
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Password</label>
+                        <input class="form-control" id="password" name="password" type="text" value=""> 
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                 <a href="#" data-dismiss="modal" form="modal-form" type="submit" class="btn btn-primary">Add</a></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+    	
+        $('body').on('click', '.add-account', function(e){
+        	e.preventDefault();
+        	$('#add_account_modal').modal('show');
+        });
+        
+    
+    });
+    
+    </script>
+
+    
+{%endblock%}

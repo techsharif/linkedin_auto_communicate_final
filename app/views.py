@@ -40,9 +40,9 @@ class RegisterView(CreateView):
         
     
 class SubsriptionView(TemplateView):
-    pass
+    template_name = 'app/subscription.html'
 
     
 class ProfileView(TemplateView):
-    pass
+    template_name = 'app/profile.html'
 

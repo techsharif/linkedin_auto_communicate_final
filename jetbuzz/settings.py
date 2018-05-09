@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['www.makju.com','127.0.0.1','localhost']
 
 #Login Redirect URL
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'accounts'
 
 #console email backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
