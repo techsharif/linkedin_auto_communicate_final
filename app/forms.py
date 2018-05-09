@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
 
 
 class RegisterForm(forms.Form):
@@ -37,3 +39,33 @@ class ProfileSettingsForm(forms.Form):
     license_type = forms.ChoiceField(choices=license_type_choices, label='License Type')
 
 
+User = get_user_model()
+
+class UserRegisterForm(UserCreationForm):
+    
+        
+    email = forms.EmailField(
+        label='Email Address',
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'type': 'text',
+        }))
+    password1 = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'type': 'password',
+        }))
+    
+    password2 = forms.CharField(
+        label='Confirm Password',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'type': 'password',
+        }))
+    
+    
+    class Meta:
+        model = User
+        fields = ('email', 'password1', 'password2', )
+    
