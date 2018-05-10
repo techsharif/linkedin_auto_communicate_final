@@ -15,7 +15,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 
 from app.forms import UserRegisterForm
-from app.models import MembershipType, Profile, Membership
+from app.models import MembershipType, Membership
 from app.tokens import account_activation_token
 from django.utils import timezone
 from datetime import timedelta

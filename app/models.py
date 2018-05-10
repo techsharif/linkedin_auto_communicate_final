@@ -21,15 +21,10 @@ class MemberShipField(models.Model):
     class Meta:
         abstract = True
 
-#may not be used        
-class Profile(MemberShipField):
-    user = models.OneToOneField(User, related_name='profile', 
-                             on_delete=models.CASCADE)
-        
 
 class LinkedInUser(models.Model):
-    #profile = models.ForeignKey(Profile, related_name='linkedusers',
-    #                            on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='linkedusers',
+                                on_delete=models.CASCADE)
     
     membership = models.ManyToManyField('Membership')
     email = models.CharField(max_length=254)
@@ -62,7 +57,6 @@ class Schedule(models.Model):
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
-
     
     def __str__(self):
         return self.name
