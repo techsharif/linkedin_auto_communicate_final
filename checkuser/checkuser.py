@@ -131,6 +131,6 @@ if __name__ == '__main__':
         actor_name_lists = driver.find_elements_by_class_name("actor-name")
         for actor_name_list in actor_name_lists:
             actor_name = actor_name_list.text
-            print actor_name.encode("utf-8")
+            print (actor_name.encode("utf-8"))
 
         driver.find_element_by_class_name("next").click()

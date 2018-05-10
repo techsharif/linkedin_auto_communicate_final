@@ -52,7 +52,7 @@
 					Current connections:
 				</td>
 				<td>
-					97				</td>
+					{{connection_count}}				</td>
 			</tr>
 			 <tr>
 				<td>
@@ -155,16 +155,19 @@
 	</tr>
 	</thead>
 	<tbody>
+	{% for mc in object.connectorcampaigns.all %}
 		<tr>
-	  <td><a href="https://jetbuzz.io/5386961/campaigns/3/">python developement</a></td>
+	  <td><a href="{%url 'messenger-campaign' pk=object.id pk_alt=mc.id %}">{{mc.name}}</a></td>
 	  <td>
-					<span class="label bg-black">Inactive</span>
-				</td>
-	  <td>1</td>
+		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}			
+		</td>
+	  <td>{% mc.contacts.all | length}}</td>
 	  <td>0</td>
 	  <td>0</td>
 	  <td>0</td>
 	</tr>
+	{%endfor%}
+		
 		</tbody>
 </table></div>
 		<!-- /.box-body -->
@@ -185,22 +188,17 @@
 	</tr>
 	</thead>
 	<tbody>
+	{% for mc in object.messegercampaigns.all %}
 		<tr>
-	  <td><a href="https://jetbuzz.io/5386961/campaigns/2/">python developer</a></td>
+	  <td><a href="{%url 'messenger-campaign' pk=object.id pk_alt=mc.id %}">{{mc.name}}</a></td>
 	  <td>
-					<span class="label bg-black">Inactive</span>
-				</td>
+		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}
+	</td>
 	  <td>0</td>
 	  <td>0</td>
 	</tr>
-		<tr>
-	  <td><a href="https://jetbuzz.io/5386961/campaigns/4/">angular develooper</a></td>
-	  <td>
-					<span class="label bg-black">Inactive</span>
-				</td>
-	  <td>1</td>
-	  <td>0</td>
-	</tr>
+	{%endfor%}
+		
 		</tbody>
 </table></div>
 	  </div>

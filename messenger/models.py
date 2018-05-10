@@ -184,6 +184,7 @@ class Inbox(ContactField):
                               default=ContactStatus.OLD_CONNECT)
     is_connected = models.BooleanField(default=False)
     is_read = models.BooleanField(default=True)
+    connected_date = models.DateTimeField(blank=True, null=True)
     
     class Meta():
         abstract = False
