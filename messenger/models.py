@@ -35,7 +35,7 @@ class ContactStatus(object):
     
     WELCOME_MES = 'Welcome Mes'
     
-    contact_statues = (
+    contact_statuses = (
         (ALL, ALL),
         (LATER, LATER),
         (NO_INTEREST, NO_INTEREST),
@@ -75,6 +75,15 @@ class ContactStatus(object):
         (IN_QUEUE, IN_QUEUE),
         (CONNECT_REQ, CONNECT_REQ)
         )
+    
+    CHAT_MSG = 'Chat'
+    
+    MESSSAGETYPES = (
+        (REPLIED, REPLIED),
+        (TALKING, TALKING),
+        (TALKING_REPLIED, TALKING_REPLIED),
+        (CONNECT_REQ, CONNECT_REQ)
+        )
 
 class CommonContactField(models.Model):
     company = models.CharField(max_length=100, db_index=True, blank=True, 
@@ -90,9 +99,8 @@ class CommonContactField(models.Model):
         abstract = True
     
 class ContactField(CommonContactField):
-    
-    name = models.CharField(max_length=100, db_index=True)
-    
+    linkedin_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, db_index=True)    
     latest_acitvity = models.DateTimeField()
     
     class Meta:
@@ -147,14 +155,23 @@ class CampaignStep(TimeStampedModel, CampaignStepField):
         abstract = False
         # db_table = 'campaign_setps'
 
-
-class Message(TimeStampedModel):
-    owner = models.ForeignKey(LinkedInUser, related_name='senders',
-                              on_delete=models.CASCADE)
-    contact = models.ForeignKey("Inbox", related_name='receivers',
-                               on_delete=models.SET_NULL, null=True)
+class MessageField(TimeStampedModel):
+    
     text = models.TextField()
     time = models.DateTimeField()
+    class Meta():
+        abstract = True
+    
+class Message(MessageField):
+    
+    contact = models.ForeignKey("Inbox", related_name='receivers',
+                               on_delete=models.SET_NULL, null=True)
+    type = models.CharField(max_length=50, blank=True, 
+                            choices=ContactStatus.MESSSAGETYPES,
+                            default=ContactStatus.TALKING)
+    messenger = models.ForeignKey(Campaign, related_name='messenger_messages',
+                                  on_delete=models.CASCADE, blank=True,
+                                  null=True)
 
     class Meta():
         abstract = False
@@ -167,3 +184,7 @@ class Inbox(ContactField):
                               default=ContactStatus.OLD_CONNECT)
     is_connected = models.BooleanField(default=False)
     is_read = models.BooleanField(default=True)
+    
+    class Meta():
+        abstract = False
+    

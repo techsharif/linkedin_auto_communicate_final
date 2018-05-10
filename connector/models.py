@@ -1,8 +1,10 @@
 from django.db import models
 
-from app.models import LinkedInUser
+from app.models import LinkedInUser, BotTaskStatus
 from messenger.models import CommonContactField, TimeStampedModel, \
-    CampaignStepField, ContactStatus, Inbox
+    CampaignStepField, ContactStatus, Inbox, MessageField
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 class Search(CommonContactField):
@@ -24,7 +26,7 @@ class Search(CommonContactField):
         verbose_name_plural = 'Searchs'
 
     def __str__(self):
-        return self.searc_hname
+        return self.search_name
         
 
 class SearchResult(CommonContactField):
@@ -67,4 +69,25 @@ class ConnectorCampaign(models.Model):
 class ConnectorStep(TimeStampedModel, CampaignStepField):
     campaign = models.ForeignKey(ConnectorCampaign, related_name='campaignsteps',
                                  on_delete=models.CASCADE)
+    
+class ConnectMessage(MessageField):
+    
+    requestee = models.ForeignKey(Inbox, related_name='requestees',
+                               on_delete=models.SET_NULL, null=True)
+    type = models.CharField(max_length=50, blank=True, 
+                            choices=ContactStatus.MESSSAGETYPES,
+                            default=ContactStatus.TALKING)
+    connector = models.ForeignKey(ConnectorCampaign, related_name='connector_messages',
+                                  on_delete=models.CASCADE, blank=True,
+                                  null=True)
+    class Meta():
+        abstract = False
+        
+class TaskQueue(models.Model):
+    status = models.CharField(max_length=10, choices=BotTaskStatus.statuses, 
+                              default=BotTaskStatus.QUEUED)
+    queue_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('queue_type', 'object_id')
+    
     
