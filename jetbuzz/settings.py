@@ -86,13 +86,6 @@ WSGI_APPLICATION = 'jetbuzz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -159,10 +152,3 @@ try:
 except ImportError:
     pass
 
-
-# EMAIl credential
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'info@mdanerichardson.com'
-EMAIL_HOST_PASSWORD = 'Snow1007!'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
