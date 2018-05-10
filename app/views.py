@@ -17,6 +17,8 @@ from django.views.generic.edit import CreateView
 from app.forms import UserRegisterForm
 from app.models import MembershipType, Profile, Membership
 from app.tokens import account_activation_token
+from django.utils import timezone
+from datetime import timedelta
 
 User = get_user_model()
 
@@ -97,6 +99,15 @@ class ProfileView(TemplateView):
     template_name = 'app/profile.html'
 
 
+def membership_add_subscription(user, membership_type, active=False):
+    valid_from = timezone.now()
+    valid_to = valid_from + timedelta(days=membership_type.day_to_live)
+    
+    membership = Membership(user=user, membership_type=membership_type,
+                            valid_to=valid_to, valid_from=valid_from,
+                            updated_at=valid_from, active=active)
+    membership.save()
+
 class ActivateAccount(View):
     template_name = "registration/invalid_activation.html"
 
@@ -114,8 +125,8 @@ class ActivateAccount(View):
             #profile = user.profile
             #if profile.day_to_live <= 0:
             membership_type, created = MembershipType.objects.get_or_create(name='Free')
-            membership = Membership(user=user, membership_type=membership_type)
-            membership.save()
+            membership_add_subscription(user, membership_type, True)
+        
             #    membership.membership_type.add(membership_type)
             #    profile.day_to_live = membership_type.day_to_live
             

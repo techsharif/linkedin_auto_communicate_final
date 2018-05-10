@@ -81,7 +81,9 @@ class Membership(models.Model):
     active = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.membership_type
+        return "{0}-{1}-{1}".format(self.user.email, 
+                                    self.membership_type.name,
+                                    self.valid_to) 
     
     
 class BotTaskStatus:
