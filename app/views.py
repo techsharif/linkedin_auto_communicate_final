@@ -3,7 +3,7 @@ from smtplib import SMTPException
 from django.contrib.auth import get_user_model, login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import  HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
@@ -38,14 +38,14 @@ class RegisterView(CreateView):
     form_class = UserRegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('register_done')
-    
+
     def form_invalid(self, form):
         print('invalid:', form.errors)
         return super(RegisterView, self).form_invalid(form)
 
     def form_valid(self, form):
         # return CreateView.form_valid(self, form)
-        
+
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.email
@@ -53,7 +53,7 @@ class RegisterView(CreateView):
             user.save()
             # create profile
             # may be not use this model for now
-            #Profile(user=user).save()
+            # Profile(user=user).save()
 
             # send validate email
 
@@ -71,25 +71,14 @@ class RegisterView(CreateView):
                 'token': account_activation_token.make_token(user),
             })
 
-            # here username is email
-            email_address = user.username
-
-            # create email
-            email = EmailMessage(
-                subject, message, to=[email_address]
-            )
-
-            # send email
-            try:
-                email.send()
-            except SMTPException as e:
-                # todo: need to handle exception if email not send
-                pass
+            # send activation link to the user
+            user.email_user(subject, message)
 
             return super(RegisterView, self).form_valid(form)
         else:
-            
+
             return super(RegisterView, self).form_invalid(form)
+
 
 class SubsriptionView(TemplateView):
     template_name = 'app/subscription.html'
@@ -102,11 +91,12 @@ class ProfileView(TemplateView):
 def membership_add_subscription(user, membership_type, active=False):
     valid_from = timezone.now()
     valid_to = valid_from + timedelta(days=membership_type.day_to_live)
-    
+
     membership = Membership(user=user, membership_type=membership_type,
                             valid_to=valid_to, valid_from=valid_from,
                             updated_at=valid_from, active=active)
     membership.save()
+
 
 class ActivateAccount(View):
     template_name = "registration/invalid_activation.html"
@@ -122,14 +112,14 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             ## add membership only
-            #profile = user.profile
-            #if profile.day_to_live <= 0:
+            # profile = user.profile
+            # if profile.day_to_live <= 0:
             membership_type, created = MembershipType.objects.get_or_create(name='Free')
             membership_add_subscription(user, membership_type, True)
-        
+
             #    membership.membership_type.add(membership_type)
             #    profile.day_to_live = membership_type.day_to_live
-            
+
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
