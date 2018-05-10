@@ -20,19 +20,26 @@ class MemberShipField(models.Model):
     
     class Meta:
         abstract = True
-        
+
+#may not be used        
 class Profile(MemberShipField):
     user = models.OneToOneField(User, related_name='profile', 
                              on_delete=models.CASCADE)
         
 
 class LinkedInUser(models.Model):
-    profile = models.ForeignKey(Profile, related_name='linkedusers',
-                                on_delete=models.CASCADE)
+    #profile = models.ForeignKey(Profile, related_name='linkedusers',
+    #                            on_delete=models.CASCADE)
+    
+    membership = models.ManyToManyField('Membership')
     email = models.CharField(max_length=254)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=True)
+    tz = models.CharField(max_length=50, default='America/New_York')
+    start_from = models.IntegerField(default=0)
+    start_to = models.IntegerField(default=12)
+    is_weekendwork = models.BooleanField(default=True)
 
     def __str__(self):
         return self.email
@@ -42,7 +49,8 @@ class UserServer(models.Model):
                                       on_delete=models.CASCADE)
     ip = models.CharField(max_length=15, blank=True, null=True)
     active = models.BooleanField(default=True)
-    
+
+# just added them into LinkedUser table to reduce the relation    
 class Schedule(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='schedules',
                                       on_delete=models.CASCADE)
@@ -62,7 +70,10 @@ class MembershipType(MemberShipField):
 class Membership(models.Model):
     user = models.ForeignKey(User, related_name='subscriptions', 
                              on_delete=models.CASCADE)
-    membership_type = models.ManyToManyField(MembershipType)
+    membership_type = models.ForeignKey(MembershipType,
+                                        related_name='membership_types',
+                                        on_delete=models.CASCADE
+                                        )
     valid_from = models.DateTimeField(blank=True, null=True)
     valid_to = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

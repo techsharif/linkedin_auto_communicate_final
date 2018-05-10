@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
 
 class RegisterForm(forms.Form):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
@@ -42,6 +42,20 @@ class ProfileSettingsForm(forms.Form):
 User = get_user_model()
 
 class UserRegisterForm(UserCreationForm):
+    error_messages2 = {
+        'email_exists': _("The email address is in-use. Please choose another one."),
+    }
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        user = User.objects.filter(email=email).first()
+        if user is not None:            
+            raise forms.ValidationError(
+                self.error_messages2['email_exists'],
+                code='email_exists',
+            )
+            
+        return email
+        
     
         
     email = forms.EmailField(

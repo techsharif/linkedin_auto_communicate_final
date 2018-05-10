@@ -36,16 +36,22 @@ class RegisterView(CreateView):
     form_class = UserRegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('register_done')
+    
+    def form_invalid(self, form):
+        print('invalid:', form.errors)
+        return super(RegisterView, self).form_invalid(form)
 
     def form_valid(self, form):
         # return CreateView.form_valid(self, form)
+        
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = form.cleaned_data.get('email')
+            user.username = user.email
             user.is_active = False
             user.save()
             # create profile
-            Profile(user=user).save()
+            # may be not use this model for now
+            #Profile(user=user).save()
 
             # send validate email
 
@@ -78,8 +84,10 @@ class RegisterView(CreateView):
                 # todo: need to handle exception if email not send
                 pass
 
-        return super(RegisterView, self).form_valid(form)
-
+            return super(RegisterView, self).form_valid(form)
+        else:
+            
+            return super(RegisterView, self).form_invalid(form)
 
 class SubsriptionView(TemplateView):
     template_name = 'app/subscription.html'
@@ -102,13 +110,15 @@ class ActivateAccount(View):
             user.is_active = True
             user.save()
             login(request, user)
-            profile = user.profile
-            if profile.day_to_live <= 0:
-                membership_type, created = MembershipType.objects.get_or_create(name='Free')
-                membership = Membership(user=user, membership_type=membership_type)
-                membership.save()
-                membership.membership_type.add(membership_type)
-                profile.day_to_live = membership_type.day_to_live
-            return HttpResponseRedirect(reverse('home'))
+            ## add membership only
+            #profile = user.profile
+            #if profile.day_to_live <= 0:
+            membership_type, created = MembershipType.objects.get_or_create(name='Free')
+            membership = Membership(user=user, membership_type=membership_type)
+            membership.save()
+            #    membership.membership_type.add(membership_type)
+            #    profile.day_to_live = membership_type.day_to_live
+            
+            return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
