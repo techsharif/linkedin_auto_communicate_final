@@ -16,7 +16,6 @@ from django.conf.global_settings import LOGIN_URL
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -26,19 +25,19 @@ SECRET_KEY = '(u!_i1a#_q85sjhw5arn)86+76$j!07zjo9&7*zt^80_5$w0ab'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.makju.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['www.makju.com', '127.0.0.1', 'localhost']
 
-#Login Redirect URL
+# Login Redirect URL
 LOGIN_REDIRECT_URL = 'accounts'
 LOGIN_URL = '/login'
 
-#console email backend
+# console email backend
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 
 INSTALLED_APPS = [
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jetbuzz.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -92,15 +90,13 @@ DATABASES = {
         'NAME': 'sq_jetbuzz_db',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -120,7 +116,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -134,7 +129,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -144,11 +138,17 @@ STATICFILES_DIRS = [
 ]
 
 # Media files (image, video)
-MEDIA_ROOT = os.path.join(BASE_DIR,'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
+
+# EMAIl credential
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'info@mdanerichardson.com'
+EMAIL_HOST_PASSWORD = 'Snow1007!'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 try:
     from .local_settings import *
 except ImportError:
     pass
-
