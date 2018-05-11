@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC, wait
 from django.contrib.auth import get_user_model
 
 from app.forms import PinForm
-from app.models import LinkedInUser, Membership
+from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
 from django.views.generic.detail import DetailView
 from messenger.models import Inbox, ContactStatus
@@ -101,8 +101,7 @@ class AccountAdd(View):
                 membership = Membership.objects.get(user=request.user)
 
                 # create of get linkedin user
-                linkedin_user, created = LinkedInUser.objects.get_or_create(email=user_email,
-                                                                            password=user_password)
+                linkedin_user, created = LinkedInUser.objects.get_or_create(user=request.user, email=user_email, password=user_password)
                 linkedin_user.latest_login = datetime.datetime.now()
                 linkedin_user.save()
                 linkedin_user.membership.add(membership)
@@ -157,4 +156,8 @@ def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
+def remove_account(request, pk):
+    linkedin_user = LinkedInUser.objects.get(id=pk)
+    BotTask(owner=linkedin_user, task_type='delete', name='remove linkedin account').save()
+    return redirect('accounts')
 
