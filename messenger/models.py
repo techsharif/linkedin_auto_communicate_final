@@ -136,14 +136,23 @@ class Campaign(TimeStampedModel):
     
     # True is messenger campaign, false is connector campaign
     is_bulk = models.BooleanField(default=False)
+    connection_message = models.TextField(max_length=2000, blank=True, null=True)
+    welcome_message = models.TextField(max_length=2000, blank=True, null=True)
     
     def __str__(self):
         return self.title
+    
+    def copy_step_message(self):        
+        for cc in self.copy_campaign.campaignsteps.all():
+            cc.clone(self)
 
 class CampaignStepField(models.Model):
     step_number = models.IntegerField(db_index=True, default=1)
+    step_time = models.IntegerField(blank=True, null=True, default=0)
     message = models.TextField()
     action = models.CharField(max_length=100, db_index=True)
+    
+    
     class Meta:
         abstract = False
         
@@ -154,7 +163,12 @@ class CampaignStep(TimeStampedModel, CampaignStepField):
 
     class Meta():
         abstract = False
-        # db_table = 'campaign_setps'
+        
+    def clone(self, parent):
+        self.pk = None
+        self.campaign = parent
+        self.save()
+        
 
 class MessageField(TimeStampedModel):
     
@@ -171,7 +185,7 @@ class ChatMessage(MessageField):
     type = models.CharField(max_length=50, blank=True, 
                             choices=ContactStatus.MESSSAGETYPES,
                             default=ContactStatus.TALKING)
-    messagestep = models.ForeignKey(CampaignStep, related_name='step_messages',
+    campaign = models.ForeignKey(Campaign, related_name='campaign_messages',
                                   on_delete=models.CASCADE, blank=True,
                                   null=True)
     replied_date = models.DateTimeField(blank=True, null=True)

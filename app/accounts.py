@@ -11,7 +11,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, BaseDetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -59,6 +59,7 @@ class AccountDetail(AccountMixins, DetailView):
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
         ctx['connectors'] = camp_qs.filter(is_bulk=False)
+        ctx['account_home'] = True
         
         return ctx    
 
@@ -224,15 +225,18 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         return super(AccountMessengerCreate, self).form_invalid(form)
     
     def form_valid(self, form):
-        print('form:', form.is_valid, form )
-        if form.is_valid():
-            camp = form.save(commit=False)
-            camp.owner_id = self.kwargs.get('acc_pk')
-            camp.is_bulk = self.is_bulk
-            camp.save()
-            return super(AccountMessengerCreate, self).form_valid(form)
         
-        return super(AccountMessengerCreate, self).form_invalid(form)
+        camp = form.instance
+        camp.owner_id = self.kwargs.get('acc_pk')
+        camp.is_bulk = self.is_bulk
+        camp = form.save()
+        # if copy step message
+        if camp.copy_campaign:
+            camp.copy_step_message()
+            
+        return super(AccountMessengerCreate, self).form_valid(form)
+        
+        
     
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignCreate(AccountMessengerCreate):
@@ -248,13 +252,14 @@ class AccountCampaignCreate(AccountMessengerCreate):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountMessengerDetail(AccountMixins, TemplateView):
-    template_name = 'app/accounts_campaign_add.html'
+class AccountMessengerDetail(AccountMixins, UpdateView):
+    template_name = 'app/accounts_messenger_update.html'
+    model = Campaign
     
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(TemplateView):
-    template_name = 'app/accounts_campaign_add.html'
-
+    template_name = 'app/accounts_campaign_update.html'
+    model = Campaign
 
 class JSONResponseMixin:
     """

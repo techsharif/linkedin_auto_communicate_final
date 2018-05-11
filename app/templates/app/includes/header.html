@@ -59,10 +59,10 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="{%if 'accounts' in request.path %}active{%endif%}">
                     <a href="{% url 'accounts' %}" title="My Accounts"> Accounts</a>
                 </li>
-                <li>
+                <li class="{%if 'subscription' in request.path %}active{%endif%}">
                     <a href="{% url 'subscription' %}" title="My subscrpition"> Subscription</a>
                 </li>
                 <li>
