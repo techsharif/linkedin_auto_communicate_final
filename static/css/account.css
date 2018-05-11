@@ -16,3 +16,11 @@
     margin-left:auto;
 	margin-right:auto;
 }
+
+.nav-wrapper .nav > li.active {
+    background-color:#fff;
+    color: #23b7e5;
+}
+.nav-wrapper .nav > li.active>a{
+	color: #23b7e5;
+}
