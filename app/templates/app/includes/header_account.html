@@ -1,11 +1,12 @@
 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
 				<ul class="nav navbar-nav">
 			<li class="active"><a href="/accounts/1/"><span>Home</span></a></li>
-			<li><a href="/accounts/1/network/"><span>My Network</span></a></li>
-			<li><a href="/accounts/1/messenger/"><span>Messenger</span></a></li>
-			<li><a href="/accounts/1/campaigns/"><span>Connector</span></a></li>
-			<li><a href="/accounts/1/search/"><span>Search</span></a></li>
-			<li><a href="/accounts/1/all/"><span>Inbox <span class="inUnread" style="display:none">(<span>0</span>)</span></span></a></li>
-			<li><a href="/accounts/1/tasks/">Tasks Queue</a></li>
+			<li><a href="{% url 'account-network' acc_pk=acc_pk %}"><span>My Network</span></a></li>
+			<li><a href="{% url 'account-messenger' acc_pk=acc_pk %}"><span>Messenger</span></a></li>
+			<li><a href="{% url 'account-campaign' acc_pk=acc_pk %}"><span>Connector</span></a></li>
+			<li><a href="{% url 'account-search' acc_pk=acc_pk %}"><span>Search</span></a></li>
+			<li><a href="{% url 'account-all' acc_pk=acc_pk %}"><span>Inbox 
+			<span class="inUnread" style="display:none">(<span>0</span>)</span></span></a></li>
+			<li><a href="{% url 'account-task' acc_pk=acc_pk %}">Tasks Queue</a></li>
 		</ul>
 				</div>

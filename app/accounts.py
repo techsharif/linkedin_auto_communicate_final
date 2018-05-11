@@ -1,35 +1,54 @@
 import datetime
+import json
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http.response import HttpResponse
+from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView, View
+from django.views.generic.detail import DetailView, BaseDetailView
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC, wait
-from django.contrib.auth import get_user_model
+from selenium.webdriver.support.ui import WebDriverWait
 
 from app.forms import PinForm
-from app.models import LinkedInUser, Membership
+from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
-from django.views.generic.detail import DetailView
-from messenger.models import Inbox, ContactStatus
+from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm
+from messenger.models import Inbox, ContactStatus, Campaign
 
-decorators = (login_required,)
+
 User = get_user_model()
-
+decorators = (never_cache, login_required,)
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
 
 
+class AccountMixins(object):
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountMixins, self).get_context_data(**kwargs)
+        if 'acc_pk' in self.kwargs:
+            ctx['acc_pk'] = self.kwargs.get('acc_pk')
+        else:
+            ctx['acc_pk'] = self.kwargs.get('pk')
+        
+        return ctx
+    
+
 @method_decorator(decorators, name='dispatch')
-class AccountDetail(DetailView):
+class AccountDetail(AccountMixins, DetailView):
     template_name = 'app/accounts_detail.html'
     model = LinkedInUser
     
@@ -40,6 +59,10 @@ class AccountDetail(DetailView):
         statuses = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
                                           status__in=statuses).count()
+        camp_qs = Campaign.objects.filter(owner=linkedIn_user)
+        ctx['messengers'] = camp_qs.filter(is_bulk=True)
+        ctx['connectors'] = camp_qs.filter(is_bulk=False)
+        
         return ctx    
 
 
@@ -113,48 +136,142 @@ class AccountAdd(View):
 
         return redirect('accounts')
 
+class InboxMixins(object):
+    status_list = None
+    
+    def get_queryset(self):
+        pass
+    
 
 @method_decorator(decorators, name='dispatch')
-class AccountNetwork(TemplateView):
+class AccountNetwork(AccountMixins, InboxMixins, ListView):
     template_name = 'app/accounts_network.html'
-
+    
 
 @method_decorator(decorators, name='dispatch')
-class AccounMessenger(TemplateView):
+class AccounMessenger(AccountMixins, ListView):
     template_name = 'app/accounts_messenger.html'
-
+    is_bulk = True
+    model = Campaign
+    
+    def get_queryset(self):
+        qs = super(AccounMessenger, self).get_queryset()
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('acc_pk'))
+        return qs
 
 @method_decorator(decorators, name='dispatch')
-class AccountCampaign(TemplateView):
+class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
+    is_bulk = False
+    
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountSearch(TemplateView):
+class AccountSearch(AccountMixins, TemplateView):
     template_name = 'app/accounts_search.html'
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountInbox(TemplateView):
+class AccountInbox(AccountMixins, TemplateView):
     template_name = 'app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountTask(TemplateView):
+class AccountTask(AccountMixins, TemplateView):
     template_name = 'app/accounts_task.html'
 
 
 @method_decorator(decorators, name='dispatch')
-class AccounMessengerCreate(TemplateView):
-    template_name = 'app/accounts_messenger_add.html'
+class AccountMessengerCreate(AccountMixins, CreateView):
+    template_name = 'app/accounts_messenger_add.html'    
+    form_class = CreateCampaignMesgForm
+    is_bulk = True
+    
+    def get_form(self, form_class=None):
+        acc_id = self.kwargs.get('acc_pk')
+        if self.request.method == "POST":
+            form = self.form_class(self.request.POST, owner_id=acc_id,
+                                   is_bulk=self.is_bulk)
+        else:
+            form = self.form_class(owner_id=acc_id, is_bulk=self.is_bulk)
+        return form
+    
+    def get_success_url(self):
+        
+        return reverse_lazy('account-messenger', kwargs=self.kwargs)
+    
+    def form_invalid(self, form):
+        print('form_invalid:', form.is_valid(), form )
+        return super(AccountMessengerCreate, self).form_invalid(form)
+    
+    def form_valid(self, form):
+        print('form:', form.is_valid, form )
+        if form.is_valid():
+            camp = form.save(commit=False)
+            camp.owner_id = self.kwargs.get('acc_pk')
+            camp.is_bulk = self.is_bulk
+            camp.save()
+            return super(AccountMessengerCreate, self).form_valid(form)
+        
+        return super(AccountMessengerCreate, self).form_invalid(form)
+    
+@method_decorator(decorators, name='dispatch')
+class AccountCampaignCreate(AccountMessengerCreate):
+    template_name = 'app/accounts_campaign_add.html'
+    form_class = CreateCampaignForm
+    
+    def __init__(self, *args, **kwargs):
+        super(AccountCampaignCreate, self).__init__()
+        self.is_bulk = False
+        
+    def get_success_url(self):
+        return reverse_lazy('account-campaign', kwargs=self.kwargs)
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountCampaignCreate(TemplateView):
+class AccountMessengerDetail(AccountMixins, TemplateView):
+    template_name = 'app/accounts_campaign_add.html'
+    
+@method_decorator(decorators, name='dispatch')
+class AccountCampaignDetail(TemplateView):
     template_name = 'app/accounts_campaign_add.html'
 
+
+class JSONResponseMixin:
+    """
+    A mixin that can be used to render a JSON response.
+    """
+    def render_to_json_response(self, context, **response_kwargs):
+        """
+        Returns a JSON response, transforming 'context' to make the payload.
+        """
+        response_kwargs['safe'] = False
+        return JsonResponse(
+            self.get_data(context),
+            **response_kwargs
+        )
+
+    def get_data(self, context):
+        """
+        Returns an object that will be serialized as JSON by json.dumps().
+        """       
+        
+        return context['object'].toJSON()
+    
+class JSONDetailView(JSONResponseMixin, BaseDetailView):
+    def render_to_response(self, context, **response_kwargs):
+        return self.render_to_json_response(context, **response_kwargs)
+    
+csrf_exempt_decorators = decorators + (csrf_exempt, ) 
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountBotTask(JSONDetailView):
+    template_name = 'app/bottask_detail.html'
+    model = BotTask
+    
 def can_add_account(user):
     # check if the current user can add more linked account
     pass
+
+
 
 

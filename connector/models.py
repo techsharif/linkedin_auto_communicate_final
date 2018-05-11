@@ -80,6 +80,9 @@ class ConnectMessage(MessageField):
     connector = models.ForeignKey(ConnectorCampaign, related_name='connector_messages',
                                   on_delete=models.CASCADE, blank=True,
                                   null=True)
+    is_connected = models.BooleanField(default=False)
+    is_replied_other = models.BooleanField(default=False)
+    
     class Meta():
         abstract = False
         
