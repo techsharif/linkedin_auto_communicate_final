@@ -1,5 +1,8 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.core import serializers
+from django.core.serializers import json
+from django.db import models
+
 
 User = get_user_model()
 
@@ -39,20 +42,7 @@ class LinkedInUser(models.Model):
     def __str__(self):
         return self.email
     
-class UserServer(models.Model):
-    owner = models.ForeignKey(LinkedInUser, related_name='servers',
-                                      on_delete=models.CASCADE)
-    ip = models.CharField(max_length=15, blank=True, null=True)
-    active = models.BooleanField(default=True)
 
-# just added them into LinkedUser table to reduce the relation    
-class Schedule(models.Model):
-    owner = models.ForeignKey(LinkedInUser, related_name='schedules',
-                                      on_delete=models.CASCADE)
-    tz = models.CharField(max_length=50, default='America/New_York')
-    start_from = models.IntegerField(default=0)
-    start_to = models.IntegerField(default=12)
-    is_weekendwork = models.BooleanField(default=True)
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)
@@ -101,5 +91,12 @@ class BotTask(models.Model):
                               default=BotTaskStatus.QUEUED)
     lastrun_date = models.DateTimeField(blank=True, null=True)
     completed_date = models.DateTimeField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
+    
+    def toJSON(self):
+        xjson = serializers.serialize('json', [self,])
+        return xjson
     
         

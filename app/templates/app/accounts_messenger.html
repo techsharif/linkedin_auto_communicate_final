@@ -24,7 +24,7 @@
    
    	<div class="row">
 	<div class="col-sm-4 col-md-3">
-		<a class="btn btn-primary btn-block" href="/5386961/campaigns/?act=add&amp;is_bulk=1">NEW MESSENGER CAMPAIGN</a>
+		<a class="btn btn-primary btn-block" href="{% url 'account-messenger-add' acc_pk=acc_pk %}">NEW MESSENGER CAMPAIGN</a>
 	</div>
 	<div class="col-sm-8 col-md-9">
 		<div class="panel-group info">
@@ -49,40 +49,10 @@
 		</div>
 	</div>
 </div>
-<div class="box">
-	<div class="box-header with-border">
-	  <h3 class="box-title">Messenger Campaigns</h3>
-	</div>
-	<!-- /.box-header -->
-	<div class="box-body table-responsive no-padding" id="bulk_campaigns_list"><table class="table table-hover">
-	<thead>
-	<tr>
-	  <th>Title</th>
-	  <th>Status</th>
-	  <th>Contacts</th>
-	  <th>Replied</th>
-	</tr>
-	</thead>
-	<tbody>
-		<tr>
-	  <td><a href="#">python developer</a></td>
-	  <td>
-					<span class="label bg-black">Inactive</span>
-				</td>
-	  <td>0</td>
-	  <td>0</td>
-	</tr>
-		<tr>
-	  <td><a href="#">angular develooper</a></td>
-	  <td>
-					<span class="label bg-black">Inactive</span>
-				</td>
-	  <td>1</td>
-	  <td>0</td>
-	</tr>
-		</tbody>
-</table></div>
-</div>
+
+{%include 'app/includes/campaigns/messenger_list.html' with object_list=object_list %}
+
+
 <!-- /.box -->	</section>
 
 {%endblock%}

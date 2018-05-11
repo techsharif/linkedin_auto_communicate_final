@@ -42,8 +42,8 @@
                 -->
                 
             </ul>
-            {%if account_menu%}
-            	{%include 'app/includes/header_account.html'%}
+            {%if acc_pk%}
+            	{%include 'app/includes/header_account.html' with acc_pk=acc_pk %}
             	
             {%endif%}
             

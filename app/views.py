@@ -40,7 +40,7 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('register_done')
 
     def form_invalid(self, form):
-        print('invalid:', form.errors)
+        # print('invalid:', form.errors)
         return super(RegisterView, self).form_invalid(form)
 
     def form_valid(self, form):
@@ -63,7 +63,7 @@ class RegisterView(CreateView):
             subject = 'Activate account'
 
             # generate message
-            print(urlsafe_base64_encode(force_bytes(user.pk)))
+            # print(urlsafe_base64_encode(force_bytes(user.pk)))
             message = render_to_string('app/account_activation_email.html', {
                 'user': user,
                 'domain': site_name.domain,

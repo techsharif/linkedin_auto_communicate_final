@@ -25,8 +25,8 @@
    
    	<div class="row">
 	<div class="col-sm-4 col-md-3">
-		<a class="btn btn-primary btn-block" href="{% url 'account-messenger-add' pk=1 %}">NEW MESSENGER CAMPAIGN</a>
-		<a class="btn btn-primary btn-block" href="{% url 'account-campaign-add' pk=1 %}">NEW CONNECTOR CAMPAIGN</a>
+		<a class="btn btn-primary btn-block" href="{% url 'account-messenger-add' acc_pk=object.id %}">NEW MESSENGER CAMPAIGN</a>
+		<a class="btn btn-primary btn-block" href="{% url 'account-campaign-add' acc_pk=object.id %}">NEW CONNECTOR CAMPAIGN</a>
 		
 		<div class="text-center pt-10">
 			<a href="{% url 'account-settings' pk=1 %}">Set account schedule</a>
@@ -137,71 +137,12 @@
 		<!-- /.box-body -->
 	  </div>
 	  <!-- /.box -->
+	  {%include 'app/includes/campaigns/connector_list.html' with object_list=connectors.all box_solid=True %}
+	 
+	  {%include 'app/includes/campaigns/messenger_list.html'  with object_list=messengers.all box_solid=True %}
 	  
-	  <div class="box box-solid">
-		<div class="box-header with-border">
-		  <h3 class="box-title">Connector campaigns</h3>
-		</div>
-		<!-- /.box-header -->
-		<div class="box-body table-responsive pt-0" id="campaigns_list"><table class="table table-hover">
-	<thead>
-	<tr>
-	  <th>Title</th>
-	  <th>Status</th>
-	  <th>Contacts</th>
-	  <th>Connected</th>
-	  <th>Replied to<br>connection message</th>
-	  <th>Replied to<br>other messages</th>
-	</tr>
-	</thead>
-	<tbody>
-	{% for mc in object.connectorcampaigns.all %}
-		<tr>
-	  <td><a href="{%url 'messenger-campaign' pk=object.id pk_alt=mc.id %}">{{mc.name}}</a></td>
-	  <td>
-		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}			
-		</td>
-	  <td>{% mc.contacts.all | length}}</td>
-	  <td>0</td>
-	  <td>0</td>
-	  <td>0</td>
-	</tr>
-	{%endfor%}
-		
-		</tbody>
-</table></div>
-		<!-- /.box-body -->
-	  </div>
 	  
-	  <div class="box box-solid">
-		<div class="box-header with-border">
-		  <h3 class="box-title">Messenger campaigns</h3>
-		</div>
-		<!-- /.box-header -->
-		<div class="box-body table-responsive no-padding" id="bulk_campaigns_list"><table class="table table-hover">
-	<thead>
-	<tr>
-	  <th>Title</th>
-	  <th>Status</th>
-	  <th>Contacts</th>
-	  <th>Replied</th>
-	</tr>
-	</thead>
-	<tbody>
-	{% for mc in object.messegercampaigns.all %}
-		<tr>
-	  <td><a href="{%url 'messenger-campaign' pk=object.id pk_alt=mc.id %}">{{mc.name}}</a></td>
-	  <td>
-		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}
-	</td>
-	  <td>0</td>
-	  <td>0</td>
-	</tr>
-	{%endfor%}
-		
-		</tbody>
-</table></div>
-	  </div>
+	  
 	</div>
 	<!-- /.col -->
 </div>	</section>

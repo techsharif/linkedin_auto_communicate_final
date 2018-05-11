@@ -1,0 +1,30 @@
+<div class="box {%if box_solid%}box-solid{%endif%}">
+		<div class="box-header with-border">
+		  <h3 class="box-title">Messenger campaigns</h3>
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body table-responsive no-padding" id="bulk_campaigns_list"><table class="table table-hover">
+	<thead>
+	<tr>
+	  <th>Title</th>
+	  <th>Status</th>
+	  <th>Contacts</th>
+	  <th>Replied</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for mc in object_list %}
+		<tr>
+	  <td><a href="{%url 'messenger-campaign' acc_pk=acc_pk pk=mc.id %}">{{mc.title}}</a></td>
+	  <td>
+		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}
+	</td>
+	  <td>0</td>
+	  <td>0</td>
+	</tr>
+	{%endfor%}
+		
+		</tbody>
+</table></div>
+	  </div>
+	  
