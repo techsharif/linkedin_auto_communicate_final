@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls.base import reverse_lazy
+from django.urls.base import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
@@ -65,29 +65,13 @@ class AccountDetail(AccountMixins, DetailView):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountSettings(View):
+class AccountSettings(UpdateView):
+    model = LinkedInUser
+    fields = ['start_from','start_to','is_weekendwork','tz']
     template_name = 'app/accounts_settings.html'
 
-    def get(self, request, pk):
-
-        # get linkedin user data using pk
-        linkedin_user = get_object_or_404(LinkedInUser,pk=pk)
-        return render(request, self.template_name, {'linkedin_user':linkedin_user})
-
-    def post(self, request, pk):
-        # get linkedin user data using pk
-        linkedin_user = get_object_or_404(LinkedInUser, pk=pk)
-
-        # update settings
-        linkedin_user.start_from = request.POST.get('schedule[from]', linkedin_user.start_from)
-        linkedin_user.start_to = request.POST.get('schedule[to]', linkedin_user.start_to)
-        linkedin_user.is_weekendwork = bool(request.POST.get('schedule[weekend]', linkedin_user.is_weekendwork))
-        linkedin_user.tz = request.POST.get('schedule[tz]', linkedin_user.tz)
-
-        # save update
-        linkedin_user.save()
-
-        return render(request, self.template_name, {'linkedin_user': linkedin_user})
+    def get_success_url(self):
+        return reverse('account-settings', kwargs={'pk': self.object.pk})
 
 
 @method_decorator(decorators, name='dispatch')
