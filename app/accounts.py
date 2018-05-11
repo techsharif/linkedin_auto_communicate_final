@@ -32,15 +32,15 @@ class AccountList(ListView):
 class AccountDetail(DetailView):
     template_name = 'app/accounts_detail.html'
     model = LinkedInUser
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
         linkedIn_user = ctx['object']
         statuses = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
-                                          status__in=statuses).count()
-        return ctx    
+                                                       status__in=statuses).count()
+        return ctx
 
 
 @method_decorator(decorators, name='dispatch')
@@ -48,10 +48,9 @@ class AccountSettings(View):
     template_name = 'app/accounts_settings.html'
 
     def get(self, request, pk):
-
         # get linkedin user data using pk
-        linkedin_user = get_object_or_404(LinkedInUser,pk=pk)
-        return render(request, self.template_name, {'linkedin_user':linkedin_user})
+        linkedin_user = get_object_or_404(LinkedInUser, pk=pk)
+        return render(request, self.template_name, {'linkedin_user': linkedin_user})
 
     def post(self, request, pk):
         # get linkedin user data using pk
@@ -60,7 +59,7 @@ class AccountSettings(View):
         # update settings
         linkedin_user.start_from = request.POST.get('schedule[from]', linkedin_user.start_from)
         linkedin_user.start_to = request.POST.get('schedule[to]', linkedin_user.start_to)
-        linkedin_user.is_weekendwork = bool (request.POST.get('schedule[weekend]', linkedin_user.is_weekendwork))
+        linkedin_user.is_weekendwork = bool(request.POST.get('schedule[weekend]', linkedin_user.is_weekendwork))
         linkedin_user.tz = request.POST.get('schedule[tz]', linkedin_user.tz)
 
         # save update
@@ -69,69 +68,23 @@ class AccountSettings(View):
         return render(request, self.template_name, {'linkedin_user': linkedin_user})
 
 
-
-
 @method_decorator(decorators, name='dispatch')
 class AccountAdd(View):
     def post(self, request):
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
+            # collect membership data of this user
+            membership = Membership.objects.get(user=request.user)
 
-            driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
-            driver.get("https://www.linkedin.com")
-            wait = WebDriverWait(driver, 2)
+            # create of get linkedin user
+            linkedin_user, created = LinkedInUser.objects.get_or_create(user=request.user, email=user_email,
+                                                                        password=user_password)
+            linkedin_user.latest_login = datetime.datetime.now()
+            linkedin_user.save()
+            linkedin_user.membership.add(membership)
 
-            print("------working-----")
-
-            email = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-email")))
-            print("------pass email---------")
-
-            password = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-password")))
-            print("------pass password---------")
-
-            signin_button = wait.until(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input#login-submit")))
-            print("------pass button---------")
-
-            email.clear()
-            password.clear()
-
-            email.send_keys(user_email)
-            password.send_keys(user_password)
-
-            signin_button.click()
-            print("----------click sign in----------------")
-
-            # check if user is exist
-            if exist_user():
-                print("That user is an existing user.")
-                print("--------pin code step----------")
-
-                # pin code verification
-                # todo: pin verification
-                try:
-                    pincode_input = wait.until(EC.visibility_of_element_located(
-                        (By.CSS_SELECTOR, "input#verification-code")))
-                    # return redirect('pinverify')
-                    return redirect('accounts')
-                except Exception as e:
-                    print("---sucessfull login without pin code verification!---")
-
-                # collect membership data of this user
-                membership = Membership.objects.get(user=request.user)
-
-                # create of get linkedin user
-                linkedin_user, created = LinkedInUser.objects.get_or_create(user=request.user, email=user_email, password=user_password)
-                linkedin_user.latest_login = datetime.datetime.now()
-                linkedin_user.save()
-                linkedin_user.membership.add(membership)
-
-
-            else:
-                print("---That user is not exist in Linkedin.---")
+            BotTask(owner=linkedin_user, task_type='add account', name='add linkedin account').save()
 
         return redirect('accounts')
 
@@ -175,12 +128,12 @@ class AccounMessengerCreate(TemplateView):
 class AccountCampaignCreate(TemplateView):
     template_name = 'app/accounts_campaign_add.html'
 
+
 def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
-def remove_account(request, pk):
-    linkedin_user = LinkedInUser.objects.get(id=pk)
-    BotTask(owner=linkedin_user, task_type='delete', name='remove linkedin account').save()
-    return redirect('accounts')
 
+def remove_account(request, pk):
+    LinkedInUser.objects.get(id=pk).delete()
+    return redirect('accounts')
