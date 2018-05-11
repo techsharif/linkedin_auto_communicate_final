@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.list import ListView
@@ -44,8 +44,31 @@ class AccountDetail(DetailView):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountSettings(TemplateView):
+class AccountSettings(View):
     template_name = 'app/accounts_settings.html'
+
+    def get(self, request, pk):
+
+        # get linkedin user data using pk
+        linkedin_user = get_object_or_404(LinkedInUser,pk=pk)
+        return render(request, self.template_name, {'linkedin_user':linkedin_user})
+
+    def post(self, request, pk):
+        # get linkedin user data using pk
+        linkedin_user = get_object_or_404(LinkedInUser, pk=pk)
+
+        # update settings
+        linkedin_user.start_from = request.POST.get('schedule[from]', linkedin_user.start_from)
+        linkedin_user.start_to = request.POST.get('schedule[to]', linkedin_user.start_to)
+        linkedin_user.is_weekendwork = bool (request.POST.get('schedule[weekend]', linkedin_user.is_weekendwork))
+        linkedin_user.tz = request.POST.get('schedule[tz]', linkedin_user.tz)
+
+        # save update
+        linkedin_user.save()
+
+        return render(request, self.template_name, {'linkedin_user': linkedin_user})
+
+
 
 
 @method_decorator(decorators, name='dispatch')
