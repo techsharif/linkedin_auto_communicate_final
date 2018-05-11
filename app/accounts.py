@@ -3,11 +3,8 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core import serializers
-from django.core.exceptions import ObjectDoesNotExist
-from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.http.response import JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -67,8 +64,31 @@ class AccountDetail(AccountMixins, DetailView):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountSettings(TemplateView):
+class AccountSettings(View):
     template_name = 'app/accounts_settings.html'
+
+    def get(self, request, pk):
+
+        # get linkedin user data using pk
+        linkedin_user = get_object_or_404(LinkedInUser,pk=pk)
+        return render(request, self.template_name, {'linkedin_user':linkedin_user})
+
+    def post(self, request, pk):
+        # get linkedin user data using pk
+        linkedin_user = get_object_or_404(LinkedInUser, pk=pk)
+
+        # update settings
+        linkedin_user.start_from = request.POST.get('schedule[from]', linkedin_user.start_from)
+        linkedin_user.start_to = request.POST.get('schedule[to]', linkedin_user.start_to)
+        linkedin_user.is_weekendwork = bool (request.POST.get('schedule[weekend]', linkedin_user.is_weekendwork))
+        linkedin_user.tz = request.POST.get('schedule[tz]', linkedin_user.tz)
+
+        # save update
+        linkedin_user.save()
+
+        return render(request, self.template_name, {'linkedin_user': linkedin_user})
+
+
 
 
 @method_decorator(decorators, name='dispatch')
@@ -124,8 +144,7 @@ class AccountAdd(View):
                 membership = Membership.objects.get(user=request.user)
 
                 # create of get linkedin user
-                linkedin_user, created = LinkedInUser.objects.get_or_create(email=user_email,
-                                                                            password=user_password)
+                linkedin_user, created = LinkedInUser.objects.get_or_create(user=request.user, email=user_email, password=user_password)
                 linkedin_user.latest_login = datetime.datetime.now()
                 linkedin_user.save()
                 linkedin_user.membership.add(membership)
@@ -272,6 +291,10 @@ def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
+def remove_account(request, pk):
+    linkedin_user = LinkedInUser.objects.get(id=pk)
+    BotTask(owner=linkedin_user, task_type='delete', name='remove linkedin account').save()
+    return redirect('accounts')
 
 
 
