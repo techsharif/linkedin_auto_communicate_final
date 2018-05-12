@@ -101,7 +101,7 @@ class CommonContactField(models.Model):
 class ContactField(CommonContactField):
     linkedin_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100, db_index=True)    
-    latest_acitvity = models.DateTimeField()
+    latest_activity = models.DateTimeField()
     
     class Meta:
         abstract = True
@@ -206,4 +206,8 @@ class Inbox(ContactField):
     
     class Meta():
         abstract = False
+    
+    
+    def __str__(self):
+        return self.name
     

@@ -101,15 +101,21 @@ class AccountNetwork(TemplateView):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccounMessenger(TemplateView):
+class AccounMessenger(AccountMixins, ListView):
     template_name = 'app/accounts_messenger.html'
-
+    is_bulk = True
+    model = Campaign
+    
+    def get_queryset(self):
+        qs = super(AccounMessenger, self).get_queryset()
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('acc_pk'))
+        return qs
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
     is_bulk = False
-
+    
 
 
 @method_decorator(decorators, name='dispatch')
