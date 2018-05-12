@@ -3,6 +3,7 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls.base import reverse_lazy, reverse
@@ -21,7 +22,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from app.forms import PinForm
 from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
-from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm
+from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
+    UpdateCampWelcomeForm, InlineCampaignStepFormSet
 from messenger.models import Inbox, ContactStatus, Campaign
 
 
@@ -195,13 +197,42 @@ class AccountCampaignCreate(AccountMessengerCreate):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
 
 
-@method_decorator(decorators, name='dispatch')
-class AccountMessengerDetail(AccountMixins, TemplateView):
-    template_name = 'app/accounts_campaign_add.html'
 
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
+    form_class = UpdateCampWelcomeForm
     model = Campaign
+    
+    def put(self, *args, **kwargs):
+        return UpdateView.put(self, *args, **kwargs)
+    
+    
+    def get_context_data(self, **kwargs):
+        data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
+        object = data['object']
+        if self.request.POST:
+            data['campaignsteps'] = InlineCampaignStepFormSet(self.request.POST,
+                                                              instance=object)
+        else:
+            data['campaignsteps'] = InlineCampaignStepFormSet(instance=object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        campaignsteps = context['campaignsteps']
+        with transaction.atomic():
+            self.object = form.save()
+            print('campaignsteps:', campaignsteps.is_valid())
+            if campaignsteps.is_valid():
+                campaignsteps.instance = self.object
+                campaignsteps.save()
+                print('campaignsteps:', campaignsteps)
+                
+        return super(AccountMessengerDetail, self).form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('messenger-campaign', kwargs=self.kwargs)
+    
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(TemplateView):

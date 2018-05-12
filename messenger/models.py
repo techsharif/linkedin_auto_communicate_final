@@ -138,6 +138,8 @@ class Campaign(TimeStampedModel):
     is_bulk = models.BooleanField(default=False)
     connection_message = models.TextField(max_length=2000, blank=True, null=True)
     welcome_message = models.TextField(max_length=2000, blank=True, null=True)
+    welcome_time = models.IntegerField(default=0, blank=True, null=True)
+    active = models.BooleanField(default=True)
     
     def __str__(self):
         return self.title
@@ -169,6 +171,9 @@ class CampaignStep(TimeStampedModel, CampaignStepField):
         self.campaign = parent
         self.save()
         
+    def __str__(self):
+        return "{0} - {1}".format(self.campaign, self.step_time)
+    
 
 class MessageField(TimeStampedModel):
     

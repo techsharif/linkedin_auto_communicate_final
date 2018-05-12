@@ -1,0 +1,29 @@
+{% load i18n %}
+	
+	<table id="id_orders_table" border="0" cellpadding="0" cellspacing="5">
+                <thead>
+                    <tr>
+                        <th scope="col">Step Time</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in campaignsteps.forms %}
+                    <tr id="{{ form.prefix }}-row">
+                        <td>
+                            {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                            {{ form.step_time }}
+                        </td>
+                        <td>{{ form.message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>
+                {{ campaignsteps.management_form }}
+                
+                
+	       		
+            		
+    
