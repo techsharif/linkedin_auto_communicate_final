@@ -25,11 +25,11 @@
    
    	<div class="row">
 	<div class="col-sm-4 col-md-3">
-		<a class="btn btn-primary btn-block" href="{% url 'account-messenger-add' acc_pk=object.id %}">NEW MESSENGER CAMPAIGN</a>
-		<a class="btn btn-primary btn-block" href="{% url 'account-campaign-add' acc_pk=object.id %}">NEW CONNECTOR CAMPAIGN</a>
+		<a class="btn btn-primary btn-block" href="{% url 'account-messenger-add' pk=object.id %}">NEW MESSENGER CAMPAIGN</a>
+		<a class="btn btn-primary btn-block" href="{% url 'account-campaign-add' pk=object.id %}">NEW CONNECTOR CAMPAIGN</a>
 		
 		<div class="text-center pt-10">
-			<a href="{% url 'account-settings' pk=1 %}">Set account schedule</a>
+			<a href="{% url 'account-settings' pk=object.id %}">Set account schedule</a>
 		</div>
 	</div>
 	<div class="campaign-info col-sm-8 col-md-8">

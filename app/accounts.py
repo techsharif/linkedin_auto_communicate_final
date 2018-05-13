@@ -39,9 +39,9 @@ class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
         if 'acc_pk' in self.kwargs:
-            ctx['acc_pk'] = self.kwargs.get('acc_pk')
+            ctx['pk'] = self.kwargs.get('acc_pk')
         else:
-            ctx['acc_pk'] = self.kwargs.get('pk')
+            ctx['pk'] = self.kwargs.get('pk')
 
         return ctx
 
@@ -110,7 +110,7 @@ class AccounMessenger(AccountMixins, ListView):
     
     def get_queryset(self):
         qs = super(AccounMessenger, self).get_queryset()
-        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('acc_pk'))
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
         return qs
 
 @method_decorator(decorators, name='dispatch')
@@ -142,7 +142,8 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     is_bulk = True
 
     def get_form(self, form_class=None):
-        acc_id = self.kwargs.get('acc_pk')
+        
+        acc_id = self.kwargs.get('pk')
         if self.request.method == "POST":
             form = self.form_class(self.request.POST, owner_id=acc_id,
                                    is_bulk=self.is_bulk)
@@ -159,10 +160,11 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         return super(AccountMessengerCreate, self).form_invalid(form)
 
     def form_valid(self, form):
-        print('form:', form.is_valid, form )
+        data = self.get_context_data()
+        acc_id = self.kwargs.get('pk')
         if form.is_valid():
             camp = form.save(commit=False)
-            camp.owner_id = self.kwargs.get('acc_pk')
+            camp.owner_id = acc_id
             camp.is_bulk = self.is_bulk
             camp.save()
             return super(AccountMessengerCreate, self).form_valid(form)
@@ -171,7 +173,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
 
 
         camp = form.instance
-        camp.owner_id = self.kwargs.get('acc_pk')
+        camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
         camp = form.save()
         # if copy step message
@@ -207,7 +209,7 @@ class AccountMessengerDelete(AccountMixins, DeleteView):
 
 @method_decorator(decorators, name='dispatch')    
 class AccountMessengerActive(View):
-    def get(self, request, acc_pk, pk):
+    def get(self, request, pk):
         
         row = get_object_or_404(Campaign, pk=pk)
         if "1" in self.request.GET.get('active'):      
