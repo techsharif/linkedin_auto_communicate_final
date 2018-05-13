@@ -123,3 +123,5 @@ class ActivateAccount(View):
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
+
+

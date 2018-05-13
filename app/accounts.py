@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import render_to_string
 from django.urls.base import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -324,6 +325,14 @@ def can_add_account(user):
 def remove_account(request, pk):
     LinkedInUser.objects.get(id=pk).delete()
     return redirect('accounts')
+
+csrf_exempt_decorators = decorators + (csrf_exempt, )
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class SearchResultView(View):
+    def post(self, request):
+        print(request.POST)
+
+        return render(request,'app/seach_render/search_render.html')
 
 
 
