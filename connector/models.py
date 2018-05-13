@@ -17,7 +17,7 @@ class Search(CommonContactField):
     sales_search = models.URLField(blank=True, null=True)
     
     resultcount = models.CharField(max_length=10)
-    searchdate = models.DateTimeField()
+    searchdate = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'connector_search'

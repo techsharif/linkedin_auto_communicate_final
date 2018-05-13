@@ -23,13 +23,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from app.forms import PinForm
 from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
+from connector.models import Search
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
 from messenger.models import Inbox, ContactStatus, Campaign
 
-
 User = get_user_model()
 decorators = (never_cache, login_required,)
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -55,14 +56,14 @@ class AccountMixins(object):
 class AccountDetail(AccountMixins, DetailView):
     template_name = 'app/accounts_detail.html'
     model = LinkedInUser
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
         linkedIn_user = ctx['object']
         statuses = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
-                                          status__in=statuses).count()
+                                                       status__in=statuses).count()
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
         ctx['connectors'] = camp_qs.filter(is_bulk=False)
@@ -74,7 +75,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from','start_to','is_weekendwork','tz']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz']
     template_name = 'app/accounts_settings.html'
 
     def get_success_url(self):
@@ -94,12 +95,12 @@ class AccountAdd(View):
             linkedin_user, created = LinkedInUser.objects.get_or_create(
                 user=request.user, email=user_email,
                 password=user_password)
-            
+
             linkedin_user.latest_login = datetime.datetime.now()
             linkedin_user.save()
             linkedin_user.membership.add(membership)
 
-            BotTask(owner=linkedin_user, task_type='add account', 
+            BotTask(owner=linkedin_user, task_type='add account',
                     name='add linkedin account').save()
 
         return redirect('accounts')
@@ -115,22 +116,36 @@ class AccounMessenger(AccountMixins, ListView):
     template_name = 'app/accounts_messenger.html'
     is_bulk = True
     model = Campaign
-    
+
     def get_queryset(self):
         qs = super(AccounMessenger, self).get_queryset()
         qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
         return qs
 
+
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
     is_bulk = False
-    
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountSearch(AccountMixins, TemplateView):
+class AccountSearch(View):
     template_name = 'app/accounts_search.html'
+
+    def get(self, request, pk):
+        searches = Search.objects.filter(owner__pk=pk)
+        return render(request, self.template_name,{'searches': searches, 'pk':pk})
+
+    def post(self, request, pk):
+
+        if 'add_new_search_item' in request.POST.keys():
+            name = request.POST['name'].strip()
+            keywords = request.POST['keywords'].strip()
+            Search(search_name=name, keyword=keywords).save()
+        print(request.POST)
+        searches = Search.objects.filter(owner__pk=pk)
+        return render(request, self.template_name, {'searches': searches, 'pk':pk})
 
 
 @method_decorator(decorators, name='dispatch')
@@ -150,7 +165,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     is_bulk = True
 
     def get_form(self, form_class=None):
-        
+
         acc_id = self.kwargs.get('pk')
         if self.request.method == "POST":
             form = self.form_class(self.request.POST, owner_id=acc_id,
@@ -164,7 +179,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         return reverse_lazy('account-messenger', kwargs=self.kwargs)
 
     def form_invalid(self, form):
-        print('form_invalid:', form.is_valid(), form )
+        print('form_invalid:', form.is_valid(), form)
         return super(AccountMessengerCreate, self).form_invalid(form)
 
     def form_valid(self, form):
@@ -180,7 +195,6 @@ class AccountMessengerCreate(AccountMixins, CreateView):
 
         return super(AccountMessengerCreate, self).form_invalid(form)
 
-
         camp = form.instance
         camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
@@ -190,7 +204,6 @@ class AccountMessengerCreate(AccountMixins, CreateView):
             camp.copy_step_message()
 
         return super(AccountMessengerCreate, self).form_valid(form)
-
 
 
 @method_decorator(decorators, name='dispatch')
@@ -206,38 +219,39 @@ class AccountCampaignCreate(AccountMessengerCreate):
 
     def get_success_url(self):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
-    
 
-@method_decorator(decorators, name='dispatch')   
+
+@method_decorator(decorators, name='dispatch')
 class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
+
     def delete(self, request, *args, **kwargs):
         self.get_object().delete()
         payload = {'deleted': 'ok'}
         return JsonResponse(json.dumps(payload), safe=False)
 
-@method_decorator(decorators, name='dispatch')    
+
+@method_decorator(decorators, name='dispatch')
 class AccountMessengerActive(View):
     def get(self, request, pk):
-        
+
         row = get_object_or_404(Campaign, pk=pk)
-        if "1" in self.request.GET.get('active'):      
+        if "1" in self.request.GET.get('active'):
             row.status = True
         else:
             row.status = False
-            
-        row.save()
-        payload = {'ok': row.status }
-        return JsonResponse(json.dumps(payload), safe=False) 
-    
 
-@method_decorator(decorators, name='dispatch')    
+        row.save()
+        payload = {'ok': row.status}
+        return JsonResponse(json.dumps(payload), safe=False)
+
+
+@method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
     form_class = UpdateCampWelcomeForm
     model = Campaign
-    
-        
+
     def get_context_data(self, **kwargs):
         data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
         row = data['object']
@@ -253,7 +267,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         context = self.get_context_data()
         campaignsteps = context['campaignsteps']
         print('form_valid form:', form.is_valid(), form.errors)
-        
+
         with transaction.atomic():
             self.object = form.save()
             print('campaignsteps:', campaignsteps.is_valid(), campaignsteps.errors)
@@ -262,34 +276,35 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                 campaignsteps.save()
                 print('campaignsteps:', campaignsteps)
                 if self.request.is_ajax():
-                    payload = {'ok': True }
+                    payload = {'ok': True}
                     return JsonResponse(json.dumps(payload), safe=False)
             else:
-                
+
                 if self.request.is_ajax():
-                    payload = {'error': campaignsteps.errors }
-                    return JsonResponse(json.dumps(payload), safe=False)    
-                
+                    payload = {'error': campaignsteps.errors}
+                    return JsonResponse(json.dumps(payload), safe=False)
+
         return super(AccountMessengerDetail, self).form_valid(form)
-    
+
     def get_success_url(self):
         return reverse_lazy('messenger-campaign', kwargs=self.kwargs)
-    
+
     def form_invalid(self, form):
         print('form invalid:', form.errors)
         return super(AccountMessengerDetail, self).form_invalid(form)
-        
+
+
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(AccountMessengerDetail):
     template_name = 'app/accounts_campaign_update.html'
     form_class = UpdateCampConnectForm
-    
-    
+
 
 class JSONResponseMixin:
     """
     A mixin that can be used to render a JSON response.
     """
+
     def render_to_json_response(self, context, **response_kwargs):
         """
         Returns a JSON response, transforming 'context' to make the payload.
@@ -307,15 +322,20 @@ class JSONResponseMixin:
 
         return context['object'].toJSON()
 
+
 class JSONDetailView(JSONResponseMixin, BaseDetailView):
     def render_to_response(self, context, **response_kwargs):
         return self.render_to_json_response(context, **response_kwargs)
 
-csrf_exempt_decorators = decorators + (csrf_exempt, )
+
+csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountBotTask(JSONDetailView):
     template_name = 'app/bottask_detail.html'
     model = BotTask
+
 
 def can_add_account(user):
     # check if the current user can add more linked account
@@ -326,22 +346,24 @@ def remove_account(request, pk):
     LinkedInUser.objects.get(id=pk).delete()
     return redirect('accounts')
 
-csrf_exempt_decorators = decorators + (csrf_exempt, )
+
+csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
     def post(self, request):
         print(request.POST)
 
-        return render(request,'app/seach_render/search_render.html')
+        return render(request, 'app/seach_render/search_render.html')
 
 
-csrf_exempt_decorators = decorators + (csrf_exempt, )
+csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchItemView(View):
     def post(self, request):
         print(request.POST)
 
-        return render(request,'app/seach_render/search_item_render.html')
-
-
-
+        return render(request, 'app/seach_render/search_item_render.html')

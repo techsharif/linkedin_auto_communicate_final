@@ -32,48 +32,34 @@
                 <a href="#" class="btn btn-success btn-block" id="new_search">Start new search</a>
 
                 <div class="box">
-                    <div class="box-body" style="height: 527px">
-                        <div class="pull-right" style="margin-bottom:10px;">
-                        </div>
-                        <div class="scroll-block">
-                            <div class="search-item active" id="si_9">
-                                <div style="display: none;">45</div>
-                                <h4 class="pull-right">979</h4>
-                                <h5><strong><i class="fa fa-search margin-r-5"></i> python-dev</strong></h5>
-                                <div>Keywords: <strong>python developer</strong></div>
+                    <div class="box-body" >
 
-
-                                <a href="#" class="remove pull-left" title="Delete search" data-click="removeSearch"
-                                   data-toggle="tooltip"><i class="fas fa-trash"></i></a>
-
-                                <span class="text-muted pull-right">
-			1 day ago			</span>
-                                <div class="clearfix"></div>
+                            <div class="pull-right" style="margin-bottom:10px">
                             </div>
-                        </div>
-
-                        <div class="pull-right" style="margin-bottom:10px;">
-                        </div>
-                        <div class="scroll-block">
-                            <div class="search-item" id="si_9">
-                                <div style="display: none;">46</div>
-                                <h4 class="pull-right">979</h4>
-                                <h5><strong><i class="fa fa-search margin-r-5"></i> python-dev</strong></h5>
-                                <div>Keywords: <strong>python developer</strong></div>
+                            <div class="scroll-block" style="height: 508px">
+                                {% for search in searches %}
+                                <div class="search-item" id="si_9">
+                                    <div style="display: none;">{{ search.id }}</div>
+                                    <h4 class="pull-right">{{ search.resultcount }}</h4>
+                                    <h5><strong><i class="fa fa-search margin-r-5"></i> {{ search.search_name }}</strong></h5>
+                                    <div>Keywords: <strong>{{ search.keyword }}</strong></div>
 
 
-                                <a href="#" class="remove pull-left" title="Delete search" data-click="removeSearch"
-                                   data-toggle="tooltip"><i class="fas fa-trash"></i></a>
+                                    <a href="#" class="remove pull-left" title="Delete search" data-click="removeSearch"
+                                       data-toggle="tooltip"><i class="fas fa-trash"></i></a>
 
-                                <span class="text-muted pull-right">
-			1 day ago			</span>
-                                <div class="clearfix"></div>
+                                    <span class="text-muted pull-right">1 day ago			</span>
+                                    <div class="clearfix"></div>
+                                </div>
+                                 {% endfor %}
                             </div>
-                        </div>
+
+
+
+
                     </div>
                 </div>
             </div>
-        </div>
 
 
     </section>
@@ -96,8 +82,9 @@
 
 
     <div>
-        <form id="add_search" class="modal fade in" tabindex="-1" role="dialog" method="POST" action="?act=add_search"
+        <form id="add_search" class="modal fade in" tabindex="-1" role="dialog" method="POST" action=""
               autocomplete="off" id="search_dialog">
+            {% csrf_token %}
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -108,7 +95,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Search name</label>
-                            <input class="form-control" type="text" required="true" name="search[name]">
+                            <input class="form-control" type="text" required="true" name="name">
                         </div>
 
                         <ul class="nav nav-tabs" role="tablist">
@@ -125,7 +112,7 @@
                             <div role="tabpanel" class="tab-pane active" id="search_std">
                                 <div class="form-group">
                                     <label>Keywords</label>
-                                    <input class="form-control" type="text" required="true" name="search[term]"
+                                    <input class="form-control" type="text" required="true" name="keywords"
                                            id="search_keyword">
                                     <p class="small">Use <strong>AND, OR, NOT</strong> boolean operators to improve
                                         search results.<br>
@@ -162,7 +149,8 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search-plus margin-r-5"></i> Add
+                        <button type="submit" name="add_new_search_item" class="btn btn-primary"><i
+                                class="fa fa-search-plus margin-r-5"></i> Add
                             search task
                         </button>
                     </div>
@@ -172,29 +160,31 @@
 
 
     <div class="modal fade" tabindex="-1" role="dialog" id="add2campaign">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Add people to Connector Campaign</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Choose campaign</p>
-                        <select class="form-control">
-                            <option value="3">python developement</option>
-                        </select>
-                    </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Add people to Connector Campaign</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Choose campaign</p>
+                    <select class="form-control">
+                        <option value="3">python developement</option>
+                    </select>
+                </div>
 
-                    <input type="hidden" name="cid" value="">
+                <input type="hidden" name="cid" value="">
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to Connector Campaign</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
+                        Connector Campaign
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
 {% endblock %}
