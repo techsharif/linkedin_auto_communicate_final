@@ -61,9 +61,15 @@ $(document).ready(function () {
     }
 
 
-
-
     load_data();
+
+
+    $("#new_search").click(function () {
+        $('#add_search').modal('show');
+    });
+
+
+
 
 
 

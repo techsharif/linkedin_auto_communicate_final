@@ -2,9 +2,9 @@
     <div class="box-body table-responsive">
 
         <div class="input-group">
-            <input id="search_text" class="form-control" type="text" placeholder="Search contacts..." value="">
+            <input id="search_text_input" class="form-control" type="text" placeholder="Search contacts..." value="">
             <span class="input-group-btn"><div id="search_submit_btn" class="btn btn-primary"><i
-                    class="glyphicon glyphicon-search"></i></div></span>
+                    class="fas fa-search"></i></div></span>
         </div>
 
 
@@ -22,16 +22,16 @@
             </div>
         </div>
 
-        <span class="btn btn-default"><input type="checkbox" data-click="checkAll"></span>&nbsp;&nbsp;&nbsp;
+        <span class="btn btn-default"><input id="select_all_items" type="checkbox" data-click="checkAll"></span>&nbsp;&nbsp;&nbsp;
 
         <a class="btn btn-default" id="add_selected" data-click="addSelected2Campaign">Add selected
             people to Connector Campaign</a>&nbsp;&nbsp;&nbsp;
         <a class="btn btn-default" id="add_allnew" data-click="addAll2Campaign">Add all new people to
             Connector Campaign</a>&nbsp;&nbsp;&nbsp;
         <button class="btn btn-default" data-click="export" data-page="search" data-toggle="tooltip"
-                title="Export contacts to CSV"><i class="glyphicon glyphicon-export"></i></button>
+                title="Export contacts to CSV"><i class="fas fa-upload"></i></button>
 
-        <div class="scroll-block" style="height: 830px;">
+        <div class="scroll-block" style="height: 450px;">
             <table class="table">
                 <thead>
                 <tr>
@@ -62,7 +62,7 @@
                     </td>
                 </tr>
                 <tr id="ctct_2301">
-                    <td><input type="checkbox"></td>
+                    <td><input class="select_items" value="1" type="checkbox"></td>
                     <td>Bigun Oleksandr</td>
                     <td>idevelop.city</td>
                     <td>Modeling, Python Developer</td>
@@ -71,7 +71,7 @@
                            data-cid="2301">Add to Campaign</a></td>
                 </tr>
                 <tr id="ctct_2300">
-                    <td><input type="checkbox"></td>
+                    <td><input class="select_items" value="2" type="checkbox"></td>
                     <td>Divyanshu Tyagi</td>
                     <td>FarmGuide</td>
                     <td>Backend Developer</td>
@@ -303,7 +303,7 @@
                     <td></td>
                     <td>WebGIS Developer</td>
                     <td>NCR - National Capital Region, Philippines</td>
-                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                    <td><a class="text-nowrap select_an_item_to_campaign" href="#"
                            data-cid="2274">Add to Campaign</a></td>
                 </tr>
                 <tr id="ctct_2273">
@@ -312,7 +312,7 @@
                     <td>SSTech</td>
                     <td>Junior Software Developer</td>
                     <td>Vietnam</td>
-                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                    <td><a class="select_an_item_to_campaign" data-val="45" class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
                            data-cid="2273">Add to Campaign</a></td>
                 </tr>
                 <tr id="ctct_2272">
@@ -321,8 +321,7 @@
                     <td>Freelancer</td>
                     <td>Freelance Web Developer</td>
                     <td>Vietnam</td>
-                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
-                           data-cid="2272">Add to Campaign</a></td>
+                    <td><button class="select_an_item_to_campaign" class="text-nowrap" data-cid="2272">Add to Campaign</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -336,48 +335,126 @@
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
 
         function load_data() {
-        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
-        $.ajax({
-            url: ACCOUNT_SEARCH_URL,
-            type: "post",
-            data: data,
-            success: function (response) {
-                $('#search_people').html(response);
+            data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
+            $.ajax({
+                url: ACCOUNT_SEARCH_URL,
+                type: "post",
+                data: data,
+                success: function (response) {
+                    $('#search_people').html(response);
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
 
 
-        });
-    }
-
+            });
+        }
 
 
         function set_ajax_data(data) {
-        $('#ajax_data_render_field').html(JSON.stringify(data));
-    }
+            console.log(data)
+            $('#ajax_data_render_field').html(JSON.stringify(data));
+        }
 
-    function get_ajax_data() {
-        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
-        return data;
-    }
+        function get_ajax_data() {
+            data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
+            return data;
+        }
 
-    function set_search_text(search_text) {
-        data = get_ajax_data();
-        data.search_text = search_text;
-        set_ajax_data(data);
-    }
-
+        function set_search_text(search_text) {
+            data = get_ajax_data();
+            data.search_text = search_text;
+            set_ajax_data(data);
+        }
 
 
         $("#search_submit_btn").click(function () {
-            console.log($('#search_text').value);
-            set_search_text($('#search_text').value);
+            console.log($('#search_text_input').value);
+            set_search_text($('#search_text_input')[0].value);
             load_data();
 
         });
 
-    });
+        $("#select_all_items").change(function () {
+
+            $('.select_items').prop('checked', this.checked);
+
+
+        });
+
+        $(".select_an_item_to_campaign").click(function () {
+
+            data = get_ajax_data();
+               data.selected_items = this.getAttribute('data-cid');
+               set_ajax_data(data);
+
+                $('#add2campaign').modal('show');
+
+
+
+        });
+
+
+        $("#add_all_selected_item_button").click(function () {
+            $('#add2campaign').modal('hide');
+            load_data();
+            data = get_ajax_data();
+            if (data.selected_items)   delete data.selected_items;
+            if (data.add_all_selected_item_button)   delete data.add_all_selected_item_button;
+               set_ajax_data(data)
+
+
+
+        });
+
+
+
+        $("#add_selected").click(function () {
+
+            checked_item = $('.select_items:checked');
+
+           if (checked_item.length){
+               selected_items_list = new Array()
+               for (i=0; i<checked_item.length; i++){
+                    selected_items_list[i] = checked_item[i].value;
+               }
+               data = get_ajax_data();
+               data.selected_items = selected_items_list;
+               set_ajax_data(data);
+
+               $('#add2campaign').modal('show');
+
+           }else{
+               alert('No item selected')
+           }
+
+
+        });
+
+        $("#add_allnew").click(function () {
+
+            checked_item = $('.select_items:checked');
+
+           data = get_ajax_data();
+               data.add_all_selected_item_button = true;
+               set_ajax_data(data);
+
+
+               $('#add2campaign').modal('show');
+
+
+
+
+        });
+
+
+        
+
+
+
+
+    })
+    ;
 </script>

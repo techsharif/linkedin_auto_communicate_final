@@ -319,4 +319,13 @@ class SearchResultView(View):
         return render(request,'app/seach_render/search_render.html')
 
 
+csrf_exempt_decorators = decorators + (csrf_exempt, )
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class SearchItemView(View):
+    def post(self, request):
+        print(request.POST)
+
+        return render(request,'app/seach_render/search_item_render.html')
+
+
 

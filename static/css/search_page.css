@@ -467,3 +467,9 @@ div.tooltip i {
       display:block !important;
   }
 }
+
+.nav-tabs > li > a {
+
+     background-color: white;
+
+}

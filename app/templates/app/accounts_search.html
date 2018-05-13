@@ -32,7 +32,7 @@
                 <a href="#" class="btn btn-success btn-block" id="new_search">Start new search</a>
 
                 <div class="box">
-                    <div class="box-body">
+                    <div class="box-body" style="height: 527px">
                         <div class="pull-right" style="margin-bottom:10px;">
                         </div>
                         <div class="scroll-block">
@@ -44,7 +44,7 @@
 
 
                                 <a href="#" class="remove pull-left" title="Delete search" data-click="removeSearch"
-                                   data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+                                   data-toggle="tooltip"><i class="fas fa-trash"></i></a>
 
                                 <span class="text-muted pull-right">
 			1 day ago			</span>
@@ -63,7 +63,7 @@
 
 
                                 <a href="#" class="remove pull-left" title="Delete search" data-click="removeSearch"
-                                   data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+                                   data-toggle="tooltip"><i class="fas fa-trash"></i></a>
 
                                 <span class="text-muted pull-right">
 			1 day ago			</span>
@@ -75,7 +75,103 @@
             </div>
         </div>
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="add2campaign">
+
+    </section>
+
+{% endblock %}
+
+{% block pagefooter %}
+
+    <script src="{% static 'app/search_page.js' %}"></script>
+    <script>
+        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+    </script>
+
+
+
+
+
+
+
+
+
+    <div>
+        <form id="add_search" class="modal fade in" tabindex="-1" role="dialog" method="POST" action="?act=add_search"
+              autocomplete="off" id="search_dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Add a new search task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Search name</label>
+                            <input class="form-control" type="text" required="true" name="search[name]">
+                        </div>
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#search_std" aria-controls="search_std"
+                                                                      role="tab" data-toggle="tab">Standard search</a>
+                            </li>
+                            <li role="presentation"><a href="#search_url" aria-controls="search_url" role="tab"
+                                                       data-toggle="tab">URL search</a></li>
+                            <li role="presentation"><a href="#search_sales" aria-controls="search_sales" role="tab"
+                                                       data-toggle="tab">Sales Navigator search</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="search_std">
+                                <div class="form-group">
+                                    <label>Keywords</label>
+                                    <input class="form-control" type="text" required="true" name="search[term]"
+                                           id="search_keyword">
+                                    <p class="small">Use <strong>AND, OR, NOT</strong> boolean operators to improve
+                                        search results.<br>
+                                        Example: (CFO OR Chief Financial Officer OR CFOO) AND (Director OR Partner) AND
+                                        NOT Friends Company<br>
+                                        For more details see <a href="/support/?openfaq=boolsearch"
+                                                                target="_blank">FAQ</a>.</p>
+                                </div>
+
+                                <div class="text-center"><a class="text-center" href="#" id="advanced_search_toggle">Advanced</a>
+                                </div>
+                                <div style="display:none" id="advanced_search"></div>
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane" id="search_url">
+                                <br>
+                                <p class="text-center">URL search is not available with Starter plan. You need
+                                    Professional or Business plan. You can upgrade on <a href="/subscription/">Subscription
+                                        page</a>.</p>
+                                <br>
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane" id="search_sales">
+                                <br>
+                                <p class="text-center">Sales Navigator search is not available with Starter or
+                                    Professional plan. You need Business plan to use this feature. You can upgrade on <a
+                                            href="/subscription/">Subscription page</a>.</p>
+                                <br>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="search[type]" value="0" id="search_type">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search-plus margin-r-5"></i> Add
+                            search task
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </form><!-- /.modal --></div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="add2campaign">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -94,21 +190,11 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary add_button">Add to Connector Campaign</button>
+                        <button type="button" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to Connector Campaign</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    </section>
-
-{% endblock %}
-
-{% block pagefooter %}
-
-    <script src="{% static 'app/search_page.js' %}"></script>
-    <script>
-    ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-    </script>
 
 
 {% endblock %}

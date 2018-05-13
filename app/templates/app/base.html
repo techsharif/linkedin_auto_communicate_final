@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<html lang="en"
+      class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -22,11 +23,13 @@
     <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css" id="maincss">
     <link href="{% static 'css/mvc-override.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet" type="text/css">
-    
-    {%block pagecss%}
-    	<link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css">
-    {%endblock%}
-    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    {% block pagecss %}
+        <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css">
+    {% endblock %}
+
     <style type="text/css">
         .jqstooltip {
             position: absolute;
@@ -35,7 +38,7 @@
             visibility: hidden;
             background: rgb(0, 0, 0) transparent;
             background-color: rgba(0, 0, 0, 0.6);
-            filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
             -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
             color: white;
             font: 10px arial, san serif;
@@ -45,7 +48,7 @@
             border: 1px solid white;
             z-index: 10000
         }
-        
+
         .jqsfield {
             color: white;
             font: 10px arial, san serif;
@@ -55,28 +58,27 @@
 </head>
 
 <body class="">
-    <div class="wrapper">
-	{%block header%}
-    {% include 'app/includes/header.html' %}
-    {%endblock%}
-    {%block sidebar%}
-    	{% include 'app/includes/sidebar.html' %}
-    {%endblock%}
-    
-    {% block content %}   
+<div class="wrapper">
+    {% block header %}
+        {% include 'app/includes/header.html' %}
+    {% endblock %}
+    {% block sidebar %}
+        {% include 'app/includes/sidebar.html' %}
+    {% endblock %}
+
+    {% block content %}
     {% endblock content %}
 
     {% include 'app/includes/footer.html' %}
-    
-    
 
-    </div>
-    
-    {%block pagefooter%}
-    
-    
-    
-    
-    {%endblock%}
+
+</div>
+
+{% block pagefooter %}
+
+
+
+
+{% endblock %}
 </body>
 </html>       
