@@ -3,7 +3,6 @@ from django.core import serializers
 from django.core.serializers import json
 from django.db import models
 
-
 User = get_user_model()
 
 
@@ -18,22 +17,24 @@ class MemberShipField(models.Model):
     custom_connect_message = models.BooleanField(default=False)
     company_title_search = models.BooleanField(default=False)
     withdrawn_invite = models.BooleanField(default=False)
-    export_csv = models.BooleanField(default=False)    
+    export_csv = models.BooleanField(default=False)
     day_to_live = models.IntegerField(default=7)
-    
+
     class Meta:
         abstract = True
 
 
 class LinkedInUser(models.Model):
     user = models.ForeignKey(User, related_name='linkedusers',
-                                on_delete=models.CASCADE)
-    
+                             on_delete=models.CASCADE)
+
     membership = models.ManyToManyField('Membership')
     email = models.CharField(max_length=254)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=False)
+    is_pin_needed = models.BooleanField(default=False)
+    pin = models.CharField(max_length=50, blank=True, null=True)
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)
@@ -41,18 +42,18 @@ class LinkedInUser(models.Model):
 
     def __str__(self):
         return self.email
-    
 
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
-    
+
     def __str__(self):
         return self.name
-    
+
+
 class Membership(models.Model):
-    user = models.ForeignKey(User, related_name='subscriptions', 
+    user = models.ForeignKey(User, related_name='subscriptions',
                              on_delete=models.CASCADE)
     membership_type = models.ForeignKey(MembershipType,
                                         related_name='membership_types',
@@ -63,13 +64,13 @@ class Membership(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     active = models.BooleanField(default=False)
-    
+
     def __str__(self):
-        return "{0}-{1}-{1}".format(self.user.email, 
+        return "{0}-{1}-{1}".format(self.user.email,
                                     self.membership_type.name,
-                                    self.valid_to) 
-    
-    
+                                    self.valid_to)
+
+
 class BotTaskStatus:
     QUEUED = 'Queued'
     RUNNING = 'Running'
@@ -81,22 +82,21 @@ class BotTaskStatus:
         (ERROR, ERROR),
         (DONE, DONE),
     )
+
+
 class BotTask(models.Model):
-    
     owner = models.ForeignKey(LinkedInUser, related_name='bottasks',
-                                      on_delete=models.CASCADE)
+                              on_delete=models.CASCADE)
     task_type = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
-    status = models.CharField(max_length=10, choices=BotTaskStatus.statuses, 
+    status = models.CharField(max_length=10, choices=BotTaskStatus.statuses,
                               default=BotTaskStatus.QUEUED)
     lastrun_date = models.DateTimeField(blank=True, null=True)
     completed_date = models.DateTimeField(blank=True, null=True)
-    
+
     def __str__(self):
         return self.name
-    
+
     def toJSON(self):
-        xjson = serializers.serialize('json', [self,])
+        xjson = serializers.serialize('json', [self, ])
         return xjson
-    
-        

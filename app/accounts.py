@@ -82,10 +82,36 @@ class AccountSettings(UpdateView):
         return reverse('account-settings', kwargs={'pk': self.object.pk})
 
 
-@method_decorator(decorators, name='dispatch')
+csrf_exempt_decorators = decorators + (csrf_exempt,)
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountAdd(View):
     def post(self, request):
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
+            user_email = request.POST['email'].strip()
+            user_password = request.POST['password'].strip()
+            # collect membership data of this user
+            membership = Membership.objects.get(user=request.user)
+
+            # create of get linkedin user
+            linkedin_user, created = LinkedInUser.objects.get_or_create(
+                user=request.user, email=user_email,
+                password=user_password)
+
+            linkedin_user.latest_login = datetime.datetime.now()
+            linkedin_user.save()
+            linkedin_user.membership.add(membership)
+
+            BotTask(owner=linkedin_user, task_type='add account',
+                    name='add linkedin account').save()
+
+        return redirect('accounts')
+
+
+csrf_exempt_decorators = decorators + (csrf_exempt,)
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AddPin(View):
+    def post(self, request):
+        if 'pin' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
             # collect membership data of this user
@@ -349,7 +375,7 @@ def remove_account(request, pk):
     return redirect('accounts')
 
 
-csrf_exempt_decorators = decorators + (csrf_exempt,)
+
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -359,8 +385,6 @@ class SearchResultView(View):
 
         return render(request, 'app/seach_render/search_render.html')
 
-
-csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
