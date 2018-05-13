@@ -1,3 +1,5 @@
+
+from django.core import serializers
 from django.db import models
 
 from app.models import LinkedInUser
@@ -214,4 +216,6 @@ class Inbox(ContactField):
     
     def __str__(self):
         return self.name
+    
+    
     
