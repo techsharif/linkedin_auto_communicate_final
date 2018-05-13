@@ -36,6 +36,7 @@ class LinkedInUserAccountStatus:
         (QUEUED, QUEUED),
         (RUNNING, RUNNING),
         (PIN_REQUIRED, PIN_REQUIRED),
+        (PIN_CHECKING, PIN_CHECKING),
         (PIN_INVALID, PIN_INVALID),
         (ERROR, ERROR),
         (DONE, DONE),
