@@ -23,7 +23,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from app.forms import PinForm
 from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
-from connector.models import Search
+from connector.models import Search, TaskQueue
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
 from messenger.models import Inbox, ContactStatus, Campaign
@@ -142,7 +142,9 @@ class AccountSearch(View):
         if 'add_new_search_item' in request.POST.keys():
             name = request.POST['name'].strip()
             keywords = request.POST['keywords'].strip()
-            Search(search_name=name, keyword=keywords).save()
+            search = Search(search_name=name, keyword=keywords)
+            search.save()
+            TaskQueue(content_object=search).save()
         print(request.POST)
         searches = Search.objects.filter(owner__pk=pk)
         return render(request, self.template_name, {'searches': searches, 'pk':pk})
