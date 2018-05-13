@@ -18,7 +18,7 @@ from django.views.generic.detail import DetailView, BaseDetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
-from app.models import LinkedInUser, Membership, BotTask
+from app.models import LinkedInUser, Membership, BotTask, LinkedInUserAccountStatus
 
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue
@@ -33,6 +33,7 @@ decorators = (never_cache, login_required,)
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
+    queryset = LinkedInUser.objects.filter(status=LinkedInUserAccountStatus.DONE)
 
 
 class AccountMixins(object):
@@ -87,22 +88,48 @@ class AccountAdd(View):
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
-            # collect membership data of this user
-            membership = Membership.objects.get(user=request.user)
-
-            # create of get linkedin user
+            # # collect membership data of this user
+            # membership = Membership.objects.get(user=request.user)
+            #
+            # # create of get linkedin user
             linkedin_user, created = LinkedInUser.objects.get_or_create(
                 user=request.user, email=user_email,
                 password=user_password)
 
-            linkedin_user.latest_login = datetime.datetime.now()
+            # linkedin_user.latest_login = datetime.datetime.now()
             linkedin_user.save()
-            linkedin_user.membership.add(membership)
-
-            BotTask(owner=linkedin_user, task_type='add account',
+            if created:
+                BotTask(owner=linkedin_user, task_type='add account',
                     name='add linkedin account').save()
 
         return redirect('accounts')
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountInfo(View):
+    def post(self, request):
+        print(request.POST)
+        if 'email' in request.POST.keys() and 'password' in request.POST.keys():
+            user_email = request.POST['email'].strip()
+            user_password = request.POST['password'].strip()
+            linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
+
+            if linkedin_user.status == LinkedInUserAccountStatus.PIN_REQUIRED:
+                return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user}))
+            elif linkedin_user.status == LinkedInUserAccountStatus.DONE :
+                return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+            elif linkedin_user.status == LinkedInUserAccountStatus.PIN_CHECKING :
+                return HttpResponse('pin checking')
+            else:
+                return HttpResponse('Processing')
+        if 'id' in request.POST.keys() and 'pin' in request.POST.keys():
+            id_ = int(request.POST['id'].strip())
+
+            pin = request.POST['pin'].strip()
+            linkedin_user = LinkedInUser.objects.get(id=id_)
+            linkedin_user.pin = pin
+            linkedin_user.status = LinkedInUserAccountStatus.PIN_CHECKING
+            linkedin_user.save()
+            return HttpResponse('pin checking')
 
 
 csrf_exempt_decorators = decorators + (csrf_exempt,)

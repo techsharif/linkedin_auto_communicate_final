@@ -24,6 +24,24 @@ class MemberShipField(models.Model):
         abstract = True
 
 
+class LinkedInUserAccountStatus:
+    QUEUED = 'Queued'
+    RUNNING = 'Running'
+    PIN_REQUIRED = 'Pin Required'
+    PIN_CHECKING = 'Pin Checking'
+    PIN_INVALID = 'Pin Invalid'
+    ERROR = 'Error'
+    DONE = 'Done'
+    statuses = (
+        (QUEUED, QUEUED),
+        (RUNNING, RUNNING),
+        (PIN_REQUIRED, PIN_REQUIRED),
+        (PIN_INVALID, PIN_INVALID),
+        (ERROR, ERROR),
+        (DONE, DONE),
+    )
+
+
 class LinkedInUser(models.Model):
     user = models.ForeignKey(User, related_name='linkedusers',
                              on_delete=models.CASCADE)
@@ -32,8 +50,8 @@ class LinkedInUser(models.Model):
     email = models.CharField(max_length=254)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
-    status = models.BooleanField(default=False)
-    is_pin_needed = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, default=LinkedInUserAccountStatus.QUEUED,
+                              choices=LinkedInUserAccountStatus.statuses)
     pin = models.CharField(max_length=50, blank=True, null=True)
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)

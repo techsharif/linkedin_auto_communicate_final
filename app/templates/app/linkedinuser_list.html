@@ -6,10 +6,10 @@
     <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
     <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
     <style>
-    .form-horizontal .form-group {
-    margin-left: 4px;
-    margin-right: 4px;
-}
+        .form-horizontal .form-group {
+            margin-left: 4px;
+            margin-right: 4px;
+        }
     </style>
 {% endblock %}
 
@@ -74,27 +74,30 @@
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
                             aria-hidden="true">×</span></button>
                     <h4 id="myModalLabel" class="modal-title">Add Linked Account</h4></div>
-                <div class="modal-body">
+                <div class="modal-body" >
 
 
-                            <form  class="form-horizontal" id="modal-form"
-                                  role="form">
-                                {% csrf_token %}
+                    <form class="form-horizontal" id="modal-form"
+                          role="form">
+                        {% csrf_token %}
 
-                                <div class="form-group">
-                                    <label class="text-left col-lg-2 control-label">Email</label>
-                                    <input class="form-control" id="eamil" name="email" type="email"
-                                           value="{{ user.email }}">
-                                </div>
-                                <div class="form-group">
-                                    <label class="text-left col-lg-2 control-label">Password</label>
-                                    <input class="form-control" id="password" name="password" type="password" value="">
-                                </div>
-                            </form>
+                        <div class="form-group">
+                            <label class="text-left col-lg-2 control-label">Email</label>
+                            <input class="form-control" id="email" name="email" type="email"
+                                   value="{{ user.email }}">
                         </div>
+                        <div class="form-group">
+                            <label class="text-left col-lg-2 control-label">Password</label>
+                            <input class="form-control" id="password" name="password" type="password" value="">
+                        </div>
+                    </form>
+
+                    <div id="add_account_modal_results"></div>
+                </div>
 
                 <div class="modal-footer">
-                    <img id="loading_image" style="display:none" class="pull-left" width="50px" src="{% static 'loading.gif' %}" alt="">
+                    <img id="loading_image" style="display:none" class="pull-left" width="50px"
+                         src="{% static 'loading.gif' %}" alt="">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                     <a href="#" form="modal-form" class="btn btn-primary"
                        id="add_account">Add</a></div>
@@ -140,11 +143,51 @@
                 e.preventDefault();
                 $('#loading_image').hide()
                 $('#add_account_modal').modal('show');
+                $('#add_account').show()
+                $('#modal-form').show();
+                $('#add_account_modal_results').html()
             });
 
             $('body').on('click', '#add_account', function (e) {
                 e.preventDefault();
                 $('#loading_image').show()
+                $('#add_account').hide()
+
+                data = new Object()
+                data.email = $('#email')[0].value
+                data.password = $('#password')[0].value
+                $.ajax({
+                    url: '{% url 'add-account' %}',
+                    type: "post",
+                    data: data,
+                    success: function (response) {
+                        setInterval(function () {
+                            $.ajax({
+                                url: '{% url 'account-info' %}',
+                                type: "post",
+                                data: data,
+                                success: function (response) {
+                                    $('#modal-form').hide();
+                                    $('#add_account_modal_results').html(response)
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    console.log(textStatus, errorThrown);
+                                }
+
+
+                            });
+                        }, 10000);
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+
+
+                });
+
 
             });
 

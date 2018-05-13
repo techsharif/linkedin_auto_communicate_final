@@ -1,12 +1,34 @@
-{% extends 'app/base.html' %}
-{% load static %}
-{% block title %}Pin code verification{% endblock %}
+<h2>Pin verification</h2>
 
-{% block content %}
-    <h2>Pin verification</h2>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="pincode_text" required>
-        <button type="submit">Submit</button>
-    </form>
-{% endblock %}
+    <input id='pin_text' type="text" name="pincode_text" required>
+    <button id="pin_submit" >Submit</button>
+
+
+<script>
+
+
+    $("#pin_submit").click(function () {
+        console.log('ok')
+        data_ = new Object()
+        data_.id = '{{ object.id }}'
+        data_.pin = $('#pin_text')[0].value
+            $.ajax({
+                url: "{% url 'account-info' %}",
+                type: "post",
+                data: data_,
+                success: function (response) {
+                    $('#add_account_modal_results').html('checking')
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+
+
+            });
+
+
+    });
+
+
+</script>
