@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^accounts/(?P<acc_pk>[\d]+)/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
     url(r'^accounts/(?P<acc_pk>[\d]+)/campaigns/$', acc_views.AccountCampaign.as_view(), name='account-campaign'),
     url(r'^accounts/(?P<acc_pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+    url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
     url(r'^accounts/(?P<acc_pk>[\d]+)/all/$', acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^accounts/(?P<acc_pk>[\d]+)/tasks/$', acc_views.AccountTask.as_view(), name='account-task'),
     url(r'^accounts/(?P<acc_pk>[\d]+)/messenger/add$', acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),

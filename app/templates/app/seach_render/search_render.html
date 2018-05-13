@@ -1,0 +1,383 @@
+<div class="box">
+    <div class="box-body table-responsive">
+
+        <div class="input-group">
+            <input id="search_text" class="form-control" type="text" placeholder="Search contacts..." value="">
+            <span class="input-group-btn"><div id="search_submit_btn" class="btn btn-primary"><i
+                    class="glyphicon glyphicon-search"></i></div></span>
+        </div>
+
+
+        <div class="pull-right" style="margin-left:10px;">
+            <div class="pages-short">
+                <div class="s howing">
+                    <strong>1</strong>-<strong>30</strong> of <strong>979</strong>
+                </div>
+                <ul class="pagination">
+                    <li class="disabled"><a><i class="glyphicon glyphicon-chevron-left"></i></a></li>
+                    <li><a>1</a></li>
+                    <li><a href="?page=2" title="Next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <span class="btn btn-default"><input type="checkbox" data-click="checkAll"></span>&nbsp;&nbsp;&nbsp;
+
+        <a class="btn btn-default" id="add_selected" data-click="addSelected2Campaign">Add selected
+            people to Connector Campaign</a>&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-default" id="add_allnew" data-click="addAll2Campaign">Add all new people to
+            Connector Campaign</a>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-default" data-click="export" data-page="search" data-toggle="tooltip"
+                title="Export contacts to CSV"><i class="glyphicon glyphicon-export"></i></button>
+
+        <div class="scroll-block" style="height: 830px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th colspan="2">Name
+                        <div class="torder" data-click="table_order" data-col="name"></div>
+                    </th>
+                    <th>Company
+                        <div class="torder" data-click="table_order" data-col="company"></div>
+                    </th>
+                    <th>Title
+                        <div class="torder" data-click="table_order" data-col="title"></div>
+                    </th>
+                    <th>Location
+                        <div class="torder" data-click="table_order" data-col="location"></div>
+                    </th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="ctct_2299">
+                    <td></td>
+                    <td>Sang Le</td>
+                    <td>PYCO Group</td>
+                    <td>Senior Frontend Developer</td>
+                    <td>Vietnam</td>
+                    <td><span class="btn bg-purple btn-block" data-toggle="tooltip" data-html="true"
+                              title="<strong>python developement</strong><br>In Queue for Connection request">In Queue</span>
+                    </td>
+                </tr>
+                <tr id="ctct_2301">
+                    <td><input type="checkbox"></td>
+                    <td>Bigun Oleksandr</td>
+                    <td>idevelop.city</td>
+                    <td>Modeling, Python Developer</td>
+                    <td>Ukraine</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2301">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2300">
+                    <td><input type="checkbox"></td>
+                    <td>Divyanshu Tyagi</td>
+                    <td>FarmGuide</td>
+                    <td>Backend Developer</td>
+                    <td>New Delhi Area, India</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2300">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2298">
+                    <td><input type="checkbox"></td>
+                    <td>Vi Nguyen</td>
+                    <td>Asnet</td>
+                    <td>Game Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2298">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2297">
+                    <td><input type="checkbox"></td>
+                    <td>Nguyen Le</td>
+                    <td></td>
+                    <td>Developer &amp; Business Analyst</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2297">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2296">
+                    <td><input type="checkbox"></td>
+                    <td>Anil Konsal</td>
+                    <td>Esri Australia (Nodejs/Python)</td>
+                    <td>Senior Software Developer</td>
+                    <td>Sydney, Australia</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2296">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2295">
+                    <td><input type="checkbox"></td>
+                    <td>Huynh Huu Tho</td>
+                    <td>NashTech</td>
+                    <td>Senior Web Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2295">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2294">
+                    <td><input type="checkbox"></td>
+                    <td>Yancy William Yee</td>
+                    <td></td>
+                    <td>Software Engineer, VBA Developer, Process Improvement Specialist, Automation
+                        Developer, Excel and Access Dev, Python Dev
+                    </td>
+                    <td>Region IVA - Calabarzon, Philippines</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2294">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2293">
+                    <td><input type="checkbox"></td>
+                    <td>Sungmo Kim</td>
+                    <td></td>
+                    <td>Android Developer</td>
+                    <td>Korea</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2293">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2292">
+                    <td><input type="checkbox"></td>
+                    <td>Tuong Duong</td>
+                    <td>Other</td>
+                    <td>Software Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2292">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2291">
+                    <td><input type="checkbox"></td>
+                    <td>Thang Le</td>
+                    <td>Novahub</td>
+                    <td>Java Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2291">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2290">
+                    <td><input type="checkbox"></td>
+                    <td>Danh Vo</td>
+                    <td>Symphony Creative Solutions</td>
+                    <td>Ruby On Rails Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2290">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2289">
+                    <td><input type="checkbox"></td>
+                    <td>Fernando Coelho</td>
+                    <td></td>
+                    <td>Python Backend Developer</td>
+                    <td>Porto Alegre Area, Brazil</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2289">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2288">
+                    <td><input type="checkbox"></td>
+                    <td>Đạt Trần</td>
+                    <td>SolarBK</td>
+                    <td>Backend Engineer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2288">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2287">
+                    <td><input type="checkbox"></td>
+                    <td>Ngoc Linh Vu</td>
+                    <td>Steel Dragon Tech</td>
+                    <td>HR Manager &amp; Product Manager</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2287">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2286">
+                    <td><input type="checkbox"></td>
+                    <td>Hung Nguyen</td>
+                    <td>Digia Plc</td>
+                    <td>Senior API developer</td>
+                    <td>Helsinki Area, Finland</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2286">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2285">
+                    <td><input type="checkbox"></td>
+                    <td>Manh Hung</td>
+                    <td>Evolable Asia CO., LTD.</td>
+                    <td>Web Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2285">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2284">
+                    <td><input type="checkbox"></td>
+                    <td>Deepak Malik</td>
+                    <td>Krunk Systems</td>
+                    <td>Django/Python Developer</td>
+                    <td>Dehra Dun Area, India</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2284">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2283">
+                    <td><input type="checkbox"></td>
+                    <td>Thanh Nguyen Ky</td>
+                    <td></td>
+                    <td>Senior Java/AEM Developer</td>
+                    <td>Singapore</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2283">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2282">
+                    <td><input type="checkbox"></td>
+                    <td>Dat Nguyen</td>
+                    <td>Axon Active Vietnam</td>
+                    <td>Software Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2282">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2281">
+                    <td><input type="checkbox"></td>
+                    <td>Dam Viet</td>
+                    <td>Tuoi Tre newspaper</td>
+                    <td>Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2281">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2280">
+                    <td><input type="checkbox"></td>
+                    <td>vinh huynh</td>
+                    <td>AgilityIO</td>
+                    <td>Web Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2280">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2279">
+                    <td><input type="checkbox"></td>
+                    <td>Huy Giang</td>
+                    <td>Dwarves Foundation</td>
+                    <td>Software Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2279">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2278">
+                    <td><input type="checkbox"></td>
+                    <td>Arun Pandey</td>
+                    <td>Robert Bosch Engineering and Business Solutions Vietnam</td>
+                    <td>Senior Software Engineer</td>
+                    <td>Bengaluru Area, India</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2278">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2277">
+                    <td><input type="checkbox"></td>
+                    <td>Cuong Nguyen Ngoc</td>
+                    <td>VCcorp</td>
+                    <td>Big Data Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2277">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2276">
+                    <td><input type="checkbox"></td>
+                    <td>Tri Vo</td>
+                    <td>TMA Solutions</td>
+                    <td>Senior Software Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2276">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2275">
+                    <td><input type="checkbox"></td>
+                    <td>Nguyen Tai</td>
+                    <td></td>
+                    <td>Senior Web Developer</td>
+                    <td>Within 23 wards, Tokyo, Japan</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2275">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2274">
+                    <td><input type="checkbox"></td>
+                    <td>Jen Alconis Ayco</td>
+                    <td></td>
+                    <td>WebGIS Developer</td>
+                    <td>NCR - National Capital Region, Philippines</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2274">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2273">
+                    <td><input type="checkbox"></td>
+                    <td>Thế Huy Trần</td>
+                    <td>SSTech</td>
+                    <td>Junior Software Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2273">Add to Campaign</a></td>
+                </tr>
+                <tr id="ctct_2272">
+                    <td><input type="checkbox"></td>
+                    <td>Hieu Hoang</td>
+                    <td>Freelancer</td>
+                    <td>Freelance Web Developer</td>
+                    <td>Vietnam</td>
+                    <td><a class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                           data-cid="2272">Add to Campaign</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+
+        function load_data() {
+        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
+        $.ajax({
+            url: ACCOUNT_SEARCH_URL,
+            type: "post",
+            data: data,
+            success: function (response) {
+                $('#search_people').html(response);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+
+
+        });
+    }
+
+
+
+        function set_ajax_data(data) {
+        $('#ajax_data_render_field').html(JSON.stringify(data));
+    }
+
+    function get_ajax_data() {
+        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
+        return data;
+    }
+
+    function set_search_text(search_text) {
+        data = get_ajax_data();
+        data.search_text = search_text;
+        set_ajax_data(data);
+    }
+
+
+
+        $("#search_submit_btn").click(function () {
+            console.log($('#search_text').value);
+            set_search_text($('#search_text').value);
+            load_data();
+
+        });
+
+    });
+</script>
