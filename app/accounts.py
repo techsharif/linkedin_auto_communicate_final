@@ -115,6 +115,8 @@ class AccountInfo(View):
 
             if linkedin_user.status == LinkedInUserAccountStatus.PIN_REQUIRED:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user}))
+            elif linkedin_user.status == LinkedInUserAccountStatus.PIN_INVALID:
+                return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user, 'error':True}))
             elif linkedin_user.status == LinkedInUserAccountStatus.DONE :
                 return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
             elif linkedin_user.status == LinkedInUserAccountStatus.PIN_CHECKING :

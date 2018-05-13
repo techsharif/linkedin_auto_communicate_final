@@ -1,5 +1,9 @@
 <h2>Pin verification</h2>
 
+{% if error %}
+    <p class="error">The pin you entered is not correct. Please enter the latest pin</p>
+{% endif %}
+
     <input id='pin_text' type="text" name="pincode_text" required>
     <button id="pin_submit" >Submit</button>
 
