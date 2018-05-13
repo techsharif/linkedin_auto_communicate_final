@@ -23,7 +23,7 @@ from app.forms import PinForm
 from app.models import LinkedInUser, Membership, BotTask
 from checkuser.checkuser import exist_user
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
-    UpdateCampWelcomeForm, InlineCampaignStepFormSet
+    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
 from messenger.models import Inbox, ContactStatus, Campaign
 
 
@@ -38,8 +38,12 @@ class AccountList(ListView):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        if 'acc_pk' in self.kwargs:
-            ctx['pk'] = self.kwargs.get('acc_pk')
+        # pk here is pk of linkeduser table, 
+        if 'object' in ctx:
+            if isinstance(ctx['object'], Campaign):
+                ctx['pk'] = ctx['object'].owner_id
+            else:
+                ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
 
@@ -86,13 +90,16 @@ class AccountAdd(View):
             membership = Membership.objects.get(user=request.user)
 
             # create of get linkedin user
-            linkedin_user, created = LinkedInUser.objects.get_or_create(user=request.user, email=user_email,
-                                                                        password=user_password)
+            linkedin_user, created = LinkedInUser.objects.get_or_create(
+                user=request.user, email=user_email,
+                password=user_password)
+            
             linkedin_user.latest_login = datetime.datetime.now()
             linkedin_user.save()
             linkedin_user.membership.add(membership)
 
-            BotTask(owner=linkedin_user, task_type='add account', name='add linkedin account').save()
+            BotTask(owner=linkedin_user, task_type='add account', 
+                    name='add linkedin account').save()
 
         return redirect('accounts')
 
@@ -162,6 +169,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     def form_valid(self, form):
         data = self.get_context_data()
         acc_id = self.kwargs.get('pk')
+        print('data:', self.kwargs, data)
         if form.is_valid():
             camp = form.save(commit=False)
             camp.owner_id = acc_id
@@ -187,7 +195,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignCreate(AccountMessengerCreate):
     template_name = 'app/accounts_campaign_add.html'
-
+    is_bulk = False
 
     form_class = CreateCampaignForm
 
@@ -232,6 +240,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     def get_context_data(self, **kwargs):
         data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
         row = data['object']
+        print('row object:', row)
         if self.request.POST:
             data['campaignsteps'] = InlineCampaignStepFormSet(self.request.POST,
                                                               instance=row)
@@ -242,6 +251,8 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         campaignsteps = context['campaignsteps']
+        print('form_valid form:', form.is_valid(), form.errors)
+        
         with transaction.atomic():
             self.object = form.save()
             print('campaignsteps:', campaignsteps.is_valid(), campaignsteps.errors)
@@ -263,11 +274,16 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     def get_success_url(self):
         return reverse_lazy('messenger-campaign', kwargs=self.kwargs)
     
-
+    def form_invalid(self, form):
+        print('form invalid:', form.errors)
+        return super(AccountMessengerDetail, self).form_invalid(form)
+        
 @method_decorator(decorators, name='dispatch')
-class AccountCampaignDetail(TemplateView):
+class AccountCampaignDetail(AccountMessengerDetail):
     template_name = 'app/accounts_campaign_update.html'
-    model = Campaign
+    form_class = UpdateCampConnectForm
+    
+    
 
 class JSONResponseMixin:
     """

@@ -6,6 +6,8 @@ from messenger.models import Campaign, CampaignStep
 from django.forms.models import inlineformset_factory
 
 css_form_attrs = {'class': 'form-control'}
+textarea_css = css_form_attrs
+textarea_css.update({'rows': 3})
 
 class CreateCampaignForm(forms.ModelForm):
     
@@ -46,7 +48,7 @@ class CreateCampaignMesgForm(CreateCampaignForm):
         
 class UpdateCampWelcomeForm(forms.ModelForm):
     welcome_message = forms.CharField(
-        widget=forms.Textarea(attrs=css_form_attrs))
+        widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
         model = Campaign
@@ -92,15 +94,16 @@ STEP_TIMES = (
 class UpdateCampConnectForm(UpdateCampWelcomeForm):
     
     welcome_time = forms.ChoiceField(
-        widget=forms.Select(attrs=css_form_attrs),
+        required=False,
+        widget=forms.Select(attrs=textarea_css),
         choices=WELCOME_TIMES
         )
-    connect_message = forms.CharField(
-        widget=forms.Textarea(attrs=css_form_attrs))
+    connection_message = forms.CharField(
+        widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
         model = Campaign
-        fields = ('connect_message', 'welcome_time', 'welcome_message',)
+        fields = ('connection_message', 'welcome_time', 'welcome_message',)
 
 class CampaignStepForm(forms.ModelForm):
     step_time = forms.ChoiceField(
@@ -109,7 +112,7 @@ class CampaignStepForm(forms.ModelForm):
         )
     
     message = forms.CharField(
-        widget=forms.Textarea(attrs=css_form_attrs))
+        widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
         model = CampaignStep

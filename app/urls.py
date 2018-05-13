@@ -82,7 +82,7 @@ urlpatterns = [
         acc_views.AccountMessengerDelete.as_view(), name='messenger-campaign-delete'),
     url(r'^account/campaigns/(?P<pk>[\d]+)/delete$', 
         acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
-    url(r'^accountcampaigns/(?P<pk>[\d]+)/active', 
+    url(r'^account/campaigns/(?P<pk>[\d]+)/active', 
         acc_views.AccountMessengerActive.as_view(), name='connector-campaign-active'),
     url(r'^account/messenger/(?P<pk>[\d]+)/active', 
         acc_views.AccountMessengerActive.as_view(), name='messenger-campaign-active'),
