@@ -1,0 +1,53 @@
+{% load static %}
+
+<script src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.checkboxes.min.js' %}"></script>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	var url = window.location.href;
+	
+    var table = $('#campaign_people').DataTable( {
+        "ajax": url,
+        'columnDefs': [
+            {
+               'targets': 0,
+               'checkboxes': true
+            },
+            {
+                "targets": -1,
+                "data": null,
+                "render": function ( data, type, row ) {
+                	var v =  row[7];
+                	var btncolor = 'bg-maroon';
+                	if (v === 'In Queue')
+                		btncolor = 'btn-purple';
+                	else if (v.indexOf('Connect Req')>=0)
+                		btncolor = 'btn-default';
+                	
+                	
+                    var html = '<span class="btn '+ btncolor;
+                    html+= ' btn-block" data-click="change_status" data-toggle="tooltip"';
+                    html+= 'data-html="true" title="<strong>Imported</strong><br>';
+                    html+= 'Old contact before you joined B2B<br><i>Click on status to change it manually</i>">' + v + '</span>';
+                    
+                    return html;
+                },
+            }
+         ],
+         'order': [[1, 'asc']],
+         
+         "drawCallback": function( settings ) {
+
+        	 $('[data-toggle="tooltip"]').tooltip();
+        	 $('[data-click="change_status"]').popover(); 
+          },
+        
+    } );
+    
+    
+    
+    $('#campaign_people tbody').on( 'click', 'td>span', function () {
+    	//$('[data-click="change_status"]').popover(); 
+    });
+   

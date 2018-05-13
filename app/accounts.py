@@ -3,7 +3,9 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.db import transaction
+from django.forms.models import model_to_dict
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
@@ -15,13 +17,9 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, BaseDetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC, wait
-from selenium.webdriver.support.ui import WebDriverWait
 
-from app.forms import PinForm
 from app.models import LinkedInUser, Membership, BotTask
+
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
@@ -132,9 +130,53 @@ class AddPin(View):
         return redirect('accounts')
 
 
+class DataTable(object):
+    status = []
+    model = Inbox
+    
+    def default(self, o):
+        if type(o) is datetime.date or type(o) is datetime.datetime:
+            return o.strftime("%d/%m/%Y @ %H:%M")
+    
+    def get_queryset(self):
+        qs = super(DataTable, self).get_queryset()
+        qs = qs.filter(owner_id=self.kwargs.get('pk'))
+        
+        # if 'my network' should limit 'connected' or 'old connected'
+        if len(self.status) > 0:
+            qs = qs.filter(status__in=self.status)
+            
+        if self.request.is_ajax():
+            qs = qs.values_list('id', 'name', 'company', 'industry', 'title',
+                          'location', 'latest_activity', 'status')
+        return qs
+    
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(DataTable, self).get_context_data(**kwargs)
+        if self.request.is_ajax():
+            return ctx
+            
+        
+        ctx['object_list'] = []
+        
+        return ctx
+    
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            #data = serializers.serialize('json', context['object_list'])
+            data = [list(x) for x in context['object_list']]
+            print('data:', data)
+                      
+            json_data = json.dumps(dict(data=data), default=self.default)
+            return HttpResponse(json_data, content_type='application/json')
+            
+        return super(DataTable, self).render_to_response(context, **response_kwargs)
+
 @method_decorator(decorators, name='dispatch')
-class AccountNetwork(TemplateView):
+class AccountNetwork(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_network.html'
+    status = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
 
 
 @method_decorator(decorators, name='dispatch')
@@ -177,9 +219,9 @@ class AccountSearch(View):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountInbox(AccountMixins, TemplateView):
+class AccountInbox(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_inbox.html'
-
+    
 
 @method_decorator(decorators, name='dispatch')
 class AccountTask(AccountMixins, TemplateView):

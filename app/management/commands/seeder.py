@@ -41,6 +41,7 @@ class Command(BaseCommand):
         first_names = ['John', 'David', 'Arthur', 'Thomas', 'Heeze']
         last_names = ['Stephon', 'Gooze', 'Bax', 'Giss', 'Aman']
         is_connecteds = [True, False]
+        industries = ["Computer/Softare", "Food and Retailer", "It Services"]
         
         owner = LinkedInUser.objects.first()
         
@@ -48,13 +49,15 @@ class Command(BaseCommand):
             first_name = random.choice(first_names)
             last_name = random.choice(last_names)
             name = '{first} {last}'.format(first=first_name , last=last_name)
-            company = "Compnay {0}".format(i)
+            company = "Company {0}".format(i)
             location = random.choice(locations)
             status = random.choice(ContactStatus.inbox_statuses)[0]
             last_activity = random.choice(dates)
             title = random.choice(titles)
+            industry = random.choice(industries)
+            
             is_connected = random.choice(is_connecteds)
             Inbox.objects.create(name=name, title=title, company=company,
                                  linkedin_id=str(i), is_connected=is_connected,
                                  location=location, latest_activity=last_activity,
-                                 status=status, owner=owner)
+                                 status=status, owner=owner, industry=industry)
