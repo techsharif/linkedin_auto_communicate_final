@@ -4,7 +4,7 @@ import json
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls.base import reverse_lazy, reverse
@@ -13,7 +13,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, BaseDetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -40,9 +40,9 @@ class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
         if 'acc_pk' in self.kwargs:
-            ctx['acc_pk'] = self.kwargs.get('acc_pk')
+            ctx['pk'] = self.kwargs.get('acc_pk')
         else:
-            ctx['acc_pk'] = self.kwargs.get('pk')
+            ctx['pk'] = self.kwargs.get('pk')
 
         return ctx
 
@@ -111,7 +111,7 @@ class AccounMessenger(AccountMixins, ListView):
     
     def get_queryset(self):
         qs = super(AccounMessenger, self).get_queryset()
-        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('acc_pk'))
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
         return qs
 
 @method_decorator(decorators, name='dispatch')
@@ -143,7 +143,8 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     is_bulk = True
 
     def get_form(self, form_class=None):
-        acc_id = self.kwargs.get('acc_pk')
+        
+        acc_id = self.kwargs.get('pk')
         if self.request.method == "POST":
             form = self.form_class(self.request.POST, owner_id=acc_id,
                                    is_bulk=self.is_bulk)
@@ -160,10 +161,11 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         return super(AccountMessengerCreate, self).form_invalid(form)
 
     def form_valid(self, form):
-        print('form:', form.is_valid, form )
+        data = self.get_context_data()
+        acc_id = self.kwargs.get('pk')
         if form.is_valid():
             camp = form.save(commit=False)
-            camp.owner_id = self.kwargs.get('acc_pk')
+            camp.owner_id = acc_id
             camp.is_bulk = self.is_bulk
             camp.save()
             return super(AccountMessengerCreate, self).form_valid(form)
@@ -172,7 +174,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
 
 
         camp = form.instance
-        camp.owner_id = self.kwargs.get('acc_pk')
+        camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
         camp = form.save()
         # if copy step message
@@ -196,26 +198,46 @@ class AccountCampaignCreate(AccountMessengerCreate):
 
     def get_success_url(self):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
+    
 
+@method_decorator(decorators, name='dispatch')   
+class AccountMessengerDelete(AccountMixins, DeleteView):
+    model = Campaign
+    def delete(self, request, *args, **kwargs):
+        self.get_object().delete()
+        payload = {'deleted': 'ok'}
+        return JsonResponse(json.dumps(payload), safe=False)
 
+@method_decorator(decorators, name='dispatch')    
+class AccountMessengerActive(View):
+    def get(self, request, pk):
+        
+        row = get_object_or_404(Campaign, pk=pk)
+        if "1" in self.request.GET.get('active'):      
+            row.status = True
+        else:
+            row.status = False
+            
+        row.save()
+        payload = {'ok': row.status }
+        return JsonResponse(json.dumps(payload), safe=False) 
+    
 
+@method_decorator(decorators, name='dispatch')    
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
     form_class = UpdateCampWelcomeForm
     model = Campaign
     
-    def put(self, *args, **kwargs):
-        return UpdateView.put(self, *args, **kwargs)
-    
-    
+        
     def get_context_data(self, **kwargs):
         data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
-        object = data['object']
+        row = data['object']
         if self.request.POST:
             data['campaignsteps'] = InlineCampaignStepFormSet(self.request.POST,
-                                                              instance=object)
+                                                              instance=row)
         else:
-            data['campaignsteps'] = InlineCampaignStepFormSet(instance=object)
+            data['campaignsteps'] = InlineCampaignStepFormSet(instance=row)
         return data
 
     def form_valid(self, form):
@@ -223,11 +245,19 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         campaignsteps = context['campaignsteps']
         with transaction.atomic():
             self.object = form.save()
-            print('campaignsteps:', campaignsteps.is_valid())
+            print('campaignsteps:', campaignsteps.is_valid(), campaignsteps.errors)
             if campaignsteps.is_valid():
                 campaignsteps.instance = self.object
                 campaignsteps.save()
                 print('campaignsteps:', campaignsteps)
+                if self.request.is_ajax():
+                    payload = {'ok': True }
+                    return JsonResponse(json.dumps(payload), safe=False)
+            else:
+                
+                if self.request.is_ajax():
+                    payload = {'error': campaignsteps.errors }
+                    return JsonResponse(json.dumps(payload), safe=False)    
                 
         return super(AccountMessengerDetail, self).form_valid(form)
     

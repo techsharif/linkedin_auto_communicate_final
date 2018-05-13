@@ -1,7 +1,9 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
-from . import views
+
 from . import accounts as acc_views
+from . import views
+
 
 urlpatterns = [
     # These are for user/page on our own
@@ -47,23 +49,43 @@ urlpatterns = [
 
     # these stuff will be for account on linkedIN
     url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-    url(r'^accounts/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
+    url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
     url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.remove_account, name='remove-account'),
     #url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
 
-    url(r'^accounts/(?P<acc_pk>[\d]+)/network/$', acc_views.AccountNetwork.as_view(), name='account-network'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/campaigns/$', acc_views.AccountCampaign.as_view(), name='account-campaign'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
-    url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/all/$', acc_views.AccountInbox.as_view(), name='account-all'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/tasks/$', acc_views.AccountTask.as_view(), name='account-task'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/messenger/add$', acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/campaigns/add$', acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/messenger/(?P<pk>[\d]+)$', acc_views.AccountMessengerDetail.as_view(), name='messenger-campaign'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/campaigns/(?P<pk>[\d]+)$', acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
-    url(r'^accounts/(?P<acc_pk>[\d]+)/bottask/(?P<pk>[\d]+)$', acc_views.AccountBotTask.as_view(), name='connector-campaign'),
+    url(r'^account/(?P<pk>[\d]+)/network/$',
+        acc_views.AccountNetwork.as_view(), name='account-network'),
+    url(r'^account/(?P<pk>[\d]+)/messenger/$',
+        acc_views.AccounMessenger.as_view(), name='account-messenger'),
+    url(r'^account/(?P<pk>[\d]+)/campaigns/$',
+        acc_views.AccountCampaign.as_view(), name='account-campaign'),
+    url(r'^account/(?P<pk>[\d]+)/search/$',
+        acc_views.AccountSearch.as_view(), name='account-search'),
+url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
+    url(r'^account/(?P<pk>[\d]+)/all/$',
+        acc_views.AccountInbox.as_view(), name='account-all'),
+    url(r'^account/(?P<pk>[\d]+)/tasks/$',
+        acc_views.AccountTask.as_view(), name='account-task'),
+    url(r'^account/(?P<pk>[\d]+)/messenger/add$',
+        acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
+    url(r'^account/(?P<pk>[\d]+)/campaigns/add$',
+        acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
+    url(r'^account/messenger/(?P<pk>[\d]+)$',
+        acc_views.AccountMessengerDetail.as_view(), name='messenger-campaign'),
+    url(r'^account/campaigns/(?P<pk>[\d]+)$',
+        acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
+    url(r'^account/bottask/(?P<pk>[\d]+)$',
+        acc_views.AccountBotTask.as_view(), name='bottask'),
+
+    url(r'^account/messenger/(?P<pk>[\d]+)/delete$',
+        acc_views.AccountMessengerDelete.as_view(), name='messenger-campaign-delete'),
+    url(r'^account/campaigns/(?P<pk>[\d]+)/delete$',
+        acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
+    url(r'^accountcampaigns/(?P<pk>[\d]+)/active',
+        acc_views.AccountMessengerActive.as_view(), name='connector-campaign-active'),
+    url(r'^account/messenger/(?P<pk>[\d]+)/active',
+        acc_views.AccountMessengerActive.as_view(), name='messenger-campaign-active'),
     
 ]

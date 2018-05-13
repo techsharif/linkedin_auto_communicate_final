@@ -15,7 +15,7 @@
 	<tbody>
 	{% for mc in object_list %}
 		<tr>
-	  <td><a href="{%url 'messenger-campaign' acc_pk=acc_pk pk=mc.id %}">{{mc.title}}</a></td>
+	  <td><a href="{%url 'messenger-campaign' pk=mc.id %}">{{mc.title}}</a></td>
 	  <td>
 		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}
 	</td>

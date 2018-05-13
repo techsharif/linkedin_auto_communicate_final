@@ -42,7 +42,7 @@
                 -->
                 
             </ul>
-            {%if acc_pk%}
+            {%if 'account/' in request.path %}
             	{%include 'app/includes/header_account.html' with acc_pk=acc_pk %}
             	
             {%endif%}
