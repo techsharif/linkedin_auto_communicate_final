@@ -29,7 +29,7 @@ class LinkedInUser(models.Model):
                              on_delete=models.CASCADE)
 
     membership = models.ManyToManyField('Membership')
-    email = models.CharField(max_length=254)
+    email = models.CharField(max_length=254, unique=True)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=False)

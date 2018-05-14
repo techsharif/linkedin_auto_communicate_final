@@ -32,7 +32,7 @@ class Command(BaseCommand):
     def create_inboxes(self, max, reset=False):
         if reset:
             Inbox.objects.all().delete()
-        locations = ['Vietname', 'Hochiminh city Vietnam', 'HaNoi Vietnam',
+        locations = ['Vietnam', 'Hochiminh city Vietnam', 'HaNoi Vietnam',
                      'California US', 'US', 'Canada', 'Vancouver Candada']
         now = timezone.now()
         dates = [now - timedelta(days=x) for x in range(max)]
