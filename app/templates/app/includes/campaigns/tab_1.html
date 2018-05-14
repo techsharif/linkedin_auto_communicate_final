@@ -1,11 +1,13 @@
 <div class="tab-pane active" id="tab_1">
+{% if object.contacts.count > 0 %}
 					<div class="row">
+					
 {% include 'app/includes/campaigns/contact_list.html' with contacts=object.contacts.all %}
 
 	
 </div>
+{%else%}
 
-{% if object.contacts.count < 0 %}
 		<h4>To get things going with this Messenger Campaign:</h4>
 	<p>1. Go to 
 	{% if object.is_bulk %}
