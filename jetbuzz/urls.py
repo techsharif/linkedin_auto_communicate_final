@@ -15,9 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
-
-from jetbuzz import settings
 
 
 urlpatterns = [
@@ -29,9 +26,3 @@ urlpatterns = [
     url(r'^messenger/', include('messenger.urls')),
 ]
 
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
