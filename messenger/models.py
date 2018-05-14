@@ -20,6 +20,23 @@ class TimeStampedModel(models.Model):
 
 class ContactStatus(object):
     
+    ALL_N = -1
+    LATER_N = 200
+    CONNECTED_N = 3
+    CONNECT_REQUESTED_N = 1
+    DISCONNECTED_N = 23
+    IN_QUEUE_N = 0
+    LATER_N = 20
+    MESSAGE_N = 7
+    NO_INTEREST_N = 21
+    OLD_CONNECT_N = 22
+    REPLIED_N = 10
+    TALKING_N = 12
+    TALKING_REPLIED_N = 100
+    WELCOME_MES_N = 6
+    CONNECT_REQ_N = 5
+    UNREAD_N = 200
+    
     ALL = 'All'
     LATER = 'Later'
     MESSAGE = 'Message'
@@ -36,56 +53,66 @@ class ContactStatus(object):
     CONNECT_REQ = 'Connect Req'
     
     WELCOME_MES = 'Welcome Mes'
+    UNREAD = 'Unread'
     
     contact_statuses = (
-        (ALL, ALL),
-        (LATER, LATER),
-        (NO_INTEREST, NO_INTEREST),
-        (OLD_CONNECT, OLD_CONNECT),
-        (REPLIED, REPLIED),
-        (TALKING, TALKING),
-        (TALKING_REPLIED, TALKING_REPLIED),
-        (IN_QUEUE, IN_QUEUE),
+        (ALL_N, ALL),
+        (LATER_N, LATER),
+        (MESSAGE_N, MESSAGE),
+        (NO_INTEREST_N, NO_INTEREST),
+        (OLD_CONNECT_N, OLD_CONNECT),
+        (REPLIED_N, REPLIED),
+        (TALKING_N, TALKING),
+        (TALKING_REPLIED_N, TALKING_REPLIED),
         )
     
     IMPORTED = 'Imported'
     CONNECTOR = 'connector'
     MESSENGER = 'messenger'
     
-    connector_messengers = (
-        (IMPORTED, IMPORTED),
-        (IN_QUEUE, IN_QUEUE),
-        
-        )
+    # connector_messengers = (
+    #    (IMPORTED, IMPORTED),
+    #    (IN_QUEUE, IN_QUEUE),
+    #)
     
     inbox_statuses = (
-        (ALL, ALL),
-        (LATER, LATER),
-        (NO_INTEREST, NO_INTEREST),
-        (OLD_CONNECT, OLD_CONNECT),
-        (REPLIED, REPLIED),
-        (TALKING, TALKING),
-        (TALKING_REPLIED, TALKING_REPLIED),
-        (CONNECTED, CONNECTED),
-        (OLD_CONNECT, OLD_CONNECT),
-        (DISCONNECTED, DISCONNECTED),
-        (IN_QUEUE, IN_QUEUE),
-        (WELCOME_MES, WELCOME_MES),
+        (ALL_N, ALL),
+        (UNREAD_N, UNREAD),
+        (CONNECTED_N, CONNECTED),
+        (CONNECT_REQUESTED_N, CONNECT_REQUESTED),
+        (DISCONNECTED_N, DISCONNECTED),
+        (IN_QUEUE_N, IN_QUEUE),
+        (NO_INTEREST_N, NO_INTEREST),        
+        (LATER_N, LATER),
+        (MESSAGE_N, MESSAGE),        
+        (OLD_CONNECT_N, OLD_CONNECT),
+        (REPLIED_N, REPLIED),
+        (TALKING_N, TALKING),
+        (TALKING_REPLIED_N, TALKING_REPLIED),
+        (OLD_CONNECT_N, OLD_CONNECT),
+        (WELCOME_MES_N, WELCOME_MES),
         )
     
     search_result_statuses = (
-        (IN_QUEUE, IN_QUEUE),
-        (CONNECT_REQ, CONNECT_REQ)
+        (IN_QUEUE_N, IN_QUEUE),
+        (CONNECT_REQ_N, CONNECT_REQ)
         )
     
     CHAT_MSG = 'Chat'
     
     MESSSAGETYPES = (
-        (REPLIED, REPLIED),
-        (TALKING, TALKING),
-        (TALKING_REPLIED, TALKING_REPLIED),
-        (CONNECT_REQ, CONNECT_REQ)
+        (REPLIED_N, REPLIED),
+        (TALKING_N, TALKING),
+        (TALKING_REPLIED_N, TALKING_REPLIED),
+        (CONNECT_REQ_N, CONNECT_REQ)
         )
+    
+    @staticmethod
+    def valid_status(status):
+        for n, v in ContactStatus.inbox_statuses:
+            if n == status:
+                return True
+        return False
 
 class CommonContactField(models.Model):
     company = models.CharField(max_length=100, db_index=True, blank=True, 
@@ -132,7 +159,7 @@ class Campaign(TimeStampedModel):
                                 on_delete=models.CASCADE)
     title = models.CharField(max_length=100, db_index=True)
     status = models.BooleanField(default=True)
-    contacts = models.ManyToManyField("Inbox")
+    contacts = models.ManyToManyField("Inbox", related_name="campaigns")
     copy_campaign = models.ForeignKey('self', on_delete=models.SET_NULL,
                                        blank=True, null=True)
     
@@ -188,9 +215,9 @@ class ChatMessage(MessageField):
     
     contact = models.ForeignKey("Inbox", related_name='receivers',
                                on_delete=models.SET_NULL, null=True)
-    type = models.CharField(max_length=50, blank=True, 
+    type = models.IntegerField(blank=True, 
                             choices=ContactStatus.MESSSAGETYPES,
-                            default=ContactStatus.TALKING)
+                            default=ContactStatus.TALKING_N)
     campaign = models.ForeignKey(Campaign, related_name='campaign_messages',
                                   on_delete=models.CASCADE, blank=True,
                                   null=True)
@@ -203,9 +230,8 @@ class ChatMessage(MessageField):
 class Inbox(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='inboxes',
                                 on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, 
-                              choices=ContactStatus.inbox_statuses, 
-                              default=ContactStatus.OLD_CONNECT)
+    status = models.IntegerField(choices=ContactStatus.inbox_statuses, 
+                              default=ContactStatus.OLD_CONNECT_N)
     is_connected = models.BooleanField(default=False)
     is_read = models.BooleanField(default=True)
     connected_date = models.DateTimeField(blank=True, null=True)

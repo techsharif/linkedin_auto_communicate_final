@@ -5,49 +5,225 @@
 <script type="text/javascript">
 <!--
 $(document).ready(function() {
+	var contact_statuses = {
+		{%for s in inbox_status %}
+		{% spaceless %}
+		"{{s.0}}": "{{s.1}}",
+		{% endspaceless  %}
+		{%endfor%}
+	};
 	var url = window.location.href;
-	
+	var statusColors = {
+		"0": "btn-purple",
+		"22": "bg-maroon",
+		"21": "bg-gray",
+		"10": "bg-green",
+		"12": "bg-yellow",
+		"200": "bg-default",
+		"3": "bg-default",
+		"1": "bg-default",
+		"23": "bg-default",
+		"20": "bg-default",
+		"7": "bg-default",
+		"100": "bg-default",
+		"6": "bg-default",
+		"28": "bg-green",
+	};
+	var path = window.location.pathname;
+	var inboxPage = path.indexOf('network')>=0? false: true;
+	var status_index = 8;
     var table = $('#campaign_people').DataTable( {
         "ajax": url,
+        'initComplete': function(settings){
+            var api = this.api();
+
+            api.cells(
+               api.rows(function(idx, data, node){
+            	  //inqueue
+                  return (data[status_index] === 0) ? true : false;
+               }).indexes(),
+               0
+            ).checkboxes.disable();
+            // filer by colums
+            api.columns().every( function () {
+                var column = this;
+                if (column.index() === status_index){
+                	//console.log(column.data());
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.header()) )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            var text = contact_statuses[val];
+     						console.log('text:', val, text);
+                            column
+                                .search( (val && val >= 0) ? text  : '', false, true )
+                                .draw();
+                        } );
+     				
+                    Object.keys(contact_statuses).sort().forEach(function(k) {
+                    	select.append( '<option value="'+ k +'">'+ contact_statuses[k] +'</option>' );
+                    })
+                }
+                
+            } );
+         },
         'columnDefs': [
             {
                'targets': 0,
                'checkboxes': true
             },
             {
-                "targets": -1,
+                "targets": status_index,
                 "data": null,
                 "render": function ( data, type, row ) {
-                	var v =  row[7];
-                	var btncolor = 'bg-maroon';
-                	if (v === 'In Queue')
-                		btncolor = 'btn-purple';
-                	else if (v.indexOf('Connect Req')>=0)
-                		btncolor = 'btn-default';
+                	var v =  row[status_index];
+                	var btncolor = statusColors[v]? statusColors[v]: 'bg-maroon';
                 	
-                	
-                    var html = '<span class="btn '+ btncolor;
+                    var html = '<span data-status="'+ v +'" data-contactid="'+ row[0] +'" class="btn '+ btncolor;
                     html+= ' btn-block" data-click="change_status" data-toggle="tooltip"';
-                    html+= 'data-html="true" title="<strong>Imported</strong><br>';
-                    html+= 'Old contact before you joined B2B<br><i>Click on status to change it manually</i>">' + v + '</span>';
+                    html+= 'data-html="true" title="';
+                    if (v === 22){
+                    	html+= '<strong>Imported</strong><br>';
+                        html+= 'Old contact before you joined B2B';
+                    }else if (v === 0){
+                    	html+= '<strong>'+ row[7] + '</strong>';
+                    }
+                    html+= '<br><i>Click on status to change it manually</i>">';
+                    html+= contact_statuses[v];
+                    html+= '</span>';
                     
                     return html;
                 },
-            }
+            },
+            {
+                "targets": [ 7 ], //
+                "visible": !inboxPage,
+                "searchable": false
+            },
          ],
          'order': [[1, 'asc']],
          
          "drawCallback": function( settings ) {
-
+        	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
+        	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect']
+        		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item ">Mark Later</a>';
+        		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item bg-gray ">Mark No Interest</a>';
+        		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item bg-green ">Mark Replied</a>';
+        		popover+= '<a href="#" data-status="12" data-click="changeStatus" class="list-group-item bg-yellow ">Mark Talking</a>';
+        		popover+= '<a href="#" data-status="22" data-click="changeStatus" class=" list-group-item bg-maroon">Mark Old Connect</a>';
+        		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
-        	 $('[data-click="change_status"]').popover(); 
+        	 $('[data-click="change_status"]').popover({
+        		 template: popover,
+        		 placement: 'bottom',
+        		 target: 'body'
+        	 });
+        	
           },
+          "dom": '<"toolbar col-md-9 mt-sm mb-sm pull-left">frtip'
         
     } );
     
     
+	var header_buttons = '';
+	if(inboxPage){
+		//inbox page
+		
+		header_buttons+= '<button class="btn btn-default mr" data-click="markRead">Mark as read</button>';
+		header_buttons+= '<button class="btn btn-default mr" data-click="markUnread">Mark as unread</button>';
+		header_buttons+= '<button class="btn btn-default mr" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+		
+	}else if (path.indexOf('network')>=0){
+		//network page
+		header_buttons+= '<a class="btn btn-default mr" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a>';
+		header_buttons+= '<a class="btn btn-default mr" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a>';
+	}
+	// plus csv export
+	header_buttons+= '<button class="btn btn-default" data-click="export" data-toggle="tooltip" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
+	
+	$("div.toolbar").html(header_buttons);
+	$(".dataTables_filter").addClass("col-md-3 mt-sm  mb-sm");
     
-    $('#campaign_people tbody').on( 'click', 'td>span', function () {
-    	//$('[data-click="change_status"]').popover(); 
+    $('table').on('click', 'a[data-click="changeStatus"]', function(e){
+        if($('.popoverButton').length>1)
+	        $('.popoverButton').popover('hide');
+	    $(e.target).popover('toggle');
+	    
+	    var parent = $(this).parent();
+	    parent.popover('hide');
+	    var statusbox = parent.prev();
+	    var contactid = statusbox.data('contactid');
+	    var old_status = statusbox.data('status');
+	    var new_status = $(this).data('status');
+	    changeContactStatus(contactid, new_status, old_status, function(contactid, new_status, old_status){
+	    	
+	    	var oldcolor = statusColors[old_status];
+	    	var newcolor = statusColors[new_status];
+	    	console.log('changing status:', old_status, oldcolor, newcolor, new_status);
+	    	spanbox = $('td>span[data-contactid="' + contactid + '"]');
+	    	spanbox.text(contact_statuses[new_status]);
+	    	spanbox.removeClass(oldcolor).addClass(newcolor);
+	    	
+	    });
+	    
     });
-   
+    
+    function changeContactStatus(contactid, new_status, old_status, cb){
+    	var url = "/account/contact/" + contactid + "/status?status="+new_status;
+    	$.get(url).done(function(res){
+    		
+    		if (res.ok){
+    			cb(contactid, new_status, old_status);
+    		}
+    	})
+    }
+    
+	// buton click
+	var contacts = [];
+    $('#add_selected').click( function(e){
+    	var rows_selected = table.column(0).checkboxes.selected();
+    	
+    	$.each(rows_selected, function(index, rowId){
+    		contacts.push(rowId);
+    	});
+    	if (contacts.length == 0){
+    		// alert
+    		alert('No contact has been selected!');
+    		return;
+    	}
+    	// show campain modal
+    	var cids = contacts.join(',');
+    	$('#add2campaign input[name="cid"]').val(cids);
+    	$("#add2campaign").modal('show');
+    });
+	
+	//add_allnew
+	$('#add_allnew').click( function(e){
+    	
+    	console.log('add_selected:', this);
+    });
+	
+	//add2bulk_button
+	$('body').on('click', '.add2bulk_button', function (e) {
+		e.preventDefault();
+		var that = $(this);
+		var form = that.closest('form');
+    	var data = form.serialize();
+		
+		$.post(form.attr('action'), data).done(function(res){
+			
+			if(res.ok){
+				table.ajax.reload();
+				$("#add2campaign").modal('hide')
+			}
+		})
+	
+	} );
+    
+    
+});
+</script>
+
+

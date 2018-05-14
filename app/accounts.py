@@ -25,6 +25,7 @@ from connector.models import Search, TaskQueue
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
 from messenger.models import Inbox, ContactStatus, Campaign
+from django.core.exceptions import ObjectDoesNotExist
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
@@ -47,22 +48,35 @@ class AccountMixins(object):
                 ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
-
+            
+        # add this current account into context for
+        ctx['account'] = get_object_or_404(LinkedInUser, pk=ctx['pk'],
+                                           user=self.request.user)
+        #print('account:', ctx['account'])
+        
+        if ctx['account'] is None or ctx['account'].status != True:
+            print('account:', ctx['account'].status)
+            #raise ObjectDoesNotExist 
+        
+        ctx['inbox_status'] = ContactStatus.inbox_statuses
+        
         return ctx
 
+contact_statuses = [ContactStatus.CONNECTED_N, ContactStatus.OLD_CONNECT_N]
 
 @method_decorator(decorators, name='dispatch')
 class AccountDetail(AccountMixins, DetailView):
     template_name = 'app/accounts_detail.html'
     model = LinkedInUser
-
+    status = contact_statuses
+    
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
         linkedIn_user = ctx['object']
-        statuses = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
+        
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
-                                                       status__in=statuses).count()
+                                                       status__in=self.statuses).count()
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
         ctx['connectors'] = camp_qs.filter(is_bulk=False)
@@ -159,37 +173,22 @@ class AddPin(View):
         return redirect('accounts')
 
 
-class DataTable(object):
-    status = []
-    model = Inbox
-    
-    def default(self, o):
+class AjaxDatatableResponse(object):
+    pass
+
+
+def Datedefault(o):
         if type(o) is datetime.date or type(o) is datetime.datetime:
             return o.strftime("%d/%m/%Y @ %H:%M")
-    
-    def get_queryset(self):
-        qs = super(DataTable, self).get_queryset()
-        qs = qs.filter(owner_id=self.kwargs.get('pk'))
         
-        # if 'my network' should limit 'connected' or 'old connected'
-        if len(self.status) > 0:
-            qs = qs.filter(status__in=self.status)
-            
-        if self.request.is_ajax():
-            qs = qs.values_list('id', 'name', 'company', 'industry', 'title',
-                          'location', 'latest_activity', 'status')
-        return qs
+class DataTable(object):
+    is_connected = False
+    model = Inbox
+    result_list = ('id', 'name', 'company', 'industry', 'title',
+                    'location', 'latest_activity', 'campaigns__title', 'status')
     
     
-    def get_context_data(self, **kwargs):
-        ctx = super(DataTable, self).get_context_data(**kwargs)
-        if self.request.is_ajax():
-            return ctx
-            
-        
-        ctx['object_list'] = []
-        
-        return ctx
+    
     
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -197,16 +196,48 @@ class DataTable(object):
             data = [list(x) for x in context['object_list']]
             print('data:', data)
                       
-            json_data = json.dumps(dict(data=data), default=self.default)
+            json_data = json.dumps(dict(data=data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
             
         return super(DataTable, self).render_to_response(context, **response_kwargs)
+    # override this for custom list
+    def get_queryset(self):
+        qs = super(DataTable, self).get_queryset()
+        qs = qs.filter(owner_id=self.kwargs.get('pk'))
+        
+        # if 'my network' should limit 'connected' or 'old connected'
+        if self.is_connected:
+            qs = qs.filter(is_connected=self.is_connected)
+            
+        if self.request.is_ajax():
+            qs = qs.values_list(*self.result_list)
+        return qs
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(DataTable, self).get_context_data(**kwargs)
+        if self.request.is_ajax():
+            return ctx
+            
+        #ctx['inbox_status'] = ContactStatus.inbox_statuses
+        
+        ctx['object_list'] = []
+        
+        return ctx
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_network.html'
-    status = [ContactStatus.CONNECTED, ContactStatus.OLD_CONNECT]
-
+    status = contact_statuses
+    is_connected = False
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountNetwork, self).get_context_data(**kwargs)
+        ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
+        ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
+        
+        return ctx
+    
+        
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
@@ -350,6 +381,20 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
     form_class = UpdateCampWelcomeForm
     model = Campaign
+    ##result_list = ('id', 'name', 'company', 'industry', 'title',
+    ##               'location', 'latest_activity', 'campaigns__title', 'status')
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            #data = serializers.serialize('json', context['object_list'])
+            data = [[x.id, x.name, x.company, x.industry,
+                         x.title, x.location, x.latest_activity,
+                         "", x.status] for x in context['object'].contacts.all()]
+            print('data:', data)
+                      
+            json_data = json.dumps(dict(data=data), default=Datedefault)
+            return HttpResponse(json_data, content_type='application/json')
+            
+        return super(AccountMessengerDetail, self).render_to_response(context, **response_kwargs)
 
     def get_context_data(self, **kwargs):
         data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
@@ -360,6 +405,8 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                                                               instance=row)
         else:
             data['campaignsteps'] = InlineCampaignStepFormSet(instance=row)
+            
+        
         return data
 
     def form_valid(self, form):

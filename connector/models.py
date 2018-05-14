@@ -35,9 +35,8 @@ class SearchResult(CommonContactField):
     search = models.ForeignKey(Search, related_name='results',
                                on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=200)
-    status = models.CharField(max_length=20, 
-                              choices=ContactStatus.search_result_statuses, 
-                              default=ContactStatus.CONNECT_REQ)
+    status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
+                              default=ContactStatus.CONNECT_REQ_N)
     
 
     class Meta:
@@ -49,7 +48,7 @@ class SearchResult(CommonContactField):
     def __str__(self):
         return self.name
 
-
+# this is not used now, may be remvoed later
 class ConnectorCampaign(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='connectorcampaigns',
                                 on_delete=models.CASCADE, default=1)
@@ -65,11 +64,12 @@ class ConnectorCampaign(models.Model):
     def __str__(self):
         return self.connector_name
     
-    
+# this is not used now, may be remvoed later    
 class ConnectorStep(TimeStampedModel, CampaignStepField):
     campaign = models.ForeignKey(ConnectorCampaign, related_name='campaignsteps',
                                  on_delete=models.CASCADE)
     
+# this is not used now, may be remvoed later    
 class ConnectMessage(MessageField):
     
     requestee = models.ForeignKey(Inbox, related_name='requestees',

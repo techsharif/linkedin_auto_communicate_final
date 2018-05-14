@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
+from messenger import views as contact_v
 from . import accounts as acc_views
 from . import views
 
@@ -89,5 +90,8 @@ urlpatterns = [
         acc_views.AccountMessengerActive.as_view(), name='connector-campaign-active'),
     url(r'^account/messenger/(?P<pk>[\d]+)/active',
         acc_views.AccountMessengerActive.as_view(), name='messenger-campaign-active'),
+    url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
+        name='contact-status')
+    
     
 ]

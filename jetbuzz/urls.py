@@ -17,10 +17,21 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
+from jetbuzz import settings
+
+
 urlpatterns = [
     # url(r'^login/$', auth_views.login, name='login'),
     # url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('app.urls')),
     url(r'^connector/', include('connector.urls')),
+    url(r'^messenger/', include('messenger.urls')),
 ]
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
