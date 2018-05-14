@@ -29,7 +29,7 @@
                     <div class="inner">
                         <h3>{{ object.email }} </h3>
 
-                        <p>97 CONNECTIONS</p>
+{#                        <p>97 CONNECTIONS</p>#}
                     </div>
                     <div class="icon">
                         <i class="ion ion-person"></i>
@@ -41,12 +41,19 @@
                 <div class="box box-success">
                     <div class="box-header">
                         <h4 class="pull-left" style="margin-right:10px;">Status</h4>
-                        <span class="label label-success">Active</span>
+                        {% if object.status %}
+                            <span class="label label-success">Active</span>
+                        {% else %}
+                            <span class="label label-warning">Inactive</span>
+                        {% endif %}
+
                     </div>
+                    {% if object.status %}
                     <div class="box-body">
-                        <a href="https://jetbuzz.io/5386961/?do=accounts&amp;act=settings&amp;status=4"
+                        <a href=""
                            class="btn btn-flat btn-danger">STOP ACCOUNT ACTIVITY</a>
                     </div>
+                {% endif %}
                 </div>
             </div>
 
