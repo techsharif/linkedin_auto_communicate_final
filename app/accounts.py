@@ -18,7 +18,8 @@ from django.views.generic.detail import DetailView, BaseDetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
-from app.models import LinkedInUser, Membership, BotTask, LinkedInUserAccountStatus
+from app.forms import SearchForm
+from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskStatus
 
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue
@@ -34,7 +35,7 @@ decorators = (never_cache, login_required,)
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
-    queryset = LinkedInUser.objects.filter(status=LinkedInUserAccountStatus.DONE)
+
 
 
 class AccountMixins(object):
@@ -113,7 +114,7 @@ class AccountAdd(View):
             # linkedin_user.latest_login = datetime.datetime.now()
             linkedin_user.save()
             if created:
-                BotTask(owner=linkedin_user, task_type='add account',
+                BotTask(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT,
                     name='add linkedin account').save()
 
         return redirect('accounts')
@@ -126,15 +127,23 @@ class AccountInfo(View):
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
             linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
+            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT)
 
-            if linkedin_user.status == LinkedInUserAccountStatus.PIN_REQUIRED:
+            if bot_task.status == BotTaskStatus.PIN_REQUIRED:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user}))
-            elif linkedin_user.status == LinkedInUserAccountStatus.PIN_INVALID:
+            elif bot_task.status == BotTaskStatus.PIN_INVALID:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user, 'error':True}))
-            elif linkedin_user.status == LinkedInUserAccountStatus.DONE :
+            elif bot_task.status == BotTaskStatus.DONE :
+                membership = Membership.objects.get(user=request.user)
+                linkedin_user.latest_login = datetime.datetime.now()
+                linkedin_user.status = True
+                linkedin_user.save()
+                linkedin_user.membership.add(membership)
                 return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
-            elif linkedin_user.status == LinkedInUserAccountStatus.PIN_CHECKING :
+            elif bot_task.status == BotTaskStatus.PIN_CHECKING :
                 return HttpResponse('pin checking')
+            elif bot_task.status == BotTaskStatus.ERROR :
+                return HttpResponse(render_to_string('app/account_add_error.html'))
             else:
                 return HttpResponse('Processing')
         if 'id' in request.POST.keys() and 'pin' in request.POST.keys():
@@ -142,9 +151,10 @@ class AccountInfo(View):
 
             pin = request.POST['pin'].strip()
             linkedin_user = LinkedInUser.objects.get(id=id_)
-            linkedin_user.pin = pin
-            linkedin_user.status = LinkedInUserAccountStatus.PIN_CHECKING
-            linkedin_user.save()
+            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT)
+            bot_task.extra_info = json.dumps({'pin':pin})
+            bot_task.status = BotTaskStatus.PIN_CHECKING
+            bot_task.save()
             return HttpResponse('pin checking')
 
 
@@ -268,12 +278,13 @@ class AccountSearch(View):
     def post(self, request, pk):
 
         if 'add_new_search_item' in request.POST.keys():
-            name = request.POST['name'].strip()
-            keywords = request.POST['keywords'].strip()
-            search = Search(search_name=name, keyword=keywords)
-            search.save()
-            TaskQueue(content_object=search).save()
-        print(request.POST)
+            search_form = SearchForm(request.POST)
+            if search_form.is_valid():
+                search = search_form.save(commit=False)
+                linkedin_user = LinkedInUser.objects.get(pk=pk)
+                search.owner = linkedin_user
+                search.save()
+                TaskQueue(content_object=search).save()
         searches = Search.objects.filter(owner__pk=pk)
         return render(request, self.template_name, {'searches': searches, 'pk':pk})
 

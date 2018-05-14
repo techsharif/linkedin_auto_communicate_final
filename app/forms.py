@@ -1,7 +1,11 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.models import ModelForm
 from django.utils.translation import gettext_lazy as _
+
+from connector.models import Search
+
 
 class RegisterForm(forms.Form):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
@@ -82,4 +86,9 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2', )
+
+class SearchForm(ModelForm):
+    class Meta:
+        model = Search
+        fields = ['search_name', 'keyword','url_search', 'sales_search', 'location', 'industry', 'company', 'title']
     

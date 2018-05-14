@@ -429,7 +429,9 @@ div.tooltip i {
 	.modal-content .nav-tabs > li:hover > a::after { transform: scale(1); }
 .modal-content .tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
 .modal-content .tab-pane { padding: 15px 0 0; }
-.modal-content .tab-content{ padding:0; }
+.modal-content .tab-content{ padding:0; border-style: none;
+     border-width: 0 0px 0px 0px;
+      }
 
 @media (max-width: 950px) {
   .navbar-header {
