@@ -95,6 +95,11 @@ class AccountSettings(UpdateView):
     def get_success_url(self):
         return reverse('account-settings', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super(AccountSettings, self).get_context_data(**kwargs)
+        context['connections'] = len(Inbox.objects.filter(owner=self.object, is_connected=True))
+        return context
+
 
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 @method_decorator(csrf_exempt_decorators, name='dispatch')
