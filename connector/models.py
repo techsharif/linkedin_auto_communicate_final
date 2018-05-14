@@ -15,7 +15,11 @@ class Search(CommonContactField):
     keyword = models.CharField(max_length=254, blank=True, null=True)
     url_search = models.URLField(blank=True, null=True)
     sales_search = models.URLField(blank=True, null=True)
-    
+    location = models.CharField(max_length=254, blank=True, null=True)
+    industry = models.CharField(max_length=254, blank=True, null=True)
+    company = models.CharField(max_length=254, blank=True, null=True)
+    title = models.CharField(max_length=254, blank=True, null=True)
+
     resultcount = models.CharField(max_length=10)
     searchdate = models.DateTimeField(auto_now_add=True)
 

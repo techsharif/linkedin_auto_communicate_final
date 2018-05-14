@@ -18,6 +18,7 @@ from django.views.generic.detail import DetailView, BaseDetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
+from app.forms import SearchForm
 from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskStatus
 
 from checkuser.checkuser import exist_user
@@ -246,12 +247,13 @@ class AccountSearch(View):
     def post(self, request, pk):
 
         if 'add_new_search_item' in request.POST.keys():
-            name = request.POST['name'].strip()
-            keywords = request.POST['keywords'].strip()
-            search = Search(search_name=name, keyword=keywords)
-            search.save()
-            TaskQueue(content_object=search).save()
-        print(request.POST)
+            search_form = SearchForm(request.POST)
+            if search_form.is_valid():
+                search = search_form.save(commit=False)
+                linkedin_user = LinkedInUser.objects.get(pk=pk)
+                search.owner = linkedin_user
+                search.save()
+                TaskQueue(content_object=search).save()
         searches = Search.objects.filter(owner__pk=pk)
         return render(request, self.template_name, {'searches': searches, 'pk':pk})
 
