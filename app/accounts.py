@@ -77,7 +77,7 @@ class AccountDetail(AccountMixins, DetailView):
         linkedIn_user = ctx['object']
         
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
-                                                       status__in=self.statuses).count()
+                                                       status__in=self.status).count()
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
         ctx['connectors'] = camp_qs.filter(is_bulk=False)
