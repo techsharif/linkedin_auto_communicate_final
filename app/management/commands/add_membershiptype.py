@@ -12,7 +12,7 @@ class Command(BaseCommand):
         user = User.objects.create_superuser('admin', 'admin@cgito.net', 'tech123$%')
         print('user:', user.id)
     def handle(self, *args, **options):
-        self.create_admin()        
+        #self.create_admin()        
         # free
         self.check_membership_type('Free')
         desc = """Add your LinkedIn account and start prospecting for new leads"""
