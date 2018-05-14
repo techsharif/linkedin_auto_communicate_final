@@ -9,78 +9,61 @@ Created on Wed Apr 25 15:33:20 IST 2018
 
 
 # Django imports
-from django.shortcuts import render, redirect
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+#from django.http import HttpResponseRedirect
+from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404
+#from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.generic.base import View
+
+from .models import Inbox, ContactStatus, Campaign
+from django.db import transaction
 
 
 # local imports
-from messenger.models import *
-
-# @login_required
-def messenger_home(request, account_id):
-    response = {}
-    campaigns = Campaign.objects.all()
-    response = {'campaigns': campaigns}
-    return render(request, 'messenger/messenger.html', response)
+decorators = (never_cache, login_required,)
 
 
-def campaigns(request, account_id):
-    response = {}
-    if request.method == 'POST':
+class AjaxHttpResponse(object):
+    payload = dict(ok=True)
+    def AjaxResponse(self, payload=None):
+        if payload is None:
+            payload = self.payload
+            
+        json_data = json.dumps(payload)
+        return HttpResponse(json_data, content_type='application/json')
+
+@method_decorator(decorators, name='dispatch')
+class ContactStatusView(View):
+    def get(self, request, pk):
+        contact = get_object_or_404(Inbox, pk=pk)
+        new_status = request.GET.get('status', None)
+        if new_status is None or ContactStatus.valid_status(new_status):
+            raise Exception("Invalid status")
+        
+        contact.status = new_status
+        contact.save
+        json_data = json.dumps(dict(ok=True))
+        return HttpResponse(json_data, content_type='application/json')
+        
+@method_decorator(decorators, name='dispatch')        
+class CampaignContactsView(AjaxHttpResponse, View):
+    def post(self, request):
         data = request.POST
-        if data.get('name'):
-            name = data.get('name')
-            if Campaign.objects.filter(account_id=account_id, title=name).exists():
-                response = {
-                    'error':'Messenger Campaign name already exists'
-                }
-            else:
-                campaign = Campaign(account_id=account_id, title=name, status='active')
-                campaign.save()
-                return HttpResponseRedirect("/%s/messenger/"% str(account_id))
-        else:
-            response = {
-                'error':'Messenger Campaign name required'
-            }
-    else:
-        campaigns = Campaign.objects.all()
-        response = {'campaigns': campaigns}
-    return render(request, 'messenger/campaigns.html', response)
-
-
-def getcampaigns(request, account_id, campaign_id):
-    response = {}
-    campaign = Campaign.objects.get(pk=campaign_id)
-    peoples = Contact.objects.filter(campaign_id=campaign_id)
-    steps = CampaignSetp.objects.filter(campaign_id=campaign_id)
-    response = {
-        'campaign': campaign,
-        'peoples':peoples,
-        'steps': steps
-    }
-    return render(request, 'messenger/campaign.html', response)
-
-
-def delete_campaigns(request, account_id, campaign_id):
-    response = {}
-    try:
-        campaign = Campaign.objects.get(pk=campaign_id)
-        campaign.delete()
-        return HttpResponseRedirect("/%s/messenger/"% str(account_id))
-    except Exception as e:
-        print(e)
-    return render(request, 'messenger/campaign.html', response)
-
-
-def getcampaigns(request, account_id, campaign_id):
-    response = {}
-    campaign = Campaign.objects.get(pk=campaign_id)
-    peoples = Contact.objects.filter(campaign_id=campaign_id)
-    steps = CampaignSetp.objects.filter(campaign_id=campaign_id)
-    response = {
-        'campaign': campaign,
-        'peoples':peoples,
-        'steps': steps
-    }
-    return render(request, 'messenger/campaign.html', response)
+        campaign_id = data.get('campaign')
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+        with transaction.atomic():
+            campaign.contacts.clear()
+            cids = data.get('cid').split(',')
+            for cid in cids:
+                contact = get_object_or_404(Inbox, pk=cid)
+                contact.status = ContactStatus.IN_QUEUE_N
+                contact.save()
+                campaign.contacts.add(contact)
+                
+        
+        return self.AjaxResponse()

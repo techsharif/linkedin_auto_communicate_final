@@ -29,7 +29,7 @@ class LinkedInUser(models.Model):
                              on_delete=models.CASCADE)
 
     membership = models.ManyToManyField('Membership')
-    email = models.CharField(max_length=254)
+    email = models.CharField(max_length=254, unique=True)
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=False)
@@ -40,7 +40,14 @@ class LinkedInUser(models.Model):
 
     def __str__(self):
         return self.email
-
+    
+    def get_messenger_campaigns(self):
+        #
+        xx = [x for x in self.messegercampaigns.all() if x.is_bulk]
+        
+        return xx
+    def get_connector_campaigns(self):
+        return [x for x in self.messegercampaigns.all() if x.is_bulk]
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)

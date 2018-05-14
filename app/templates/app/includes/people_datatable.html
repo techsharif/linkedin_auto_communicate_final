@@ -1,10 +1,10 @@
 <table class="table table-bordered table-striped" id="campaign_people">
 	<thead>
-	{% include 'app/includes/people_datatable_headrow.html' %}
+	{% include 'app/includes/people_datatable_headrow.html' with campaign=campaign%}
 	</thead>
 	<tbody>
 	{% for contact in contacts %}
-	 <tr id="ctct_{{contact.id}}" class="contact">
+	 <tr  class="contact">
 	  <td></td>
 	  <td>{{contact.name}}</td>
 	  <td>{{contact.name}}</td>
@@ -12,8 +12,11 @@
 	  <td>{{contact.title}}</td>
 	  <td>{{contact.location}}</td>
 	  <td>{{contact.latest_activity}}</td>
-	  <td>{# how to deal with this #}
-	  <span class="btn bg-purple btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}" 
+	  {%if campaign%}
+	  <td>{{contact.campaign}}</td>
+	  {%endif%}
+	  <td >{# how to deal with this #}
+	  <span data-contactid="{{contact.id}}" class="btn bg-purple btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}" 
 	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
 	  In Queue</span>
 	 </td>
@@ -21,7 +24,7 @@
 	{%endfor%}
 	</tbody>
 	<tfoot>
-	{% include 'app/includes/people_datatable_headrow.html' %}
+	{% include 'app/includes/people_datatable_headrow.html'  with campaign=campaign %}
 	</tfoot>
 </table>
 

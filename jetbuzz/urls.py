@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     # url(r'^login/$', auth_views.login, name='login'),
@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('app.urls')),
     url(r'^connector/', include('connector.urls')),
+    url(r'^messenger/', include('messenger.urls')),
 ]
+
