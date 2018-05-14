@@ -50,8 +50,17 @@
                     </div>
                     {% if object.status %}
                     <div class="box-body">
-                        <a href=""
-                           class="btn btn-flat btn-danger">STOP ACCOUNT ACTIVITY</a>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input style="display: none" type="checkbox" name="status" id="">
+                            <input style="display: none" type="text" name="start_from" value="{{ object.start_from }}" id="">
+                            <input style="display: none" type="text" name="start_to" value="{{ object.start_to }}" id="">
+                            <input style="display: none" type="text" name="is_weekendwork" value="{{ object.is_weekendwork }}" id="">
+                            <input style="display: none" type="text" name="tz" value="{{ object.tz }}" id="">
+
+                        <button type="submit"
+                           class="btn btn-flat btn-danger">STOP ACCOUNT ACTIVITY</button>
+                        </form>
                     </div>
                 {% endif %}
                 </div>
@@ -608,7 +617,7 @@
                                 }
                             </style>
 
-
+                            <input style="display: none" type="checkbox" name="status" {% if object.status %} checked {% endif %} id="">
                             <div class="form-group checkbox">
 
                                 <label><input type="checkbox" name="is_weekendwork" value="1" {% if object.is_weekendwork%} checked {% endif %}>Work on

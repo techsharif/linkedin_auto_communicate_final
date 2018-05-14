@@ -89,7 +89,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status']
     template_name = 'app/accounts_settings.html'
 
     def get_success_url(self):
