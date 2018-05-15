@@ -389,7 +389,8 @@ $(document).ready(function() {
 	setTimeout(function(){
 		var firstrow = $('#campaign_people tbody tr').first();
 		var data = table.row( firstrow ).data();
-        show_uinfo(data[0])
+		if( data)
+        	show_uinfo(data[0])
 	}, 2000);
 	
 	

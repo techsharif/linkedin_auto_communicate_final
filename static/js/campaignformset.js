@@ -72,9 +72,8 @@ $(function() {
     	var url = window.location.href;
     	var data = $('body').find('form[name="campaign"]').serialize();        	
     	$.post(url+"/delete", data).done(function(res){
-    		var to = url.lastIndexOf('/');
-        	to = to == -1 ? url.length : to + 1;
-        	var url2 = url.substring(0, to);
+    		var accid = $("a[data-click='removeCampaign']").data('accid');
+    		var url2 = "/account/"+accid+"/messenger"
     		window.location = url2;
     	});
     	

@@ -332,16 +332,8 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     def form_valid(self, form):
         data = self.get_context_data()
         acc_id = self.kwargs.get('pk')
-        print('data:', self.kwargs, data)
-        if form.is_valid():
-            camp = form.save(commit=False)
-            camp.owner_id = acc_id
-            camp.is_bulk = self.is_bulk
-            camp.save()
-            return super(AccountMessengerCreate, self).form_valid(form)
-
-        return super(AccountMessengerCreate, self).form_invalid(form)
-
+        #print('data:', self.kwargs, data)
+        
         camp = form.instance
         camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk

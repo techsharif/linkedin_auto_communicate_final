@@ -172,8 +172,14 @@ class Campaign(TimeStampedModel):
     def __str__(self):
         return self.title
     
-    def copy_step_message(self):        
-        for cc in self.copy_campaign.campaignsteps.all():
+    def copy_step_message(self):
+        copy_campaign = self.copy_campaign
+        self.welcome_message = copy_campaign.welcome_message
+        self.connection_message = copy_campaign.connection_message
+        self.save()
+        print('self.welcome_message:', self.welcome_message)
+                        
+        for cc in copy_campaign.campaignsteps.all():
             cc.clone(self)
 
 class CampaignStepField(models.Model):
