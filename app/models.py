@@ -94,10 +94,29 @@ class BotTaskStatus:
         (DONE, DONE),
     )
 
-
-
+    
 class BotTaskType:
     ADD_ACCOUNT = 'Add Account'
+    
+    LOGIN = 'login'
+    PINVERIFY = 'pinverify'
+    CONTACT = 'contact' # get contacts
+    MESSAGING = 'messaging' # get messaging
+    POSTMESSAGE = 'postmessage' # post a message to contact
+    POSTCONNECT = 'postconnect' # post a message for connection
+    CHECKMESSAGE = 'checkmessage' # check a posted message
+    CHECKCONNECT = 'checkconnect' # check a posted connect message
+    
+    task_types = (
+        (LOGIN, LOGIN),
+        (PINVERIFY, PINVERIFY),
+        (CONTACT, CONTACT),
+        (MESSAGING, MESSAGING),
+        (POSTMESSAGE, POSTMESSAGE),
+        (POSTCONNECT, POSTCONNECT),
+        (CHECKMESSAGE, CHECKMESSAGE),
+        (CHECKCONNECT, CHECKCONNECT),
+        )
 
 class BotTask(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='bottasks',
