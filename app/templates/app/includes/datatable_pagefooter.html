@@ -333,22 +333,12 @@ $(document).ready(function() {
 			table.ajax.reload();
 			$("#add2campaign").modal('hide');
 		});
-		/*
-    	var data = form.serialize();
-    	console.log('posted data:', data);
-		$.post(form.attr('action'), data).done(function(res){
-			console.log('posted result:', data);
-			if(res.ok){
-				table.ajax.reload();
-				$("#add2campaign").modal('hide')
-			}
-		});
-		*/
+		
 	}
 	
 	function do_post_action(form, cb){
     	var data = form.serialize();
-    	console.log('posted data:', data);
+    	console.log('posted data:', form.attr('action'),  data);
 		$.post(form.attr('action'), data).done(function(res){
 			console.log('posted result:', data);
 			if(res.ok){				
@@ -391,7 +381,7 @@ $(document).ready(function() {
 		var form = $(this).closest('form');
 		do_post_action(form, function(res){
 			console.log('notes is saved')
-			$('#uinfo_box').html(res);
+			show_uinfo(current_uid);
 			
 			});
 	});

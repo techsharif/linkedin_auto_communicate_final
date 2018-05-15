@@ -114,7 +114,7 @@ class ContactUpdateNoteView(UpdateView):
     
 
 @method_decorator(decorators, name='dispatch')        
-class ContactChatMessageView(CreateView):
+class ContactChatMessageView(AjaxHttpResponse, CreateView):
     model = ChatMessage
     form_class = CreateChatMesgForm
     
@@ -127,7 +127,8 @@ class ContactChatMessageView(CreateView):
         chat.save()
         
         #print('chat:', chat)
-        return super(ContactChatMessageView, self).form_valid(form)
+        #return super(ContactChatMessageView, self).form_valid(form)
+        return self.AjaxResponse()
     
     def form_invalid(self, form):
         #print('invalid form:', form)
