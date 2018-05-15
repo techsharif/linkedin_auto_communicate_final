@@ -6,7 +6,8 @@ class CampaignAdmin(admin.ModelAdmin):
     pass
 
 class InboxAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'owner', 'status', 'name', 'company', 'title', 'latest_activity',) 
+    list_filter = ('status', 'owner')
 
 class CampaignStepAdmin(admin.ModelAdmin):
     pass

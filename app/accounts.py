@@ -209,7 +209,7 @@ class DataTable(object):
         if self.request.is_ajax():
             #data = serializers.serialize('json', context['object_list'])
             data = [list(x) for x in context['object_list']]
-            print('data:', data)
+            
                       
             json_data = json.dumps(dict(data=data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
@@ -224,6 +224,7 @@ class DataTable(object):
         if self.is_connected:
             qs = qs.filter(is_connected=self.is_connected)
             
+        
         if self.request.is_ajax():
             qs = qs.values_list(*self.result_list)
         return qs

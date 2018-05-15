@@ -1,0 +1,43 @@
+<div class="box box-primary direct-chat direct-chat-primary direct-chat-short">
+<div class="box-header with-border">
+  <h3 class="box-title">Direct chat</h3>
+
+  <div class="box-tools pull-right">
+	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+  </div>
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+  <!-- Conversations are loaded here -->
+  <div class="direct-chat-messages">
+			<!-- Your Message. -->
+	{% for chat in chats %}
+		
+		
+		{# He/She box #}
+		{%if chat.is_direct == False %}
+		{%include 'app/includes/messages/chat_left.html' with chat=chat%}
+		{%else%}
+		{# You box #}
+		{%include 'app/includes/messages/chat_right.html' with chat=chat%}
+		{%endif%}
+		
+	{%endfor%}
+			
+	
+	<!-- /.your-msg -->
+				
+	<!-- /.direct-chat-msg -->
+		  </div>
+  <!--/.direct-chat-messages-->
+</div>
+<!-- /.box-body -->
+<div class="box-footer">
+	<form action="{% url 'contact-chatmessage' pk=contact.id %}" method="post" id="chat_form">
+	{% csrf_token %}
+		{{chatform.text}}
+		<button type="submit" class="btn btn-primary btn-flat btn-block" id="sendmessage">Send</button>
+	</form>
+</div>
+<!-- /.box-footer-->
+</div>
