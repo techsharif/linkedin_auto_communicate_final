@@ -64,7 +64,7 @@ class CampaignContactsView(AjaxHttpResponse, View):
         campaign_id = data.get('campaign')
         campaign = get_object_or_404(Campaign, pk=campaign_id)
         with transaction.atomic():
-            campaign.contacts.clear()
+            
             cids = data.get('cid').split(',')
             for cid in cids:
                 contact = get_object_or_404(Inbox, pk=cid)
