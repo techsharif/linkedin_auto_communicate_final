@@ -129,7 +129,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" href="asdff" class="btn btn-primary add_button" id="account_add_confirm">Delete</a>
+                    <a type="button" href="asdff" class="btn btn-primary add_button" id="account_delete_confirm">Delete</a>
 
                 </div>
             </div><!-- /.modal-content -->
@@ -194,7 +194,7 @@
             $('body').on('click', '.remove_account', function (e) {
                 e.preventDefault();
                 linkedin_id = this.getAttribute('data_id');
-                $('#confirm_button')[0].href = '/accounts/remove/' + linkedin_id;
+                $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
                 $('#remove_account').modal('show');
             });
 
