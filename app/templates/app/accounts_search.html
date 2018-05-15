@@ -32,16 +32,17 @@
                 <a href="#" class="btn btn-success btn-block" id="new_search">Start new search</a>
 
                 <div class="box">
-                    <div class="box-body" >
+                    <div class="box-body">
 
-                            <div class="pull-right" style="margin-bottom:10px">
-                            </div>
-                            <div class="scroll-block" style="height: 508px">
-                                {% for search in searches %}
+                        <div class="pull-right" style="margin-bottom:10px">
+                        </div>
+                        <div class="scroll-block" style="height: 508px">
+                            {% for search in searches %}
                                 <div class="search-item" id="si_9">
                                     <div style="display: none;">{{ search.id }}</div>
                                     <h4 class="pull-right">{{ search.resultcount }}</h4>
-                                    <h5><strong><i class="fa fa-search margin-r-5"></i> {{ search.search_name }}</strong></h5>
+                                    <h5><strong><i class="fa fa-search margin-r-5"></i> {{ search.search_name }}
+                                    </strong></h5>
                                     <div>Keywords: <strong>{{ search.keyword }}</strong></div>
 
 
@@ -51,10 +52,8 @@
                                     <span class="text-muted pull-right">1 day ago			</span>
                                     <div class="clearfix"></div>
                                 </div>
-                                 {% endfor %}
-                            </div>
-
-
+                            {% endfor %}
+                        </div>
 
 
                     </div>
@@ -68,10 +67,6 @@
 
 {% block pagefooter %}
 
-    <script src="{% static 'app/search_page.js' %}"></script>
-    <script>
-        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-    </script>
 
 
 
@@ -95,7 +90,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Search name</label>
-                            <input class="form-control" type="text" required="true" name="search_name">
+                            <input class="form-control" id="search_name" type="text" required="true" name="search_name">
                         </div>
 
                         <ul class="nav nav-tabs" role="tablist">
@@ -122,25 +117,30 @@
                                                                 target="_blank">FAQ</a>.</p>
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Location</label>
-                                    <input class="form-control" type="text"  name="location"
-                                           id="search_location">
+                                <div class="text-center"><a class="text-center" href="#" id="advanced_search_toggle">Advanced</a>
                                 </div>
-                                 <div class="form-group">
-                                    <label>Industry</label>
-                                    <input class="form-control" type="text"  name="industry"
-                                           id="search_industry">
-                                </div>
-                                <div class="form-group">
-                                    <label>Company</label>
-                                    <input class="form-control" type="text"  name="company"
-                                           id="search_company">
-                                </div>
-                                <div class="form-group">
-                                    <label>Title</label>
-                                    <input class="form-control" type="text"  name="title"
-                                           id="search_title">
+
+                                <div id="advance_search_data">
+                                    <div class="form-group">
+                                        <label>Location</label>
+                                        <input class="form-control" type="text" name="location"
+                                               id="search_location">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Industry</label>
+                                        <input class="form-control" type="text" name="industry"
+                                               id="search_industry">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Company</label>
+                                        <input class="form-control" type="text" name="company"
+                                               id="search_company">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input class="form-control" type="text" name="title"
+                                               id="search_title">
+                                    </div>
                                 </div>
                             </div>
 
@@ -157,7 +157,7 @@
                                 <br>
                                 <div class="form-group">
                                     <label>Sales</label>
-                                    <input class="form-control" type="url" name="sales_search"
+                                    <input class="form-control"  type="url" name="sales_search"
                                            id="search_sales">
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" name="add_new_search_item" class="btn btn-primary"><i
+                        <button id='add_search_task' name="add_new_search_item" class="btn btn-primary"><i
                                 class="fa fa-search-plus margin-r-5"></i> Add
                             search task
                         </button>
@@ -197,13 +197,18 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
+                    <button type="submit" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
                         Connector Campaign
                     </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+     <script src="{% static 'app/search_page.js' %}?id=2"></script>
+    <script>
+        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+    </script>
 
 
 {% endblock %}
