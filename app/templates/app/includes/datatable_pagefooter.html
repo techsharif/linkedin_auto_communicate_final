@@ -5,6 +5,10 @@
 <script type="text/javascript">
 <!--
 $(document).ready(function() {
+	var filtered_row_num = 0;
+	var filtered_rows = [];
+	var contact_camps = {};
+	
 	var contact_statuses = {
 		{%for s in inbox_status %}
 		{% spaceless %}
@@ -36,7 +40,7 @@ $(document).ready(function() {
         "ajax": url,
         'initComplete': function(settings){
             var api = this.api();
-
+			/* disale the disable checkbox now
             api.cells(
                api.rows(function(idx, data, node){
             	  //inqueue
@@ -44,6 +48,7 @@ $(document).ready(function() {
                }).indexes(),
                0
             ).checkboxes.disable();
+			*/
             // filer by colums
             api.columns().every( function () {
                 var column = this;
@@ -181,48 +186,224 @@ $(document).ready(function() {
     }
     
 	// buton click
-	var contacts = [];
+	//export to excel
+	$('button[data-click="export"]').click(function(e){
+		swal("alert!", "Will be done.", "success");
+		
+	});
+	//delete
+	$('button[data-click="removeFromCampaign"]').click(function(e){
+		var rows_selected = table.column(0).checkboxes.selected();
+		if(rows_selected.length < 1){
+			alert_no_contact();
+    		return;
+		}
+		console.log('rows_selected:', rows_selected);
+		swal({
+			  title: "Are you sure?",
+			  text: "Your connect contacts will be deleted but your network contats will be changed to 'Old connect'",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonClass: "btn-danger",
+			  confirmButtonText: "Yes, delete it!",
+			  closeOnConfirm: false
+			},
+			function(){
+				var form = $('form[name="contacts-delete"]');
+				
+				var data = rows_selected.join(',');
+				form.find('input[name="cid"]').val(data);
+				do_post_action(form, function(){
+					table.ajax.reload();
+					swal("Deleted!", "Your contacts have been deleted.", "success");
+				});
+					
+				
+			  
+			});
+	});
+	
+	//add selected
     $('#add_selected').click( function(e){
-    	var rows_selected = table.column(0).checkboxes.selected();
     	
+    	var rows_selected = table.column(0).checkboxes.selected();
+    	var contacts = [];
     	$.each(rows_selected, function(index, rowId){
     		contacts.push(rowId);
+    		// find its row
+    		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
+    	      var row = table.row($row).data();
+    		if (row){
+    			console.log('row:', row);
+       			if (row[7] !== null)
+           			contact_camps[row[7]] = 1;
+    		}
+    		
     	});
     	if (contacts.length == 0){
     		// alert
-    		alert('No contact has been selected!');
+    		//alert('No contact has been selected!');
+    		alert_no_contact();
     		return;
     	}
     	// show campain modal
+    	show_add2campaign(contacts);
+    });
+	
+	function alert_no_contact(){
+		swal("Alert!", "No selected contact", "error");
+	};
+	
+	//add_all filtered contact
+	
+	$('#add_allnew').click( function(e){
+    	
+    	if( filtered_row_num < 1) {
+    		alert_no_contact();
+    		return;
+    	}
+    	var contacts = [];
+    	$.each(filtered_rows, function(index, row){
+    		contacts.push(row[0]);
+    		if (row[7] !== null)
+    			contact_camps[row[7]] = 1;
+    	});
+    	show_add2campaign(contacts);
+    	
+    	
+    });
+    function show_add2campaign(contacts) {
     	var cids = contacts.join(',');
     	$('#add2campaign input[name="cid"]').val(cids);
     	$("#add2campaign").modal('show');
-    });
-	
-	//add_allnew
-	$('#add_allnew').click( function(e){
     	
-    	console.log('add_selected:', this);
-    });
+    }
 	
 	//add2bulk_button
 	$('body').on('click', '.add2bulk_button', function (e) {
 		e.preventDefault();
 		var that = $(this);
-		var form = that.closest('form');
-    	var data = form.serialize();
 		
-		$.post(form.attr('action'), data).done(function(res){
+    	// check contact in other campaign
+    	campaign_name = $("#add2campaign #campaign option:selected").text();
+		console.log('campaign_name:', campaign_name, contact_camps);
+		var othercamps = [];
+		var arr = Object.keys(contact_camps);
+		if (arr.length > 0){
+			arr.forEach(function(camp) {
+				console.log('checking:', camp);
 			
+				if (camp !== campaign_name){
+					othercamps.push(camp);
+				}
+					
+			});
+			
+			console.log('othercamps:', othercamps);
+			if (othercamps.length > 0){
+				// add move contacts button
+				$("#add2campaign .add2bulk_button").hide();
+				$("#add2campaign .modal-body-input").hide();
+				var mbody = $("#add2campaign .modal-body-move");
+				var text = 'Contacts in <b>'+ othercamps.join(', ') + '</b> campaign' + (othercamps.length>1?'s':'');
+				text+= ' will be moved into <b>' + campaign_name + '</b>';
+				
+				mbody.html(text);
+				mbody.show();
+				$("#add2campaign .move2bulk_button").removeClass('hidden');
+				
+				return;
+			}
+		}
+		do_post_campaign(that);
+		
+		
+	
+	} );
+	$('body').on('click', '.move2bulk_button', function (e) {
+		e.preventDefault();
+		var that = $(this);
+		do_post_campaign(that);
+		
+	});
+	
+	function do_post_campaign(that){
+		var form = that.closest('form');
+		do_post_action(form, function(){
+			table.ajax.reload();
+			$("#add2campaign").modal('hide');
+		});
+		/*
+    	var data = form.serialize();
+    	console.log('posted data:', data);
+		$.post(form.attr('action'), data).done(function(res){
+			console.log('posted result:', data);
 			if(res.ok){
 				table.ajax.reload();
 				$("#add2campaign").modal('hide')
 			}
-		})
+		});
+		*/
+	}
 	
-	} );
+	function do_post_action(form, cb){
+    	var data = form.serialize();
+    	console.log('posted data:', data);
+		$.post(form.attr('action'), data).done(function(res){
+			console.log('posted result:', data);
+			if(res.ok){				
+				cb(res);
+			}
+		});
+	}
+	
+	// filtered
+	table.on('search.dt', function() {
+	    //number of filtered rows
+	    filtered_row_num = table.rows( { filter : 'applied'} ).nodes().length;
+	    //filtered rows data as arrays
+	    filtered_rows = table.rows( { filter : 'applied'} ).data();                                  
+	}) 
     
-    
+    // click row
+	$('#campaign_people tbody').on('click', 'tr', function () {
+        var data = table.row( this ).data();
+        show_uinfo(data[0])
+    } );
+	var current_uid = 1;
+	function show_uinfo(uid){
+		current_uid = uid;
+		var url = "/messenger/contact/" + uid + "/updatenote";
+		$.get(url).done(function(res){
+			$('#uinfo_box').html(res);
+		});
+	}
+	
+	//save notes
+	$('body').on('click', '#save_notes', function(e){
+		e.preventDefault();
+		var form = $(this).closest('form');
+		do_post_action(form, function(){console.log('notes is saved')});
+	});
+	//sendmessage
+	$('body').on('click', '#sendmessage', function(e){
+		e.preventDefault();
+		var form = $(this).closest('form');
+		do_post_action(form, function(res){
+			console.log('notes is saved')
+			$('#uinfo_box').html(res);
+			
+			});
+	});
+	
+	setTimeout(function(){
+		var firstrow = $('#campaign_people tbody tr').first();
+		var data = table.row( firstrow ).data();
+        show_uinfo(data[0])
+	}, 2000);
+	
+	
+	
 });
 </script>
 

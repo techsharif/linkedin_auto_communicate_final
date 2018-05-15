@@ -9,5 +9,11 @@ urlpatterns = [
     #url(r'^update_campaigns/(?P<campaign_id>\d+)/$', views.update_campaigns, name='update_campaigns'),
     
     url(r'^campaign/contacts/', views.CampaignContactsView.as_view(),
-        name='campaign-contacts')
+        name='campaign-contacts'),
+    url(r'^contacts/delete', views.ContactDeleteView.as_view(),
+        name='contacts-delete'),
+    url(r'^contact/(?P<pk>\d+)/chatmessage', views.ContactChatMessageView.as_view(),
+        name='contact-chatmessage'),
+    url(r'^contact/(?P<pk>\d+)/updatenote', views.ContactUpdateNoteView.as_view(),
+        name='contact-update-note'),
 ]

@@ -39,3 +39,8 @@
 		</div>
 	</div>
 </div>
+{# a dummy form for delete accounts #}
+<form name="contacts-delete" action="{% url 'contacts-delete' %}" method="post">
+{% csrf_token %}
+<input name="cid" value="" type=hidden />
+</form>

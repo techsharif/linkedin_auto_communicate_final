@@ -78,10 +78,10 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Add Contacts to Messenger Campaign</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body modal-body-input">
       {% if messenger_campaigns_count > 0 %}
 		        <p>Choose Campaign</p>
-		<select class="form-control" name="campaign">
+		<select class="form-control" name="campaign" id="campaign">
 		{%for camp in messenger_campaigns %}
 			
 			<option value="{{camp.id}}">{{camp.title}}</option>
@@ -95,11 +95,13 @@
 	  {%endif%}
 	  </div>
 	  <input type="hidden" name="cid" value="">
-	  
+	  <div class="modal-body modal-body-move text text-danger">
+	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         {% if messenger_campaigns_count > 0 %}
 		        <button type="button" class="btn btn-primary add2bulk_button">Add to Messenger</button>
+		        <button type="button" class="btn btn-info move2bulk_button hidden">Move</button>
 		{%endif%}
 		
 		      </div>

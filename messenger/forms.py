@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 
-from messenger.models import Campaign, CampaignStep
+from messenger.models import Campaign, CampaignStep, ChatMessage, Inbox
 from django.forms.models import inlineformset_factory
 
 css_form_attrs = {'class': 'form-control'}
@@ -39,6 +39,22 @@ class CreateCampaignForm(forms.ModelForm):
         model = Campaign
         fields = ('title', 'copy_campaign', )
 
+class CreateChatMesgForm(forms.ModelForm):
+    text = forms.CharField(
+        widget=forms.Textarea(attrs=textarea_css))
+    
+    class Meta:
+        model = ChatMessage
+        fields = ('text',)
+        
+class UpdateContactNoteForm(forms.ModelForm):
+    notes = forms.CharField(
+        widget=forms.Textarea(attrs=textarea_css))
+    
+    class Meta:
+        model = Inbox
+        fields = ('notes',)
+        
 
 class CreateCampaignMesgForm(CreateCampaignForm):
     def __init__(self, *args, **kwargs):

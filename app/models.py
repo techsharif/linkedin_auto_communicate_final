@@ -102,16 +102,19 @@ class BotTaskType:
     PINVERIFY = 'pinverify'
     CONTACT = 'contact' # get contacts
     MESSAGING = 'messaging' # get messaging
+    SEARCH = 'search'
     POSTMESSAGE = 'postmessage' # post a message to contact
     POSTCONNECT = 'postconnect' # post a message for connection
     CHECKMESSAGE = 'checkmessage' # check a posted message
     CHECKCONNECT = 'checkconnect' # check a posted connect message
+    
     
     task_types = (
         (LOGIN, LOGIN),
         (PINVERIFY, PINVERIFY),
         (CONTACT, CONTACT),
         (MESSAGING, MESSAGING),
+        (SEARCH, SEARCH),
         (POSTMESSAGE, POSTMESSAGE),
         (POSTCONNECT, POSTCONNECT),
         (CHECKMESSAGE, CHECKMESSAGE),
