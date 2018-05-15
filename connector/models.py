@@ -91,7 +91,7 @@ class ConnectMessage(MessageField):
         abstract = False
         
 class TaskQueue(models.Model):
-    status = models.CharField(max_length=10, choices=BotTaskStatus.statuses, 
+    status = models.CharField(max_length=20, choices=BotTaskStatus.statuses,
                               default=BotTaskStatus.QUEUED)
     queue_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
