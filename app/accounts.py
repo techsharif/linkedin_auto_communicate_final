@@ -135,7 +135,7 @@ class AccountInfo(View):
         contact_task.name = 'Get contacts of  linkedin account'
         contact_task.save()
         
-        message_task.name='Get contacts of  linkedin account'
+        message_task.name='Get messageing of  linkedin account'
         message_task.save()
         
     def update_data_sync(self,linkedin_user):
