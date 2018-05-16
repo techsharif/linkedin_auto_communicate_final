@@ -65,6 +65,8 @@ urlpatterns = [
         acc_views.AccountCampaign.as_view(), name='account-campaign'),
     url(r'^account/(?P<pk>[\d]+)/search/$',
         acc_views.AccountSearch.as_view(), name='account-search'),
+    url(r'^account/(?P<pk>[\d]+)/search/delete/(?P<search_id>[\d]+)/$',
+        acc_views.AccountSearchDelete.as_view(), name='account-search-delete'),
     url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), 
         name='account-search-result'),
     url(r'^account/(?P<pk>[\d]+)/all/$',

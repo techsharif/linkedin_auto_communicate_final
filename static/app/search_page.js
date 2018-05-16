@@ -45,6 +45,15 @@ $(document).ready(function () {
     });
 
 
+    $(".delete_search_result").click(function (event) {
+        event.preventDefault()
+        $('#remove_search').modal('show');
+
+        $('#account_delete_form_model')[0].setAttribute('action',window.location.pathname+'delete/'+$(this).parent()[0].children[0].innerHTML+'/')
+
+    });
+
+
     function set_ajax_data(data) {
         $('#ajax_data_render_field').html(JSON.stringify(data));
     }

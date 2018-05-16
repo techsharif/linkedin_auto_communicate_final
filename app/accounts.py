@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db import transaction
 from django.forms.models import model_to_dict
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls.base import reverse_lazy, reverse
@@ -292,6 +292,14 @@ class AccountSearch(View):
             TaskQueue(content_object=search).save()
         searches = Search.objects.filter(owner__pk=pk)
         return render(request, self.template_name, {'searches': searches, 'pk':pk})
+
+@method_decorator(decorators, name='dispatch')
+class AccountSearchDelete(View):
+    template_name = 'app/accounts_search.html'
+    def post(self, request, pk, search_id):
+
+        Search.objects.filter(owner__pk=pk, pk=search_id).delete()
+        return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
 
 @method_decorator(decorators, name='dispatch')
