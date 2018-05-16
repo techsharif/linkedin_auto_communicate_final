@@ -126,12 +126,25 @@ class AccountAdd(View):
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountInfo(View):
+    
     def add_sync_data_task(self, linkedin_user):
-        BotTask(owner=linkedin_user, task_type=BotTaskType.CONTACT,
-                    name='Get contacts of  linkedin account').save()
-        BotTask(owner=linkedin_user, task_type=BotTaskType.MESSAGING,
-                    name='Get contacts of  linkedin account').save()
+        contact_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.CONTACT)
+        message_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.MESSAGING)
+        contact_task.name = 'Get contacts of  linkedin account'
+        contact_task.save()
         
+        message_task.name='Get contacts of  linkedin account'
+        message_task.save()
+        
+    def update_data_sync(self,linkedin_user):
+        membership = Membership.objects.get(user=linkedin_user.user)
+        linkedin_user.latest_login = datetime.datetime.now()
+        linkedin_user.status = True
+        linkedin_user.save()
+        linkedin_user.membership.add(membership)
+            
     def check_data_sync(self, linkedin_user):
         contact_task = BotTask.objects.get(owner=linkedin_user, 
                                            task_type=BotTaskType.CONTACT)
@@ -141,6 +154,7 @@ class AccountInfo(View):
         if contact_task.status == BotTaskStatus.DONE and (
             message_task.status == BotTaskStatus.DONE):
             # sync done
+            self.update_data_sync(linkedin_user)
             return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
         
         return HttpResponse(BotTaskType.DATA_SYNC)
@@ -164,11 +178,7 @@ class AccountInfo(View):
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user, 'error':True}))
             elif bot_task.status == BotTaskStatus.DONE :
-                membership = Membership.objects.get(user=request.user)
-                linkedin_user.latest_login = datetime.datetime.now()
-                linkedin_user.status = True
-                linkedin_user.save()
-                linkedin_user.membership.add(membership)
+                
                 #return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
                 # not done yet
                 self.add_sync_data_task(linkedin_user) 
