@@ -74,7 +74,7 @@
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
                             aria-hidden="true">×</span></button>
                     <h4 id="myModalLabel" class="modal-title">Add Linked Account</h4></div>
-                <div class="modal-body" >
+                <div class="modal-body">
 
 
                     <form class="form-horizontal" id="modal-form"
@@ -129,7 +129,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" href="asdff" class="btn btn-primary add_button" id="account_delete_confirm">Delete</a>
+                    <a type="button" href="asdff" class="btn btn-primary add_button"
+                       id="account_delete_confirm">Delete</a>
 
                 </div>
             </div><!-- /.modal-content -->
@@ -141,6 +142,9 @@
 
             $('body').on('click', '.add-account', function (e) {
                 e.preventDefault();
+                if (typeof interval !== 'undefined') {
+                    clearInterval(interval);
+                }
                 $('#loading_image').hide()
                 $('#add_account_modal').modal('show');
                 $('#add_account').show()
@@ -157,15 +161,15 @@
                 data.email = $('#email')[0].value
                 data.password = $('#password')[0].value
                 var html = $('#add_account_modal_results').html()
-                if (html.indexOf('Data_Sync')>=0){
-                	data.task_type = 'Data_Sync'
-            	}
+                if (html.indexOf('Data_Sync') >= 0) {
+                    data.task_type = 'Data_Sync'
+                }
                 $.ajax({
                     url: '{% url 'add-account' %}',
                     type: "post",
                     data: data,
                     success: function (response) {
-                        setInterval(function () {
+                        interval = setInterval(function () {
                             $.ajax({
                                 url: '{% url 'account-info' %}',
                                 type: "post",
