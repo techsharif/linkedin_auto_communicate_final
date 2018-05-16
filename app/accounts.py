@@ -128,15 +128,21 @@ class AccountAdd(View):
 class AccountInfo(View):
     
     def add_sync_data_task(self, linkedin_user):
-        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
-                                           task_type=BotTaskType.CONTACT)
+        
+        """ may be this can be done when contacts is done? """
+        
         message_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
                                            task_type=BotTaskType.MESSAGING)
-        contact_task.name = 'Get contacts of  linkedin account'
-        contact_task.save()
+        
         
         message_task.name='Get messageing of  linkedin account'
         message_task.save()
+        # to have this run first
+        
+        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
+                                           task_type=BotTaskType.CONTACT)
+        contact_task.name = 'Get contacts of  linkedin account'
+        contact_task.save()
         
     def update_data_sync(self,linkedin_user):
         membership = Membership.objects.get(user=linkedin_user.user)
