@@ -26,10 +26,12 @@
 	<div class="col-md-6">
 		<div class="box box-success box-solid">
 			<div class="box-header with-border">
-				<h3 class="box-title" style="display:block">Upcoming tasks <div class="pull-right" title="JetBuzz limits the number of actions per day to assure your profile safety. At this time connection requests and messages go out with an optimal balance of profile safety and productivity. After a number of requests, you now have an option to speed up all of activity 2x. Though we haven't seen issues with LinkedIn profiles when set to 2x, keep in mind using 2x involves certain risk." data-toggle="tooltip" data-placement="bottom"><input type="checkbox" id="x2speed"> 2x</div></h3>
+				<h3 class="box-title" style="display:block">Upcoming tasks 
+				<div class="pull-right hidden" title="{{site.name}} limits the number of actions per day to assure your profile safety. At this time connection requests and messages go out with an optimal balance of profile safety and productivity. After a number of requests, you now have an option to speed up all of activity 2x. Though we haven't seen issues with LinkedIn profiles when set to 2x, keep in mind using 2x involves certain risk." data-toggle="tooltip" data-placement="bottom">
+				<input type="checkbox" id="x2speed" > 2x</div></h3>
 			</div>
 			<div class="box-body" id="upcoming_tasks">There are no tasks
-</div>
+			</div>
 		</div>
 	</div>
 	
@@ -46,11 +48,18 @@
 	  <th>Date completed</th>
 	</tr>
 	</thead>
-		<tbody><tr>
-		<td>Search</td>
-		<td>python-dev</td>
-		<td>05/08/2018 @ 04:14</td>
+		<tbody>
+{% for task in object_list %}
+{%if task.status in 'Done Error' %}		
+		<tr>
+		<td>{{task.search_name}}</td>
+		<td>{{task.search_name}}</td>
+		<td>{{task.search_name}}</td>
 	</tr>
+{%endif%}
+
+{%endfor%}	
+	
 	</tbody></table>
 </div>
 		</div>
