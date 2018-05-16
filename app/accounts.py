@@ -119,32 +119,76 @@ class AccountAdd(View):
             # linkedin_user.latest_login = datetime.datetime.now()
             linkedin_user.save()
             if created:
-                BotTask(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT,
+                BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                     name='add linkedin account').save()
 
         return redirect('accounts')
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountInfo(View):
+    
+    def add_sync_data_task(self, linkedin_user):
+        
+        """ may be this can be done when contacts is done? """
+        
+        message_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
+                                           task_type=BotTaskType.MESSAGING)
+        
+        
+        message_task.name='Get messageing of  linkedin account'
+        message_task.save()
+        # to have this run first
+        
+        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
+                                           task_type=BotTaskType.CONTACT)
+        contact_task.name = 'Get contacts of  linkedin account'
+        contact_task.save()
+        
+    def update_data_sync(self,linkedin_user):
+        membership = Membership.objects.get(user=linkedin_user.user)
+        linkedin_user.latest_login = datetime.datetime.now()
+        linkedin_user.status = True
+        linkedin_user.save()
+        linkedin_user.membership.add(membership)
+            
+    def check_data_sync(self, linkedin_user):
+        contact_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.CONTACT)
+        message_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.MESSAGING)
+        
+        if contact_task.status == BotTaskStatus.DONE and (
+            message_task.status == BotTaskStatus.DONE):
+            # sync done
+            self.update_data_sync(linkedin_user)
+            return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+        
+        return HttpResponse(BotTaskType.DATA_SYNC)
+        
     def post(self, request):
         print(request.POST)
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
+            req_task_type = request.POST.get('task_type', '')
+            
             linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
-            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT)
+            
+            if req_task_type == BotTaskType.DATA_SYNC:
+                return self.check_data_sync(linkedin_user)
+            
+            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
 
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
                 return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user, 'error':True}))
             elif bot_task.status == BotTaskStatus.DONE :
-                membership = Membership.objects.get(user=request.user)
-                linkedin_user.latest_login = datetime.datetime.now()
-                linkedin_user.status = True
-                linkedin_user.save()
-                linkedin_user.membership.add(membership)
-                return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                
+                #return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                # not done yet
+                self.add_sync_data_task(linkedin_user) 
+                return HttpResponse(BotTaskType.DATA_SYNC)
             elif bot_task.status == BotTaskStatus.PIN_CHECKING :
                 return HttpResponse('pin checking')
             elif bot_task.status == BotTaskStatus.ERROR :
@@ -156,7 +200,7 @@ class AccountInfo(View):
 
             pin = request.POST['pin'].strip()
             linkedin_user = LinkedInUser.objects.get(id=id_)
-            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.ADD_ACCOUNT)
+            bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
             bot_task.extra_info = json.dumps({'pin':pin})
             bot_task.status = BotTaskStatus.PIN_CHECKING
             bot_task.save()
@@ -308,9 +352,10 @@ class AccountInbox(AccountMixins, DataTable, ListView):
     
 
 @method_decorator(decorators, name='dispatch')
-class AccountTask(AccountMixins, TemplateView):
+class AccountTask(AccountMixins, ListView):
     template_name = 'app/accounts_task.html'
-
+    model = TaskQueue
+    
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):

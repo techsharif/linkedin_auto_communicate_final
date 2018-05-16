@@ -106,10 +106,12 @@ class ConnectMessage(MessageField):
         abstract = False
         
 class TaskQueue(models.Model):
+    owner = models.ForeignKey(LinkedInUser, related_name='taskqueues',
+                                on_delete=models.CASCADE, default=1)
     status = models.CharField(max_length=20, choices=BotTaskStatus.statuses,
                               default=BotTaskStatus.QUEUED)
     queue_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('queue_type', 'object_id')
-    
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(blank=True, null=True)

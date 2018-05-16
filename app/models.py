@@ -108,6 +108,8 @@ class BotTaskType:
     CHECKMESSAGE = 'checkmessage' # check a posted message
     CHECKCONNECT = 'checkconnect' # check a posted connect message
     
+    # Data_sync internal used only
+    DATA_SYNC = 'Data_Sync'
     
     task_types = (
         (LOGIN, LOGIN),
