@@ -130,6 +130,8 @@ $(document).ready(function () {
         if (error==0)
             $('#add_search').submit();
 
+        console.log(error)
+
     });
 
 

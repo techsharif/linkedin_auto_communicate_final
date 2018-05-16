@@ -6,6 +6,7 @@
     <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
     <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
     <link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css">
+    <link href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block title %}Home{% endblock title %}
@@ -20,7 +21,7 @@
 
 
 {% block content %}
-    <section class="content">
+    <section class="content" style="height:80%">
 
         <div class="row">
             <div id="ajax_data_render_field" style="display: none"></div>
@@ -36,7 +37,7 @@
 
                         <div class="pull-right" style="margin-bottom:10px">
                         </div>
-                        <div class="scroll-block" style="height: 508px">
+                        <div class="scroll-block" >
                             {% for search in searches %}
                                 <div class="search-item" id="si_9">
                                     <div style="display: none;">{{ search.id }}</div>
@@ -59,7 +60,7 @@
                     </div>
                 </div>
             </div>
-
+        </div>
 
     </section>
 
@@ -204,11 +205,12 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
+<script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <script src="{% static 'app/search_page.js' %}?id=2"></script>
     <script>
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
     </script>
+
 
 
 {% endblock %}

@@ -1,26 +1,28 @@
+<style>
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+            position: relative;
+    /* float: left; */
+    padding: 2px 11px;
+    line-height: 1.52857;
+    text-decoration: none;
+    color: #515253;
+{#    background-color: #fff;#}
+    border: 1px solid #eee;
+    margin-left: -1px;
+    }
+</style>
 <div class="box">
     <div class="box-body table-responsive">
 
-        <div class="input-group">
-            <input id="search_text_input" class="form-control" type="text" placeholder="Search contacts..." value="">
-            <span class="input-group-btn"><div id="search_submit_btn" class="btn btn-primary"><i
-                    class="fas fa-search"></i></div></span>
+        <div class="input-group" style="width:100%">
+            <input id="search_input_datatable" class="form-control" type="text" placeholder="Search contacts..."
+                   value="">
+            <br>
+            <br>
         </div>
 
 
-        <div class="pull-right" style="margin-left:10px;">
-            <div class="pages-short">
-                <div class="s howing">
-                    <strong>1</strong>-<strong>30</strong> of <strong>979</strong>
-                </div>
-                <ul class="pagination">
-                    <li class="disabled"><a><i class="glyphicon glyphicon-chevron-left"></i></a></li>
-                    <li><a>1</a></li>
-                    <li><a href="?page=2" title="Next"><i class="glyphicon glyphicon-chevron-right"></i></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
 
         <span class="btn btn-default"><input id="select_all_items" type="checkbox" data-click="checkAll"></span>&nbsp;&nbsp;&nbsp;
 
@@ -31,11 +33,12 @@
         <button class="btn btn-default" data-click="export" data-page="search" data-toggle="tooltip"
                 title="Export contacts to CSV"><i class="fas fa-upload"></i></button>
 
-        <div class="scroll-block" style="height: 450px;">
+        <div class="scroll-block">
             <table class="table">
                 <thead>
                 <tr>
-                    <th colspan="2">Name
+                    <th style="width: 5%"></th>
+                    <th>Name
                         <div class="torder" data-click="table_order" data-col="name"></div>
                     </th>
                     <th>Company
@@ -312,7 +315,8 @@
                     <td>SSTech</td>
                     <td>Junior Software Developer</td>
                     <td>Vietnam</td>
-                    <td><a class="select_an_item_to_campaign" data-val="45" class="text-nowrap" href="#" data-toggle="modal" data-target="#add2campaign"
+                    <td><a class="select_an_item_to_campaign" data-val="45" class="text-nowrap" href="#"
+                           data-toggle="modal" data-target="#add2campaign"
                            data-cid="2273">Add to Campaign</a></td>
                 </tr>
                 <tr id="ctct_2272">
@@ -321,7 +325,10 @@
                     <td>Freelancer</td>
                     <td>Freelance Web Developer</td>
                     <td>Vietnam</td>
-                    <td><button class="select_an_item_to_campaign" class="text-nowrap" data-cid="2272">Add to Campaign</button></td>
+                    <td>
+                        <button class="select_an_item_to_campaign" class="text-nowrap" data-cid="2272">Add to Campaign
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -331,126 +338,142 @@
 </div>
 
 <script>
+
     $(document).ready(function () {
-        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
 
-        function load_data() {
-            data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
-            $.ajax({
-                url: ACCOUNT_SEARCH_URL,
-                type: "post",
-                data: data,
-                success: function (response) {
-                    $('#search_people').html(response);
+        oTable = $('.table').DataTable({
+            "lengthChange": false,
+            "pageLength": 15,
+            {#            searching: false,#}
+            "dom": '<"top"ip>rt<"bottom"><"clear">',
+            "language": {
+                "paginate": {
+                    "previous": '<i class="glyphicon glyphicon-chevron-left"></i>',
+                    "next": '<i class="glyphicon glyphicon-chevron-right"></i>'
+                }
+            }
+        });
 
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+        $('#search_input_datatable').keyup(function () {
+            console.log('ok')
+            oTable.search($(this).val()).draw();
+        })
+
+                ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+
+                function load_data() {
+                    data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
+                    $.ajax({
+                        url: ACCOUNT_SEARCH_URL,
+                        type: "post",
+                        data: data,
+                        success: function (response) {
+                            $('#search_people').html(response);
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+
+
+                    });
                 }
 
 
-            });
-        }
+                function set_ajax_data(data) {
+                    console.log(data)
+                    $('#ajax_data_render_field').html(JSON.stringify(data));
+                }
+
+                function get_ajax_data() {
+                    data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
+                    return data;
+                }
+
+                function set_search_text(search_text) {
+                    data = get_ajax_data();
+                    data.search_text = search_text;
+                    set_ajax_data(data);
+                }
 
 
-        function set_ajax_data(data) {
-            console.log(data)
-            $('#ajax_data_render_field').html(JSON.stringify(data));
-        }
+                $("#search_submit_btn").click(function () {
+                    console.log($('#search_text_input').value);
+                    set_search_text($('#search_text_input')[0].value);
+                    load_data();
 
-        function get_ajax_data() {
-            data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
-            return data;
-        }
+                });
+        {##}
+                $("#select_all_items").change(function () {
 
-        function set_search_text(search_text) {
-            data = get_ajax_data();
-            data.search_text = search_text;
-            set_ajax_data(data);
-        }
+                    $('.select_items').prop('checked', this.checked);
 
 
-        $("#search_submit_btn").click(function () {
-            console.log($('#search_text_input').value);
-            set_search_text($('#search_text_input')[0].value);
-            load_data();
+                });
+        {##}
+                $(".select_an_item_to_campaign").click(function () {
 
-        });
+                    data = get_ajax_data();
+                       data.selected_items = this.getAttribute('data-cid');
+                       set_ajax_data(data);
 
-        $("#select_all_items").change(function () {
-
-            $('.select_items').prop('checked', this.checked);
-
-
-        });
-
-        $(".select_an_item_to_campaign").click(function () {
-
-            data = get_ajax_data();
-               data.selected_items = this.getAttribute('data-cid');
-               set_ajax_data(data);
-
-                $('#add2campaign').modal('show');
+                        $('#add2campaign').modal('show');
 
 
 
-        });
-
-
-        $("#add_all_selected_item_button").click(function () {
-            $('#add2campaign').modal('hide');
-            load_data();
-            data = get_ajax_data();
-            if (data.selected_items)   delete data.selected_items;
-            if (data.add_all_selected_item_button)   delete data.add_all_selected_item_button;
-               set_ajax_data(data)
-
-
-
-        });
+                });
+        {##}
+        {##}
+                $("#add_all_selected_item_button").click(function () {
+                    $('#add2campaign').modal('hide');
+                    load_data();
+                    data = get_ajax_data();
+                    if (data.selected_items)   delete data.selected_items;
+                    if (data.add_all_selected_item_button)   delete data.add_all_selected_item_button;
+                       set_ajax_data(data)
 
 
 
-        $("#add_selected").click(function () {
+                });
 
-            checked_item = $('.select_items:checked');
+                $("#add_selected").click(function () {
 
-           if (checked_item.length){
-               selected_items_list = new Array()
-               for (i=0; i<checked_item.length; i++){
-                    selected_items_list[i] = checked_item[i].value;
-               }
-               data = get_ajax_data();
-               data.selected_items = selected_items_list;
-               set_ajax_data(data);
+                    checked_item = $('.select_items:checked');
 
-               $('#add2campaign').modal('show');
+                   if (checked_item.length){
+                       selected_items_list = new Array()
+                       for (i=0; i<checked_item.length; i++){
+                            selected_items_list[i] = checked_item[i].value;
+                       }
+                       data = get_ajax_data();
+                       data.selected_items = selected_items_list;
+                       set_ajax_data(data);
 
-           }else{
-               alert('No item selected')
-           }
+                       $('#add2campaign').modal('show');
 
-
-        });
-
-        $("#add_allnew").click(function () {
-
-            checked_item = $('.select_items:checked');
-
-           data = get_ajax_data();
-               data.add_all_selected_item_button = true;
-               set_ajax_data(data);
+                   }else{
+                       alert('No item selected')
+                   }
 
 
-               $('#add2campaign').modal('show');
+                });
+
+                $("#add_allnew").click(function () {
+
+                    checked_item = $('.select_items:checked');
+
+                   data = get_ajax_data();
+                       data.add_all_selected_item_button = true;
+                       set_ajax_data(data);
+
+
+                       $('#add2campaign').modal('show');
 
 
 
 
-        });
+                });
 
-
-        
 
 
 

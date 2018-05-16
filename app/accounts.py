@@ -283,14 +283,13 @@ class AccountSearch(View):
 
     def post(self, request, pk):
 
-        if 'add_new_search_item' in request.POST.keys():
-            search_form = SearchForm(request.POST)
-            if search_form.is_valid():
-                search = search_form.save(commit=False)
-                linkedin_user = LinkedInUser.objects.get(pk=pk)
-                search.owner = linkedin_user
-                search.save()
-                TaskQueue(content_object=search).save()
+        search_form = SearchForm(request.POST)
+        if search_form.is_valid():
+            search = search_form.save(commit=False)
+            linkedin_user = LinkedInUser.objects.get(pk=pk)
+            search.owner = linkedin_user
+            search.save()
+            TaskQueue(content_object=search).save()
         searches = Search.objects.filter(owner__pk=pk)
         return render(request, self.template_name, {'searches': searches, 'pk':pk})
 
