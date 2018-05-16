@@ -7,7 +7,7 @@ class SearchAdmin(admin.ModelAdmin):
     list_display = ('search_name', 'result_count',) +  list_filter
     
 class TaskQueueAdmin(admin.ModelAdmin):
-    list_filter = ('owner', 'queue_type', 'status',)
+    list_filter = ('queue_type', 'status',)
     list_display = list_filter
 
 class SearchResultAdmin(admin.ModelAdmin):
