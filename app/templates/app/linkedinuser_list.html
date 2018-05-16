@@ -84,7 +84,7 @@
                         <div class="form-group">
                             <label class="text-left col-lg-2 control-label">Email</label>
                             <input class="form-control" id="email" name="email" type="email"
-                                   value="{{ user.email }}">
+                                   value="">
                         </div>
                         <div class="form-group">
                             <label class="text-left col-lg-2 control-label">Password</label>
@@ -149,7 +149,7 @@
                 $('#add_account_modal').modal('show');
                 $('#add_account').show()
                 $('#modal-form').show();
-                $('#add_account_modal_results').html()
+                $('#add_account_modal_results').html('')
             });
 
             $('body').on('click', '#add_account', function (e) {
@@ -190,7 +190,12 @@
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
+                        if (jqXHR.responseText=='400')
+                            $('#add_account_modal_results').html('Account with this email is already exists')
+                        else
+                            $('#add_account_modal_results').html('An error occur during add this acount. please reloade this page and try again')
+                        $('#loading_image').hide()
+                        $('#add_account').show()
                     }
 
 
