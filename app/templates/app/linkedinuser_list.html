@@ -98,7 +98,7 @@
                 <div class="modal-footer">
                     <img id="loading_image" style="display:none" class="pull-left" width="50px"
                          src="{% static 'loading.gif' %}" alt="">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                    <button type="button" id="add_item_modal_close" class="btn btn-default">Close</button>
                     <a href="#" form="modal-form" class="btn btn-primary"
                        id="add_account">Add</a></div>
             </div>
@@ -209,6 +209,13 @@
                 linkedin_id = this.getAttribute('data_id');
                 $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
                 $('#remove_account').modal('show');
+            });
+
+
+            $('body').on('click', '#add_item_modal_close', function (e) {
+                e.preventDefault();
+                $('#add_account').hide()
+                window.location.href = ''
             });
 
 
