@@ -150,11 +150,11 @@ class AccountInfo(View):
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
-            task_type = request.POST['task_type'].strip()
+            req_task_type = request.POST.get('task_type', '')
             
             linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
             
-            if task_type == BotTaskType.DATA_SYNC:
+            if req_task_type == BotTaskType.DATA_SYNC:
                 return self.check_data_sync(linkedin_user)
             
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
