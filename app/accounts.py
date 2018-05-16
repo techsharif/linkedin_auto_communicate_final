@@ -22,7 +22,7 @@ from app.forms import SearchForm
 from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskStatus
 
 from checkuser.checkuser import exist_user
-from connector.models import Search, TaskQueue
+from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
 from messenger.models import Inbox, ContactStatus, Campaign
@@ -279,7 +279,8 @@ class AccountSearch(View):
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
-        return render(request, self.template_name,{'searches': searches, 'pk':pk})
+        campaigns = Campaign.objects.filter(owner__pk=pk)
+        return render(request, self.template_name,{'searches': searches, 'pk':pk, 'campaigns':campaigns})
 
     def post(self, request, pk):
 
@@ -290,8 +291,7 @@ class AccountSearch(View):
             search.owner = linkedin_user
             search.save()
             TaskQueue(content_object=search).save()
-        searches = Search.objects.filter(owner__pk=pk)
-        return render(request, self.template_name, {'searches': searches, 'pk':pk})
+        return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearchDelete(View):
@@ -516,14 +516,36 @@ def remove_account(request, pk):
 class SearchResultView(View):
     def post(self, request):
         print(request.POST)
+        if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
+            return render(request,'app/search_render/search_select.html')
+        print(request.POST['search_head'])
+        search_id = int(request.POST['search_head'])
+        search = get_object_or_404(Search,pk=search_id, owner__user=request.user)
+        if not search.result_status():
+            return render(request, 'app/search_render/search_waiting.html')
 
-        return render(request, 'app/seach_render/search_render.html')
+        if not search.result_count():
+            return render(request, 'app/search_render/no_search_result.html')
+
+        item = []
+        if 'selected_items[]' in request.POST.keys():
+            item = list( map(int, request.POST.getlist('selected_items[]')))
+        elif 'selected_items' in request.POST.keys():
+            item += [int(request.POST.get('selected_items'))]
+        elif 'add_all_selected_item_button' in request.POST.keys():
+            search_results = SearchResult.objects.filter(search=search, status=None)
+            search_results.update(status=ContactStatus.IN_QUEUE_N)
+
+        if item:
+            if 'campaign' in request.POST.keys():
+                search_results = SearchResult.objects.filter(search=search, pk__in=item)
+                search_results.update(status=ContactStatus.IN_QUEUE_N)
 
 
 
-@method_decorator(csrf_exempt_decorators, name='dispatch')
-class SearchItemView(View):
-    def post(self, request):
-        print(request.POST)
+        search_results = SearchResult.objects.filter(search=search)
+        return render(request, 'app/search_render/search_render.html', {'search':search, 'search_results':search_results})
 
-        return render(request, 'app/seach_render/search_item_render.html')
+
+
+

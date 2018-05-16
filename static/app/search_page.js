@@ -5,10 +5,7 @@ $(document).ready(function () {
 
     function create_ajax_requst_data() {
         var ajax_request_data = new Object();
-        ajax_request_data.search_text = '';
         ajax_request_data.search_head = '';
-        ajax_request_data.page = '';
-        ajax_request_data.order_by = '';
 
         return ajax_request_data;
     }

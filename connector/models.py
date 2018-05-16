@@ -20,7 +20,7 @@ class Search(CommonContactField):
     company = models.CharField(max_length=254, blank=True, null=True)
     title = models.CharField(max_length=254, blank=True, null=True)
 
-    resultcount = models.CharField(max_length=10)
+    resultcount = models.IntegerField(blank=True, null=True)
     searchdate = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -31,6 +31,12 @@ class Search(CommonContactField):
 
     def __str__(self):
         return self.search_name
+
+    def result_status(self):
+        return False if self.resultcount == None else True
+
+    def result_count(self):
+        return 0 if self.resultcount == None else self.resultcount
         
 
 class SearchResult(CommonContactField):
@@ -40,7 +46,7 @@ class SearchResult(CommonContactField):
                                on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=200)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
-                              default=ContactStatus.CONNECT_REQ_N)
+                              blank=True, null=True)
     
 
     class Meta:
@@ -51,6 +57,15 @@ class SearchResult(CommonContactField):
 
     def __str__(self):
         return self.name
+
+    def search_result_status(self):
+        if self.status == None:
+            return 0
+        elif self.status == ContactStatus.IN_QUEUE_N:
+            return 1
+        else:
+            return 2
+
 
 # this is not used now, may be remvoed later
 class ConnectorCampaign(models.Model):

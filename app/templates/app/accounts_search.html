@@ -41,16 +41,29 @@
                             {% for search in searches %}
                                 <div class="search-item" id="si_9">
                                     <div style="display: none;">{{ search.id }}</div>
-                                    <h4 class="pull-right">{{ search.resultcount }}</h4>
+                                    <h4 class="pull-right">{{ search.result_count }}</h4>
                                     <h5><strong><i class="fa fa-search margin-r-5"></i> {{ search.search_name }}
                                     </strong></h5>
-                                    <div>Keywords: <strong>{{ search.keyword }}</strong></div>
+
+                                    {% if search.keyword %} <div>Keywords: <strong>{{ search.keyword }}</strong></div> {% endif %}
+                                    {% if search.url_search %} <div>Keywords: <strong>{{ search.url_search }}</strong></div> {% endif %}
+                                    {% if search.sales_search %} <div>Keywords: <strong>{{ search.sales_search }}</strong></div> {% endif %}
+                                    {% if search.location %} <div>Keywords: <strong>{{ search.location }}</strong></div> {% endif %}
+                                    {% if search.industry %} <div>Keywords: <strong>{{ search.industry }}</strong></div> {% endif %}
+                                    {% if search.company %} <div>Keywords: <strong>{{ search.company }}</strong></div> {% endif %}
+                                    {% if search.title %} <div>Keywords: <strong>{{ search.title }}</strong></div> {% endif %}
+
 
 
                                     <a href="" class="remove pull-left delete_search_result" title="Delete search" data-click="removeSearch"
                                        data-toggle="tooltip"><i class="fas fa-trash"></i></a>
 
-                                    <span class="text-muted pull-right">1 day ago			</span>
+                                    {% if search.result_status %}
+                                        <span class="text-muted pull-right">{{ search.searchdate|timesince  }} ago</span>
+
+                                        {% else %}
+                                        <span class="text-muted pull-right">Waiting</span>
+                                    {% endif %}
                                     <div class="clearfix"></div>
                                 </div>
                             {% endfor %}
@@ -231,17 +244,26 @@
                     <h4 class="modal-title">Add people to Connector Campaign</h4>
                 </div>
                 <div class="modal-body">
+                    {% if campaigns %}
                     <p>Choose campaign</p>
-                    <select class="form-control">
-                        <option value="3">python developement</option>
+                    <select id="campaign_select" class="form-control">
+                    {% for campaign in campaigns %}
+                        <option value="{{ campaign.pk }}">{{ campaign }}</option>
+                        <option value="52">{{ campaign }}</option>
+                    {% endfor %}
+
+
                     </select>
+                    {% else %}
+                    <p>Please add a campaign first</p>
+                    {% endif %}
                 </div>
 
                 <input type="hidden" name="cid" value="">
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
+                    <button {% if not campaigns %} style="display:none" {% endif %} type="submit" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
                         Connector Campaign
                     </button>
                 </div>
@@ -251,6 +273,7 @@
 <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <script src="{% static 'app/search_page.js' %}?id=2"></script>
     <script>
+            ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
             ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
     </script>
 
