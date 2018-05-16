@@ -128,9 +128,9 @@ class AccountAdd(View):
 class AccountInfo(View):
     
     def add_sync_data_task(self, linkedin_user):
-        contact_task = BotTask.objects.get_or_create(owner=linkedin_user, 
+        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
                                            task_type=BotTaskType.CONTACT)
-        message_task = BotTask.objects.get_or_create(owner=linkedin_user, 
+        message_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
                                            task_type=BotTaskType.MESSAGING)
         contact_task.name = 'Get contacts of  linkedin account'
         contact_task.save()
