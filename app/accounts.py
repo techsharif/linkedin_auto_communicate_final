@@ -126,12 +126,37 @@ class AccountAdd(View):
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountInfo(View):
+    def add_sync_data_task(self, linkedin_user):
+        BotTask(owner=linkedin_user, task_type=BotTaskType.CONTACT,
+                    name='Get contacts of  linkedin account').save()
+        BotTask(owner=linkedin_user, task_type=BotTaskType.MESSAGING,
+                    name='Get contacts of  linkedin account').save()
+        
+    def check_data_sync(self, linkedin_user):
+        contact_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.CONTACT)
+        message_task = BotTask.objects.get(owner=linkedin_user, 
+                                           task_type=BotTaskType.MESSAGING)
+        
+        if contact_task.status == BotTaskStatus.DONE and (
+            message_task.status == BotTaskStatus.DONE):
+            # sync done
+            return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+        
+        return HttpResponse(BotTaskType.DATA_SYNC)
+        
     def post(self, request):
         print(request.POST)
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
+            task_type = request.POST['task_type'].strip()
+            
             linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
+            
+            if task_type == BotTaskType.DATA_SYNC:
+                return self.check_data_sync(linkedin_user)
+            
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
 
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
@@ -144,7 +169,10 @@ class AccountInfo(View):
                 linkedin_user.status = True
                 linkedin_user.save()
                 linkedin_user.membership.add(membership)
-                return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                #return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                # not done yet
+                self.add_sync_data_task(linkedin_user) 
+                return HttpResponse(BotTaskType.DATA_SYNC)
             elif bot_task.status == BotTaskStatus.PIN_CHECKING :
                 return HttpResponse('pin checking')
             elif bot_task.status == BotTaskStatus.ERROR :

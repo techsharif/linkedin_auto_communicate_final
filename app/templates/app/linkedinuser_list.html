@@ -156,6 +156,10 @@
                 data = new Object()
                 data.email = $('#email')[0].value
                 data.password = $('#password')[0].value
+                var html = $('#add_account_modal_results').html()
+                if (html.indexOf('Data_Sync')>=0){
+                	data.task_type = 'Data_Sync'
+            	}
                 $.ajax({
                     url: '{% url 'add-account' %}',
                     type: "post",
