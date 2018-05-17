@@ -120,16 +120,18 @@ class AccountAdd(View):
             # membership = Membership.objects.get(user=request.user)
             #
             # # create of get linkedin user
-            linkedin_user, created = LinkedInUser.objects.get_or_create(email=user_email)
 
-            if created:
-                linkedin_user.password = user_password
-                linkedin_user.user = request.user
-                linkedin_user.save()
-                BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
-                        name='add linkedin account').save()
-            else:
+            try:
+                is_user = LinkedInUser.objects.get(email=user_email)
                 return HttpResponse('400', status=400)
+            except:
+                pass
+
+            linkedin_user = LinkedInUser(user=request.user,email=user_email,password=user_password)
+            linkedin_user.save()
+            BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
+                    name='add linkedin account').save()
+
 
         return redirect('accounts')
 
