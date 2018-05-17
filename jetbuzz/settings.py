@@ -25,7 +25,7 @@ SECRET_KEY = '(u!_i1a#_q85sjhw5arn)86+76$j!07zjo9&7*zt^80_5$w0ab'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.makju.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['www.makju.com', '127.0.0.1', 'localhost', 'makju.com']
 
 # Login Redirect URL
 LOGIN_REDIRECT_URL = 'accounts'
