@@ -2,6 +2,16 @@ ACCOUNT_SEARCH_URL = ''
 $(document).ready(function () {
     console.log("ready!");
 
+    function isURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+        return pattern.test(str);
+    }
+
 
     function create_ajax_requst_data() {
         var ajax_request_data = new Object();
@@ -46,7 +56,7 @@ $(document).ready(function () {
         event.preventDefault()
         $('#remove_search').modal('show');
 
-        $('#account_delete_form_model')[0].setAttribute('action',window.location.pathname+'delete/'+$(this).parent()[0].children[0].innerHTML+'/')
+        $('#account_delete_form_model')[0].setAttribute('action', window.location.pathname + 'delete/' + $(this).parent()[0].children[0].innerHTML + '/')
 
     });
 
@@ -100,7 +110,7 @@ $(document).ready(function () {
         if ($.trim($('#search_name')[0].value) == '') {
             $('#search_name').parent().addClass('has-error');
             error = 1;
-        }else{
+        } else {
             $('#search_name').parent().removeClass('has-error');
         }
 
@@ -111,29 +121,31 @@ $(document).ready(function () {
                 error = 2;
             }
         }
-        if (error!=2){
+        if (error != 2) {
             $('#search_keyword').parent().removeClass('has-error');
         }
-        if ($('#search_url').is(":visible")) {
-            if ($.trim($('#search_url')[0].value) == '') {
-                $('#search_url').parent().addClass('has-error');
+        console.log(isURL($('#search_url_form')[0].value))
+        console.log($('#search_url_form')[0].value)
+        if ($('#search_url_form').is(":visible")) {
+            if (!isURL($.trim($('#search_url_form')[0].value))) {
+                $('#search_url_form').parent().addClass('has-error');
                 error = 3;
             }
         }
-        if (error!=3){
+        if (error != 3) {
             $('#search_url').parent().removeClass('has-error');
         }
 
-        if ($('#search_sales').is(":visible")) {
-            if ($.trim($('#search_sales')[0].value) == '') {
-                $('#search_sales').parent().addClass('has-error');
+        if ($('#sales_search').is(":visible")) {
+            if (!isURL($.trim($('#sales_search')[0].value))) {
+                $('#sales_search').parent().addClass('has-error');
                 error = 4;
             }
         }
-        if (error!=4){
-             $('#search_sales').parent().removeClass('has-error');
+        if (error != 4) {
+            $('#search_sales').parent().removeClass('has-error');
         }
-        if (error==0)
+        if (error == 0)
             $('#add_search').submit();
 
         console.log(error)

@@ -37,7 +37,7 @@
 
                         <div class="pull-right" style="margin-bottom:10px">
                         </div>
-                        <div class="scroll-block" >
+                        <div class="scroll-block" style="height: 510px">
                             {% for search in searches %}
                                 <div class="search-item" id="si_9">
                                     <div style="display: none;">{{ search.id }}</div>
@@ -46,12 +46,12 @@
                                     </strong></h5>
 
                                     {% if search.keyword %} <div>Keywords: <strong>{{ search.keyword }}</strong></div> {% endif %}
-                                    {% if search.url_search %} <div>Keywords: <strong>{{ search.url_search }}</strong></div> {% endif %}
-                                    {% if search.sales_search %} <div>Keywords: <strong>{{ search.sales_search }}</strong></div> {% endif %}
-                                    {% if search.location %} <div>Keywords: <strong>{{ search.location }}</strong></div> {% endif %}
-                                    {% if search.industry %} <div>Keywords: <strong>{{ search.industry }}</strong></div> {% endif %}
-                                    {% if search.company %} <div>Keywords: <strong>{{ search.company }}</strong></div> {% endif %}
-                                    {% if search.title %} <div>Keywords: <strong>{{ search.title }}</strong></div> {% endif %}
+                                    {% if search.url_search %} <div>Search Url: <strong>{{ search.url_search }}</strong></div> {% endif %}
+                                    {% if search.sales_search %} <div>Search Sales: <strong>{{ search.sales_search }}</strong></div> {% endif %}
+                                    {% if search.location %} <div>Location: <strong>{{ search.location }}</strong></div> {% endif %}
+                                    {% if search.industry %} <div>Industry: <strong>{{ search.industry }}</strong></div> {% endif %}
+                                    {% if search.company %} <div>Company: <strong>{{ search.company }}</strong></div> {% endif %}
+                                    {% if search.title %} <div>Title: <strong>{{ search.title }}</strong></div> {% endif %}
 
 
 
@@ -163,7 +163,7 @@
                                 <div class="form-group">
                                     <label>URL</label>
                                     <input class="form-control" type="url"  name="url_search"
-                                           id="search_url">
+                                           id="search_url_form">
                                 </div>
                             </div>
 
@@ -172,7 +172,7 @@
                                 <div class="form-group">
                                     <label>Sales</label>
                                     <input class="form-control"  type="url" name="sales_search"
-                                           id="search_sales">
+                                           id="sales_search">
                                 </div>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-     <script src="{% static 'app/search_page.js' %}?id=2"></script>
+     <script src="{% static 'app/search_page.js' %}?id=5"></script>
     <script>
             ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
             ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";

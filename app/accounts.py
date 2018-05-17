@@ -37,7 +37,6 @@ class AccountList(ListView):
     model = LinkedInUser
 
 
-
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
@@ -49,33 +48,35 @@ class AccountMixins(object):
                 ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
-            
+
         # add this current account into context for
         ctx['account'] = get_object_or_404(LinkedInUser, pk=ctx['pk'],
                                            user=self.request.user)
-        #print('account:', ctx['account'])
-        
+        # print('account:', ctx['account'])
+
         if ctx['account'] is None or ctx['account'].status != True:
             print('account:', ctx['account'].status)
-            #raise ObjectDoesNotExist 
-        
+            # raise ObjectDoesNotExist
+
         ctx['inbox_status'] = ContactStatus.inbox_statuses
-        
+
         return ctx
 
+
 contact_statuses = [ContactStatus.CONNECTED_N, ContactStatus.OLD_CONNECT_N]
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountDetail(AccountMixins, DetailView):
     template_name = 'app/accounts_detail.html'
     model = LinkedInUser
     status = contact_statuses
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
         linkedIn_user = ctx['object']
-        
+
         ctx['connection_count'] = Inbox.objects.filter(owner=linkedIn_user,
                                                        status__in=self.status).count()
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
@@ -102,6 +103,8 @@ class AccountSettings(UpdateView):
 
 
 csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountAdd(View):
     def post(self, request):
@@ -113,85 +116,86 @@ class AccountAdd(View):
             #
             # # create of get linkedin user
             linkedin_user, created = LinkedInUser.objects.get_or_create(
-                user=request.user, email=user_email,
-                password=user_password)
+                user=request.user, email=user_email)
 
-            # linkedin_user.latest_login = datetime.datetime.now()
-            linkedin_user.save()
             if created:
+                linkedin_user.password = user_password
+                linkedin_user.save()
                 BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
-                    name='add linkedin account').save()
+                        name='add linkedin account').save()
+            else:
+                return HttpResponse('400', status=400)
 
         return redirect('accounts')
 
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountInfo(View):
-    
+
     def add_sync_data_task(self, linkedin_user):
-        
+
         """ may be this can be done when contacts is done? """
-        
-        message_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
-                                           task_type=BotTaskType.MESSAGING)
-        
-        
-        message_task.name='Get messageing of  linkedin account'
+
+        message_task, _ = BotTask.objects.get_or_create(owner=linkedin_user,
+                                                        task_type=BotTaskType.MESSAGING)
+
+        message_task.name = 'Get messageing of  linkedin account'
         message_task.save()
         # to have this run first
-        
-        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user, 
-                                           task_type=BotTaskType.CONTACT)
+
+        contact_task, _ = BotTask.objects.get_or_create(owner=linkedin_user,
+                                                        task_type=BotTaskType.CONTACT)
         contact_task.name = 'Get contacts of  linkedin account'
         contact_task.save()
-        
-    def update_data_sync(self,linkedin_user):
+
+    def update_data_sync(self, linkedin_user):
         membership = Membership.objects.get(user=linkedin_user.user)
         linkedin_user.latest_login = datetime.datetime.now()
         linkedin_user.status = True
         linkedin_user.save()
         linkedin_user.membership.add(membership)
-            
+
     def check_data_sync(self, linkedin_user):
-        contact_task = BotTask.objects.get(owner=linkedin_user, 
+        contact_task = BotTask.objects.get(owner=linkedin_user,
                                            task_type=BotTaskType.CONTACT)
-        message_task = BotTask.objects.get(owner=linkedin_user, 
+        message_task = BotTask.objects.get(owner=linkedin_user,
                                            task_type=BotTaskType.MESSAGING)
-        
+
         if contact_task.status == BotTaskStatus.DONE and (
-            message_task.status == BotTaskStatus.DONE):
+                message_task.status == BotTaskStatus.DONE):
             # sync done
             self.update_data_sync(linkedin_user)
             return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
-        
+
         return HttpResponse(BotTaskType.DATA_SYNC)
-        
+
     def post(self, request):
         print(request.POST)
         if 'email' in request.POST.keys() and 'password' in request.POST.keys():
             user_email = request.POST['email'].strip()
             user_password = request.POST['password'].strip()
             req_task_type = request.POST.get('task_type', '')
-            
-            linkedin_user = LinkedInUser.objects.get(email=user_email,password=user_password)
-            
+
+            linkedin_user = LinkedInUser.objects.get(email=user_email, password=user_password)
+
             if req_task_type == BotTaskType.DATA_SYNC:
                 return self.check_data_sync(linkedin_user)
-            
+
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
 
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
-                return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user}))
+                return HttpResponse(render_to_string('app/pinverify.html', {'object': linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
-                return HttpResponse(render_to_string('app/pinverify.html',{'object':linkedin_user, 'error':True}))
-            elif bot_task.status == BotTaskStatus.DONE :
-                
-                #return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                return HttpResponse(render_to_string('app/pinverify.html', {'object': linkedin_user, 'error': True}))
+            elif bot_task.status == BotTaskStatus.DONE:
+
+                # return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
                 # not done yet
-                self.add_sync_data_task(linkedin_user) 
+                self.add_sync_data_task(linkedin_user)
                 return HttpResponse(BotTaskType.DATA_SYNC)
-            elif bot_task.status == BotTaskStatus.PIN_CHECKING :
+            elif bot_task.status == BotTaskStatus.PIN_CHECKING:
                 return HttpResponse('pin checking')
-            elif bot_task.status == BotTaskStatus.ERROR :
+            elif bot_task.status == BotTaskStatus.ERROR:
                 return HttpResponse(render_to_string('app/account_add_error.html'))
             else:
                 return HttpResponse('Processing')
@@ -201,13 +205,15 @@ class AccountInfo(View):
             pin = request.POST['pin'].strip()
             linkedin_user = LinkedInUser.objects.get(id=id_)
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
-            bot_task.extra_info = json.dumps({'pin':pin})
+            bot_task.extra_info = json.dumps({'pin': pin})
             bot_task.status = BotTaskStatus.PIN_CHECKING
             bot_task.save()
             return HttpResponse('pin checking')
 
 
 csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AddPin(View):
     def post(self, request):
@@ -237,67 +243,64 @@ class AjaxDatatableResponse(object):
 
 
 def Datedefault(o):
-        if type(o) is datetime.date or type(o) is datetime.datetime:
-            return o.strftime("%d/%m/%Y @ %H:%M")
-        
+    if type(o) is datetime.date or type(o) is datetime.datetime:
+        return o.strftime("%d/%m/%Y @ %H:%M")
+
+
 class DataTable(object):
     is_connected = False
     model = Inbox
     result_list = ('id', 'name', 'company', 'industry', 'title',
-                    'location', 'latest_activity', 'campaigns__title', 'status')
-    
-    
-    
-    
+                   'location', 'latest_activity', 'campaigns__title', 'status')
+
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
-            #data = serializers.serialize('json', context['object_list'])
+            # data = serializers.serialize('json', context['object_list'])
             data = [list(x) for x in context['object_list']]
-            
-                      
+
             json_data = json.dumps(dict(data=data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
-            
+
         return super(DataTable, self).render_to_response(context, **response_kwargs)
+
     # override this for custom list
     def get_queryset(self):
         qs = super(DataTable, self).get_queryset()
         qs = qs.filter(owner_id=self.kwargs.get('pk'))
-        
+
         # if 'my network' should limit 'connected' or 'old connected'
         if self.is_connected:
             qs = qs.filter(is_connected=self.is_connected)
-            
-        
+
         if self.request.is_ajax():
             qs = qs.values_list(*self.result_list)
         return qs
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(DataTable, self).get_context_data(**kwargs)
         if self.request.is_ajax():
             return ctx
-            
-        #ctx['inbox_status'] = ContactStatus.inbox_statuses
-        
+
+        # ctx['inbox_status'] = ContactStatus.inbox_statuses
+
         ctx['object_list'] = []
-        
+
         return ctx
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_network.html'
     status = contact_statuses
     is_connected = False
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
         ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
         ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
-        
+
         return ctx
-    
-        
+
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
@@ -324,24 +327,24 @@ class AccountSearch(View):
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
         campaigns = Campaign.objects.filter(owner__pk=pk)
-        return render(request, self.template_name,{'searches': searches, 'pk':pk, 'campaigns':campaigns})
+        return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns})
 
     def post(self, request, pk):
-
         search_form = SearchForm(request.POST)
         if search_form.is_valid():
             search = search_form.save(commit=False)
             linkedin_user = LinkedInUser.objects.get(pk=pk)
             search.owner = linkedin_user
             search.save()
-            TaskQueue(content_object=search).save()
+            TaskQueue(owner=linkedin_user, content_object=search).save()
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearchDelete(View):
     template_name = 'app/accounts_search.html'
-    def post(self, request, pk, search_id):
 
+    def post(self, request, pk, search_id):
         Search.objects.filter(owner__pk=pk, pk=search_id).delete()
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
@@ -349,13 +352,19 @@ class AccountSearchDelete(View):
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_inbox.html'
-    
+
 
 @method_decorator(decorators, name='dispatch')
-class AccountTask(AccountMixins, ListView):
+class AccountTask(View):
     template_name = 'app/accounts_task.html'
-    model = TaskQueue
-    
+
+    def get(self, request, pk):
+        linkedin_user = LinkedInUser.objects.get(pk=pk)
+        all_task_queue = TaskQueue.objects.filter(owner=linkedin_user)
+        finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
+        upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
+        return render(request, self.template_name, {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk':pk})
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):
@@ -384,8 +393,8 @@ class AccountMessengerCreate(AccountMixins, CreateView):
     def form_valid(self, form):
         data = self.get_context_data()
         acc_id = self.kwargs.get('pk')
-        #print('data:', self.kwargs, data)
-        
+        # print('data:', self.kwargs, data)
+
         camp = form.instance
         camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
@@ -442,19 +451,20 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
     form_class = UpdateCampWelcomeForm
     model = Campaign
+
     ##result_list = ('id', 'name', 'company', 'industry', 'title',
     ##               'location', 'latest_activity', 'campaigns__title', 'status')
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
-            #data = serializers.serialize('json', context['object_list'])
+            # data = serializers.serialize('json', context['object_list'])
             data = [[x.id, x.name, x.company, x.industry,
-                         x.title, x.location, x.latest_activity,
-                         "", x.status] for x in context['object'].contacts.all()]
+                     x.title, x.location, x.latest_activity,
+                     "", x.status] for x in context['object'].contacts.all()]
             print('data:', data)
-                      
+
             json_data = json.dumps(dict(data=data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
-            
+
         return super(AccountMessengerDetail, self).render_to_response(context, **response_kwargs)
 
     def get_context_data(self, **kwargs):
@@ -466,8 +476,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                                                               instance=row)
         else:
             data['campaignsteps'] = InlineCampaignStepFormSet(instance=row)
-            
-        
+
         return data
 
     def form_valid(self, form):
@@ -554,18 +563,15 @@ def remove_account(request, pk):
     return redirect('accounts')
 
 
-
-
-
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
     def post(self, request):
         print(request.POST)
         if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
-            return render(request,'app/search_render/search_select.html')
+            return render(request, 'app/search_render/search_select.html')
         print(request.POST['search_head'])
         search_id = int(request.POST['search_head'])
-        search = get_object_or_404(Search,pk=search_id, owner__user=request.user)
+        search = get_object_or_404(Search, pk=search_id, owner__user=request.user)
         if not search.result_status():
             return render(request, 'app/search_render/search_waiting.html')
 
@@ -574,7 +580,7 @@ class SearchResultView(View):
 
         item = []
         if 'selected_items[]' in request.POST.keys():
-            item = list( map(int, request.POST.getlist('selected_items[]')))
+            item = list(map(int, request.POST.getlist('selected_items[]')))
         elif 'selected_items' in request.POST.keys():
             item += [int(request.POST.get('selected_items'))]
         elif 'add_all_selected_item_button' in request.POST.keys():
@@ -586,11 +592,6 @@ class SearchResultView(View):
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 search_results.update(status=ContactStatus.IN_QUEUE_N)
 
-
-
         search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'app/search_render/search_render.html', {'search':search, 'search_results':search_results})
-
-
-
-
+        return render(request, 'app/search_render/search_render.html',
+                      {'search': search, 'search_results': search_results})
