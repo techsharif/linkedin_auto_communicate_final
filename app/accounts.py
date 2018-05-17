@@ -120,8 +120,7 @@ class AccountAdd(View):
             # membership = Membership.objects.get(user=request.user)
             #
             # # create of get linkedin user
-            linkedin_user, created = LinkedInUser.objects.get_or_create(
-                user=request.user, email=user_email)
+            linkedin_user, created = LinkedInUser.objects.get_or_create(email=user_email)
 
             if created:
                 linkedin_user.password = user_password
