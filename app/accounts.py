@@ -341,7 +341,7 @@ class AccountSearch(View):
             linkedin_user = LinkedInUser.objects.get(pk=pk)
             search.owner = linkedin_user
             search.save()
-            TaskQueue(owner=linkedin_user, content_object=search).save()
+            BotTask(owner=linkedin_user, task_type=BotTaskType.SEARCH).save()
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
 
