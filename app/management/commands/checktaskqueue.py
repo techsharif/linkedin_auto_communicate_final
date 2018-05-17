@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-from app.models import BotTask, BotTaskStatus
+from app.models import BotTask, BotTaskStatus, BotTaskType
 from connector.models import TaskQueue
 
 
@@ -22,3 +22,13 @@ class Command(BaseCommand):
                     pending_task.save()
             else:
                 TaskQueue(content_object=pending_task).save()
+                
+        self.check_taskqueue()
+        
+    def check_taskqueue(self):
+        task_queues = TaskQueue.objects.filter(status=BotTaskStatus.QUEUED).all()
+        for tq in task_queues:
+            print('adding:', tq)
+            BotTask.objects.create(name=tq.content_object, task_type=BotTaskType.SEARCH,
+                                   owner=tq.owner, status=tq.status)
+        
