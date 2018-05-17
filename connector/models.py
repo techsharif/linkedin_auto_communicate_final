@@ -47,7 +47,7 @@ class SearchResult(CommonContactField):
     name = models.CharField(max_length=200)
     connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
-                              blank=True, null=True)
+                              default=ContactStatus.CONNECT_REQUESTED_N)
     
 
     class Meta:
@@ -60,12 +60,10 @@ class SearchResult(CommonContactField):
         return self.name
 
     def search_result_status(self):
-        if self.status == None:
-            return 0
-        elif self.status == ContactStatus.IN_QUEUE_N:
+        if self.status == ContactStatus.IN_QUEUE_N:
             return 1
         else:
-            return 2
+            return 0
 
 
 # this is not used now, may be remvoed later
