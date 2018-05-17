@@ -168,8 +168,9 @@ class AccountInfo(View):
         message_task = BotTask.objects.get(owner=linkedin_user,
                                            task_type=BotTaskType.MESSAGING)
 
-        if contact_task.status == BotTaskStatus.DONE and (
-                message_task.status == BotTaskStatus.DONE):
+        # if contact_task.status == BotTaskStatus.DONE and (
+        #         message_task.status == BotTaskStatus.DONE):
+        if contact_task.status == BotTaskStatus.DONE:
             # sync done
             self.update_data_sync(linkedin_user)
             return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
