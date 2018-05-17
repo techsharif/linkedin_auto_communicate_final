@@ -589,8 +589,9 @@ class SearchResultView(View):
 
         if item:
             if 'campaign' in request.POST.keys():
+                campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                search_results.update(status=ContactStatus.IN_QUEUE_N)
+                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'app/search_render/search_render.html',

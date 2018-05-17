@@ -2,7 +2,7 @@ from django.db import models
 
 from app.models import LinkedInUser, BotTaskStatus
 from messenger.models import CommonContactField, TimeStampedModel, \
-    CampaignStepField, ContactStatus, Inbox, MessageField
+    CampaignStepField, ContactStatus, Inbox, MessageField, Campaign
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
@@ -45,6 +45,7 @@ class SearchResult(CommonContactField):
     search = models.ForeignKey(Search, related_name='results',
                                on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=200)
+    connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
                               blank=True, null=True)
     
