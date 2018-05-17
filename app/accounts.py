@@ -124,6 +124,7 @@ class AccountAdd(View):
 
             if created:
                 linkedin_user.password = user_password
+                linkedin_user.user = request.user
                 linkedin_user.save()
                 BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                         name='add linkedin account').save()
