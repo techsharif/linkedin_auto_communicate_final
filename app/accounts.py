@@ -36,6 +36,11 @@ decorators = (never_cache, login_required,)
 class AccountList(ListView):
     model = LinkedInUser
 
+    def get_queryset(self):
+        qs = super(AccountList, self).get_queryset()
+        qs = qs.filter(user=self.request.user)
+        return qs
+
 
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
