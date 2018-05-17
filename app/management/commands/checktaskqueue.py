@@ -23,12 +23,12 @@ class Command(BaseCommand):
             else:
                 TaskQueue(content_object=pending_task).save()
                 
-        self.check_taskqueue()
-        
-    def check_taskqueue(self):
-        task_queues = TaskQueue.objects.filter(status=BotTaskStatus.QUEUED).all()
-        for tq in task_queues:
-            print('adding:', tq)
-            BotTask.objects.create(name=tq.content_object, task_type=BotTaskType.SEARCH,
-                                   owner=tq.owner, status=tq.status)
-        
+    #     self.check_taskqueue()
+    #
+    # def check_taskqueue(self):
+    #     task_queues = TaskQueue.objects.filter(status=BotTaskStatus.QUEUED).all()
+    #     for tq in task_queues:
+    #         print('adding:', tq)
+    #         BotTask.objects.create(name=tq.content_object, task_type=BotTaskType.SEARCH,
+    #                                owner=tq.owner, status=tq.status)
+    #
