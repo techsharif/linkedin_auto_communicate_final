@@ -6,6 +6,24 @@ from django.db import models
 User = get_user_model()
 
 
+class BotTaskStatus:
+    QUEUED = 'Queued'
+    RUNNING = 'Running'
+    PIN_REQUIRED = 'Pin Required'
+    PIN_CHECKING = 'Pin Checking'
+    PIN_INVALID = 'Pin Invalid'
+    ERROR = 'Error'
+    DONE = 'Done'
+    statuses = (
+        (QUEUED, QUEUED),
+        (RUNNING, RUNNING),
+        (PIN_REQUIRED, PIN_REQUIRED),
+        (PIN_CHECKING, PIN_CHECKING),
+        (PIN_INVALID, PIN_INVALID),
+        (ERROR, ERROR),
+        (DONE, DONE),
+    )
+
 class MemberShipField(models.Model):
     max_seat = models.IntegerField(default=1)
     max_search = models.IntegerField(default=5)
@@ -33,6 +51,7 @@ class LinkedInUser(models.Model):
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=False)
+    login_status = models.CharField(max_length=50, choices=BotTaskStatus.statuses, blank=True, null=True)
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)
@@ -76,23 +95,6 @@ class Membership(models.Model):
                                     self.valid_to)
 
 
-class BotTaskStatus:
-    QUEUED = 'Queued'
-    RUNNING = 'Running'
-    PIN_REQUIRED = 'Pin Required'
-    PIN_CHECKING = 'Pin Checking'
-    PIN_INVALID = 'Pin Invalid'
-    ERROR = 'Error'
-    DONE = 'Done'
-    statuses = (
-        (QUEUED, QUEUED),
-        (RUNNING, RUNNING),
-        (PIN_REQUIRED, PIN_REQUIRED),
-        (PIN_CHECKING, PIN_CHECKING),
-        (PIN_INVALID, PIN_INVALID),
-        (ERROR, ERROR),
-        (DONE, DONE),
-    )
 
     
 class BotTaskType:
