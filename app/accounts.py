@@ -172,9 +172,8 @@ class AccountInfo(View):
         message_task = BotTask.objects.get(owner=linkedin_user,
                                            task_type=BotTaskType.MESSAGING)
 
-        # if contact_task.status == BotTaskStatus.DONE and (
-        #         message_task.status == BotTaskStatus.DONE):
-        if contact_task.status == BotTaskStatus.DONE:
+        if contact_task.status == BotTaskStatus.DONE and (
+                message_task.status == BotTaskStatus.DONE):
             # sync done
             self.update_data_sync(linkedin_user)
             return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
@@ -190,8 +189,8 @@ class AccountInfo(View):
 
             linkedin_user = LinkedInUser.objects.get(email=user_email, password=user_password)
 
-            # if req_task_type == BotTaskType.DATA_SYNC:
-            #     return self.check_data_sync(linkedin_user)
+            if req_task_type == BotTaskType.DATA_SYNC:
+                return self.check_data_sync(linkedin_user)
 
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
 
@@ -200,13 +199,9 @@ class AccountInfo(View):
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
                 return HttpResponse(render_to_string('app/account/pinverify.html', {'object': linkedin_user, 'error': True}))
             elif bot_task.status == BotTaskStatus.DONE:
-                linkedin_user.status = True
-                linkedin_user.save()
-
-                return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
                 # not done yet
-                # self.add_sync_data_task(linkedin_user)
-                # return HttpResponse(BotTaskType.DATA_SYNC)
+                self.add_sync_data_task(linkedin_user)
+                return HttpResponse(render_to_string('app/account/data_sync.html'))
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
                 return  HttpResponse(render_to_string('app/account/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
