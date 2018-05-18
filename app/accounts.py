@@ -207,7 +207,7 @@ class AccountInfo(View):
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
                 return  HttpResponse(render_to_string('app/account/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
-                return HttpResponse(render_to_string('app/account_add_error.html'))
+                return HttpResponse(render_to_string('app/account/account_add_error.html'))
             else:
                 return HttpResponse(render_to_string('app/account/email_password_config.html'))
         if 'id' in request.POST.keys() and 'pin' in request.POST.keys():
