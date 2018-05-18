@@ -124,7 +124,10 @@ class AccountAdd(View):
 
             try:
                 is_user = LinkedInUser.objects.get(email=user_email)
-                return HttpResponse('400', status=400)
+                if is_user.status == False:
+                    is_user.delete()
+                else:
+                    return HttpResponse('400', status=400)
             except:
                 pass
 
