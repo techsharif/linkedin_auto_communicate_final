@@ -4,7 +4,7 @@
 
 {% block pagecss %}
     <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
-    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
+{#    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">#}
     <style>
         .form-horizontal .form-group {
             margin-left: 4px;
@@ -26,9 +26,9 @@
     <div class="col-md-4 col-md-offset-4 mt-xl">
         <div class="box box-default box-solid">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-fw fa-linkedin-square"></i> Accounts</h3>
+                <h3 class="box-title"><i class="fab fa-linkedin"></i> Accounts</h3>
                 <div class="box-tools"><a href="/accounts/add/" class="btn btn-box-tool add-account"
-                                          data-toggle="tooltip" title="Add account"><i class="fa fa-user-plus"></i></a>
+                                          data-toggle="tooltip" title="Add account"><i class="fas fa-user-plus"></i></a>
                 </div>
             </div>
             <div class="box-body">
@@ -36,13 +36,24 @@
                     <tbody>
                     {% for item in object_list %}
                         <tr>
-                            <td width="90%"><a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a></td>
+                            <td width="90%">
+                                {% if item.status %}
+                                    <a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a>
+                                {% else %}
+                                    <a href="#" id="inactive_account_click"
+                                       data-email="{{ item.email }}"
+                                       data-pass="{{ item.password }}">{{ item.email }}</a>
+                                {% endif %}
+
+                            </td>
+                            <td>{% if item.status %}
+                                <a href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"
+                                   data-original-title="" title="">Settings</a> {% endif %}</td>
                             <td>
                                 <span class="label label-{% if item.status %}success{% else %}warning{% endif %}">{% if item.status %}
                                     Active{% else %}Inactive{% endif %}</span>
                             </td>
-                            <td><a href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"
-                                   data-original-title="" title="">Settings</a></td>
+
                             <td><a href="#" title="Delete" data_id="{{ item.id }}" class="remove_account"
                                    id="acc_{{ item.id }}"><i class="fa fa-remove"></i></a></td>
                         </tr>
@@ -71,8 +82,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
-                            aria-hidden="true">×</span></button>
+
                     <h4 id="myModalLabel" class="modal-title">Add Linked Account</h4></div>
                 <div class="modal-body">
 
@@ -140,8 +150,7 @@
     <script>
         $(document).ready(function () {
 
-            $('body').on('click', '.add-account', function (e) {
-                e.preventDefault();
+            function modal_open() {
                 if (typeof interval !== 'undefined') {
                     clearInterval(interval);
                 }
@@ -150,7 +159,49 @@
                 $('#add_account').show()
                 $('#modal-form').show();
                 $('#add_account_modal_results').html('')
+            }
+
+            $('body').on('click', '.add-account', function (e) {
+                e.preventDefault();
+                modal_open()
             });
+
+
+            function load(data) {
+                $.ajax({
+                    url: '{% url 'account-info' %}',
+                    type: "post",
+                    data: data,
+                    success: function (response) {
+                        $('#modal-form').hide();
+                        $('#add_account_modal_results').html(response)
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+
+
+                });
+            }
+
+
+            $('body').on('click', '#inactive_account_click', function (e) {
+                e.preventDefault();
+                email = this.getAttribute('data-email')
+                password = this.getAttribute('data-pass')
+                data = new Object();
+                data.email = email
+                data.password = password
+                modal_open()
+                $('#add_account').hide()
+                load(data)
+                interval = setInterval(function () {
+                    load(data)
+                }, 10000);
+            });
+
 
             $('body').on('click', '#add_account', function (e) {
                 e.preventDefault();
@@ -170,27 +221,12 @@
                     data: data,
                     success: function (response) {
                         interval = setInterval(function () {
-                            $.ajax({
-                                url: '{% url 'account-info' %}',
-                                type: "post",
-                                data: data,
-                                success: function (response) {
-                                    $('#modal-form').hide();
-                                    $('#add_account_modal_results').html(response)
-
-
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    console.log(textStatus, errorThrown);
-                                }
-
-
-                            });
+                            load(data)
                         }, 10000);
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText=='400')
+                        if (jqXHR.responseText == '400')
                             $('#add_account_modal_results').html('Account with this email is already exists')
                         else
                             $('#add_account_modal_results').html('An error occur during add this acount. please reloade this page and try again')
@@ -203,6 +239,7 @@
 
 
             });
+
 
             $('body').on('click', '.remove_account', function (e) {
                 e.preventDefault();
@@ -219,7 +256,8 @@
             });
 
 
-        });
+        })
+        ;
 
 
     </script>
