@@ -1,0 +1,6 @@
+{%for camp in campaigns %}
+			
+	<div class="hidden campaign campaign-{{camp.id}}">{%if camp.welcome_message%}{{camp.welcome_message}}{%endif%}</div>
+	<div class="hidden campaign connect-{{camp.id}}">{%if camp.welcome_message%}{{camp.welcome_message}}{%endif%}</div>
+	
+{%endfor%}

@@ -63,8 +63,9 @@ class AccountMixins(object):
             print('account:', ctx['account'].status)
             # raise ObjectDoesNotExist
 
-        ctx['inbox_status'] = ContactStatus.inbox_statuses
-
+        ctx['inbox_page_statuses'] = ContactStatus.inbox_page_statuses
+        ctx['mynetwork_page_statuses'] = ContactStatus.mynetwork_page_statuses
+        
         return ctx
 
 
@@ -261,7 +262,8 @@ class DataTable(object):
     is_connected = False
     model = Inbox
     result_list = ('id', 'name', 'company', 'industry', 'title',
-                   'location', 'latest_activity', 'campaigns__title', 'status')
+                   'location', 'latest_activity', 'campaigns__title', 
+                   'status', 'campaigns__is_bulk')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -336,7 +338,7 @@ class AccountSearch(View):
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
-        campaigns = Campaign.objects.filter(owner__pk=pk)
+        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
         return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns})
 
     def post(self, request, pk):
@@ -469,7 +471,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             # data = serializers.serialize('json', context['object_list'])
             data = [[x.id, x.name, x.company, x.industry,
                      x.title, x.location, x.latest_activity,
-                     "", x.status] for x in context['object'].contacts.all()]
+                     "", x.status, x.campaigns.first().is_bulk] for x in context['object'].contacts.all()]
             print('data:', data)
 
             json_data = json.dumps(dict(data=data), default=Datedefault)
@@ -575,6 +577,11 @@ def remove_account(request, pk):
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
+    def _clone_to_contact(self, qs, campaign):
+        # is there a better way to do this??
+        for row in qs.all():
+            row.attach_to_campaign(campaign)
+        
     def post(self, request):
         print(request.POST)
         if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
@@ -601,7 +608,10 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
+                # attache to a campagn                
+                search_results.update(status=ContactStatus.IN_QUEUE_N, 
+                                      connect_campaign=campaign)
+                self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'app/search_render/search_render.html',

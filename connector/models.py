@@ -1,10 +1,12 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 
 from app.models import LinkedInUser, BotTaskStatus
 from messenger.models import CommonContactField, TimeStampedModel, \
-    CampaignStepField, ContactStatus, Inbox, MessageField, Campaign
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+    CampaignStepField, ContactStatus, Inbox, MessageField, Campaign, \
+    ContactField
 
 
 class Search(CommonContactField):
@@ -39,12 +41,12 @@ class Search(CommonContactField):
         return 0 if self.resultcount == None else self.resultcount
         
 
-class SearchResult(CommonContactField):
+class SearchResult(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='searchresults',
                                 on_delete=models.CASCADE, default=1)
     search = models.ForeignKey(Search, related_name='results',
                                on_delete=models.CASCADE, default=1)
-    name = models.CharField(max_length=200)
+    # name = models.CharField(max_length=200)
     connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
                               default=ContactStatus.CONNECT_REQ_N)
@@ -64,6 +66,23 @@ class SearchResult(CommonContactField):
             return 1
         else:
             return 0
+        
+    def attach_to_campaign(self, campaign):
+        
+        # clone to Inbox
+        name = self.name if self.name else self.id
+        
+        contact, created = Inbox.objects.get_or_create(name=name, title=self.title, 
+                             company=self.company, industry=self.industry,
+                             latest_activity=self.latest_activity,
+                             location=self.location, linkedin_id=self.linkedin_id,
+                             is_connected=False, status=self.status,
+                             owner=self.owner
+            )
+        
+        contact.attach_to_campaign(campaign)
+        
+        
 
 
 # this is not used now, may be remvoed later
@@ -115,3 +134,6 @@ class TaskQueue(models.Model):
     remark = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
+    # the date to be placed in action(send task to bottask)
+    due_date = models.DateTimeField(blank=True, null=True, 
+                                    default=timezone.now)
