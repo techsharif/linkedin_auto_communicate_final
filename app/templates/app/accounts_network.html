@@ -82,19 +82,12 @@
       {% if messenger_campaigns_count > 0 %}
 		        <p>Choose Campaign</p>
 		<select class="form-control" name="campaign" id="campaign">
-		{%for camp in messenger_campaigns %}
-			
-			<option value="{{camp.id}}">{{camp.title}}</option>
-			
-		{%endfor%}
-					
+		
+		{% include 'app/includes/campaigns/list_select.html' with campaigns=messenger_campaigns %}			
 				</select>
-				
-		{%for camp in messenger_campaigns %}
-			
-			<div class="hidden campaign campaign-{{camp.id}}">{%if camp.welcome_message%}{{camp.welcome_message}}{%endif%}</div>
-			
-		{%endfor%}
+		
+		{% include 'app/includes/campaigns/list_hidden.html' with  campaigns=messenger_campaigns %}			
+		
 		      
 	  {%else%}
 	  You don't have any Messenger Campaigns yet. To create one go <a href="{% url 'account-messenger' pk=account.id %}">here</a>.
