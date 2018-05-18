@@ -63,8 +63,9 @@ class AccountMixins(object):
             print('account:', ctx['account'].status)
             # raise ObjectDoesNotExist
 
-        ctx['inbox_status'] = ContactStatus.inbox_statuses
-
+        ctx['inbox_page_statuses'] = ContactStatus.inbox_page_statuses
+        ctx['mynetwork_page_statuses'] = ContactStatus.mynetwork_page_statuses
+        
         return ctx
 
 
@@ -259,7 +260,8 @@ class DataTable(object):
     is_connected = False
     model = Inbox
     result_list = ('id', 'name', 'company', 'industry', 'title',
-                   'location', 'latest_activity', 'campaigns__title', 'status')
+                   'location', 'latest_activity', 'campaigns__title', 
+                   'status', 'campaigns__is_bulk')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -467,7 +469,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             # data = serializers.serialize('json', context['object_list'])
             data = [[x.id, x.name, x.company, x.industry,
                      x.title, x.location, x.latest_activity,
-                     "", x.status] for x in context['object'].contacts.all()]
+                     "", x.status, x.campaigns.first().is_bulk] for x in context['object'].contacts.all()]
             print('data:', data)
 
             json_data = json.dumps(dict(data=data), default=Datedefault)

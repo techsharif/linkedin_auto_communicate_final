@@ -12,22 +12,24 @@ Created on Wed Apr 25 15:33:20 IST 2018
 import json
 
 from django.contrib.auth.decorators import login_required
-#from django.http import HttpResponseRedirect
+from django.db import transaction
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
-#from django.shortcuts import render, redirect
+from django.urls.base import reverse_lazy, reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import View
+from django.views.generic.edit import UpdateView, CreateView
+
+from connector.models import TaskQueue, SearchResult
+from messenger.forms import UpdateContactNoteForm, CreateChatMesgForm
 
 from .models import Inbox, ContactStatus, Campaign, ChatMessage
-from django.db import transaction
-from django.views.generic.edit import UpdateView, CreateView
-from messenger.forms import UpdateContactNoteForm, CreateChatMesgForm
-from django.urls.base import reverse_lazy, reverse
-from django.utils import timezone
 
 
+#from django.http import HttpResponseRedirect
+#from django.shortcuts import render, redirect
 # local imports
 decorators = (never_cache, login_required,)
 
@@ -75,6 +77,17 @@ class CampaignContactsView(AjaxHttpResponse, View):
     
 @method_decorator(decorators, name='dispatch')        
 class ContactDeleteView(AjaxHttpResponse, View):
+    def _delete_contact(self, contact):
+        
+        # delete its clone in searchResult first
+        if contact.is_connected:
+            # channged status only
+            contact.change_status(ContactStatus.OLD_CONNECT_N)
+            return        
+            
+        SearchResult.objects.filter(linked_id=contact.linkedin_id).delete()
+        contact.delete()
+        
     def post(self, request):
         cids = request.POST.get('cid', '').split(',')
         if len(cids) > 0:
@@ -82,10 +95,10 @@ class ContactDeleteView(AjaxHttpResponse, View):
                 contact = get_object_or_404(Inbox, pk=cid)
                 if contact.owner.user != request.user:
                     raise Exception("Invalid Contact")
+                
                 contact.detach_from_campaigns()
-                if contact.is_connected == False:
-                    contact.delete()
-                contact.change_status(ContactStatus.OLD_CONNECT_N)
+                self._delete_contact(contact)
+                
         
         return self.AjaxResponse()
     
@@ -120,12 +133,10 @@ class ContactChatMessageView(AjaxHttpResponse, CreateView):
     
     def form_valid(self, form):
         chat = form.save(commit=False)
-        contact = get_object_or_404(Inbox, pk=self.kwargs.get('pk'))        
-        chat.owner = contact.owner
-        chat.contact = contact
-        chat.time = timezone.now()
-        chat.save()
-        
+        contact = get_object_or_404(Inbox, pk=self.kwargs.get('pk')) 
+        chat.send_message(contact)
+        # place a taskscheduel record
+        TaskQueue.objects.create(content_object=chat, owner=chat.owner)
         #print('chat:', chat)
         #return super(ContactChatMessageView, self).form_valid(form)
         return self.AjaxResponse()

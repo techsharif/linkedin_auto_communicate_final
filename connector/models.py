@@ -5,6 +5,7 @@ from messenger.models import CommonContactField, TimeStampedModel, \
     CampaignStepField, ContactStatus, Inbox, MessageField, Campaign
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.utils import timezone
 
 
 class Search(CommonContactField):
@@ -115,3 +116,6 @@ class TaskQueue(models.Model):
     remark = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
+    # the date to be placed in action(send task to bottask)
+    due_date = models.DateTimeField(blank=True, null=True, 
+                                    default=timezone.now)

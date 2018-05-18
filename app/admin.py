@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Membership, MembershipType,
-                     LinkedInUser, BotTask, )
+                     LinkedInUser, BotTask,)
 class ProfileAdmin(admin.ModelAdmin):
     pass
 

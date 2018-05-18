@@ -89,6 +89,12 @@
 		{%endfor%}
 					
 				</select>
+				
+		{%for camp in messenger_campaigns %}
+			
+			<div class="hidden campaign campaign-{{camp.id}}">{%if camp.welcome_message%}{{camp.welcome_message}}{%endif%}</div>
+			
+		{%endfor%}
 		      
 	  {%else%}
 	  You don't have any Messenger Campaigns yet. To create one go <a href="{% url 'account-messenger' pk=account.id %}">here</a>.
@@ -110,6 +116,8 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->	
+
+
 
 {%endblock%}
 

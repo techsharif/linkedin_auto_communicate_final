@@ -1,9 +1,7 @@
-
-from django.core import serializers
 from django.db import models
+from django.utils import timezone
 
 from app.models import LinkedInUser
-
 
 try:
     from django.utils.encoding import force_text
@@ -89,7 +87,6 @@ class ContactStatus(object):
         (REPLIED_N, REPLIED),
         (TALKING_N, TALKING),
         (TALKING_REPLIED_N, TALKING_REPLIED),
-        (OLD_CONNECT_N, OLD_CONNECT),
         (WELCOME_MES_N, WELCOME_MES),
         )
     
@@ -106,6 +103,32 @@ class ContactStatus(object):
         (TALKING_REPLIED_N, TALKING_REPLIED),
         (CONNECT_REQ_N, CONNECT_REQ)
         )
+    # status for ui select
+    inbox_page_statuses = (
+        (ALL_N, ALL),
+        (CONNECTED_N, CONNECTED),
+        (CONNECT_REQUESTED_N, CONNECT_REQUESTED),
+        (DISCONNECTED_N, DISCONNECTED),
+        (IN_QUEUE_N, IN_QUEUE),      
+        (LATER_N, LATER),
+        (MESSAGE_N, MESSAGE),
+        (NO_INTEREST_N, NO_INTEREST),          
+        (OLD_CONNECT_N, OLD_CONNECT),
+        (REPLIED_N, REPLIED),
+        (TALKING_N, TALKING),
+        (TALKING_REPLIED_N, TALKING_REPLIED),
+        (WELCOME_MES_N, WELCOME_MES),
+        )
+    mynetwork_page_statuses = (
+        (ALL_N, ALL),
+        (LATER_N, LATER),
+        (MESSAGE_N, MESSAGE),
+        (NO_INTEREST_N, NO_INTEREST),
+        (OLD_CONNECT_N, OLD_CONNECT),
+        (REPLIED_N, REPLIED),
+        (TALKING_N, TALKING),
+        (TALKING_REPLIED_N, TALKING_REPLIED),
+         )
     
     @staticmethod
     def valid_status(status):
@@ -239,6 +262,24 @@ class ChatMessage(MessageField):
     class Meta():
         abstract = False
         
+    def __str__(self):
+        if self.campaign:
+            return self.campaign.title
+        return self.contact.name
+    
+        
+    def send_message(self, contact):
+          
+        self.owner = contact.owner
+        self.contact = contact
+        self.time = timezone.now()
+        self.save()
+        # change status
+        if contact.status != ContactStatus.IN_QUEUE_N:
+            contact.change_status(ContactStatus.TALKING_N)
+        
+        
+        
 class Inbox(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='inboxes',
                                 on_delete=models.CASCADE)
@@ -271,3 +312,6 @@ class Inbox(ContactField):
         self.detach_from_campaigns()
         self.change_status(ContactStatus.IN_QUEUE_N)
         campaign.contacts.add(self)
+        
+    
+        
