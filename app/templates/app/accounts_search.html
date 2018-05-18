@@ -249,7 +249,6 @@
                     <select id="campaign_select" class="form-control">
                     {% for campaign in campaigns %}
                         <option value="{{ campaign.pk }}">{{ campaign }}</option>
-                        <option value="52">{{ campaign }}</option>
                     {% endfor %}
 
 
@@ -274,7 +273,7 @@
      <script src="{% static 'app/search_page.js' %}?id=5"></script>
     <script>
             ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-            ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+            
     </script>
 
 

@@ -336,7 +336,7 @@ class AccountSearch(View):
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
-        campaigns = Campaign.objects.filter(owner__pk=pk)
+        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
         return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns})
 
     def post(self, request, pk):
@@ -575,6 +575,11 @@ def remove_account(request, pk):
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
+    def _clone_to_contact(self, qs, campaign):
+        # is there a better way to do this??
+        for row in qs.all():
+            row.attach_to_campaign(campaign)
+        
     def post(self, request):
         print(request.POST)
         if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
@@ -601,7 +606,10 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
+                # attache to a campagn                
+                search_results.update(status=ContactStatus.IN_QUEUE_N, 
+                                      connect_campaign=campaign)
+                self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'app/search_render/search_render.html',
