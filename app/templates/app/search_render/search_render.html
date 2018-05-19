@@ -186,10 +186,24 @@
         {##}
         {##}
         $("#add_all_selected_item_button").click(function () {
+        	//check connect message
+        	var camp_id = $('#campaign_select')[0].value;
+        	var that = $(this);
+        	var connect = $('#add2campaign .connect-'+camp_id);
+        	var connect_msg = connect.html();
+        	if(connect_msg === "" || connect_msg.length < 5){
+        		that.hide();
+        		var text = "<p class='text text-danger'>Your connector campaign does not have any message. Please add it <a href='";
+        		text+=connect.data('url') + "'>here</a></p>";
+        		$('#add2campaign .modal-body').html(text);
+        		return;
+        	}
+        	
+        	
             $('#add2campaign').modal('hide');
 
             data = get_ajax_data();
-            data.campaign = $('#campaign_select')[0].value;
+            data.campaign = camp_id;
             set_ajax_data(data);
 
 

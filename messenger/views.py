@@ -85,7 +85,7 @@ class ContactDeleteView(AjaxHttpResponse, View):
             contact.change_status(ContactStatus.OLD_CONNECT_N)
             return        
             
-        SearchResult.objects.filter(linked_id=contact.linkedin_id).delete()
+        SearchResult.objects.filter(linkedin_id=contact.linkedin_id).delete()
         contact.delete()
         
     def post(self, request):
@@ -108,14 +108,23 @@ class ContactDeleteView(AjaxHttpResponse, View):
 @method_decorator(decorators, name='dispatch')        
 class ContactUpdateNoteView(UpdateView):
     template_name = 'app/includes/rightbox_contact_info.html'
+    template_name2 = 'app/includes/rightbox_contact_info_empty.html'
     form_class = UpdateContactNoteForm
     model = Inbox
+    
+    def get_template_names(self):
+        ctx = self.get_context_data()
+        if ctx['object'].is_connected == False:
+            return self.template_name2
+        return self.template_name
+    
     
     def get_success_url(self):
         return reverse_lazy('accounts')
     
     def get_context_data(self, **kwargs):
         ctx = super(ContactUpdateNoteView, self).get_context_data(**kwargs)
+        
         contact = ctx['object']
         owner = contact.owner
         qs = ChatMessage.objects.filter(owner=owner, 

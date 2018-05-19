@@ -40,24 +40,43 @@ $(function() {
     	var form = that.closest('form');
     	var data = form.serialize();
     	$.post(form.attr('action'), data).done(function(res){
-    		res = $.parseJSON(res);
     		console.log('resutl:', res);
+    		try{
+    			var x = $.parseJSON(res);
+    			res = x;
+    		}catch(e){
+    			console.log('error', e);
+    		}
+    		
+    		
     		var alertbox = $('.alert-box');
     		if (res.ok) {
-    			alertbox.html('Message has been saved successfully!');
-    			alertbox.addClass('text-success').removeClass('text-danger');
+    			swal("alert!", 'Message has been saved successfully!', "success");
+    			//alertbox.html('Message has been saved successfully!');
+    			//alertbox.addClass('text-success').removeClass('text-danger');
     			return;
     		}
     		if ( res.error){
     			var html = "";
-    			$.each( res.error, function( i, obj ) {
+    			for(var key in  res.error) {
+    				console.log('resutl:', key);
     				
-    				var key = Object.keys(obj);
-    				if (obj[key])
-    					html+=  key + ": " + obj[key] + "<br/>";
-    			});
-    			alertbox.html( html );
-    			alertbox.removeClass('text-success').addClass('text-danger')
+    				if (res.error[key][0])
+    					html+=  key + ": " + res.error[key];
+    				
+    			}
+    			if (html === ""){
+    				$.each( res.error, function( i, obj ) {
+        				
+        				var key = Object.keys(obj);
+        				if (obj[key])
+        					html+=  key + ": " + obj[key] ;
+        			});
+    			}
+    			
+    			//alertbox.html( html );
+    			//alertbox.removeClass('text-success').addClass('text-danger')
+    			swal("alert!", html, "error");
     		}
     	});
     });

@@ -311,9 +311,10 @@ $(document).ready(function() {
 		var selected_camp = $("#add2campaign #campaign option:selected");
 		var camp_id = selected_camp.val();
 		var campaign_name = selected_camp.text();
-		var camp_message = $("#add2campaign .campaign-"+camp_id).html();
+		var messenger = $("#add2campaign .campaign-"+camp_id);
+		var camp_message = messenger.html();
 		if (camp_message === "" || camp_message.length < 5){
-			var url = "/account/messenger/"+camp_id;
+			var url = messenger.data('url');
 			
 			var text = 'Your selected campaign <b>' + campaign_name + '</b> has not had any message yet.';
 			text+= ' Please add some <a href="' + url +'">here</a>.';
