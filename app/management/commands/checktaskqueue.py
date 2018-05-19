@@ -15,6 +15,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         task_queues = TaskQueue.objects.filter(status=BotTaskStatus.QUEUED).all()
         for task in task_queues:
-            print(task.queue_type_id)
             BotTask.objects.create(name=task.content_object, task_type=task.queue_type,
                                    owner=task.owner, status=task.status, extra_info={'id':task.queue_type_id})
