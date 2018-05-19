@@ -64,6 +64,7 @@ class CreateCampaignMesgForm(CreateCampaignForm):
         
 class UpdateCampWelcomeForm(forms.ModelForm):
     welcome_message = forms.CharField(
+        label=_('Message'),
         widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
@@ -108,7 +109,9 @@ STEP_TIMES = (
 )
         
 class UpdateCampConnectForm(UpdateCampWelcomeForm):
-    
+    welcome_message = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs=textarea_css))
     welcome_time = forms.ChoiceField(
         required=False,
         widget=forms.Select(attrs=textarea_css),

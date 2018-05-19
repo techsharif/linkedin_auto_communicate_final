@@ -252,7 +252,7 @@
                     
                     </select>
                     {% else %}
-                    <p>Please add a campaign first</p>
+                    <p>Please <a href="{% url 'account-campaign-add' pk=pk %}">add</a> a campaign first</p>
                     {% endif %}
                 </div>
 
@@ -262,14 +262,17 @@
 				
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button {% if not campaigns %} style="display:none" {% endif %} type="submit" id="add_all_selected_item_button" class="btn btn-primary add_button">Add to
-                        Connector Campaign
+                    <button {% if not campaigns %} style="display:none" {% endif %} type="submit" 
+                    id="add_all_selected_item_button" class="btn btn-primary add_button">Add to Connector Campaign
+                        
                     </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-<script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+ 
+ <script src="{% static 'js/datatables.min.js' %}"></script>
+{# alreay included <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> #}
      <script src="{% static 'app/search_page.js' %}?id=5"></script>
     <script>
             ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";

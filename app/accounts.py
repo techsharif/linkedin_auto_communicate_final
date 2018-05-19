@@ -303,7 +303,7 @@ class DataTable(object):
 class AccountNetwork(AccountMixins, DataTable, ListView):
     template_name = 'app/accounts_network.html'
     status = contact_statuses
-    is_connected = False
+    is_connected = True
 
     def get_context_data(self, **kwargs):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
@@ -518,6 +518,12 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
     def form_invalid(self, form):
         print('form invalid:', form.errors)
+        if self.request.is_ajax():
+            context = dict(error=form.errors)
+            json_data = json.dumps(context)
+            return HttpResponse(json_data, content_type='application/json')
+            
+        
         return super(AccountMessengerDetail, self).form_invalid(form)
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from app.models import LinkedInUser
+from django.urls.base import reverse_lazy
 
 try:
     from django.utils.encoding import force_text
@@ -153,7 +154,7 @@ class CommonContactField(models.Model):
 class ContactField(CommonContactField):
     linkedin_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100, db_index=True)    
-    latest_activity = models.DateTimeField()
+    latest_activity = models.DateTimeField(blank=True, null=True)
     
     class Meta:
         abstract = True
@@ -204,6 +205,12 @@ class Campaign(TimeStampedModel):
                         
         for cc in copy_campaign.campaignsteps.all():
             cc.clone(self)
+            
+    def get_absolute_url(self):
+        kwargs = dict(pk=self.id)
+        if self.is_bulk:
+            return reverse_lazy('messenger-campaign', kwargs=kwargs)
+        return reverse_lazy('connector-campaign', kwargs=kwargs)
 
 class CampaignStepField(models.Model):
     step_number = models.IntegerField(db_index=True, default=1)
