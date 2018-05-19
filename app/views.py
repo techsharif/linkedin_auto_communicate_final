@@ -22,6 +22,9 @@ from datetime import timedelta
 
 User = get_user_model()
 
+def home(request,pk):
+    return render(request, 'account/base.html', {'pk':pk})
+
 
 class HomeView(TemplateView):
     template_name = 'app/home.html'

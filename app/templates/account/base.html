@@ -1,0 +1,460 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en"
+      class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+
+<head>
+    {% include 'account/includes/head.html' %}
+    {% block extra_head %}
+
+    {% endblock %}
+</head>
+
+<body class="">
+<div class="wrapper">
+{% include 'account/includes/header.html' %}
+{% include 'account/includes/aside.html' %}
+
+
+    <section>
+        <div class="content-wrapper">
+            <div class="content-heading"> Dashboard</div>
+
+        </div>
+    </section>
+    <footer><span>© 2017 - 2018, ProspectsGenerator.com</span></footer>
+</div>
+<script src="/static/js/modernizr-2.8.3.js"></script>
+<script src="/static/js/matchMedia.js"></script>
+<script src="/static/js/jquery-2.2.4.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/jquery.storageapi.js"></script>
+<script src="/static/js/jquery.easing.js"></script>
+<script src="/static/js/animo.js"></script>
+<script src="/static/js/jquery.slimscroll.min.js"></script>
+<script src="/static/js/screenfull.js"></script>
+<script src="/static/js/jquery.localize.js"></script>
+<script src="/static/js/demo-rtl.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+<script src="/static/js/index.js"></script>
+<script src="/static/js/jquery.flot.js"></script>
+<script src="/static/js/jquery.flot.tooltip.min.js"></script>
+<script src="/static/js/jquery.flot.resize.js"></script>
+<script src="/static/js/jquery.flot.pie.js"></script>
+<script src="/static/js/jquery.flot.time.js"></script>
+<script src="/static/js/jquery.flot.categories.js"></script>
+<script src="/static/js/jquery.flot.spline.min.js"></script>
+<script src="/static/js/jquery.classyloader.min.js"></script>
+<script src="/static/js/moment-with-locales.min.js"></script>
+
+<script>
+    var data = [{
+        "label": "Invitations",
+        "color": "#768294",
+        "data": [
+            ['1518048000000', 0],
+            ['1518134400000', 0],
+            ['1518220800000', 0],
+            ['1518307200000', 0],
+            ['1518393600000', 0],
+            ['1518480000000', 0],
+            ['1518566400000', 0],
+            ['1518652800000', 0],
+            ['1518739200000', 0],
+            ['1518825600000', 0],
+            ['1518912000000', 0],
+            ['1518998400000', 0],
+            ['1519084800000', 0],
+            ['1519171200000', 0],
+            ['1519257600000', 0]
+        ]
+    }, {
+        "label": "Connections",
+        "color": "#1f92fe",
+        "data": [
+            ['1518048000000', 0],
+            ['1518134400000', 0],
+            ['1518220800000', 0],
+            ['1518307200000', 0],
+            ['1518393600000', 0],
+            ['1518480000000', 0],
+            ['1518566400000', 0],
+            ['1518652800000', 0],
+            ['1518739200000', 0],
+            ['1518825600000', 0],
+            ['1518912000000', 0],
+            ['1518998400000', 0],
+            ['1519084800000', 0],
+            ['1519171200000', 0],
+            ['1519257600000', 0]
+        ]
+    }];
+    var options = {
+        series: {
+            lines: {
+                show: false
+            },
+            points: {
+                show: true,
+                radius: 4
+            },
+            splines: {
+                show: true,
+                tension: 0.4,
+                lineWidth: 1,
+                fill: 0.5
+            }
+        },
+        grid: {
+            borderColor: '#eee',
+            borderWidth: 1,
+            hoverable: true,
+            backgroundColor: '#fcfcfc'
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: function (label, x, y) {
+                return label + ' : ' + x + ' : ' + y;
+            }
+        },
+        xaxis: {
+            tickColor: '#fcfcfc',
+            mode: "time",
+            timeformat: "%m/%d/%Y"
+        },
+        yaxis: {
+            min: 0,
+            max: 100,
+            tickColor: '#eee',
+            tickFormatter: function (v) {
+                return v;
+            }
+        },
+        shadowSize: 0
+    };
+    var chart = $('.chart-spline');
+    if (chart.length) $.plot(chart, data, options);
+</script>
+<div class="flotTip"
+     style="display: none; position: absolute; background: rgb(255, 255, 255); z-index: 1040; padding: 0.4em 0.6em; border-radius: 0.5em; font-size: 0.8em; border: 1px solid rgb(17, 17, 17); white-space: nowrap; left: 461px; top: 555px;"></div>
+<script src="/static/js/app.init.js"></script>
+<script src="/static/js/bootstrap-start.js"></script>
+<script src="/static/js/calendar.js"></script>
+<script src="/static/js/classyloader.js"></script>
+<script src="/static/js/clear-storage.js"></script>
+<script src="/static/js/constants.js"></script>
+<script src="/static/js/flatdoc.js"></script>
+<script src="/static/js/trigger-resize.js"></script>
+<script src="/static/js/fullscreen.js"></script>
+<script src="/static/js/gmap.js"></script>
+<script src="/static/js/load-css.js"></script>
+<script src="/static/js/localize.js"></script>
+<script src="/static/js/maps-vector.js"></script>
+<script src="/static/js/navbar-search.js"></script>
+<script src="/static/js/notify.js"></script>
+<script src="/static/js/now.js"></script>
+<script src="/static/js/panel-tools.js"></script>
+<script src="/static/js/play-animation.js"></script>
+<script src="/static/js/porlets.js"></script>
+<script src="/static/js/sidebar.js"></script>
+<script src="/static/js/skycons.js"></script>
+<script src="/static/js/slimscroll.js"></script>
+<script src="/static/js/sparkline.js"></script>
+<script src="/static/js/table-checkall.js"></script>
+<script src="/static/js/toggle-state.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/chart.js"></script>
+<script src="/static/js/morris.js"></script>
+<script src="/static/js/rickshaw.js"></script>
+<script src="/static/js/chartist.js"></script>
+<script src="/static/js/tour.js"></script>
+<script src="/static/js/sweetalert.js"></script>
+<script src="/static/js/color-picker.js"></script>
+<script src="/static/js/imagecrop.js"></script>
+<script src="/static/js/chart-knob.js"></script>
+<script src="/static/js/chart-easypie.js"></script>
+<script src="/static/js/select2.full.min.js"></script>
+<script src="/static/js/select2.js"></script>
+<script src="/static/js/datatables.min.js"></script>
+
+
+<div id="myModalLarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabelLarge" aria-hidden="true"
+     class="modal fade" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 id="myModalLabelLarge" class="modal-title"><em class="fa fa-search fa-1x"></em>&nbsp;Basic Search
+                </h4></div>
+            <div class="modal-body">
+                <div class="row">
+                    <form action="/Campaigns/AddRegularSearch" id="add-regular-search-modal-form" method="post"
+                          role="form">
+                        <input name="__RequestVerificationToken" type="hidden"
+                               value="cF8heZThbHCLe4MDNshdYBAwpWm_CfjF-_Ff99MOndnkGoQ3S-n-CpZvfsvHYsVjxnAPpy2VsJiYGwVkhvd9jOnpSNboSPmjESjk8-aaGsAuomyF77ZPeu4A3MAvflhvV3WzK3PDwgGKIOb-1P9zcg2">
+                        <input data-val="true" data-val-number="The field CampaignId must be a number." id="campaignId"
+                               name="campaignId" type="hidden" value="18">
+                        <div class="form-group col-lg-12">
+                            <label class="col-lg-2 text-left" style="padding-left:0px;">Connection level</label>
+                            <label class="checkbox-inline col-lg-2">
+                                <input id="inlineCheckbox1" value="true" type="checkbox" name="connections_1">1st
+                            </label>
+                            <label class="checkbox-inline col-lg-2">
+                                <input id="inlineCheckbox2" value="true" type="checkbox" name="connections_2">2nd
+                            </label>
+                            <label class="checkbox-inline col-lg-2">
+                                <input id="inlineCheckbox3" value="true" type="checkbox" name="connections_3">3rd+
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group col-lg-6">
+                                <label>Title</label>
+                                <input name="title" class="form-control">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Company</label>
+                                <input name="company" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Locations</label>
+
+                            <select class="select2_demo_2 form-control select2-hidden-accessible" name="locations"
+                                    multiple="multiple" style="width: 100%" tabindex="-1" aria-hidden="true">
+                                <option value="Mayotte">Mayotte</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Industries</label>
+                            <select class="select2_demo_2 form-control select2-hidden-accessible" name="industries"
+                                    multiple="multiple" style="width: 100%" tabindex="-1" aria-hidden="true">
+                                <option value="Mayotte">Mayotte</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Current companies</label>
+                            <select class="select2_demo_2 form-control select2-hidden-accessible"
+                                    name="current_companies" multiple="multiple" style="width: 100%" tabindex="-1"
+                                    aria-hidden="true">
+                                <option value="Mayotte">Mayotte</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Past companies</label>
+                            <select class="select2_demo_2 form-control select2-hidden-accessible" name="past_companies"
+                                    multiple="multiple" style="width: 100%" tabindex="-1" aria-hidden="true">
+                                <option value="Mayotte">Mayotte</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Schools</label>
+                            <select class="select2_demo_2 form-control select2-hidden-accessible" name="schools"
+                                    multiple="multiple" style="width: 100%" tabindex="-1" aria-hidden="true">
+                                <option value="Mayotte">Mayotte</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button form="add-regular-search-modal-form" type="button" class="btn btn-primary">Start Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.demo4').click(function () {
+            swal({
+                title: "Add existing connections?",
+                text: "It will add your existing connections to campaign",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, do it!",
+                cancelButtonText: "No, thanks!",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                //if (isConfirm) {
+                swal("Success!", "Your task has been queued.Please wait while we load your data. It takes 5 - 10 minutes, depending on your account settings", "success");
+                //} else {
+                // swal("Cancelled", "Your imaginary file is safe :)", "error");
+                //}
+            });
+        });
+        $('.demo2').click(function () {
+            swal({
+                title: "Success!",
+                text: "The campaign has been started",
+                type: "success"
+            });
+        });
+    });
+</script>
+<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 id="myModalLabel" class="modal-title">Attach Campaign</h4></div>
+            <div class="modal-body">
+                <form action="/Campaigns/AttachAutoresponderMessage" class="form-horizontal" id="modal-form"
+                      method="post" role="form">
+                    <input name="__RequestVerificationToken" type="hidden" value="">
+                    <input id="modalAutoresponderMessageId" name="autoresponderMessageId" type="hidden" value="7">
+                    <div class="form-group">
+                        <!-- <label class="col-lg-2 control-label">Campaign</label> -->
+                        <div class="col-lg-12">
+                            <select class="form-control" id="campaignId" name="campaignId">
+                                <option value="18">My First Campaign</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--  <div class="form-group">
+                         <label class="col-lg-2 control-label">Send After</label>
+                         <div class="col-lg-4">
+                             <div class="input-group">
+                                 <input class="form-control" id="sendAfter" name="sendAfter" type="number" value="0"> <span class="input-group-addon">days</span></div>
+                         </div>
+                     </div> -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <a href="connection-messages.php" form="modal-form" type="submit" class="btn btn-primary">Save
+                    changes</a></div>
+        </div>
+    </div>
+</div>
+<div id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 id="myModalLabel" class="modal-title">Attach Campaign</h4></div>
+            <div class="modal-body">
+                <form action="/Campaigns/AttachAutoresponderMessage" class="form-horizontal" id="modal-form"
+                      method="post" role="form">
+                    <input name="__RequestVerificationToken" type="hidden" value="">
+                    <input id="modalAutoresponderMessageId" name="autoresponderMessageId" type="hidden" value="7">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Campaign</label>
+                        <div class="col-lg-10">
+                            <select class="form-control" id="campaignId" name="campaignId">
+                                <option value="18">My First Campaign</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Send After</label>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <input class="form-control" id="sendAfter" name="sendAfter" type="number" value="0">
+                                <span class="input-group-addon">days</span></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <a href="thanks-for-connecting.php" form="modal-form" type="submit" class="btn btn-primary">Save
+                    changes</a></div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

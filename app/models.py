@@ -51,7 +51,7 @@ class LinkedInUser(models.Model):
     password = models.CharField(max_length=32)
     latest_login = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=False)
-    login_status = models.CharField(max_length=50, choices=BotTaskStatus.statuses, blank=True, null=True)
+    login_status = models.BooleanField(default=False)
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)

@@ -173,6 +173,7 @@ class AccountInfo(View):
         membership = Membership.objects.get(user=linkedin_user.user)
         linkedin_user.latest_login = datetime.datetime.now()
         linkedin_user.status = True
+        linkedin_user.login_status = True
         linkedin_user.save()
         linkedin_user.membership.add(membership)
 

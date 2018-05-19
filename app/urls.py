@@ -8,6 +8,7 @@ from . import views
 
 urlpatterns = [
     # These are for user/page on our own
+    url(r'^home/(?P<pk>[\d]+)/$', views.home),
     url(r'^$', views.HomeView.as_view(), name='home'),
     #url(r'^login/$', views.login, name='login'),
     #url(r'^logout/$', views.logout, name='logout'),    

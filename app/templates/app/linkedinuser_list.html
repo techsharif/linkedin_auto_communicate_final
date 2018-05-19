@@ -37,7 +37,7 @@
                     {% for item in object_list %}
                         <tr>
                             <td width="90%">
-                                {% if item.status %}
+                                {% if item.login_status %}
                                     <a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a>
                                 {% else %}
                                     <a href="#" id="inactive_account_click"
@@ -46,7 +46,7 @@
                                 {% endif %}
 
                             </td>
-                            <td>{% if item.status %}
+                            <td>{% if item.login_status %}
                                 <a href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"
                                    data-original-title="" title="">Settings</a> {% endif %}</td>
                             <td>
