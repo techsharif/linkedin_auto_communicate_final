@@ -41,7 +41,7 @@ class Command(BaseCommand):
                 TaskQueue(content_object=search, owner=pending_task.owner).save()
 
     def check_or_add_connect_campaign_task(self):
-        connect_campaigns = Campaign.objects.filter(status=True)
+        connect_campaigns = Campaign.objects.filter(status=True, is_bulk=False)
         for connect_campaign in connect_campaigns:
             queue_type = ContentType.objects.get_for_model(connect_campaign)
             task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
@@ -56,5 +56,24 @@ class Command(BaseCommand):
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
                 bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTCONNECT,
                         extra_id=connect_campaign.id, name=BotTaskType.POSTCONNECT)
+                bottask.status = BotTaskStatus.QUEUED
+                bottask.save()
+
+    def check_or_add_message_campaign_task(self):
+        connect_campaigns = Campaign.objects.filter(status=True, is_bulk=True)
+        for connect_campaign in connect_campaigns:
+            queue_type = ContentType.objects.get_for_model(connect_campaign)
+            task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
+            if task_queue:
+                task = task_queue[0]
+                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
+                                           extra_id=connect_campaign.id, name=BotTaskType.CHECKMESSAGE)
+                if not created:
+                    task.status = bottask.status
+                    task.save()
+            else:
+                TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
+                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
+                        extra_id=connect_campaign.id, name=BotTaskType.POSTMESSAGE)
                 bottask.status = BotTaskStatus.QUEUED
                 bottask.save()
