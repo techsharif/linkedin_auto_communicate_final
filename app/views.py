@@ -15,7 +15,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 
 from app.forms import UserRegisterForm
-from app.models import MembershipType, Membership
+from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
 from datetime import timedelta
@@ -23,7 +23,8 @@ from datetime import timedelta
 User = get_user_model()
 
 def home(request,pk):
-    return render(request, 'account/base.html', {'pk':pk})
+    linkedin_account = LinkedInUser.objects.get(pk=pk)
+    return render(request, 'account/base.html', {'pk':pk, 'linkedin_user':linkedin_account})
 
 
 class HomeView(TemplateView):

@@ -17,26 +17,21 @@
                                 }
                             </style>
                             <div class="pull-right" style="margin-top: -12px; margin-right: 11px;"><a
-                                    class="btn btn-link btn-custom-link" type="button" href="{% url 'account-settings' pk=pk %}"
+                                    class="btn btn-link btn-custom-link" type="button"
+                                    href="{% url 'account-settings' pk=pk %}"
                                     title="Account Settings"><em class="icon-settings"></em></a></div>
                             <div class="user-block-picture">
                                 <div class="user-block-status"><img src="/static/images/linkedin-in.svg"
                                                                     alt="Jonathan Korkol" width="60" height="60"
                                                                     class="img-thumbnail img-rectangle">
-                                    <div class="circle circle-primary circle-lg" title="Not logged in"></div>
+
                                 </div>
                             </div>
-                            <div class="user-block-info"><span class="user-block-name">Jonathan Korkol</span>
-                                <div class="user-block-role" style="white-space: normal;">Business Loan Specialist -
-                                    Same Day Loan Offers Available
-                                </div>
-                                <span class="user-block-role"><strong>cpnnumbers@gmail.com</strong></span></div>
+                            <div class="user-block-info"><span class="user-block-name">{{ linkedin_user.email }}</span>
+
+                            </div>
                         </div>
                     </div>
-                </li>
-                <li class="False">
-                    <a href="getting-started.php" title="Getting Started"> <em class="icon-home"></em> <span>Getting Started</span>
-                    </a>
                 </li>
                 <li class="nav-heading"><span>User Menu</span></li>
                 <li class="False">
