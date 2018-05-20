@@ -17,19 +17,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.check_or_add_search_task()
-        # self.check_taskqueue()
         self.check_or_add_connect_campaign_task()
         self.check_or_add_message_campaign_task()
 
-    def check_and_message_campaign(self):
-
-        task_queues = TaskQueue.objects.filter(status=BotTaskStatus.QUEUED).all()
-        for task in task_queues:
-            BotTask.objects.create(name=task.content_object, task_type=task.queue_type,
-                                   owner=task.owner, status=task.status, extra_id = task.queue_type_id)
 
     def check_or_add_search_task(self):
-        pending_task_list = BotTask.objects.exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR], task_type=BotTaskType.SEARCH)
+        pending_task_list = BotTask.objects.exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR],
+                                                    task_type=BotTaskType.SEARCH)
         for pending_task in pending_task_list:
             search = Search.objects.get(id=pending_task.search_id())
             queue_type = ContentType.objects.get_for_model(search)
@@ -57,7 +51,7 @@ class Command(BaseCommand):
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
                 bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTCONNECT,
-                        extra_id=connect_campaign.id, name=BotTaskType.POSTCONNECT)
+                                           extra_id=connect_campaign.id, name=BotTaskType.POSTCONNECT)
                 bottask.status = BotTaskStatus.QUEUED
                 bottask.save()
 
@@ -76,6 +70,6 @@ class Command(BaseCommand):
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
                 bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
-                        extra_id=connect_campaign.id, name=BotTaskType.POSTMESSAGE)
+                                           extra_id=connect_campaign.id, name=BotTaskType.POSTMESSAGE)
                 bottask.status = BotTaskStatus.QUEUED
                 bottask.save()
