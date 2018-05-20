@@ -62,14 +62,14 @@ class Command(BaseCommand):
             task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
             if task_queue:
                 task = task_queue[0]
-                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
+                bottask, created = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
                                            extra_id=connect_campaign.id, name=BotTaskType.CHECKMESSAGE)
                 if not created:
                     task.status = bottask.status
                     task.save()
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
-                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
+                bottask, created = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
                                            extra_id=connect_campaign.id, name=BotTaskType.POSTMESSAGE)
                 bottask.status = BotTaskStatus.QUEUED
                 bottask.save()
