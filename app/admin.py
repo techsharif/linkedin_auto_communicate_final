@@ -2,9 +2,6 @@ from django.contrib import admin
 
 from .models import (Membership, MembershipType,
                      LinkedInUser, BotTask,)
-class ProfileAdmin(admin.ModelAdmin):
-    pass
-
     
 class MembershipAdmin(admin.ModelAdmin):
     pass
@@ -13,11 +10,14 @@ class MembershipTypeAdmin(admin.ModelAdmin):
     pass
     
 class LinkedInUserAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('user', 'status', 'login_status')
+    list_display = ('email', ) + list_filter
     
 class BotTaskAdmin(admin.ModelAdmin):
-    pass
-
+    list_filter = ('owner', 'status')
+    list_display = ('name', 'task_type', 'extra_info', 
+                    'completed_date') + list_filter
+    
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType, MembershipTypeAdmin)
 admin.site.register(LinkedInUser, LinkedInUserAdmin)    

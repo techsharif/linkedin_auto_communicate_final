@@ -108,21 +108,14 @@ STEP_TIMES = (
     (730,"SEND 2 YEARS AFTER PREVIOUS MESSAGE IF NO REPLY"), 
 )
         
-class UpdateCampConnectForm(UpdateCampWelcomeForm):
-    welcome_message = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs=textarea_css))
-    welcome_time = forms.ChoiceField(
-        required=False,
-        widget=forms.Select(attrs=textarea_css),
-        choices=WELCOME_TIMES
-        )
+class UpdateCampConnectForm(forms.ModelForm):
+    
     connection_message = forms.CharField(
         widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
         model = Campaign
-        fields = ('connection_message', 'welcome_time', 'welcome_message',)
+        fields = ('connection_message',)
 
 class CampaignStepForm(forms.ModelForm):
     step_time = forms.ChoiceField(
