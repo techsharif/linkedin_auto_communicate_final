@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.core.serializers import json
 from django.db import models
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -70,6 +71,9 @@ class LinkedInUser(models.Model):
     def get_connector_campaigns(self):
         return [x for x in self.messegercampaigns.all() if x.is_bulk]
 
+    def is_now_campaign_active(self):
+        hour = timezone.now().hour
+        return self.start_from <= hour <= self.start_to
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)

@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from app.models import BotTask, BotTaskStatus, BotTaskType
 from connector.models import TaskQueue, Search
-from messenger.models import Campaign
+from messenger.models import Campaign, ChatMessage
 
 
 class Command(BaseCommand):
@@ -19,7 +19,6 @@ class Command(BaseCommand):
         self.check_or_add_search_task()
         self.check_or_add_connect_campaign_task()
         self.check_or_add_message_campaign_task()
-
 
     def check_or_add_search_task(self):
         pending_task_list = BotTask.objects.exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR],
@@ -39,25 +38,39 @@ class Command(BaseCommand):
     def check_or_add_connect_campaign_task(self):
         connect_campaigns = Campaign.objects.filter(status=True, is_bulk=False)
         for connect_campaign in connect_campaigns:
-            queue_type = ContentType.objects.get_for_model(connect_campaign)
-            task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
-            contacts = connect_campaign.contacts.all()
-            if task_queue:
-                for contact in contacts:
-                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
-                                                               task_type=BotTaskType.CHECKCONNECT,
-                                                               extra_id=contact.id, name=BotTaskType.CHECKCONNECT,
-                                                               extra_info=connect_campaign.get_message())
+            if connect_campaign.owner.is_now_campaign_active():
+                queue_type = ContentType.objects.get_for_model(connect_campaign)
+                task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
+                contacts = connect_campaign.contacts.all()
+                if task_queue:
+                    for contact in contacts:
+                        message = connect_campaign.connection_message.format(Name=contact.name, FirstName=contact.first_name(),
+                                                                          Company=contact.company, Title=contact.title)
+                        chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact, campaign=connect_campaign,
+                                                   text=message, time=timezone.now())
+                        chat_message.save()
+                        bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                                   task_type=BotTaskType.CHECKCONNECT,
+                                                                   extra_id=chat_message.id, name=BotTaskType.CHECKCONNECT,
+                                                                   )
 
-            else:
-                TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
-                for contact in contacts:
-                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
-                                                               task_type=BotTaskType.POSTCONNECT,
-                                                               extra_id=contact.id, name=BotTaskType.POSTCONNECT,
-                                                               extra_info=connect_campaign.get_message())
-                    bottask.status = BotTaskStatus.QUEUED
-                    bottask.save()
+                else:
+                    TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
+                    for contact in contacts:
+                        message = connect_campaign.connection_message.format(Name=contact.name,
+                                                                          FirstName=contact.first_name(),
+                                                                          Company=contact.company, Title=contact.title)
+                        chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact,
+                                                   campaign=connect_campaign,
+                                                   text=message, time=timezone.now())
+                        chat_message.save()
+                        bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                                   task_type=BotTaskType.POSTCONNECT,
+                                                                   extra_id=chat_message.id,
+                                                                   name=BotTaskType.POSTCONNECT,
+                                                                   )
+                        bottask.status = BotTaskStatus.QUEUED
+                        bottask.save()
 
     def check_or_add_message_campaign_task(self):
         connect_campaigns = Campaign.objects.filter(status=True, is_bulk=True)
@@ -67,13 +80,27 @@ class Command(BaseCommand):
             contacts = connect_campaign.contacts.all()
             if task_queue:
                 for contact in contacts:
-                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
-                                           extra_id=contact.id, name=BotTaskType.CHECKMESSAGE, extra_info=connect_campaign.get_message())
+                    message = connect_campaign.welcome_message.format(Name=contact.name, FirstName=contact.first_name(),
+                                                                      Company=contact.company, Title=contact.title)
+                    chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact, campaign=connect_campaign,
+                                               text=message, time=timezone.now())
+                    chat_message.save()
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                               task_type=BotTaskType.CHECKMESSAGE,
+                                                               extra_id=chat_message.id, name=BotTaskType.CHECKMESSAGE,
+                                                               )
 
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
                 for contact in contacts:
-                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
-                                           extra_id=contact.id, name=BotTaskType.POSTMESSAGE, extra_info=connect_campaign.get_message())
+                    message = connect_campaign.welcome_message.format(Name=contact.name, FirstName=contact.first_name(),
+                                                                      Company=contact.company, Title=contact.title)
+                    chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact, campaign=connect_campaign,
+                                               text=message, time=timezone.now())
+                    chat_message.save()
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                               task_type=BotTaskType.CHECKMESSAGE,
+                                                               extra_id=chat_message.id, name=BotTaskType.CHECKMESSAGE,
+                                                               )
                     bottask.status = BotTaskStatus.QUEUED
                     bottask.save()
