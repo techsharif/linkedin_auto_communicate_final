@@ -24,6 +24,7 @@ class BotTaskStatus:
         (DONE, DONE),
     )
 
+
 class MemberShipField(models.Model):
     max_seat = models.IntegerField(default=1)
     max_search = models.IntegerField(default=5)
@@ -59,14 +60,16 @@ class LinkedInUser(models.Model):
 
     def __str__(self):
         return self.email
-    
+
     def get_messenger_campaigns(self):
         #
         xx = [x for x in self.messegercampaigns.all() if x.is_bulk]
-        
+
         return xx
+
     def get_connector_campaigns(self):
         return [x for x in self.messegercampaigns.all() if x.is_bulk]
+
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)
@@ -95,24 +98,22 @@ class Membership(models.Model):
                                     self.valid_to)
 
 
-
-    
 class BotTaskType:
     ADD_ACCOUNT = 'Add Account'
-    
+
     LOGIN = 'login'
     PINVERIFY = 'pinverify'
-    CONTACT = 'contact' # get contacts
-    MESSAGING = 'messaging' # get messaging
+    CONTACT = 'contact'  # get contacts
+    MESSAGING = 'messaging'  # get messaging
     SEARCH = 'search'
-    POSTMESSAGE = 'postmessage' # post a message to contact
-    POSTCONNECT = 'postconnect' # post a message for connection
-    CHECKMESSAGE = 'checkmessage' # check a posted message
-    CHECKCONNECT = 'checkconnect' # check a posted connect message
-    
+    POSTMESSAGE = 'postmessage'  # post a message to contact
+    POSTCONNECT = 'postconnect'  # post a message for connection
+    CHECKMESSAGE = 'checkmessage'  # check a posted message
+    CHECKCONNECT = 'checkconnect'  # check a posted connect message
+
     # Data_sync internal used only
     DATA_SYNC = 'Data_Sync'
-    
+
     task_types = (
         (LOGIN, LOGIN),
         (PINVERIFY, PINVERIFY),
@@ -123,7 +124,8 @@ class BotTaskType:
         (POSTCONNECT, POSTCONNECT),
         (CHECKMESSAGE, CHECKMESSAGE),
         (CHECKCONNECT, CHECKCONNECT),
-        )
+    )
+
 
 class BotTask(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='bottasks',
@@ -131,6 +133,7 @@ class BotTask(models.Model):
     task_type = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     extra_info = models.TextField(blank=True, null=True)
+    extra_id = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=BotTaskStatus.statuses,
                               default=BotTaskStatus.QUEUED)
     lastrun_date = models.DateTimeField(blank=True, null=True)
@@ -142,7 +145,3 @@ class BotTask(models.Model):
     def toJSON(self):
         xjson = serializers.serialize('json', [self, ])
         return xjson
-
-    def search_id(self):
-        extra_info = json.loads(self.extra_info)
-        return extra_info['search_id']

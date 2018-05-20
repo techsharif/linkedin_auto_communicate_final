@@ -22,4 +22,3 @@ admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType, MembershipTypeAdmin)
 admin.site.register(LinkedInUser, LinkedInUserAdmin)    
 admin.site.register(BotTask, BotTaskAdmin)
-    
