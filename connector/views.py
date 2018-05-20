@@ -145,4 +145,4 @@ def create_connector(request):
         return redirect('../connector')
 
     return render(request, 'connector/create_connector.html', {'connector_name_list':connector_name_list})
-            
+

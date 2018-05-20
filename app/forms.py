@@ -45,10 +45,12 @@ class ProfileSettingsForm(forms.Form):
 
 User = get_user_model()
 
+
 class UserRegisterForm(UserCreationForm):
     error_messages2 = {
         'email_exists': _("The email address is in-use. Please choose another one."),
     }
+
     def clean_email(self):
         email = self.cleaned_data.get("email")
         user = User.objects.filter(email=email).first()
@@ -59,9 +61,7 @@ class UserRegisterForm(UserCreationForm):
             )
             
         return email
-        
-    
-        
+
     email = forms.EmailField(
         label='Email Address',
         widget=forms.EmailInput(attrs={
@@ -81,14 +81,13 @@ class UserRegisterForm(UserCreationForm):
             'class': 'form-control',
             'type': 'password',
         }))
-    
-    
+
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2', )
+
 
 class SearchForm(ModelForm):
     class Meta:
         model = Search
         fields = ['search_name', 'keyword','url_search', 'sales_search', 'location', 'industry', 'company', 'title']
-    

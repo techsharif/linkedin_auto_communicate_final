@@ -35,6 +35,7 @@ def suspended_user():
     # else:
     #     return True
 
+
 def limited_user():
     pass
     # restricted_account = driver.findElements(By.xpath("//*[contains(.,'temporarily restricted')]"))
@@ -42,6 +43,7 @@ def limited_user():
     #     return False
     # else:
     #     return True
+
 
 def pinverify():
     try:
@@ -56,7 +58,6 @@ def pinverify():
     except Exception as e:
         return False
     
-
 
 if __name__ == '__main__':
     
