@@ -136,7 +136,6 @@ class AccountAdd(View):
             BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                     name='add linkedin account').save()
 
-
         return redirect('accounts')
 
 
@@ -148,11 +147,9 @@ class AccountInfo(View):
         """ may be this can be done when contacts is done? """
 
         # check message and contact task is already in here or not
-        message_task, message_task_created = BotTask.objects.get_or_create(owner=linkedin_user,
-                                                        task_type=BotTaskType.MESSAGING)
+        message_task, message_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.MESSAGING)
 
-        contact_task, contact_task_created = BotTask.objects.get_or_create(owner=linkedin_user,
-                                                        task_type=BotTaskType.CONTACT)
+        contact_task, contact_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.CONTACT)
 
         # if not created than add the message task name and contact task name
         if message_task_created or contact_task_created:
@@ -168,7 +165,6 @@ class AccountInfo(View):
                 return True
         return False
 
-
     def update_data_sync(self, linkedin_user):
         membership = Membership.objects.get(user=linkedin_user.user)
         linkedin_user.latest_login = datetime.datetime.now()
@@ -176,8 +172,6 @@ class AccountInfo(View):
         linkedin_user.login_status = True
         linkedin_user.save()
         linkedin_user.membership.add(membership)
-
-
 
     def post(self, request):
         print(request.POST)
@@ -192,7 +186,6 @@ class AccountInfo(View):
 
             # collect the bottask to add the linkedin account
             bot_task = BotTask.objects.get(owner=linkedin_user, task_type=BotTaskType.LOGIN)
-
 
             # check different status and pop up
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
@@ -211,6 +204,7 @@ class AccountInfo(View):
                 return HttpResponse(render_to_string('app/account/account_add_error.html'))
             else:
                 return HttpResponse(render_to_string('app/account/email_password_config.html'))
+
         if 'id' in request.POST.keys() and 'pin' in request.POST.keys(): # for pin verification
             id_ = int(request.POST['id'].strip())
             pin = request.POST['pin'].strip()

@@ -32,6 +32,7 @@ def exist_user():
         print(login_success_desc)
         return True
 
+
 def compose_new_message(driver, message):
     driver.get("https://www.linkedin.com/messaging/compose/")
     wait = WebDriverWait(driver, 5)
@@ -65,6 +66,7 @@ def get_message_contract_list(driver):
         print("Exception[get_message_contract_list] %s" % e.message)
         return None
 
+
 def select_message_send_contract(driver, contract_a_elements):
     try:
         messaging_link = contract_a_elements[0].get_attribute('href') # For I have set 1st contract 
@@ -72,6 +74,7 @@ def select_message_send_contract(driver, contract_a_elements):
     except Exception as e:
         print("Exception[select_message_send_contract] %s" % e.message)
         return None
+
 
 def send_message(driver, message):
     wait = WebDriverWait(driver, 10)
@@ -93,7 +96,7 @@ def send_message(driver, message):
 
 def get_profile_info(driver, profile_url):
     response = {
-        'profile_url' : profile_url
+        'profile_url' : profile_url,
         'name' : '',
         'title' : '',
         'location' : '',
