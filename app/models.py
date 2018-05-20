@@ -142,3 +142,7 @@ class BotTask(models.Model):
     def toJSON(self):
         xjson = serializers.serialize('json', [self, ])
         return xjson
+
+    def search_id(self):
+        extra_info = json.loads(self.extra_info)
+        return extra_info['search_id']
