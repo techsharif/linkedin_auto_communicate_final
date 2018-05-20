@@ -41,35 +41,39 @@ class Command(BaseCommand):
         for connect_campaign in connect_campaigns:
             queue_type = ContentType.objects.get_for_model(connect_campaign)
             task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
+            contacts = connect_campaign.contacts.all()
             if task_queue:
-                task = task_queue[0]
-                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.CHECKCONNECT,
-                                           extra_id=connect_campaign.id, name=BotTaskType.CHECKCONNECT)
-                if not created:
-                    task.status = bottask.status
-                    task.save()
+                for contact in contacts:
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                               task_type=BotTaskType.CHECKCONNECT,
+                                                               extra_id=contact.id, name=BotTaskType.CHECKCONNECT,
+                                                               extra_info=connect_campaign.get_message())
+
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
-                bottask, created = BotTask(owner=connect_campaign.owner, task_type=BotTaskType.POSTCONNECT,
-                                           extra_id=connect_campaign.id, name=BotTaskType.POSTCONNECT)
-                bottask.status = BotTaskStatus.QUEUED
-                bottask.save()
+                for contact in contacts:
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
+                                                               task_type=BotTaskType.POSTCONNECT,
+                                                               extra_id=contact.id, name=BotTaskType.POSTCONNECT,
+                                                               extra_info=connect_campaign.get_message())
+                    bottask.status = BotTaskStatus.QUEUED
+                    bottask.save()
 
     def check_or_add_message_campaign_task(self):
         connect_campaigns = Campaign.objects.filter(status=True, is_bulk=True)
         for connect_campaign in connect_campaigns:
             queue_type = ContentType.objects.get_for_model(connect_campaign)
             task_queue = TaskQueue.objects.filter(object_id=connect_campaign.id, queue_type=queue_type)
+            contacts = connect_campaign.contacts.all()
             if task_queue:
-                task = task_queue[0]
-                bottask, created = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
-                                           extra_id=connect_campaign.id, name=BotTaskType.CHECKMESSAGE)
-                if not created:
-                    task.status = bottask.status
-                    task.save()
+                for contact in contacts:
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.CHECKMESSAGE,
+                                           extra_id=contact.id, name=BotTaskType.CHECKMESSAGE, extra_info=connect_campaign.get_message())
+
             else:
                 TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
-                bottask, created = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
-                                           extra_id=connect_campaign.id, name=BotTaskType.POSTMESSAGE)
-                bottask.status = BotTaskStatus.QUEUED
-                bottask.save()
+                for contact in contacts:
+                    bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=BotTaskType.POSTMESSAGE,
+                                           extra_id=contact.id, name=BotTaskType.POSTMESSAGE, extra_info=connect_campaign.get_message())
+                    bottask.status = BotTaskStatus.QUEUED
+                    bottask.save()

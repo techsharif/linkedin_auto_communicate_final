@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.utils import timezone
 
@@ -211,6 +213,14 @@ class Campaign(TimeStampedModel):
         if self.is_bulk:
             return reverse_lazy('messenger-campaign', kwargs=kwargs)
         return reverse_lazy('connector-campaign', kwargs=kwargs)
+
+    def get_message(self):
+        data = {}
+        data['campaign_id'] = self.id
+        data['connection_message'] = self.connection_message
+        data['welcome_message'] = self.welcome_message
+        data['welcome_time'] = self.welcome_time
+        return json.dumps((data))
 
 class CampaignStepField(models.Model):
     step_number = models.IntegerField(db_index=True, default=1)
