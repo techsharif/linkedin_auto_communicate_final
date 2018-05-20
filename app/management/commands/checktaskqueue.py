@@ -99,8 +99,8 @@ class Command(BaseCommand):
                                                text=message, time=timezone.now())
                     chat_message.save()
                     bottask, _ = BotTask.objects.get_or_create(owner=connect_campaign.owner,
-                                                               task_type=BotTaskType.CHECKMESSAGE,
-                                                               extra_id=chat_message.id, name=BotTaskType.CHECKMESSAGE,
+                                                               task_type=BotTaskType.POSTMESSAGE,
+                                                               extra_id=chat_message.id, name=BotTaskType.POSTMESSAGE,
                                                                )
                     bottask.status = BotTaskStatus.QUEUED
                     bottask.save()
