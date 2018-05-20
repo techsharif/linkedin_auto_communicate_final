@@ -18,6 +18,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.check_or_add_search_task()
         # self.check_taskqueue()
+        self.check_or_add_connect_campaign_task()
+        self.check_or_add_message_campaign_task()
 
     def check_and_message_campaign(self):
 
