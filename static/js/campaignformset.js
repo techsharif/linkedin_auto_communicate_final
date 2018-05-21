@@ -76,6 +76,9 @@ $(function() {
     			
     			//alertbox.html( html );
     			//alertbox.removeClass('text-success').addClass('text-danger')
+    			if (window.location.pathname.indexOf('messenger')>=0) {
+    				html = html.replace('connection_', '');
+    			}
     			swal("alert!", html, "error");
     		}
     	});

@@ -32,30 +32,13 @@
 	{% include 'app/includes/campaigns/tab_1.html' %}
 	  
 	  <!-- /.tab-pane -->
+	  
 	  <div class="tab-pane" id="tab_2" style="">
+	  
 	  		<form name="campaign" method="POST" action="{% url 'connector-campaign' pk=object.pk %}">
-	  		{% csrf_token %}
+	  		{% include 'app/includes/campaigns/tab_2_form.html' %}
 	  		
-			<div class="row">
-				<div class="col-md-9">
-					<div class="box">
-						<div class="box-body">
-							<div class="form-group">
-								<label>Connection Message</label>
-								{{form.connection_message}}
-							</div>
-							
-						</div>
-					</div>
-					
-					{% include 'app/includes/campaigns/step_formset.html' with campaignsteps=campaignsteps %}
-											
-						
-						
-				</div>
-				{% include 'app/includes/campaigns/msg_var.html' %}
-				
-			</div>
+	  		
 			
 			
 			
