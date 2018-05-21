@@ -145,33 +145,30 @@ class AccountInfo(View):
     def check_data_sync(self, linkedin_user):
 
         """ may be this can be done when contacts is done? """
-
+        # messaging will be called after contacts
         # check message and contact task is already in here or not
-        message_task, message_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.MESSAGING)
+        # message_task, message_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.MESSAGING)
 
         contact_task, contact_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.CONTACT)
 
         # if not created than add the message task name and contact task name
-        if message_task_created or contact_task_created:
-            message_task.name = 'Get messageing of  linkedin account'
-            message_task.save()
+        if contact_task_created:
+            
+            # message_task.name = 'Get messageing of  linkedin account'
+            # message_task.save()
             contact_task.name = 'Get contacts of  linkedin account'
             contact_task.save()
         else:
             # check if sync complete
-            if contact_task.status == BotTaskStatus.DONE and (
-                        message_task.status == BotTaskStatus.DONE):
+            if contact_task.status == BotTaskStatus.DONE:
                 self.update_data_sync(linkedin_user) # if sync complete add a membership
                 return True
         return False
 
     def update_data_sync(self, linkedin_user):
-        membership = Membership.objects.get(user=linkedin_user.user)
-        linkedin_user.latest_login = datetime.datetime.now()
-        linkedin_user.status = True
-        linkedin_user.login_status = True
-        linkedin_user.save()
-        linkedin_user.membership.add(membership)
+        linkedin_user.activate()
+        
+        
 
     def post(self, request):
         print(request.POST)

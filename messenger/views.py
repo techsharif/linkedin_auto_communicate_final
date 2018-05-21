@@ -26,6 +26,7 @@ from connector.models import TaskQueue, SearchResult
 from messenger.forms import UpdateContactNoteForm, CreateChatMesgForm
 
 from .models import Inbox, ContactStatus, Campaign, ChatMessage
+from app.models import BotTask, BotTaskType
 
 
 #from django.http import HttpResponseRedirect
@@ -146,7 +147,8 @@ class ContactChatMessageView(AjaxHttpResponse, CreateView):
         contact = get_object_or_404(Inbox, pk=self.kwargs.get('pk')) 
         chat.send_message(contact)
         # place a taskscheduel record
-        TaskQueue.objects.create(content_object=chat, owner=chat.owner)
+        BotTask.make_bottask(owner=chat.owner, name=chat, extra_id=chat.id,
+                            task_type=BotTaskType.POSTMESSAGE)
         #print('chat:', chat)
         #return super(ContactChatMessageView, self).form_valid(form)
         return self.AjaxResponse()
