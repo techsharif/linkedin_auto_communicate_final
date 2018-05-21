@@ -20,8 +20,7 @@ class Command(BaseCommand):
         self.check_or_add_campaign_task()
 
     def check_or_add_search_task(self):
-        pending_task_list = BotTask.objects.exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR],
-                                                    task_type=BotTaskType.SEARCH)
+        pending_task_list = BotTask.objects.filter(task_type=BotTaskType.SEARCH).exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR])
         for pending_task in pending_task_list:
             search = Search.objects.get(id=pending_task.extra_id)
             queue_type = ContentType.objects.get_for_model(search)
