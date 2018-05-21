@@ -275,6 +275,7 @@ class ChatMessage(MessageField):
                                null=True, on_delete=models.CASCADE)
     is_read = models.BooleanField(default=True)
     is_direct = models.BooleanField(default=True)
+    is_sent = models.BooleanField(default=False)
 
     class Meta():
         abstract = False
