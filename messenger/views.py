@@ -85,7 +85,8 @@ class ContactDeleteView(AjaxHttpResponse, View):
             contact.change_status(ContactStatus.OLD_CONNECT_N)
             return        
             
-        SearchResult.objects.filter(linkedin_id=contact.linkedin_id).delete()
+        SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
+                                    owner=contact.owner).delete()
         contact.delete()
         
     def post(self, request):

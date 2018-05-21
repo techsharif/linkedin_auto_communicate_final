@@ -16,3 +16,7 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False),
         ),
     ]
+
+    def __init__(self, name, app_label):
+        super(Migration, self).__init__(name, app_label)
+        print('Migration name:', self)

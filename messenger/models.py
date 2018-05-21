@@ -154,7 +154,7 @@ class CommonContactField(models.Model):
         abstract = True
     
 class ContactField(CommonContactField):
-    linkedin_id = models.CharField(max_length=50, unique=True)
+    linkedin_id = models.CharField(max_length=50, unique=False)
     name = models.CharField(max_length=100, db_index=True)    
     latest_activity = models.DateTimeField(blank=True, null=True)
     
