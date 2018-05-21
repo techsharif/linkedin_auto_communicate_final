@@ -52,21 +52,21 @@
 					Current connections:
 				</td>
 				<td>
-					{{connection_count}}				</td>
+					{{connection.connection_count}}				</td>
 			</tr>
 			 <tr>
 				<td>
 					New in 24 hours:
 				</td>
 				<td>
-					0				</td>
+					{{connection.h24}}		</td>
 			</tr>
 			 <tr>
 				<td>
 					New in 7 days:
 				</td>
 				<td>
-					0				</td>
+					{{connection.d7}}	</td>
 			</tr>
 			</tbody></table>
 		 </div>
@@ -102,35 +102,36 @@
 				</tr>
 				<tr>
 					<td>Connection requests:</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
+					<td>{{ calculate_communication_stats.h24.connection_request }}</td>
+					<td>{{ calculate_communication_stats.h48.connection_request }}</td>
+					<td>{{ calculate_communication_stats.h72.connection_request }}</td>
+					<td>{{ calculate_communication_stats.w1.connection_request }}</td>
+					<td>{{ calculate_communication_stats.m1.connection_request }}</td>
+
 				</tr>
 				<tr>
 					<td>Connected:</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
+					<td>{{ calculate_communication_stats.h24.connected }}</td>
+					<td>{{ calculate_communication_stats.h48.connected }}</td>
+					<td>{{ calculate_communication_stats.h72.connected }}</td>
+					<td>{{ calculate_communication_stats.w1.connected }}</td>
+					<td>{{ calculate_communication_stats.m1.connected }}</td>
 				</tr>
 				<tr>
 					<td>Replied to connection message:</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
+					<<td>{{ calculate_communication_stats.h24.replied }}</td>
+					<td>{{ calculate_communication_stats.h48.replied }}</td>
+					<td>{{ calculate_communication_stats.h72.replied }}</td>
+					<td>{{ calculate_communication_stats.w1.replied }}</td>
+					<td>{{ calculate_communication_stats.m1.replied }}</td>
 				</tr>
 				<tr>
 					<td>Replied to other messages:</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
+					<td>{{ calculate_communication_stats.h24.replied_others }}</td>
+					<td>{{ calculate_communication_stats.h48.replied_others }}</td>
+					<td>{{ calculate_communication_stats.h72.replied_others }}</td>
+					<td>{{ calculate_communication_stats.w1.replied_others }}</td>
+					<td>{{ calculate_communication_stats.m1.replied_others }}</td>
 				</tr>
 			</tbody></table>
 		</div>
