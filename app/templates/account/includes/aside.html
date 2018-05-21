@@ -53,7 +53,7 @@
                     </a>
                 </li>
                 <li class="False">
-                    <a href="{% url 'account-search' pk=pk %}" title="Search"> <span class="fa fa-search"> &nbsp;&nbsp;  </span> <span>Search</span>
+                    <a href="{% url 'account-search' pk=pk %}" title="Search"> <em class="icon-magnifier"></em> <span>Search</span>
                     </a>
                 </li>
 
@@ -63,13 +63,10 @@
                 </li>
 
                 <li class="False">
-                    <a href="{% url 'account-task' pk=pk %}" title="Autoresponder"> <em class="icon-layers"></em> <span>Tasks Queue</span>
+                    <a href="{% url 'account-task' pk=pk %}" title="Tasks Queue"> <em class="icon-layers"></em> <span>Tasks Queue</span>
                     </a>
                 </li>
-                <li class="nav-heading"><span></span></li>
-                <li class="False text-warning">
-                    <a href="{% url 'logout' %}" title="Sign out"> <em class="icon-logout text-danger"></em> <span class="text-danger">Sign out</span> </a>
-                </li>
+
 
 
             </ul>
