@@ -35,49 +35,43 @@
                 </li>
                 <li class="nav-heading"><span>User Menu</span></li>
                 <li class="False">
-                    <a href="index.php" title="Dashboard"> <em class="icon-speedometer"></em> <span>Dashboard</span>
+                    <a href="{% url 'account-detail' pk=pk %}" title="Dashboard"> <em class="icon-speedometer"></em> <span>Home</span>
+                    </a>
+                </li>
+
+                <li class="False">
+                    <a href="{% url 'account-network' pk=pk %}" title="My Network"> <em class="icon-people"></em>
+                        <span>My Network</span> </a>
+                </li>
+
+                <li class="False">
+                    <a href="{% url 'account-messenger' pk=pk %}" title="Messenger"> <em class="icon-speech"></em>
+                        <span>Messenger</span> </a>
+                </li>
+                <li class="False">
+                    <a href="{% url 'account-campaign' pk=pk %}" title="Connector"> <em class="icon-user-following"></em> <span>Connector</span>
                     </a>
                 </li>
                 <li class="False">
-                    <a href="#campaigns" title="Campaigns" data-toggle="collapse">
-                        <div class="label label-info pull-right">1</div>
-                        <em class="icon-grid"></em> <span> Campaigns</span> </a>
-                    <ul id="campaigns" class="nav sidebar-subnav collapse">
-                        <li class="sidebar-subnav-header">Campaigns</li>
-                        <li class="False" style="text-wrap:normal">
-                            <a href="my-first-campaign.php" title="My First Campaign">
-                                <span>My First Campaign</span> </a>
-                        </li>
-                        <li class="False">
-                            <a href="add-new-campaign.php" title="Add New Campaign"> <span><em
-                                    class="fa fa-plus"></em>&nbsp;Add New Campaign</span> </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="False">
-                    <a href="connection-messages.php" title="Connection Messages"> <em class="icon-speech"></em>
-                        <span>Connection Messages</span> </a>
-                </li>
-                <li class="False">
-                    <a href="autoresponder.php" title="Autoresponder"> <em class="icon-envelope"></em> <span>Autoresponder</span>
+                    <a href="{% url 'account-search' pk=pk %}" title="Search"> <span class="fa fa-search"> &nbsp;&nbsp;  </span> <span>Search</span>
                     </a>
                 </li>
+
                 <li class="False">
-                    <a href="#" title="External Integrations"> <em class="icon-vector"></em>
-                        <span>External Integrations</span>
+                    <a href="{% url 'account-all' pk=pk %}" title="Inbox"> <em class="icon-envelope"></em> <span>Inbox</span>
                     </a>
                 </li>
-                <li class="nav-heading"><span>Global Menu</span></li>
+
                 <li class="False">
-                    <a href="settings.php" title="Settings"> <em class="icon-settings"></em> <span>Settings</span>
+                    <a href="{% url 'account-task' pk=pk %}" title="Autoresponder"> <em class="icon-layers"></em> <span>Tasks Queue</span>
                     </a>
                 </li>
-                <li class="False">
-                    <a href="settings.php" title="Billing"> <em class="fa fa-usd"></em> <span>Billing</span> </a>
+                <li class="nav-heading"><span></span></li>
+                <li class="False text-warning">
+                    <a href="{% url 'logout' %}" title="Sign out"> <em class="icon-logout text-danger"></em> <span class="text-danger">Sign out</span> </a>
                 </li>
-                <li class="False">
-                    <a href="#" title="Sign out"> <em class="icon-logout"></em> <span>Sign out</span> </a>
-                </li>
+
+
             </ul>
         </nav>
     </div>
