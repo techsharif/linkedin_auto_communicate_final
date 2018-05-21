@@ -22,9 +22,9 @@
 		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}			
 		</td>
 	  <td>{{ mc.contacts.all | length }}</td>
-	  <td>0</td>
-	  <td>0</td>
-	  <td>0</td>
+	  <td>{{ mc.count_sends }}</td>
+	  <td>{{ mc.count_replies }}</td>
+	  <td>{{ mc.count_reply_other }}</td>
 	</tr>
 	{%endfor%}
 		

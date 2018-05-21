@@ -20,7 +20,7 @@
 		{%include 'app/includes/campaigns/list_status.html' with mc=mc %}
 	</td>
 	  <td>{{mc.contacts.count}}</td>
-	  <td>0</td>
+	  <td>{{ mc.count_replies }}</td>
 	</tr>
 	{%endfor%}
 		
