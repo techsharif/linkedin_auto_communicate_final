@@ -97,7 +97,7 @@ class AccountDetail(AccountMixins, DetailView):
 class AccountSettings(UpdateView):
     model = LinkedInUser
     fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status']
-    template_name = 'app/accounts_settings.html'
+    template_name = 'account/account_settings.html'
 
     def get_success_url(self):
         return reverse('account-settings', kwargs={'pk': self.object.pk})
@@ -105,6 +105,8 @@ class AccountSettings(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(AccountSettings, self).get_context_data(**kwargs)
         context['connections'] = len(Inbox.objects.filter(owner=self.object, is_connected=True))
+        context['linkedin_user'] = self.object
+        context['pk'] = self.object.pk
         return context
 
 

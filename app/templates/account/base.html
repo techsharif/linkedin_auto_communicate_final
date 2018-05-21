@@ -6,6 +6,7 @@
 
 <head>
     {% include 'account/includes/head.html' %}
+    <title>{% block title %}B2B Prospects {% endblock title %}</title>
     {% block extra_head %}
 
     {% endblock %}
@@ -20,6 +21,9 @@
     <section>
         <div class="content-wrapper">
             <div class="content-heading"> Dashboard</div>
+            {% block content %}
+            
+            {% endblock %}
 
         </div>
     </section>
@@ -47,6 +51,10 @@
 <script src="/static/js/jquery.flot.spline.min.js"></script>
 <script src="/static/js/jquery.classyloader.min.js"></script>
 <script src="/static/js/moment-with-locales.min.js"></script>
+
+{% block pagefooter %}
+
+{% endblock %}
 
 <script>
     var data = [{
