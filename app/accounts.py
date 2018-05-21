@@ -452,7 +452,7 @@ class AccountMessengerActive(View):
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'app/accounts_messenger_update.html'
-    form_class = UpdateCampWelcomeForm
+    form_class = UpdateCampConnectForm
     model = Campaign
 
     ##result_list = ('id', 'name', 'company', 'industry', 'title',

@@ -34,30 +34,8 @@
 	  <!-- /.tab-pane -->
 	  <div class="tab-pane" id="tab_2" style="">
 	  		<form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
-	  		{% csrf_token %}
+	  		{% include 'app/includes/campaigns/tab_2_form.html' with messenger=1 %}
 	  		
-			<div class="row">
-				<div class="col-md-9">
-					<div class="box">
-						<div class="box-body">
-							
-							<div class="form-group">
-								<label>Message</label>
-								{{form.welcome_message}}
-							</div>
-						</div>
-					</div>
-					
-					{% include 'app/includes/campaigns/step_formset.html' with campaignsteps=campaignsteps %}
-											
-						
-						
-				</div>
-				{% include 'app/includes/campaigns/msg_var.html' %}
-				
-			</div>
-			
-			
 			
 			
 			</form>
