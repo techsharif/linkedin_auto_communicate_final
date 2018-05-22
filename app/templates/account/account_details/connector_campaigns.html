@@ -1,11 +1,12 @@
-<div class="box {% if box_solid %} box-solid {% endif %}">
-    <div class="box-header with-border">
-        <h3 class="box-title">Connector campaigns</h3>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <p class="panel-title">Connector campaigns</p>
     </div>
     <!-- /.box-header -->
-    <div class="box-body table-responsive pt-0" id="campaigns_list">
-        <table class="table table-hover">
-            <thead>
+    <div class="panel-body">
+        <table class="table table-bordered">
+
+            <tbody>
             <tr>
                 <th>Title</th>
                 <th>Status</th>
@@ -14,13 +15,11 @@
                 <th>Replied to<br>connection message</th>
                 <th>Replied to<br>other messages</th>
             </tr>
-            </thead>
-            <tbody>
             {% for mc in object_list %}
                 <tr>
                     <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
                     <td>
-                        {% include 'app/includes/campaigns/list_status.html' with mc=mc %}
+                        <span class="label bg-{%if mc.status%}green{%else%}black{%endif%}">{%if mc.status%}Active{%else%}Inactive{%endif%}</span>
                     </td>
                     <td>{{ mc.contacts.all | length }}</td>
                     <td>{{ mc.count_sends }}</td>
@@ -32,5 +31,5 @@
             </tbody>
         </table>
     </div>
-    <!-- /.box-body -->
+
 </div>

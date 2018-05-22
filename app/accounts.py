@@ -76,7 +76,7 @@ contact_statuses = [ContactStatus.CONNECTED_N, ContactStatus.OLD_CONNECT_N]
 
 @method_decorator(decorators, name='dispatch')
 class AccountDetail(AccountMixins, DetailView):
-    template_name = 'app/accounts_detail.html'
+    template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
 
@@ -84,13 +84,18 @@ class AccountDetail(AccountMixins, DetailView):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
         linkedIn_user = ctx['object']
+        ctx['linkedin_user'] = self.object
+        ctx['pk'] = self.object.pk
 
         ctx['connection'] = calculate_connections(self.object.pk, self.status)
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
         ctx['connectors'] = camp_qs.filter(is_bulk=False)
         ctx['account_home'] = True
+        ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
+
+
 
 
         return ctx
