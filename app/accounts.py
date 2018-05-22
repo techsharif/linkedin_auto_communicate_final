@@ -335,12 +335,13 @@ class AccountCampaign(AccounMessenger):
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearch(View):
-    template_name = 'app/accounts_search.html'
+    template_name = 'account/account_search.html'
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
         campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
-        return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns})
+        linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
+        return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user':linkedin_user})
 
     def post(self, request, pk):
         search_form = SearchForm(request.POST)
@@ -596,15 +597,15 @@ class SearchResultView(View):
     def post(self, request):
         print(request.POST)
         if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
-            return render(request, 'app/search_render/search_select.html')
+            return render(request, 'account/search_render/search_select.html')
         print(request.POST['search_head'])
         search_id = int(request.POST['search_head'])
         search = get_object_or_404(Search, pk=search_id, owner__user=request.user)
         if not search.result_status():
-            return render(request, 'app/search_render/search_waiting.html')
+            return render(request, 'account/search_render/search_waiting.html')
 
         if not search.result_count():
-            return render(request, 'app/search_render/no_search_result.html')
+            return render(request, 'account/search_render/no_search_result.html')
 
         item = []
         if 'selected_items[]' in request.POST.keys():
@@ -625,5 +626,5 @@ class SearchResultView(View):
                 self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'app/search_render/search_render.html',
+        return render(request, 'account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
