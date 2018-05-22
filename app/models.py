@@ -58,6 +58,8 @@ class LinkedInUser(models.Model):
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)
     is_weekendwork = models.BooleanField(default=True)
+    # for bot ip
+    bot_ip = models.GenericIPAddressField(blank=True, null=True)
 
     def __str__(self):
         return self.email
