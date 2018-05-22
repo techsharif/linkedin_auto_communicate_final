@@ -25,7 +25,7 @@ from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
-from messenger.models import Inbox, ContactStatus, Campaign
+from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
 from django.core.exceptions import ObjectDoesNotExist
 
 from messenger.utils import calculate_communication_stats, calculate_connections
@@ -327,6 +327,8 @@ class AccounMessenger(AccountMixins, ListView):
         return qs
 
 
+
+
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
@@ -488,12 +490,34 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
     def get_context_data(self, **kwargs):
         data = super(AccountMessengerDetail, self).get_context_data(**kwargs)
         row = data['object']
-        print('row object:', row)
+        print('row object:', row, type(row))
         if self.request.POST:
             data['campaignsteps'] = InlineCampaignStepFormSet(self.request.POST,
                                                               instance=row)
         else:
             data['campaignsteps'] = InlineCampaignStepFormSet(instance=row)
+
+        contact_count = row.contacts.all().count()
+        message_contacts = []
+        reply_contacts = []
+
+        messages = ChatMessage.objects.filter(campaign=row)
+        for message in messages:
+            if message.is_direct:
+                message_contacts += [message.contact.pk]
+                if message.replied_date:
+                    reply_contacts += [message.contact.pk]
+
+        message_contacts = len(set(message_contacts))
+        reply_contacts = len(set(reply_contacts))
+
+        data['contacts_stat'] = {
+            'contacts':contact_count,
+            'message_contacts': message_contacts,
+            'message_percent': int( message_contacts/contact_count * 100 ),
+            'reply_contacts': reply_contacts,
+            'reply_percent': int( reply_contacts/contact_count * 100 )
+        }
 
         return data
 
