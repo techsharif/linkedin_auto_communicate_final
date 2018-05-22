@@ -369,14 +369,18 @@ class AccountInbox(AccountMixins, DataTable, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccountTask(View):
-    template_name = 'app/accounts_task.html'
+    template_name = 'account/account_task_queue.html'
 
     def get(self, request, pk):
         linkedin_user = LinkedInUser.objects.get(pk=pk)
         all_task_queue = TaskQueue.objects.filter(owner=linkedin_user)
         finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
         upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
-        return render(request, self.template_name, {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk':pk})
+
+        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk':pk}
+        context['linkedin_user'] = linkedin_user
+        context['pk'] = pk
+        return render(request, self.template_name, context)
 
 
 @method_decorator(decorators, name='dispatch')
