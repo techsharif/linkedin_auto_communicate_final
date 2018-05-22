@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'app',
     'connector',
     'messenger',
+    'dashboard',
+    
 ]
 
 MIDDLEWARE = [
