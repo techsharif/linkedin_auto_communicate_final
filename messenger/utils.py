@@ -34,18 +34,23 @@ def calculate_communication_stats(linkedin_user_id):
         set_data(connection, 30, 'm1', data)
     return data
 
+
 def calculate_connections(linkedin_user_id, status):
-    data = {'h24':0 , 'd7':0}
+    data = {'h24': 0, 'h48': 0, 'h72': 0, 'd7': 0, 'm1': 0}
     connections = Inbox.objects.filter(owner__id=linkedin_user_id, status__in=status)
     for connection in connections:
         if connection.connected_date:
             time_diff = timezone.now() - connection.connected_date
             if time_diff.days <= 1:
                 data['h24'] += 1
+            if time_diff.days <= 1:
+                data['h48'] += 1
+            if time_diff.days <= 1:
+                data['h72'] += 1
             if time_diff.days <= 7:
                 data['d7'] += 1
+            if time_diff.days <= 30:
+                data['m1'] += 1
 
     data['connection_count'] = len(connections)
     return data
-
-
