@@ -21,7 +21,7 @@ urlpatterns = [
     # url(r'^login/$', auth_views.login, name='login'),
     # url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^admin/', admin.site.urls),
-    url(r'^dashboard', include('dashboard.urls')),
+    url(r'^dashboard/', include('dashboard.urls')),
     url(r'^connector/', include('connector.urls')),
     url(r'^messenger/', include('messenger.urls')),
     url(r'^', include('app.urls')),
