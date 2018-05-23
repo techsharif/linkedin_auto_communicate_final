@@ -25,7 +25,7 @@
                        class="btn btn-info bot-status">Bot Status</a>
 
                 {% else %}
-                    <button type="button" class="btn btn-warning" data-value="{{ item.id }}" id="add_ip_btn">
+                    <button type="button" class="btn btn-warning add_ip_btn" data-value="{{ item.id }}">
                         IP is not available
                     </button>
 
@@ -86,7 +86,7 @@
 
 {% block extra_script %}
     <script>
-        $("#add_ip_btn").click(function (event) {
+        $(".add_ip_btn").click(function (event) {
             event.preventDefault();
             $('#ipModal').modal('show');
             $('#change_ip_item_id')[0].value = this.getAttribute('data-value');
