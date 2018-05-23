@@ -22,7 +22,7 @@
                 <td>{{ item.email }}</td>
                 <td> {% if item.bot_ip is not None %}
                     <a href="{% url 'bot-status' pk=item.id %}" data-log="{% url 'bot-log' pk=item.id %}"
-                       class="p-3 btn  bot-status">Bot Status</a>
+                       class="btn btn-info bot-status">Bot Status</a>
 
                 {% else %}
                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ipModal">
