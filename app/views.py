@@ -22,9 +22,8 @@ from datetime import timedelta
 
 User = get_user_model()
 
-def home(request,pk):
-    linkedin_account = LinkedInUser.objects.get(pk=pk)
-    return render(request, 'account/base.html', {'pk':pk, 'linkedin_user':linkedin_account})
+def home(request):
+    return render(request, 'home/base.html')
 
 
 class HomeView(TemplateView):
