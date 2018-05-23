@@ -12,7 +12,7 @@
             <th width="4%">#</th>
             <th widht="60%">Email</th>
             <th width="18%">Bot status</th>
-            <th width="18%">Account status</th>
+            
         </tr>
         </thead>
         <tbody>
@@ -34,8 +34,7 @@
                 {% endif %}
                     <span class="bot-log-lines p-3"></span>
                 </td>
-                <td><span class="btn btn-{% if item.status %}success{% else %}warning{% endif %}">{% if item.status %}
-                    active{% else %}inactive{% endif %}</span></td>
+                
             </tr>
         {% empty %}
             <tr>
@@ -69,7 +68,20 @@
             </div>
         </div>
     </div>
+	
+	<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_script %}
@@ -91,4 +103,6 @@
         });
     </script>
 {% endblock %}
+
+
 

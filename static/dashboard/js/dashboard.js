@@ -7,7 +7,8 @@ $(function() {
 		
 		$.get(url).done(function(res){
 			console.log('res:', res);
-			that.next().html(res.data);
+			$('#logModal .modal-body').html(res.data)
+			$('#logModal').modal('show');
 		});
 	});
 	var checkBot = function(){
