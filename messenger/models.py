@@ -312,6 +312,8 @@ class ChatMessage(MessageField):
 class Inbox(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='inboxes',
                               on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.inbox_statuses,
                                  default=ContactStatus.OLD_CONNECT_N)
     is_connected = models.BooleanField(default=False)
