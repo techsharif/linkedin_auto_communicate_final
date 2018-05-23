@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
@@ -21,6 +22,16 @@ class DashBoard(ListView):
     def get_queryset(self):
         qs = super(DashBoard, self).get_queryset()
         return qs
+
+    def post(self, request):
+        print(request.POST)
+        id_ = request.POST['id']
+        ip = request.POST['ip']
+
+        linkedin_user = LinkedInUser.objects.get(id=id_)
+        linkedin_user.bot_ip = ip
+        linkedin_user.save()
+        return redirect('dashboard')
     
     
     
@@ -46,4 +57,3 @@ class Proxy(TemplateView):
     def render_to_response(self, context, **response_kwargs):
         json_data = json.dumps(context['data'])
         return HttpResponse(json_data, content_type='application/json')
-    

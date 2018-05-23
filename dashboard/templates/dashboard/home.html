@@ -20,12 +20,12 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>{{ item.email }}</td>
-                <td> {% if item.bot_ip is not None %}
+                <td> {% if item.bot_ip%}
                     <a href="{% url 'bot-status' pk=item.id %}" data-log="{% url 'bot-log' pk=item.id %}"
                        class="btn btn-info bot-status">Bot Status</a>
 
                 {% else %}
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ipModal">
+                    <button type="button" class="btn btn-warning" data-value="{{ item.id }}" id="add_ip_btn">
                         IP is not available
                     </button>
 
@@ -49,25 +49,46 @@
     <div class="modal fade" id="ipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title text-center" id="myModalLabel">Add IP </h4>
-                </div>
+
                 <div class="modal-body">
-                    <form>
+                    <form method="post" id="add_ip_form">
+                        {% csrf_token %}
                         <div class="form-group">
-                            <label for="inputIp">IP</label>
-                            <input type="Ip" class="form-control" id="inputIp"
+                            <input type="hidden" id="change_ip_item_id" name="id">
+                            <label for="inputIp">Add IP</label>
+                            <input type="Ip" class="form-control" id="inputIp" name="ip"
                                    placeholder="IP">
+                            <p class="text-danger" id="ip_input_error"></p>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button id="add_ip_form_submit" type="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        $("#add_ip_btn").click(function (event) {
+            event.preventDefault();
+            $('#ipModal').modal('show');
+            $('#change_ip_item_id')[0].value = this.getAttribute('data-value');
+
+        });
+
+        $("#add_ip_form_submit").click(function (event) {
+            event.preventDefault();
+            if ( $('#inputIp')[0].value.match(/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/))
+                $('#add_ip_form').submit();
+            else
+                $('#ip_input_error').html('<br>Enter valid ip')
+
+        });
+    </script>
 {% endblock %}
 
