@@ -430,7 +430,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignCreate(AccountMessengerCreate):
-    template_name = 'app/accounts_campaign_add.html'
+    template_name = 'account/accounts_campaign_add.html'
     is_bulk = False
 
     form_class = CreateCampaignForm

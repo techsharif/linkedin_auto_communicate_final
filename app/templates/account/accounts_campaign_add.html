@@ -1,45 +1,38 @@
-{% extends 'app/base.html' %}
+{% extends 'account/base.html' %}
 {% load static %}
 
+{% block title %}New Connector Campaign{% endblock title %}
 
-{%block pagecss%}
-    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
-    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
-{%endblock%}
-    
-{% block title %}Home{% endblock title %}
-
-{%block header%}
-   {% include 'app/includes/header.html' with account_menu=1 %}
-{%endblock%}
-
-{%block sidebar%}
-   
-{%endblock%}
+{% block pagetitle %}
+    New Connector Campaign
+{% endblock %}
 
 
-{%block content%}
-<section class="content">
-   
-   	<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-		<form class="box box-primary" method="POST">
-		{% csrf_token %}
-						<div class="box-header with-border">
-			  <h3 class="box-title">New Connector Campaign</h3>
-			</div>
-			
-			{%include 'app/includes/campaigns/add_form.html' with form=form %}
+{% block content %}
+    <section class="content">
 
-			  <div class="box-footer">
-				<input type="submit" name="save" class="btn btn-primary" value="CREATE CONNECTOR CAMPAIGN">
-			  </div>
-			</form>
-		
-		<!-- /.box -->
-	</div>
-</div>
-	</section>
-	
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form class="panel panel-primary" method="POST">
 
-{%endblock%}
+                    <div class="panel-heading">
+                        <h3>New Connector Campaign</h3>
+                    </div>
+
+                    {% include 'account/campaign/add_form.html' with form=form %}
+
+
+                    <div class="panel-footer">
+                        <input type="submit" name="save" class="btn btn-primary btn-block"
+                               value="CREATE CONNECTOR CAMPAIGN">
+                    </div>
+                </form>
+
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
