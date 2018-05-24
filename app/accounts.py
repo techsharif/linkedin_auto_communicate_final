@@ -510,12 +510,21 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         message_contacts = len(set(message_contacts))
         reply_contacts = len(set(reply_contacts))
 
+        # contact_count = 50
+        # message_contacts = 35
+        # reply_contacts = 17
+        message_percent = int(message_contacts / contact_count * 100) if contact_count else 0
+        reply_percent = int(reply_contacts / contact_count * 100) if contact_count else 0
+        message_above_50 = True if message_percent >50 else False
+        reply_above_50 =  True if reply_percent >50 else False
         data['contacts_stat'] = {
             'contacts': contact_count,
             'message_contacts': message_contacts,
-            'message_percent': int(message_contacts / contact_count * 100) if contact_count else 0,
+            'message_percent': message_percent,
             'reply_contacts': reply_contacts,
-            'reply_percent': int(reply_contacts / contact_count * 100) if contact_count else 0
+            'reply_percent': reply_percent,
+            'message_above_50':message_above_50,
+            'reply_above_50':reply_above_50
         }
 
         return data

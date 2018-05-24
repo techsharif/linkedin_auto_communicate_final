@@ -1,25 +1,35 @@
+<style>
+    .progress-circle{
+        margin: 20px auto;
+    }
+</style>
 <div class="tab-pane" id="tab_4">
-	  		<div class="row">
-	<div class="col-sm-4 stats_block">
-		<h1>{{ contacts_stat.contacts }}</h1>
-		<p>Contacts</p>
-	</div>
-	
-	<div class="col-sm-4 stats_block">
-		<div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100"></canvas><input type="text" class="knob" data-displayinput="false" data-readonly="true" value="" data-width="100" data-height="100" data-fgcolor="#00c1fe" readonly="readonly" style="display: none; width: 0px; visibility: hidden;"></div>
-		<div class="nums">
-			<h2>{{ contacts_stat.message_percent }}%</h2>
-			<h3>{{ contacts_stat.message_contacts }}</h3>
-		</div>
-		<p>Messages</p>
-	</div>
-	
-	<div class="col-sm-4 stats_block">
-		<div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100"></canvas><input type="text" class="knob" data-displayinput="false" data-readonly="true" value="" data-width="100" data-height="100" data-fgcolor="#00b257" readonly="readonly" style="display: none; width: 0px; visibility: hidden;"></div>
-		<div class="nums">
-			<h2>{{ contacts_stat.reply_percent }}%</h2>
-			<h3>{{ contacts_stat.reply_contacts }}</h3>
-		</div>
-		<p>Replied</p>
-	</div>
-</div>	  	  </div>
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <h3 class="">Contacts</h3>
+            <h1 style=" font-size: 5em; color:#53777A">{{ contacts_stat.contacts }}</h1>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3 class="">Messages</h3>
+            <div class="progress-circle p{{ contacts_stat.message_percent }} {% if contacts_stat.message_above_50 %} over50 {% endif %}">
+                <span>{{ contacts_stat.message_percent }}%</span>
+                <div class="left-half-clipper">
+                    <div class="first50-bar"></div>
+                    <div class="value-bar"></div>
+                </div>
+            </div>
+            <div class="h4">{{ contacts_stat.message_contacts }}</div>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3 class="">Replied</h3>
+            <div class="progress-circle p{{ contacts_stat.reply_percent }}  {% if contacts_stat.reply_above_50 %} over50 {% endif %}">
+                <span>{{ contacts_stat.reply_percent }}%</span>
+                <div class="left-half-clipper">
+                    <div class="first50-bar"></div>
+                    <div class="value-bar"></div>
+                </div>
+            </div>
+            <div class="h4">{{ contacts_stat.reply_contacts }}</div>
+        </div>
+    </div>
+</div>
