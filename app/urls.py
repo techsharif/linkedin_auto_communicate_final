@@ -62,6 +62,8 @@ urlpatterns = [
         acc_views.AccountNetwork.as_view(), name='account-network'),
     url(r'^account/(?P<pk>[\d]+)/messenger/$',
         acc_views.AccounMessenger.as_view(), name='account-messenger'),
+    url(r'^account/(?P<pk>[\d]+)/messenger-test/$',
+        acc_views.AccounMessengerTest.as_view(), name='account-messenger'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/$',
         acc_views.AccountCampaign.as_view(), name='account-campaign'),
     url(r'^account/(?P<pk>[\d]+)/search/$',

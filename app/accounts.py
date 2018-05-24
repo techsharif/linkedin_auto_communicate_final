@@ -314,12 +314,29 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
-    template_name = 'app/accounts_messenger.html'
+    template_name = 'account/account_messenger.html'
     is_bulk = True
     model = Campaign
 
     def get_queryset(self):
         qs = super(AccounMessenger, self).get_queryset()
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccounMessenger, self).get_context_data(**kwargs)
+        ctx['linkedin_user'] = ctx['account']
+
+        return ctx
+
+@method_decorator(decorators, name='dispatch')
+class AccounMessengerTest(AccountMixins, ListView):
+    template_name = 'app/accounts_messenger.html'
+    is_bulk = True
+    model = Campaign
+
+    def get_queryset(self):
+        qs = super(AccounMessengerTest, self).get_queryset()
         qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
         return qs
 
