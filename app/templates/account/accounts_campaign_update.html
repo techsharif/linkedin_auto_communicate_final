@@ -5,10 +5,10 @@
     <link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
-{% block title %}Messenger Details{% endblock title %}
+{% block title %}Connect Campaign Details{% endblock title %}
 {% block pagetitle %}
-    Messenger Details
-{% endblock %}
+    Connect Campaign Details
+{% endblock %}}
 
 {% block content %}
 
@@ -26,12 +26,12 @@
 
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_2" style="">
-                            <form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
-                                {% include 'account/campaign/tab_2_form.html' with messenger=1 %}
+
+                            <form name="campaign" method="POST" action="{% url 'connector-campaign' pk=object.pk %}">
+                                {% include 'account/campaign/tab_2_form.html' %}
 
 
                             </form>
-
 
                         </div>
                         <!-- /.tab-pane -->
@@ -54,6 +54,5 @@
 
     {% include 'app/includes/campaigns/page_footer.html' %}
 
-    {% include 'app/includes/datatable_pagefooter.html' %}
 
 {% endblock %}
