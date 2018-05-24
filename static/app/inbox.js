@@ -130,7 +130,7 @@ $(document).ready(function() {
         	 });
         	
           },
-          "dom": '<"toolbar col-md-9 mt-sm mb-sm pull-left">frtip'
+          "dom": '<"toolbar col-md-8 mt-sm mb-sm pull-left">frtip'
         
     } );
     
