@@ -330,18 +330,6 @@ class AccounMessenger(AccountMixins, ListView):
         return ctx
 
 @method_decorator(decorators, name='dispatch')
-class AccounMessengerTest(AccountMixins, ListView):
-    template_name = 'app/accounts_messenger.html'
-    is_bulk = True
-    model = Campaign
-
-    def get_queryset(self):
-        qs = super(AccounMessengerTest, self).get_queryset()
-        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
-        return qs
-
-
-@method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
     is_bulk = False
@@ -402,7 +390,7 @@ class AccountTask(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):
-    template_name = 'app/accounts_messenger_add.html'
+    template_name = 'account/accounts_messenger_add.html'
     form_class = CreateCampaignMesgForm
     is_bulk = True
 

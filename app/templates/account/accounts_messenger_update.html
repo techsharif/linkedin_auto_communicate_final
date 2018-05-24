@@ -1,0 +1,64 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+
+{%block pagecss%}
+    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
+    <link href="{% static 'css/camp.css' %}" rel="stylesheet" type="text/css" id="maincss1">
+    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss2">
+{%endblock%}
+    
+{% block title %}Connector Campaign{% endblock title %}
+
+{%block header%}
+   {% include 'app/includes/header.html' with account_menu=1 %}
+{%endblock%}
+
+{%block sidebar%}
+   
+{%endblock%}
+
+
+{%block content%}
+
+<section class="content">
+   
+   	<div class="nav-tabs-custom">
+   	
+   	{% include 'app/includes/campaigns/tab_header.html' %}
+   	
+	
+	<div class="tab-content">
+	{% include 'app/includes/campaigns/tab_1.html' %}
+	  
+	  <!-- /.tab-pane -->
+	  <div class="tab-pane" id="tab_2" style="">
+	  		<form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
+	  		{% include 'app/includes/campaigns/tab_2_form.html' with messenger=1 %}
+	  		
+			
+			
+			</form>
+
+	  	  </div>
+	  <!-- /.tab-pane -->
+	  {% include 'app/includes/campaigns/tab_3.html' %}
+	  
+	  <!-- /.tab-pane -->
+	  {% include 'app/includes/campaigns/tab_4.html' %}
+	  
+	  <!-- /.tab-pane -->
+	</div>
+	<!-- /.tab-content -->
+</div>	
+</section>
+
+{%endblock%}
+
+{%block pagefooter%}
+
+{% include 'app/includes/campaigns/page_footer.html' %}
+
+{% include 'app/includes/datatable_pagefooter.html' %}
+
+{%endblock%}
