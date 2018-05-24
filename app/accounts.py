@@ -470,15 +470,12 @@ class AccountMessengerActive(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
-    template_name = 'app/accounts_messenger_update.html'
+    template_name = 'account/accounts_messenger_update.html'
     form_class = UpdateCampConnectForm
     model = Campaign
 
-    ##result_list = ('id', 'name', 'company', 'industry', 'title',
-    ##               'location', 'latest_activity', 'campaigns__title', 'status')
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
-            # data = serializers.serialize('json', context['object_list'])
             data = [[x.id, x.name, x.company, x.industry,
                      x.title, x.location, x.latest_activity,
                      "", x.status, x.campaigns.first().is_bulk] for x in context['object'].contacts.all()]
