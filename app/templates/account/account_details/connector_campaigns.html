@@ -4,6 +4,7 @@
     </div>
     <!-- /.box-header -->
     <div class="panel-body">
+        {% if object_list %}
         <table class="table table-bordered">
 
             <tbody>
@@ -29,7 +30,11 @@
             {% endfor %}
 
             </tbody>
+
         </table>
+    {% else %}
+        <p>There is no Connector Campaign at this moment</p>
+        {% endif %}
     </div>
 
 </div>

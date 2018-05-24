@@ -3,7 +3,8 @@
         <p class="panel-title">Messenger campaigns</p>
     </div>
     <!-- /.box-header -->
-    <div class="panel-body">
+    <div class="panel-body"
+    {% if object_list %}>
         <table class="table table-bordered">
 
             <tbody>
@@ -26,6 +27,9 @@
 
             </tbody>
         </table>
+    {% else %}
+        <p>There is no Connector Campaign at this moment</p>
+        {% endif %}
     </div>
 
 </div>
