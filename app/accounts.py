@@ -331,7 +331,7 @@ class AccounMessenger(AccountMixins, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
-    template_name = 'app/accounts_campaign.html'
+    template_name = 'account/account_connect.html'
     is_bulk = False
 
 
