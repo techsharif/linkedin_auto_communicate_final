@@ -125,8 +125,14 @@
             $(".export-to-csv").click(function () {
                 var $table = $('#csv_convert_table');
                 var csv = $table.table2CSV({delivery: 'value'});
-                window.location.href = 'data:text/csv;charset=UTF-8,'
+                var downloadLink = document.createElement("a");
+                downloadLink.href = 'data:text/csv;charset=UTF-8,'
                     + encodeURIComponent(csv);
+                downloadLink.download = "my_network.csv";
+
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
             });
         });
 
