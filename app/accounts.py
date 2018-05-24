@@ -67,7 +67,7 @@ class AccountMixins(object):
 
         ctx['inbox_page_statuses'] = ContactStatus.inbox_page_statuses
         ctx['mynetwork_page_statuses'] = ContactStatus.mynetwork_page_statuses
-        
+
         return ctx
 
 
@@ -94,9 +94,6 @@ class AccountDetail(AccountMixins, DetailView):
         ctx['account_home'] = True
         ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
-
-
-
 
         return ctx
 
@@ -141,7 +138,7 @@ class AccountAdd(View):
             except:
                 pass
 
-            linkedin_user = LinkedInUser(user=request.user,email=user_email,password=user_password)
+            linkedin_user = LinkedInUser(user=request.user, email=user_email, password=user_password)
             linkedin_user.save()
             BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                     name='add linkedin account').save()
@@ -159,11 +156,12 @@ class AccountInfo(View):
         # check message and contact task is already in here or not
         # message_task, message_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.MESSAGING)
 
-        contact_task, contact_task_created = BotTask.objects.get_or_create(owner=linkedin_user, task_type=BotTaskType.CONTACT)
+        contact_task, contact_task_created = BotTask.objects.get_or_create(owner=linkedin_user,
+                                                                           task_type=BotTaskType.CONTACT)
 
         # if not created than add the message task name and contact task name
         if contact_task_created:
-            
+
             # message_task.name = 'Get messageing of  linkedin account'
             # message_task.save()
             contact_task.name = 'Get contacts of  linkedin account'
@@ -171,14 +169,12 @@ class AccountInfo(View):
         else:
             # check if sync complete
             if contact_task.status == BotTaskStatus.DONE:
-                self.update_data_sync(linkedin_user) # if sync complete add a membership
+                self.update_data_sync(linkedin_user)  # if sync complete add a membership
                 return True
         return False
 
     def update_data_sync(self, linkedin_user):
         linkedin_user.activate()
-        
-        
 
     def post(self, request):
         print(request.POST)
@@ -198,7 +194,8 @@ class AccountInfo(View):
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
                 return HttpResponse(render_to_string('app/account/pinverify.html', {'object': linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
-                return HttpResponse(render_to_string('app/account/pinverify.html', {'object': linkedin_user, 'error': True}))
+                return HttpResponse(
+                    render_to_string('app/account/pinverify.html', {'object': linkedin_user, 'error': True}))
             elif bot_task.status == BotTaskStatus.DONE:
                 # not done yet
                 if self.check_data_sync(linkedin_user):
@@ -206,13 +203,13 @@ class AccountInfo(View):
                 else:
                     return HttpResponse(render_to_string('app/account/data_sync.html'))
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
-                return  HttpResponse(render_to_string('app/account/pin_checking.html'))
+                return HttpResponse(render_to_string('app/account/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
                 return HttpResponse(render_to_string('app/account/account_add_error.html'))
             else:
                 return HttpResponse(render_to_string('app/account/email_password_config.html'))
 
-        if 'id' in request.POST.keys() and 'pin' in request.POST.keys(): # for pin verification
+        if 'id' in request.POST.keys() and 'pin' in request.POST.keys():  # for pin verification
             id_ = int(request.POST['id'].strip())
             pin = request.POST['pin'].strip()
             linkedin_user = LinkedInUser.objects.get(id=id_)
@@ -263,7 +260,7 @@ class DataTable(object):
     is_connected = False
     model = Inbox
     result_list = ('id', 'name', 'company', 'industry', 'title',
-                   'location', 'latest_activity', 'campaigns__title', 
+                   'location', 'latest_activity', 'campaigns__title',
                    'status', 'campaigns__is_bulk')
 
     def render_to_response(self, context, **response_kwargs):
@@ -327,8 +324,6 @@ class AccounMessenger(AccountMixins, ListView):
         return qs
 
 
-
-
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'app/accounts_campaign.html'
@@ -343,7 +338,8 @@ class AccountSearch(View):
         searches = Search.objects.filter(owner__pk=pk)
         campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
         linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
-        return render(request, self.template_name, {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user':linkedin_user})
+        return render(request, self.template_name,
+                      {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user': linkedin_user})
 
     def post(self, request, pk):
         search_form = SearchForm(request.POST)
@@ -352,7 +348,8 @@ class AccountSearch(View):
             linkedin_user = LinkedInUser.objects.get(pk=pk)
             search.owner = linkedin_user
             search.save()
-            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH, extra_id=search.id).save()
+            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH,
+                    extra_id=search.id).save()
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
 
@@ -380,7 +377,7 @@ class AccountTask(View):
         finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
         upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
 
-        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk':pk}
+        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk': pk}
         context['linkedin_user'] = linkedin_user
         context['pk'] = pk
         return render(request, self.template_name, context)
@@ -512,11 +509,11 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         reply_contacts = len(set(reply_contacts))
 
         data['contacts_stat'] = {
-            'contacts':contact_count,
+            'contacts': contact_count,
             'message_contacts': message_contacts,
-            'message_percent': int( message_contacts/contact_count * 100 ),
+            'message_percent': int(message_contacts / contact_count * 100) if contact_count else 0,
             'reply_contacts': reply_contacts,
-            'reply_percent': int( reply_contacts/contact_count * 100 )
+            'reply_percent': int(reply_contacts / contact_count * 100) if contact_count else 0
         }
 
         return data
@@ -553,8 +550,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             context = dict(error=form.errors)
             json_data = json.dumps(context)
             return HttpResponse(json_data, content_type='application/json')
-            
-        
+
         return super(AccountMessengerDetail, self).form_invalid(form)
 
 
@@ -617,7 +613,7 @@ class SearchResultView(View):
         # is there a better way to do this??
         for row in qs.all():
             row.attach_to_campaign(campaign)
-        
+
     def post(self, request):
         print(request.POST)
         if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
@@ -645,7 +641,7 @@ class SearchResultView(View):
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 # attache to a campagn                
-                search_results.update(status=ContactStatus.IN_QUEUE_N, 
+                search_results.update(status=ContactStatus.IN_QUEUE_N,
                                       connect_campaign=campaign)
                 self._clone_to_contact(search_results, campaign)
 
