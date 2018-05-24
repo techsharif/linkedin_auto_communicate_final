@@ -153,7 +153,7 @@ $(document).ready(function() {
 		header_buttons+= '<a class="btn btn-default mr" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a>';
 	}
 	// plus csv export
-	header_buttons+= '<button class="btn btn-default" data-click="export" data-toggle="tooltip" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
+	header_buttons+= '<button class="btn btn-default export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
 	
 	$("div.toolbar").html(header_buttons);
 	$(".dataTables_filter").addClass("col-md-3 mt-sm  mb-sm");
