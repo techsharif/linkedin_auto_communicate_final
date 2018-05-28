@@ -51,6 +51,7 @@ urlpatterns = [
 
     # these stuff will be for account on linkedIN
     url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+    url(r'^accounts-new/$', acc_views.AccountListNew.as_view(), name='accounts'),
     url(r'^accounts/info/$', acc_views.AccountInfo.as_view(), name='account-info'),
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
