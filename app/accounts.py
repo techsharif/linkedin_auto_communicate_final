@@ -304,6 +304,9 @@ class DataTable(object):
 
         # ctx['inbox_status'] = ContactStatus.inbox_statuses
 
+        ctx['object_list_default'] = ctx['object_list']
+        for cc in ctx['object_list_default']:
+            print(cc.__dict__)
         ctx['object_list'] = []
 
         return ctx

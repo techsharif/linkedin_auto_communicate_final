@@ -4,6 +4,7 @@
 	</thead>
 	<tbody>
 	{% for contact in contacts %}
+
 	 <tr  class="contact">
 	  <td></td>
 	  <td>{{contact.name}}</td>
@@ -16,7 +17,7 @@
 	  <td>{{contact.campaign}}</td>
 	  {%endif%}
 	  <td >{# how to deal with this #}
-	  <span data-contactid="{{contact.id}}" class="btn bg-purple btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}" 
+	  <span data-contactid="{{contact.id}}" class="btn bg-purple btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}"
 	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
 	  In Queue</span>
 	 </td>
