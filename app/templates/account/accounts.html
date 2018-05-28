@@ -97,11 +97,13 @@
 
 
                     <div id="add_account_modal_results">
-                        <div id="progressbar_custom">
-                        {% include 'account/accounts/progress_authentication.html' %}
-                        </div>
+
                     </div>
 
+
+                    <div id="progressbar_custom_first_page">
+                        {% include "account/accounts/progress_authentication.html" %}
+                        </div>
 
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
@@ -126,8 +128,8 @@
                     </div>
                     <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <img id="loading_image" style="display:none" class="pull-left" width="50px"
-                                 src="{% static 'loading.gif' %}" alt="">
+{#                                <img id="loading_image" style="display:none" class="pull-left" width="50px"#}
+{#                                 src="{% static 'loading.gif' %}" alt="">#}
 
                             <a href="#" form="modal-form" class="pull-right btn btn-primary"
                                id="add_account">Add</a>
@@ -187,6 +189,7 @@
                 $('#add_account_modal').modal('show');
                 $('#add_account').show()
                 $('#modal-form').show();
+                $('#progressbar_custom_first_page').show();
                 $('#add_account_modal_results').html('')
             }
 
@@ -203,6 +206,7 @@
                     data: data,
                     success: function (response) {
                         $('#modal-form').hide();
+                        $('#progressbar_custom_first_page').hide();
                         $('#add_account_modal_results').html(response)
 
 
@@ -234,8 +238,7 @@
 
             $('body').on('click', '#add_account', function (e) {
                 e.preventDefault();
-                $('#loading_image').show()
-                $('#add_account').hide()
+
 
                 data = new Object()
                 data.email = $('#email')[0].value
@@ -249,6 +252,9 @@
                     type: "post",
                     data: data,
                     success: function (response) {
+                        $('#add_account').hide()
+                        $('#add_account_modal_extra_results').html('')
+                        load(data)
                         interval = setInterval(function () {
                             load(data)
                         }, 10000);
@@ -259,8 +265,6 @@
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> Account with this email is already exists </p>')
                         else
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> An error occur during add this acount. please reloade this page and try again </p>')
-                        $('#loading_image').hide()
-                        $('#add_account').show()
                     }
 
 
