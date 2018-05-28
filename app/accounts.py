@@ -37,20 +37,10 @@ decorators = (never_cache, login_required,)
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
-
-    def get_queryset(self):
-        qs = super(AccountList, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountListNew(ListView):
-    model = LinkedInUser
     template_name = 'account/accounts.html'
 
     def get_queryset(self):
-        qs = super(AccountListNew, self).get_queryset()
+        qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
 
