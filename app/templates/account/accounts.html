@@ -95,8 +95,11 @@
                         <hr style="display: block; height: 1px;border: 0;border-top: 1px solid #23b7e5;margin: 1em 0;padding: 0; ">
                     </div>
 
-                    <div id="progressbar_custom">
+
+                    <div id="add_account_modal_results">
+                        <div id="progressbar_custom">
                         {% include 'account/accounts/progress_authentication.html' %}
+                        </div>
                     </div>
 
 
@@ -116,7 +119,8 @@
                                     <input class="form-control" id="password" name="password" type="password" value="">
                                 </div>
                             </form>
-                            <div id="add_account_modal_results"></div>
+
+                            <div id="add_account_modal_extra_results"></div>
                         </div>
 
                     </div>
@@ -252,9 +256,9 @@
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText == '400')
-                            $('#add_account_modal_results').html('Account with this email is already exists')
+                            $('#add_account_modal_extra_results').html('<p class="text-danger"> Account with this email is already exists </p>')
                         else
-                            $('#add_account_modal_results').html('An error occur during add this acount. please reloade this page and try again')
+                            $('#add_account_modal_extra_results').html('<p class="text-danger"> An error occur during add this acount. please reloade this page and try again </p>')
                         $('#loading_image').hide()
                         $('#add_account').show()
                     }
@@ -276,7 +280,7 @@
 
             $('body').on('click', '#add_item_modal_close', function (e) {
                 e.preventDefault();
-                $('#add_account').hide()
+{#                $('#add_account').hide()#}
                 window.location.href = ''
             });
 

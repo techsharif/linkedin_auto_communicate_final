@@ -157,6 +157,7 @@ class AccountAdd(View):
         return redirect('accounts')
 
 
+
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountInfo(View):
 
@@ -203,22 +204,22 @@ class AccountInfo(View):
 
             # check different status and pop up
             if bot_task.status == BotTaskStatus.PIN_REQUIRED:
-                return HttpResponse(render_to_string('app/account/pinverify.html', {'object': linkedin_user}))
+                return HttpResponse(render_to_string('account/accounts/pinverify.html', {'object': linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_INVALID:
                 return HttpResponse(
-                    render_to_string('app/account/pinverify.html', {'object': linkedin_user, 'error': True}))
+                    render_to_string('account/accounts/pinverify.html', {'object': linkedin_user, 'error': True}))
             elif bot_task.status == BotTaskStatus.DONE:
                 # not done yet
                 if self.check_data_sync(linkedin_user):
-                    return HttpResponse('<script> window.location.href = "/accounts/"; </script>')
+                    return HttpResponse(render_to_string('account/accounts/activate.html'))
                 else:
-                    return HttpResponse(render_to_string('app/account/data_sync.html'))
+                    return HttpResponse(render_to_string('account/accounts/data_sync.html'))
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
-                return HttpResponse(render_to_string('app/account/pin_checking.html'))
+                return HttpResponse(render_to_string('account/accounts/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
-                return HttpResponse(render_to_string('app/account/account_add_error.html'))
+                return HttpResponse(render_to_string('account/accounts/account_add_error.html'))
             else:
-                return HttpResponse(render_to_string('app/account/email_password_config.html'))
+                return HttpResponse(render_to_string('account/accounts/email_password_config.html'))
 
         if 'id' in request.POST.keys() and 'pin' in request.POST.keys():  # for pin verification
             id_ = int(request.POST['id'].strip())
@@ -228,7 +229,7 @@ class AccountInfo(View):
             bot_task.extra_info = json.dumps({'pin': pin})
             bot_task.status = BotTaskStatus.PIN_CHECKING
             bot_task.save()
-            return HttpResponse(render_to_string('app/account/pin_checking.html'))
+            return HttpResponse(render_to_string('account/accounts/pin_checking.html'))
 
 
 csrf_exempt_decorators = decorators + (csrf_exempt,)
