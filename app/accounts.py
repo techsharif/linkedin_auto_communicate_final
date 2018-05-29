@@ -19,7 +19,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from app.forms import SearchForm
-from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskStatus
+from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskStatus, FreeBotIP
 
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
@@ -141,13 +141,24 @@ class AccountAdd(View):
             except:
                 pass
 
-            linkedin_user = LinkedInUser(user=request.user, email=user_email, password=user_password, bot_ip=bot_ip)
+            linkedin_user = LinkedInUser(user=request.user, email=user_email, password=user_password)
             linkedin_user.save()
+            if not bot_ip:
+                try:
+                    bot_ip = FreeBotIP.objects.filter()[:1].get()
+                    linkedin_user.bot_ip = bot_ip.bot_ip
+                    linkedin_user.save()
+                    bot_ip.delete()
+                except:
+                    pass
+            else:
+                linkedin_user.bot_ip = bot_ip
+                linkedin_user.save()
+
             BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                     name='add linkedin account').save()
 
         return redirect('accounts')
-
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -336,6 +347,7 @@ class AccounMessenger(AccountMixins, ListView):
 
         return ctx
 
+
 @method_decorator(decorators, name='dispatch')
 class AccountCampaign(AccounMessenger):
     template_name = 'account/account_connect.html'
@@ -522,16 +534,16 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         # reply_contacts = 17
         message_percent = int(message_contacts / contact_count * 100) if contact_count else 0
         reply_percent = int(reply_contacts / contact_count * 100) if contact_count else 0
-        message_above_50 = True if message_percent >50 else False
-        reply_above_50 =  True if reply_percent >50 else False
+        message_above_50 = True if message_percent > 50 else False
+        reply_above_50 = True if reply_percent > 50 else False
         data['contacts_stat'] = {
             'contacts': contact_count,
             'message_contacts': message_contacts,
             'message_percent': message_percent,
             'reply_contacts': reply_contacts,
             'reply_percent': reply_percent,
-            'message_above_50':message_above_50,
-            'reply_above_50':reply_above_50
+            'message_above_50': message_above_50,
+            'reply_above_50': reply_above_50
         }
 
         return data

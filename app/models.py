@@ -76,24 +76,24 @@ class LinkedInUser(models.Model):
     def is_now_campaign_active(self):
         hour = timezone.now().hour
         return self.start_from <= hour <= self.start_to
-    
+
     def activate(self):
         membership = None
-        try:                
+        try:
             membership = Membership.objects.get(user=self.user)
-            
+
         except Exception as err:
             print('activate error:', err)
             # TODO, please check and add 'Free' membership if this is the first account
             # otherwise, show error and require add 'membership' by make payment
-            
+
         self.latest_login = timezone.now()
         self.status = True
         self.login_status = True
         self.save()
         if membership:
             self.membership.add(membership)
-            
+
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)
@@ -169,14 +169,19 @@ class BotTask(models.Model):
     def toJSON(self):
         xjson = serializers.serialize('json', [self, ])
         return xjson
-    
+
     @staticmethod
     def make_bottask(**kwargs):
         """
         owner=connect_campaign.owner, task_type=BotTaskType.CHECKCONNECT,
         extra_id=chat_message.id, name=BotTaskType.CHECKCONNECT, )
         """
-        
-        return  BotTask.objects.create(**kwargs)
-         
-    
+
+        return BotTask.objects.create(**kwargs)
+
+
+class FreeBotIP(models.Model):
+    bot_ip = models.GenericIPAddressField()
+
+    def __str__(self):
+        return str(self.bot_ip)
