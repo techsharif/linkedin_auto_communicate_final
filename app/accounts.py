@@ -130,16 +130,18 @@ class AccountAdd(View):
             #
             # # create of get linkedin user
 
+            bot_ip = None
             try:
                 is_user = LinkedInUser.objects.get(email=user_email)
                 if is_user.status == False:
+                    bot_ip = is_user.bot_ip
                     is_user.delete()
                 else:
                     return HttpResponse('400', status=400)
             except:
                 pass
 
-            linkedin_user = LinkedInUser(user=request.user, email=user_email, password=user_password)
+            linkedin_user = LinkedInUser(user=request.user, email=user_email, password=user_password, bot_ip=bot_ip)
             linkedin_user.save()
             BotTask(owner=linkedin_user, task_type=BotTaskType.LOGIN,
                     name='add linkedin account').save()
