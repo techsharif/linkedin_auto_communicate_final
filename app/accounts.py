@@ -631,13 +631,15 @@ def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
+
 @method_decorator(decorators, name='dispatch')
-def remove_account(request, pk):
-    linekedin_user = LinkedInUser.objects.get(id=pk)
-    if linekedin_user.bot_ip:
-        FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-    linekedin_user.delete()
-    return redirect('accounts')
+class RemoveAccount(View):
+    def get(self, request, pk):
+        linekedin_user = LinkedInUser.objects.get(id=pk)
+        if linekedin_user.bot_ip:
+            FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
+        linekedin_user.delete()
+        return redirect('accounts')
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')

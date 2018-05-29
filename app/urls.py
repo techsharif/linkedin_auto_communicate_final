@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
-    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.remove_account, name='remove-account'),
+    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name='remove-account'),
     #url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
 
     url(r'^account/(?P<pk>[\d]+)/network/$',
