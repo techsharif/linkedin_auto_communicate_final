@@ -7,6 +7,17 @@ from . import views
 
 
 urlpatterns = [
+
+
+
+    # NEW URLS
+    url(r'^new-register/$', views.NewRegisterView, name='NewRegisterView'),
+
+
+
+
+    # OLD URLS
+
     # These are for user/page on our own
     url(r'^home/$', views.home),
     url(r'^$', views.HomeView.as_view(), name='home'),

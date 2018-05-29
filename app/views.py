@@ -22,6 +22,65 @@ from datetime import timedelta
 
 User = get_user_model()
 
+# New views
+
+
+def NewRegisterView(request):
+    if request.POST:
+        print("SSSSSSSS")
+    return render(request, 'v2/registration/register.html')
+
+
+class RegisterViewV2(CreateView):
+    form_class = UserRegisterForm
+    template_name = 'v2/registration/register.html'
+    success_url = reverse_lazy('register_done')
+
+    def form_invalid(self, form):
+        # print('invalid:', form.errors)
+        return super(RegisterViewV2, self).form_invalid(form)
+
+    def form_valid(self, form):
+        # return CreateView.form_valid(self, form)
+
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.email
+            user.is_active = False
+            user.save()
+            # create profile
+            # may be not use this model for now
+            # Profile(user=user).save()
+
+            # send validate email
+
+            # collect site name
+            site_name = get_current_site(self.request)
+            # todo: change hard code subject
+            subject = 'Activate account'
+
+            # generate message
+            # print(urlsafe_base64_encode(force_bytes(user.pk)))
+            message = render_to_string('app/account_activation_email.html', {
+                'user': user,
+                'domain': site_name.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode("utf-8"),
+                'token': account_activation_token.make_token(user),
+            })
+
+            # send activation link to the user
+            user.email_user(subject, message)
+
+            return super(RegisterViewV2, self).form_valid(form)
+        else:
+
+            return super(RegisterViewV2, self).form_invalid(form)
+
+
+
+
+# OLD Views
+
 def home(request):
     return render(request, 'home/base.html')
 
@@ -35,6 +94,9 @@ class HomeView(TemplateView):
             ctx[x.name] = x
         # print('ctx:', ctx)
         return ctx
+
+
+
 
 
 class RegisterView(CreateView):

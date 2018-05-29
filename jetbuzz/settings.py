@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sq_jetbuzz_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'lunasushi',
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         'OPTIONS': {
