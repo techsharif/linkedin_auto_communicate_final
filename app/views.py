@@ -1,6 +1,6 @@
 from smtplib import SMTPException
 
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
@@ -26,9 +26,59 @@ User = get_user_model()
 
 
 def NewRegisterView(request):
+    msg=''
     if request.POST:
-        print("SSSSSSSS")
-    return render(request, 'v2/registration/register.html')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        print(email)
+        user = User.objects.filter(email=email).first()
+        if user is not None:
+            msg="email_exists"
+        else:
+            user = User()
+            user.username = email
+            user.is_active = False
+            user.email = email
+            user.password = password
+            user.set_password(password)
+            user.save()
+
+            site_name = get_current_site(request)
+            # todo: change hard code subject
+            subject = 'Activate account'
+
+            # generate message
+            # print(urlsafe_base64_encode(force_bytes(user.pk)))
+            message = render_to_string('app/account_activation_email.html', {
+                'user': user,
+                'domain': site_name.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode("utf-8"),
+                'token': account_activation_token.make_token(user),
+            })
+            msg="register_success"
+            # send activation link to the user
+            user.email_user(subject, message)
+
+        print( "msg = ")
+        print (msg)
+    return render(request, 'v2/registration/register.html',{'msg':msg})
+
+
+def NewLoginView(request):
+    if request.POST:
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        print(email)
+        print(password)
+        # USER = authenticate(email=email, password=password)
+        # print(USER)
+        # if USER is not None:
+        #     # if USER.is_active:
+        #     login(request, USER)
+        #     redirect_url='/'
+        #     return HttpResponseRedirect(redirect_url)
+
+    return render(request, 'v2/registration/login.html')
 
 
 class RegisterViewV2(CreateView):
@@ -83,6 +133,7 @@ class RegisterViewV2(CreateView):
 
 def home(request):
     return render(request, 'home/base.html')
+
 
 
 class HomeView(TemplateView):

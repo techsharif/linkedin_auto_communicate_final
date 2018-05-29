@@ -13,6 +13,7 @@ urlpatterns = [
     # NEW URLS
     url(r'^new-register/$', views.NewRegisterView, name='NewRegisterView'),
 
+    url(r'^new-login/$', views.NewLoginView, name='NewLoginView'),
 
 
 

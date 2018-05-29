@@ -1,4 +1,21 @@
 
+function showMessage(msg) {
+
+    if(msg=="email_exists"){
+        $('.validemail').addClass('text-danger');
+        $('#email').addClass('border-danger');
+        $("#email_error").text("The email address is in-use. Please choose another one.")
+        return false
+
+    }
+
+    if( msg == 'register_success' ){
+        $('#myModal').modal('show');
+    }
+    return false
+
+}
+
 
 function validateReg(){
 
@@ -84,7 +101,7 @@ function validateReg(){
         $("#confirm-password").val('');
         return false
     }
-    return false
+    return true
 
 
 
@@ -98,3 +115,11 @@ function emailValidate(email){
         else return false;
     else return false;
 }
+
+
+
+$(document).ready(function(){
+
+    showMessage(msg);
+
+});
