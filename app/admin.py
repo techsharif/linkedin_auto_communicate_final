@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Membership, MembershipType,
-                     LinkedInUser, BotTask,)
+                     LinkedInUser, BotTask, FreeBotIP)
     
 class MembershipAdmin(admin.ModelAdmin):
     pass
@@ -17,8 +17,14 @@ class BotTaskAdmin(admin.ModelAdmin):
     list_filter = ('owner', 'status')
     list_display = ('name', 'task_type', 'extra_info', 
                     'completed_date') + list_filter
+
+class FreeBotIPAdmin(admin.ModelAdmin):
+    list_filter = ('bot_ip', )
+    list_display = list_filter
     
+  
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType, MembershipTypeAdmin)
 admin.site.register(LinkedInUser, LinkedInUserAdmin)    
 admin.site.register(BotTask, BotTaskAdmin)
+admin.site.register(FreeBotIP, FreeBotIPAdmin)
