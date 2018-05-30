@@ -34,6 +34,22 @@ User = get_user_model()
 decorators = (never_cache, login_required,)
 
 
+# New views
+
+@method_decorator(decorators, name='dispatch')
+class AccountList_NEW(ListView):
+    model = LinkedInUser
+    template_name = 'v2/account/accounts.html'
+
+    def get_queryset(self):
+        qs = super(AccountList_NEW, self).get_queryset()
+        qs = qs.filter(user=self.request.user)
+        return qs
+
+
+
+# Old views
+
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
@@ -43,6 +59,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
+
 
 
 class AccountMixins(object):

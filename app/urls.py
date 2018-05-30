@@ -11,9 +11,13 @@ urlpatterns = [
 
 
     # NEW URLS
-    url(r'^new-register/$', views.NewRegisterView, name='NewRegisterView'),
+    url(r'^new-register/$', views.RegisterView_NEW, name='RegisterView'),
 
-    url(r'^new-login/$', views.NewLoginView, name='NewLoginView'),
+    url(r'^new-login/$', views.LoginView_NEW, name='LoginView'),
+
+    url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
+
+    url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
 
 
 

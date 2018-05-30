@@ -1,7 +1,10 @@
 
-{% extends 'v2/app/base.html' %}
+{% extends 'v2/app/base_headless.html' %}
 
 {% load static %}
+
+{% block title %}Register{% endblock %}
+
 {% block content %}
 
 	<div class="container-fluid">
@@ -48,7 +51,7 @@
 							</button>
 							<hr>
 							<p class="text-center">
-								Already Have An Account? <a href="/login/">Sign In here</a>
+								Already Have An Account? <a href="/new-login/">Sign In here</a>
 							</p>
 						</form>
 
@@ -75,7 +78,7 @@
                                          </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary"><a href="/login/" style="color:white">Login</a></button>
+                                        <button type="button" class="btn btn-primary"><a href="/new-login/" style="color:white">Login</a></button>
                                     </div>
                                 </div>
                             </div>
