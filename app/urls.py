@@ -7,6 +7,22 @@ from . import views
 
 
 urlpatterns = [
+
+
+
+    # NEW URLS
+    url(r'^new-register/$', views.RegisterView_NEW, name='RegisterView'),
+
+    url(r'^new-login/$', views.LoginView_NEW, name='LoginView'),
+
+    url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
+
+    url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+
+
+
+    # OLD URLS
+
     # These are for user/page on our own
     url(r'^home/$', views.home),
     url(r'^newlanding/$', views.new_landing),
