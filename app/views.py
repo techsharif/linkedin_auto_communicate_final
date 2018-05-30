@@ -22,6 +22,7 @@ from datetime import timedelta
 
 User = get_user_model()
 
+
 # New views
 
 
@@ -111,10 +112,16 @@ class HomeView_NEW(TemplateView):
 
 # OLD Views
 
+
 def home(request):
     return render(request, 'home/base.html')
 
+def new_landing(request):
+    return render(request, 'new/landing/base.html')
 
+
+def new_auth(request):
+    return render(request, 'new/auth/base.html')
 
 class HomeView(TemplateView):
     template_name = 'app/home.html'
@@ -219,5 +226,3 @@ class ActivateAccount(View):
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
-
-

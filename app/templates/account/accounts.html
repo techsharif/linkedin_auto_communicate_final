@@ -26,6 +26,8 @@
 
 {% block content %}
 
+    <div id="modal_open_flag" style="display: none"></div>
+
     <div class="col-md-4 col-md-offset-4 mt-xl">
         <div class="box box-default box-solid">
             <div class="box-header with-border">
@@ -80,7 +82,7 @@
 {% block pagefooter %}
 
     <div id="add_account_modal" tabindex="-1" role="dialog" aria-labelledby="Add account" aria-hidden="true"
-         class="modal fade" style="display: none;">
+         class="modal fade" style="display: none;" data-keyboard="false" data-backdrop="static">
 
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -103,7 +105,7 @@
 
                     <div id="progressbar_custom_first_page">
                         {% include "account/accounts/progress_authentication.html" %}
-                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
@@ -127,10 +129,13 @@
 
                     </div>
                     <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
+                        <div class="col-md-8 col-md-offset-2">
+                            {#                                <img id="loading_image" style="display:none" class="pull-left" width="50px"#}
+                            {#                                 src="{% static 'loading.gif' %}" alt="">#}
+
                             <a href="#" form="modal-form" class="pull-right btn btn-primary"
                                id="add_account">Add</a>
-                            </div>
+                        </div>
                     </div>
                     <br>
                     <br>
@@ -183,6 +188,7 @@
                     clearInterval(interval);
                 }
                 $('#loading_image').hide()
+                $('#modal_open_flag').html('1')
                 $('#add_account_modal').modal('show');
                 $('#add_account').show()
                 $('#modal-form').show();
@@ -281,9 +287,10 @@
 
             $('body').on('click', '#add_item_modal_close', function (e) {
                 e.preventDefault();
-{#                $('#add_account').hide()#}
+                {#                $('#add_account').hide()#}
                 window.location.href = ''
             });
+
 
 
         })

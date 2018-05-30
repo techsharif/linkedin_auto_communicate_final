@@ -4,3 +4,4 @@ selenium==3.12.0
 django-widget-tweaks
 mysqlclient
 pyvirtualdisplay==0.2.1
+requests
