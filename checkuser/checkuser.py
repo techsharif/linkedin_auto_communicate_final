@@ -1,7 +1,4 @@
-"""
-    require: python 2.7, selenium module, webdriver
-
-"""
+"""require: python 2.7, selenium module, webdriver"""
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -9,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.firefox.options import Options  
+from selenium.webdriver.firefox.options import Options
 
 from getpass import getpass
 import sys
@@ -57,16 +54,16 @@ def pinverify():
         return True
     except Exception as e:
         return False
-    
+
 
 if __name__ == '__main__':
-    
+
     user_email = raw_input("Enter email address:")
     user_password = getpass("Enter password:")
 
     options = Options()
     options.add_argument('--headless')
-    
+
     driver = webdriver.Firefox(options=options)
     driver.get("https://www.linkedin.com")
     wait = WebDriverWait(driver, 5)
@@ -107,7 +104,7 @@ if __name__ == '__main__':
     # if limited_user():
     #     print("That user has been restricted.")
     # else:
-    
+
     #     print("Thank user is not restricted.")
 
     # pin code verification
@@ -115,7 +112,7 @@ if __name__ == '__main__':
         print("Success to verify!")
     else:
         print("sucessfull login without pin code verification!")
-    
+
     # search connection
     search_input = driver.find_element_by_xpath("/html/body/nav/div/form/div/div/div/artdeco-typeahead-deprecated/artdeco-typeahead-deprecated-input/input")
     keyword = raw_input("Input keyword:")

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from django.conf.global_settings import LOGIN_URL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -50,7 +49,7 @@ INSTALLED_APPS = [
     'connector',
     'messenger',
     'dashboard',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -91,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sq_jetbuzz_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'lunasushi',
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         'OPTIONS': {
