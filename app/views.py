@@ -19,6 +19,7 @@ from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
 from datetime import timedelta
+import datetime
 
 User = get_user_model()
 
@@ -134,9 +135,6 @@ class HomeView(TemplateView):
         return ctx
 
 
-
-
-
 class RegisterView(CreateView):
     form_class = UserRegisterForm
     template_name = 'registration/register.html'
@@ -213,8 +211,17 @@ class ActivateAccount(View):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
+            # send welcome email to user
+            # site_name = get_current_site(self.request)
+            # todo: change hard code subject
+            subject = 'Getting started with JetBuzz'
+            message = render_to_string('app/account_activated_email.html', {
+                'current_date': datetime.datetime.now().strftime('%Y-%m-%d')
+            })
+            # send activation link to the user
+            user.email_user(subject, message)
             login(request, user)
-            ## add membership only
+            # add membership only
             # profile = user.profile
             # if profile.day_to_live <= 0:
             membership_type, created = MembershipType.objects.get_or_create(name='Free')
