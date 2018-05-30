@@ -1,0 +1,52 @@
+{% load static %}
+<nav id="sidebar" class="px-0 bg-dark bg-gradient sidebar">
+    <ul class="nav nav-pills flex-column">
+        <li class="logo-nav-item">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'assets/img/logo-white.png' %}" width="145" height="32.3" alt="QuillPro">
+            </a>
+
+        </li>
+        <li>
+            <h6 class="nav-header">General</h6>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/new-home/">
+                    <i class="batch-icon batch-icon-home"></i>
+                    Home <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/new-accounts/">
+                    <i class="batch-icon batch-icon-user-alt-3"></i>
+                    Accounts <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="batch-icon batch-icon-out"></i>
+                    logout <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+        {%else%}
+            <li class="nav-item">
+                <a class="nav-link" href="/new-login/">
+                    <i class="batch-icon batch-icon-in"></i>
+                    Sign In <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/new-register/">
+                    <i class="batch-icon batch-icon-user-alt-add"></i>
+                    Sign Up <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+        {%endif%}
+
+    </ul>
+
+
+</nav>
