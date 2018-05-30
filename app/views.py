@@ -22,8 +22,17 @@ from datetime import timedelta
 
 User = get_user_model()
 
+
 def home(request):
     return render(request, 'home/base.html')
+
+
+def new_landing(request):
+    return render(request, 'new/landing/base.html')
+
+
+def new_auth(request):
+    return render(request, 'new/auth/base.html')
 
 
 class HomeView(TemplateView):
@@ -126,5 +135,3 @@ class ActivateAccount(View):
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
-
-
