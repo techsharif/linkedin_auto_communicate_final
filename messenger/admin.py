@@ -13,7 +13,9 @@ class CampaignStepAdmin(admin.ModelAdmin):
     pass
 
 class ChatMessageAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('owner', 'contact', 'type', 'campaign')
+    list_display =  ('id',) + list_filter 
+    
 
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(CampaignStep, CampaignStepAdmin)
