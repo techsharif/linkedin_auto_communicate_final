@@ -700,3 +700,18 @@ class SearchResultView(View):
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
+
+@method_decorator(decorators, name='dispatch')
+class AccountTask_NEW(View):
+    template_name = 'v2/account/account_task_queue.html'
+
+    def get(self, request, pk):
+        linkedin_user = LinkedInUser.objects.get(user_id=pk)
+        all_task_queue = TaskQueue.objects.filter(owner=linkedin_user)
+        finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
+        upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
+
+        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk': pk}
+        context['linkedin_user'] = linkedin_user
+        context['pk'] = pk
+        return render(request, self.template_name, context)
