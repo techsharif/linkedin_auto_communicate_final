@@ -148,6 +148,9 @@ EMAIL_HOST_PASSWORD = 'Snow1007!'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+# maximum campaign message per account
+MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
+
 try:
     from .local_settings import *
 except ImportError:

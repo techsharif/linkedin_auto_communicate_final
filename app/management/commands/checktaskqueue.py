@@ -1,11 +1,13 @@
 import json
 
+import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from app.models import BotTask, BotTaskStatus, BotTaskType
 from connector.models import TaskQueue, Search
+from jetbuzz.settings import MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT
 from messenger.models import Campaign, ChatMessage
 
 
@@ -20,7 +22,8 @@ class Command(BaseCommand):
         self.check_or_add_campaign_task()
 
     def check_or_add_search_task(self):
-        pending_task_list = BotTask.objects.filter(task_type=BotTaskType.SEARCH).exclude(status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR])
+        pending_task_list = BotTask.objects.filter(task_type=BotTaskType.SEARCH).exclude(
+            status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR])
         for pending_task in pending_task_list:
             search = Search.objects.get(id=pending_task.extra_id)
             queue_type = ContentType.objects.get_for_model(search)
@@ -45,6 +48,14 @@ class Command(BaseCommand):
                     TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
 
                 for contact in contacts:
+                    if connect_campaign.owner.last_message_send_date == datetime.date.today() and connect_campaign.owner.message_count >= MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT:
+                        break
+
+                    if connect_campaign.owner.last_message_send_date != datetime.date.today():
+                        connect_campaign.owner.last_message_send_date = datetime.date.today()
+                        connect_campaign.owner.message_count = 0
+                        connect_campaign.owner.save()
+
                     try:
                         ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
                                                 campaign=connect_campaign)
@@ -59,3 +70,5 @@ class Command(BaseCommand):
                                                    text=message, time=timezone.now())
                         BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
                                 name=connect_campaign)
+                        connect_campaign.owner.message_count += 1
+                        connect_campaign.owner.save()
