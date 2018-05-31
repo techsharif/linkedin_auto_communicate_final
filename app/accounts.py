@@ -285,7 +285,7 @@ class AjaxDatatableResponse(object):
 
 def Datedefault(o):
     if type(o) is datetime.date or type(o) is datetime.datetime:
-        return o.strftime("%d/%m/%Y @ %H:%M")
+        return o.strftime("%m/%d/%Y @ %H:%M")
 
 
 class DataTable(object):
