@@ -48,19 +48,27 @@ class Command(BaseCommand):
                     TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
 
                 for contact in contacts:
-                    if connect_campaign.owner.last_message_send_date == datetime.date.today() and connect_campaign.owner.message_count >= MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT:
-                        break
-
-                    if connect_campaign.owner.last_message_send_date != datetime.date.today():
-                        connect_campaign.owner.last_message_send_date = datetime.date.today()
-                        connect_campaign.owner.message_count = 0
-                        connect_campaign.owner.save()
 
                     try:
-                        ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
-                                                campaign=connect_campaign)
+                        get_chat_message = ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
+                                                                   campaign=connect_campaign)
+                        if get_chat_message.is_sent and not (
+                                get_chat_message.replied_date or get_chat_message.replied_other_date):
+                            check_task_type = BotTaskType.CHECKCONNECT if task_type == BotTaskType.POSTCONNECT else BotTaskType.CHECKMESSAGE
+                            BotTask.objects.get_or_create(owner=connect_campaign.owner, task_type=check_task_type,
+                                                          extra_id=get_chat_message.id,
+                                                          name=connect_campaign)
                         continue
                     except:
+                        if connect_campaign.owner.last_message_send_date == datetime.date.today() and \
+                                connect_campaign.owner.message_count >= MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT:
+                            continue
+
+                        if connect_campaign.owner.last_message_send_date != datetime.date.today():
+                            connect_campaign.owner.last_message_send_date = datetime.date.today()
+                            connect_campaign.owner.message_count = 0
+                            connect_campaign.owner.save()
+
                         message = connect_campaign.connection_message.format(Name=contact.name,
                                                                              FirstName=contact.first_name(),
                                                                              Company=contact.company,
