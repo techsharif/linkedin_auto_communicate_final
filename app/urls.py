@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
 
     url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+    url(r'^layout/styles/landing/$', views.new_landing),
+    url(r'^layout/styles/auth/$', views.new_auth),
 
 
 
@@ -25,10 +27,7 @@ urlpatterns = [
 
     # These are for user/page on our own
     url(r'^home/$', views.home),
-    url(r'^newlanding/$', views.new_landing),
-    url(r'^newauth/$', views.new_auth),
     url(r'^$', views.HomeView.as_view(), name='home'),
-
     # url(r'^login/$', views.login, name='login'),
     # url(r'^logout/$', views.logout, name='logout'),
     # confirm email
