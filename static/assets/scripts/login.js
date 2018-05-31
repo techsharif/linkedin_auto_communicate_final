@@ -1,5 +1,24 @@
 
 
+function showMessage(msg) {
+
+    if(msg=="invalid_user"){
+        $("#email").val('');
+        $("#password").val('');
+        $('.validemail').addClass('text-danger');
+        $('#email').addClass('border-danger');
+        $('#label_pass').addClass('text-danger');
+        $('#password').addClass('border-danger');
+        $("#password_error").text("Please enter a correct email and password.")
+        return false
+
+
+    }
+
+    return false
+
+}
+
 function validateLogin(){
 
     $('.validemail').removeClass('text-danger');
@@ -7,8 +26,8 @@ function validateLogin(){
     $("#email_error").text("");
 
 
-    $('#label_pass').removeClass('');
-    $('#password').removeClass('');
+    $('#label_pass').removeClass('text-danger');
+    $('#password').removeClass('border-danger');
     $("#password_error").text("");
 
 
@@ -46,12 +65,7 @@ function validateLogin(){
 
     }
 
-
-
     return true
-
-
-
 
 }
 
@@ -63,3 +77,9 @@ function emailValidate(email){
     else return false;
 }
 
+
+$(document).ready(function(){
+
+    showMessage(msg);
+
+});

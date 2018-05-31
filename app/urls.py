@@ -11,25 +11,41 @@ urlpatterns = [
 
 
     # NEW URLS
-    url(r'^new-register/$', views.NewRegisterView, name='NewRegisterView'),
+        url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
 
-    url(r'^new-login/$', views.NewLoginView, name='NewLoginView'),
+        url(r'^login/$', views.LoginView_NEW, name='LoginView'),
+
+        url(r'^$', views.HomeView_NEW.as_view(), name='home'),
+
+        url(r'^accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+
+        url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
+
+        #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch_NEW.as_view(), name='account-search'),
+
+    # Changes Old URLS
+    #     url(r'^old/$', views.HomeView.as_view(), name='home'),
+    #
+    #     url(r'^old-login/$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    #
+    #     url(r'^old-register/$', views.RegisterView.as_view(), name='register'),
+    #
+    #     url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+    #
+        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
 
 
 
-    # OLD URLS
 
     # These are for user/page on our own
     url(r'^home/$', views.home),
-    url(r'^$', views.HomeView.as_view(), name='home'),
+
     #url(r'^login/$', views.login, name='login'),
     #url(r'^logout/$', views.logout, name='logout'),    
     # confirm email
     # change password
     # forgot passsword
-    url(r'^login/$',
-        auth_views.LoginView.as_view(template_name='registration/login.html'),
-        name='login'),
+
     url(r'^logout/$', 
         auth_views.LogoutView.as_view(
             template_name='registration/logged_out.html',
@@ -52,7 +68,7 @@ urlpatterns = [
             template_name='registration/page-password_reset_done.html'),
         name='password_reset_done'),
     
-    url(r'^register/$', views.RegisterView.as_view(), name='register'),
+
     url(r'^registered/$', views.TemplateView.as_view(
         template_name='registration/register_done.html'), 
         name='register_done'),
@@ -62,12 +78,12 @@ urlpatterns = [
         views.ActivateAccount.as_view(), name='activate'),
 
     # these stuff will be for account on linkedIN
-    url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+
     url(r'^accounts/info/$', acc_views.AccountInfo.as_view(), name='account-info'),
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
-    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.remove_account, name='remove-account'),
+    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name='remove-account'),
     #url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
 
     url(r'^account/(?P<pk>[\d]+)/network/$',
@@ -76,8 +92,7 @@ urlpatterns = [
         acc_views.AccounMessenger.as_view(), name='account-messenger'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/$',
         acc_views.AccountCampaign.as_view(), name='account-campaign'),
-    url(r'^account/(?P<pk>[\d]+)/search/$',
-        acc_views.AccountSearch.as_view(), name='account-search'),
+
     url(r'^account/(?P<pk>[\d]+)/search/delete/(?P<search_id>[\d]+)/$',
         acc_views.AccountSearchDelete.as_view(), name='account-search-delete'),
     url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), 

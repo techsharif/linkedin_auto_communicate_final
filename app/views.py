@@ -24,8 +24,12 @@ User = get_user_model()
 
 # New views
 
+def AccountSearch_NEW(request):
+    return render(request, 'v2/account/account_search.html')
 
-def NewRegisterView(request):
+
+
+def RegisterView_NEW(request):
     msg=''
     if request.POST:
         email = request.POST.get('email')
@@ -64,67 +68,46 @@ def NewRegisterView(request):
     return render(request, 'v2/registration/register.html',{'msg':msg})
 
 
-def NewLoginView(request):
+def LoginView_NEW(request):
+    msg=''
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
         print(email)
         print(password)
-        # USER = authenticate(email=email, password=password)
-        # print(USER)
-        # if USER is not None:
-        #     # if USER.is_active:
-        #     login(request, USER)
-        #     redirect_url='/'
-        #     return HttpResponseRedirect(redirect_url)
+        USER = authenticate(username=email, password=password)
+        print(USER)
+        if USER is not None:
 
-    return render(request, 'v2/registration/login.html')
-
-
-class RegisterViewV2(CreateView):
-    form_class = UserRegisterForm
-    template_name = 'v2/registration/register.html'
-    success_url = reverse_lazy('register_done')
-
-    def form_invalid(self, form):
-        # print('invalid:', form.errors)
-        return super(RegisterViewV2, self).form_invalid(form)
-
-    def form_valid(self, form):
-        # return CreateView.form_valid(self, form)
-
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.email
-            user.is_active = False
-            user.save()
-            # create profile
-            # may be not use this model for now
-            # Profile(user=user).save()
-
-            # send validate email
-
-            # collect site name
-            site_name = get_current_site(self.request)
-            # todo: change hard code subject
-            subject = 'Activate account'
-
-            # generate message
-            # print(urlsafe_base64_encode(force_bytes(user.pk)))
-            message = render_to_string('app/account_activation_email.html', {
-                'user': user,
-                'domain': site_name.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode("utf-8"),
-                'token': account_activation_token.make_token(user),
-            })
-
-            # send activation link to the user
-            user.email_user(subject, message)
-
-            return super(RegisterViewV2, self).form_valid(form)
+            USER.is_active = True
+            USER.save()
+            login(request, USER)
+            ## add membership only
+            # profile = user.profile
+            # if profile.day_to_live <= 0:
+            membership_type, created = MembershipType.objects.get_or_create(name='Free')
+            membership_add_subscription(USER, membership_type, True)
+            redirect_url='/accounts'
+            return HttpResponseRedirect(redirect_url)
         else:
+            msg="invalid_user"
 
-            return super(RegisterViewV2, self).form_invalid(form)
+    return render(request, 'v2/registration/login.html',{'msg' : msg})
+
+
+
+
+
+
+class HomeView_NEW(TemplateView):
+    template_name = 'v2/app/home.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(HomeView_NEW, self).get_context_data(**kwargs)
+        for x in MembershipType.objects.all():
+            ctx[x.name] = x
+        # print('ctx:', ctx)
+        return ctx
 
 
 
@@ -138,7 +121,7 @@ def home(request):
 
 class HomeView(TemplateView):
     template_name = 'app/home.html'
-
+    print("template_name = " + template_name)
     def get_context_data(self, **kwargs):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         for x in MembershipType.objects.all():
