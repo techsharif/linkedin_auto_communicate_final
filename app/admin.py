@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Membership, MembershipType,
-                     LinkedInUser, BotTask, FreeBotIP)
+                     LinkedInUser, BotTask, FreeBotIP, AdminEmail)
 
 class MembershipAdmin(admin.ModelAdmin):
     pass
@@ -27,3 +27,4 @@ admin.site.register(MembershipType, MembershipTypeAdmin)
 admin.site.register(LinkedInUser, LinkedInUserAdmin)
 admin.site.register(BotTask, BotTaskAdmin)
 admin.site.register(FreeBotIP, FreeBotIPAdmin)
+admin.site.register(AdminEmail)

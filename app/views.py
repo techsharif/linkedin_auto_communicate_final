@@ -13,7 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-
+from .models import AdminEmail
 from app.forms import UserRegisterForm
 from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
@@ -219,7 +219,11 @@ class ActivateAccount(View):
                 'current_date': datetime.datetime.now().strftime('%Y-%m-%d')
             })
             # send activation link to the user
-            user.email_user(subject, message)
+            bccs = AdminEmail.objects.all()
+            send_bcc = []
+            for bcc in bccs:
+                send_bcc.append(bcc.email)
+            user.email_user(subject, message, None, send_bcc)
             login(request, user)
             # add membership only
             # profile = user.profile

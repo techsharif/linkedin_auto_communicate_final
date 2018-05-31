@@ -189,3 +189,10 @@ class FreeBotIP(models.Model):
 
     def __str__(self):
         return str(self.bot_ip)
+
+
+class AdminEmail(models.Model):
+    email = models.EmailField(max_length=70, blank=True)
+
+    def __str__(self):
+        return str(self.email)

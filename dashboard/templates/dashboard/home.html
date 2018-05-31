@@ -1,108 +1,231 @@
+
 {% extends 'dashboard/base.html' %}
+{% load static %}
+
 {% block pageheader %}
-    {{ block.super }}
+
+{{ block.super }}
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  .activat-button {
+    width: 90px;
+  }
+</style>
 {% endblock %}
 {% block content %}
+<div class="row mb-5">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h2>Scrape/Posting activities</h2>
+        <table class="table" id="linkedin_user_table">
+        </table>
+        {# modal for add ip #}
 
-    <h2>Scrape/Posting activities</h2>
-    <div class="table-responsive">
-    <table class="table table-striped table-sm">
-        <thead>
-        <tr>
-            <th width="4%">#</th>
-            <th widht="60%">Email</th>
-            <th width="18%">Bot status</th>
-            
-        </tr>
-        </thead>
-        <tbody>
-        {% for item in object_list %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.email }}</td>
-                <td> {% if item.bot_ip%}
-                    <a href="{% url 'bot-status' pk=item.id %}" data-log="{% url 'bot-log' pk=item.id %}"
-                       class="btn btn-info bot-status">Bot Status</a>
+        <div id="add_ip_modal" data-iziModal-title="Add Ip"  data-iziModal-icon="icon-key">
+          <div class="card">
+              <div class="card-body">
+                <form id="add_ip_form">
+                  <div class="form-group">
+                      <label for="exampleFormControlInput1" class="active">Email address</label>
+                      <input type="hidden" id="linked_id" name="linked_id">
+                      {% csrf_token %}
+                      <input type="Ip" class="form-control" id="inputIp" name="ip" placeholder="IP">
+                      <p class="text-danger" id="ip_input_error"></p>
+                  </div>
+                  <div class="form-group">
+                      <button class="btn-primary btn pull-right" onclick = "add_ip_submit()" type="button">Add</button>
+                      <button class="btn btn-info btn-left" data-izimodal-close="">Close</button>
+                  </div>
+              </form>
+              </div>
+          </div>
+        </div>
 
-                {% else %}
-                    <button type="button" class="btn btn-warning add_ip_btn" data-value="{{ item.id }}">
-                        IP is not available
-                    </button>
-
-                    <!-- Modal -->
-
-                {% endif %}
-                    <span class="bot-log-lines p-3"></span>
-                </td>
-                
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan=6>There is no available accounts</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {# modal for add ip    #}
-    <div class="modal fade" id="ipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
             <div class="modal-content">
 
-                <div class="modal-body">
-                    <form method="post" id="add_ip_form">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="hidden" id="change_ip_item_id" name="id">
-                            <label for="inputIp">Add IP</label>
-                            <input type="Ip" class="form-control" id="inputIp" name="ip"
-                                   placeholder="IP">
-                            <p class="text-danger" id="ip_input_error"></p>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="add_ip_form_submit" type="button" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
+              <div class="modal-body">
 
-                <div class="modal-body">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
+{% csrf_token %}
+
 {% endblock %}
-
 {% block extra_script %}
-    <script>
-        $(".add_ip_btn").click(function (event) {
-            event.preventDefault();
-            $('#ipModal').modal('show');
-            $('#change_ip_item_id')[0].value = this.getAttribute('data-value');
+<script>
+  var ajax_linkedin_user_url = '{%url "get_linked_list" %}'
+  var linkedinTable
+  $(".add_ip_btn").click(function(event) {
+    event.preventDefault();
+    $('#ipModal').modal('show');
+    $('#change_ip_item_id')[0].value = this.getAttribute('data-value');
 
+  });
+
+  $("#add_ip_form_submit").click(function(event) {
+    event.preventDefault();
+    if ($('#inputIp')[0].value.match(/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/))
+      $('#add_ip_form').submit();
+    else
+      $('#ip_input_error').html('<br>Enter valid ip')
+  });
+
+  function setting (id) {
+
+  }
+  function add_ip_submit(){
+      if ($('#inputIp')[0].value.match(/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/)){
+      }else{
+        $('#ip_input_error').html('<br>Enter valid ip')
+        return
+      }
+      let formData = $('#add_ip_form').serialize();
+      console.log(formData)
+      let settings = {
+          "url": "{% url 'updateIp' %}",
+          "method": "POST",
+          "data": formData
+      };
+      $.ajax(settings).done(function (response) {
+        if(response.response_code){
+          $('#add_ip_modal').iziModal('close');
+        }
+        $.alert({
+            title: 'Alert!',
+            content: response.message,
+            columnClass: 'small',
+            theme: 'bootstrap',
+            buttons: {
+                ok: {
+                    text: 'Ok',
+                    btnClass: 'btn-info',
+                    action: function () {
+                        if(response.response_code){
+                            linkedinTable.ajax.reload();
+                        }else{
+
+                        }
+                    }
+                }
+            }
         });
+      })
+      .fail(function(err) {
+          console.log( err );
+      });
 
-        $("#add_ip_form_submit").click(function (event) {
-            event.preventDefault();
-            if ( $('#inputIp')[0].value.match(/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/))
-                $('#add_ip_form').submit();
-            else
-                $('#ip_input_error').html('<br>Enter valid ip')
+  }
+  function update_status(id, status){
+       var data = {
+         linked_id: id,
+         status:status,
+         'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+       }
+       let settings = {
+           "url": "{% url 'updateStatus' %}",
+           "method": "POST",
+           "data": data
+       };
+       $.ajax(settings).done(function (response) {
+           $.alert({
+               title: 'Alert!',
+               content: response.message,
+               columnClass: 'small',
+               theme: 'bootstrap',
+               buttons: {
+                   ok: {
+                       text: 'Ok',
+                       btnClass: 'btn-info',
+                       action: function () {
+                           if(response.response_code){
+                               linkedinTable.ajax.reload();
+                           }else{
 
-        });
-    </script>
+                           }
+                       }
+                   }
+               }
+           });
+       })
+       .fail(function(err) {
+           console.log( err );
+       });
+  }
+
+  function add_ip(id){
+    $('#linked_id').val(id);
+    $('#add_ip_modal').iziModal('open');
+  }
+
+  $(function() {
+    $('#add_ip_modal').iziModal();
+    linkedinTable = $('#linkedin_user_table').DataTable({
+      "ajax": ajax_linkedin_user_url,
+      "order": [
+        [0, "asc"]
+      ],
+      "bLengthChange": false,
+      "bFilter": true,
+      "bPaginate": false,
+      "columns": [{
+          "data": "index"
+        },
+        {
+          "data": "email"
+        },
+        {
+          "data": "status"
+        },
+        {
+          "data": "bot_ip"
+        },
+        {
+          "data": "action"
+        },
+      ],
+      "searching": false,
+      "columnDefs": [{
+          "title": "No",
+          "width": "5%",
+          "targets": 0
+        },
+        {
+          "title": "Email",
+          "width": "20%",
+          "targets": 1
+        },
+        {
+          "title": "Status",
+          "width": "10%",
+          "targets": 2
+        },
+        {
+          "title": "IP",
+          "width": "20%",
+          "targets": 3
+        },
+        {
+          "title": "Action",
+          "width": "20%",
+          "targets": 4
+        },
+        {"className": "dt-body-center", "targets": "_all"}
+      ],
+      "bAutoWidth": false
+    });
+  });
+</script>
 {% endblock %}
-
-
-
