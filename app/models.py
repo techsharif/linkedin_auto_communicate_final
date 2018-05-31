@@ -65,6 +65,9 @@ class LinkedInUser(models.Model):
     # for bot ip
     bot_ip = models.GenericIPAddressField(blank=True, null=True)
 
+    last_message_send_date = models.DateField(blank=True, null=True)
+    message_count = models.IntegerField(default=0)
+
     def __str__(self):
         return self.email
 
