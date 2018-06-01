@@ -129,7 +129,6 @@ class AccountDetail(AccountMixins, DetailView):
     template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
-
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by

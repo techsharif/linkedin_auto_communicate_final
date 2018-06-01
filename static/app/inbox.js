@@ -223,7 +223,9 @@ $(document).ready(function() {
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
 
-		var rows_selected = table.column(0).checkboxes.selected();
+		var $table             = table.table().node();
+	    var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+    	var rows_selected = $chkbox_checked;
 
 		if(rows_selected.length < 1){
 			alert_no_contact();
