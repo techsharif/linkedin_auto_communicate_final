@@ -26,7 +26,9 @@ User = get_user_model()
 
 # New views
 
-
+def AccountSearch_NEW(request):
+    return render(request, 'v2/account/account_search.html')  
+  
 def RegisterView_NEW(request):
     msg=''
     if request.POST:
@@ -76,7 +78,6 @@ def LoginView_NEW(request):
         USER = authenticate(username=email, password=password)
         print(USER)
         if USER is not None:
-
             USER.is_active = True
             USER.save()
             login(request, USER)
@@ -91,13 +92,7 @@ def LoginView_NEW(request):
             msg="invalid_user"
 
     return render(request, 'v2/registration/login.html',{'msg' : msg})
-
-
-
-
-# def Test_NEW(request):
-#     return render(request, 'v2/app/test.html')
-
+  
 class HomeView_NEW(TemplateView):
     template_name = 'v2/app/home.html'
 
@@ -107,10 +102,6 @@ class HomeView_NEW(TemplateView):
             ctx[x.name] = x
         # print('ctx:', ctx)
         return ctx
-
-
-
-
 # OLD Views
 
 
