@@ -1,0 +1,24 @@
+{% load static %}
+
+<script src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.checkboxes.min.js' %}"></script>
+<script type="text/javascript">
+
+	var filtered_row_num = 0;
+	var filtered_rows = [];
+	var contact_camps = {};
+	
+	var contact_statuses = {
+			{%include 'app/includes/datatable_pagefooter_contactstatus.html' with statuses=inbox_page_statuses %}
+	};
+	var mynetwork_statuses = {
+			{%include 'app/includes/datatable_pagefooter_contactstatus.html' with statuses=mynetwork_page_statuses %}
+			
+		};
+	
+	</script>
+	
+<script src="{% static 'app/inbox.js' %}?v=10"></script>
+		
+
+

@@ -1,0 +1,35 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3>Connector campaigns</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="panel-body" id="bulk_campaigns_list">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Contacts</th>
+                <th>Connected</th>
+                <th>Replied to<br>connection message</th>
+                <th>Replied to<br>other messages</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for mc in object_list %}
+                <tr>
+                    <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
+                    <td>
+                        <span class="label bg-{%if mc.status%}green{%else%}black{%endif%}">{%if mc.status%}Active{%else%}Inactive{%endif%}</span>
+                    </td>
+                    <td>{{ mc.contacts.all | length }}</td>
+                    <td>{{ mc.count_sends }}</td>
+                    <td>{{ mc.count_replies }}</td>
+                    <td>{{ mc.count_reply_other }}</td>
+                </tr>
+            {% endfor %}
+
+           </tbody>
+        </table>
+    </div>
+</div>

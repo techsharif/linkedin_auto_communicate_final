@@ -1,0 +1,157 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{%block sidebar%}
+   
+{%endblock%}
+
+{%block pagecss%}
+    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
+    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
+{%endblock%}
+
+{% block content %}
+
+   <section class="content">
+   
+   	<div class="row">
+	<div class="col-sm-4">
+		<div class="info-box">
+			<span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-briefcase"></i></span>
+
+			<div class="info-box-content">
+			  <span class="info-box-text">Current plan</span>
+			  <span class="info-box-number">TRIAL</span>
+			  
+			  <span>4 days left			</span></div>
+		</div>
+	</div>
+	
+	<div class="col-sm-4">
+		<div class="info-box">
+			<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+
+			<div class="info-box-content">
+			  <span class="info-box-text">Seats</span>
+			  <span class="info-box-number">1</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-sm-4">
+		<div class="info-box">
+			<span class="info-box-icon bg-green"><i class="fa fa-dollar"></i></span>
+
+			<div class="info-box-content">
+			  <span class="info-box-text">Cost</span>
+			  <span class="info-box-number">FREE</span>
+			  			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+
+<div class="text-center">
+		<p>To select one of the plans, you need to add a payment method.</p>
+		<a href="/profile/?act=add_card" class="btn btn-primary">Add Payment Method</a>
+</div>
+</div>
+
+<br>
+
+<div class="row">
+	<div class="col-md-2 col-md-offset-3">
+		<div class="box text-center plan">
+			<div class="box-header with-border">
+				<p>STARTER</p>
+				<p class="price">$35 / seat</p>
+			</div>
+			<div class="box-body">
+				<p>Up to <strong>500</strong> results per search</p>
+				<p><strong>10</strong> saved searches</p>
+				<p><strong>5</strong> campaigns</p>
+				<p>2 way communication</p>
+				<p>Welcome message</p>
+				<p>‐</p>
+				<p>‐</p>
+				<p>‐</p>
+				<p>‐</p>
+			</div>
+					</div>
+	</div>
+	
+	<div class="col-md-2">
+		<div class="box text-center plan">
+			<div class="box-header with-border">
+				<p>PROFESSIONAL</p>
+				<p class="price">$50 / seat</p>
+			</div>
+			<div class="box-body">
+				<p>Up to <strong>750</strong> results per search</p>
+				<p><strong>50</strong> saved searches</p>
+				<p><strong>25</strong> campaigns</p>
+				<p>2 way communication</p>
+				<p>Welcome message</p>
+				<p>Custom connect message</p>
+				<p>Company &amp; title search filter</p>
+				<p>Withdraw invites</p>
+				<p>‐</p>
+			</div>
+					</div>
+	</div>
+	
+	<div class="col-md-2">
+		<div class="box text-center plan">
+			<div class="box-header with-border">
+				<p>BUSINESS</p>
+				<p class="price">$75 / seat</p>
+			</div>
+			<div class="box-body">
+				<p><strong>Unlimited</strong> results per search</p>
+				<p><strong>Unlimited</strong> saved searches</p>
+				<p><strong>Unlimited</strong> campaigns</p>
+				<p>2 way communication</p>
+				<p>Welcome message</p>
+				<p>Custom connect message</p>
+				<p>Company &amp; title search filter</p>
+				<p>Withdraw invites</p>
+				<p>Export to CSV</p>
+			</div>
+					</div>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-8 col-md-offset-1">
+	<div class="box">
+		<div class="box-header with-border">
+			<h4>Payments</h4>
+		</div>
+		<div class="box-body table-responsive">
+				There are no payments yet.
+				</div>
+	</div>
+	</div>
+	
+	<div class="col-md-2">
+	<div class="box">
+		<div class="box-header with-border">
+			<h4>Invoices</h4>
+		</div>
+		<div class="box-body table-responsive">
+		<table class="table">
+			<tbody>
+						</tbody>
+		</table>
+		</div>
+	</div>
+	</div>
+</div>
+
+	</section>
+
+{%endblock%}
+

@@ -7,8 +7,8 @@ from . import views
 
 
 urlpatterns = [
-    # NEW URLS
 
+    # NEW URLS
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
     url(r'^new-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
     url(r'^layout/styles/landing/$', views.new_landing),
@@ -24,10 +24,8 @@ urlpatterns = [
     url(r'^login/$',
         auth_views.LoginView.as_view(template_name='registration/login.html'),
         name='login'),
-    url(r'^logout/$', 
-            template_name='registration/logged_out.html',
-             next_page='/'),
-        auth_views.LogoutView.as_view(
+    url(r'^logout/$', auth_views.LogoutView.as_view(
+        template_name='registration/logged_out.html', next_page='/'),
         name='logout'),
     url(r'^password_reset/$', auth_views.password_reset,{
         'template_name': 'v2/registration/password_reset_form.html',
@@ -47,7 +45,6 @@ urlpatterns = [
         auth_views.PasswordResetConfirmView.as_view(
             template_name='registration/page-password_reset_confirm.html'),
         name='password_reset_confirm'),
-
     url(r'password_reset_complete',
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_complete.html'),
@@ -93,7 +90,6 @@ urlpatterns = [
         acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask.as_view(), name='account-task'),
-
     url(r'^new-account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask_NEW.as_view(), name='account-task-new'),
     url(r'^account/(?P<pk>[\d]+)/messenger/add$',

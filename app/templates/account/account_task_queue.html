@@ -1,0 +1,72 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+
+{% block title %}Settings{% endblock title %}
+{% block pagetitle %}
+    Task Queue
+{% endblock %}
+
+
+
+{% block content %}
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p class="panel-title">Upcoming tasks</p>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="panel-body">
+                        {% include 'account/common_use/upcomming_task.html' %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p class="panel-title">Finished tasks</p>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="panel-body">
+                        {% if finished_tasks %}
+                            <table class="table .table-bordered">
+
+                                <tbody>
+                                 <tr>
+                                    <th>Task type</th>
+                                    <th>Name</th>
+                                    <th>Date completed</th>
+
+                                </tr>
+                                {% for task in finished_tasks %}
+
+                                    <tr>
+                                        <td>{{ task.queue_type }}</td>
+                                        <td>{{ task.content_object }}</td>
+                                        <td>{{ task.updated_at }}</td>
+
+                                    </tr>
+
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        {% else %}
+                            There are no tasks
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+{% endblock %}
