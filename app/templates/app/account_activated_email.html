@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+{% load static %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to join our service</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+
+    body,
+    table,
+    td,
+    p,
+    a,
+    li,
+    blockquote {
+      -webkit-text-size-adjust: none !important;
+      font-family: sans-serif;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    button {
+      width: 90%;
+    }
+
+    @media screen and (max-width:600px) {
+      /*styling for objects with screen size less than 600px; */
+      body,
+      table,
+      td,
+      p,
+      a,
+      li,
+      blockquote {
+        -webkit-text-size-adjust: none !important;
+        font-family: sans-serif;
+      }
+      table {
+        /* All tables are 100% width */
+        width: 100%;
+      }
+      .footer {
+        /* Footer has 2 columns each of 48% width */
+        height: auto !important;
+        max-width: 48% !important;
+        width: 48% !important;
+      }
+      table.responsiveImage {
+        /* Container for images in catalog */
+        height: auto !important;
+        max-width: 30% !important;
+        width: 30% !important;
+      }
+      table.responsiveContent {
+        /* Content that accompanies the content in the catalog */
+        height: auto !important;
+        max-width: 66% !important;
+        width: 66% !important;
+      }
+      .top {
+        /* Each Columnar table in the header */
+        height: auto !important;
+        max-width: 48% !important;
+        width: 48% !important;
+      }
+      .catalog {
+        margin-left: 0% !important;
+      }
+    }
+
+    @media screen and (max-width:480px) {
+      /*styling for objects with screen size less than 480px; */
+      body,
+      table,
+      td,
+      p,
+      a,
+      li,
+      blockquote {
+        -webkit-text-size-adjust: none !important;
+        font-family: sans-serif;
+      }
+      table {
+        /* All tables are 100% width */
+        width: 100% !important;
+        border-style: none !important;
+      }
+      .footer {
+        /* Each footer column in this case should occupy 96% width  and 4% is allowed for email client padding*/
+        height: auto !important;
+        max-width: 96% !important;
+        width: 96% !important;
+      }
+      .table.responsiveImage {
+        /* Container for each image now specifying full width */
+        height: auto !important;
+        max-width: 96% !important;
+        width: 96% !important;
+      }
+      .table.responsiveContent {
+        /* Content in catalog  occupying full width of cell */
+        height: auto !important;
+        max-width: 96% !important;
+        width: 96% !important;
+      }
+      .top {
+        /* Header columns occupying full width */
+        height: auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      .catalog {
+        margin-left: 0% !important;
+      }
+      button {
+        width: 90% !important;
+      }
+    }
+  </style>
+</head>
+<body yahoo="yahoo">
+  <table width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td>
+          <table width="600" align="center" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr>
+                <td>
+                  <table bgcolor="#d0cfcf" class="top" width="48%" align="left" cellpadding="0" cellspacing="0" style="padding:10px 10px 10px 10px;">
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px; color:#929292; text-align:center; font-family: sans-serif;">LOGO</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table bgcolor="#d0cfcf" class="top" width="48%" align="left" cellpadding="0" cellspacing="0" style="padding:10px 10px 10px 10px; text-align:right">
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px; color:#929292; text-align:center; font-family: sans-serif;">Activate | {{current_date}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <!-- HTML Spacer row -->
+                <td style="font-size: 0; line-height: 0;" height="20">
+                  <table width="96%" align="left" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <!-- HTML IMAGE SPACER -->
+                <td style="font-size: 0; line-height: 0;" height="20">
+                  <table align="left" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td><img src="{% static 'images/welcome.png'%}" alt="" height="" width="100%" class=""></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <!-- HTML Spacer row -->
+                <td style="font-size: 0; line-height: 0;" height="20">
+                  <table width="96%" align="left" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <!-- Introduction area -->
+                <td>
+                  <table width="96%" align="left" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <!-- row container for TITLE/EMAIL THEME -->
+                      <td align="center" style="font-size: 32px; font-weight: 300; line-height: 2.5em; color: #929292; font-family: sans-serif;">Welcome</td>
+                    </tr>
+                    <tr>
+                      <!-- row container for Tagline -->
+                      <td align="center" style="font-size: 16px; font-weight:300; color: #929292; font-family: sans-serif;">Your account have been activated </td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 0; line-height: 0;" height="20">
+                        <table width="96%" align="left" cellpadding="0" cellspacing="0">
+                          <tr>
+                            <!-- HTML Spacer row -->
+                            <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <!-- Row container for Intro/ Description -->
+                      <td align="left" style="font-size: 14px; font-style: normal; font-weight: 100; color: #929292; line-height: 1.8; text-align:justify; padding:10px 20px 0px 20px; font-family: sans-serif;">
+
+
+              Hi,
+              Getting started with JetBuzz is easy.
+              <p>The first thing you'll want to do is connect your LinkedIn account. To do so, just go to Add account and enter your LinkedIn credentials. Your account will take about a minute to set up.</p>
+
+              <h3><strong>JetBuzz serves two main roles:</strong></h3>
+
+
+              <p><strong>1. Growing your network and finding new leads.</strong><br></p>
+
+              <p>
+                - Start with creating a Connector Campaign. On the top menu, click on 'Connector'. While on the Connector page, click the 'NEW CONNECTOR CAMPAIGN' button.<br>
+              </p>
+              <p>
+                 - Set up steps with personalized automated messages for connection requests or a follow-up message to be sent a few hours or days after connecting, set another automated follow-up message if no response is received in a few days. This is done by clicking on the 'Steps' tab inside the Connector Campaign.<br>
+              </p>
+              <p>
+                - Start with creating a Connector Campaign. On the top menu, click on 'Connector'. While on the Connector page, click the 'NEW CONNECTOR CAMPAIGN' button.<br>
+              </p>
+              <p>
+               - Search for new leads by keyword, location, industry, company, title. To start a new search, go to the 'Search' on the top menu, and click on 'Start new search' on the right side.
+              <br>
+              </p>
+              <p>
+               - After the search is completed, select people you would like to be added to Connector Campaign and click 'Add selected people to Connector Campaign', or add all new people found by clicking 'Add all new people to Connector Campaign'.<br>
+              </p>
+              <p>
+               <strong>2. Facilitating communication with your existing contacts.</strong><br>
+              </p>
+
+              <p>
+                - First, create a Messenger Campaign. On the top menu, click on 'Messenger'. While on the Messenger page, click on the 'NEW MESSENGER CAMPAIGN' button.
+              </p>
+              <p>- Set up steps with personalized automated messages for your first message or for a follow-up message, set another automated follow-up message if no response is received in a few days. This is done by clicking on the 'Steps' tab inside the Messenger Campaign.</p>
+              <p> - To add people from your network to the Messenger Campaign click on 'My Network' in the top menu. Select people you would like to be added to Messenger Campaign and click 'Add selected people to messenger campaign', or add all filtered people by clicking 'Add all filtered people to Messenger Campaign'.</p><br>
+
+              <p>From this point, both growing your network and communicating with your existing contacts basically follows the same logic.</p>
+              <p>
+                 - See responses in the simple-to-use Inbox. To do so, go to 'Inbox' on the top menu.
+              </p>
+              <p>
+                - Respond directly from JetBuzz's panel. Select the contact you are connected with either in Inbox or in the specific campaign and send a message through 'Direct chat' on the right side.
+
+              </p>
+              <p>
+                 - Mark prospects according to their interest.
+              </p>
+              <p>
+                Just imagine, a one-time campaign setup can put your sales on autopilot for months. After your campaign is set up, you simply sit back and relax while only responding to those leads who express interest in your product, service, etc.
+
+              </p>
+
+              Best,<br>
+              <strong>
+                 JetBuzz Team
+              </strong>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
