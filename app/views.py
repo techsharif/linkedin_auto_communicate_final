@@ -65,7 +65,7 @@ def RegisterView_NEW(request):
 
         print( "msg = ")
         print (msg)
-    return render(request, 'v2/registration/register.html',{'msg':msg})
+    return render(request, 'v2/registration/register.html', {'msg': msg})
 
 
 def LoginView(request):

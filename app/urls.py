@@ -8,23 +8,19 @@ from . import views
 
 urlpatterns = [
     # NEW URLS
-    url(r'^new-register/$', views.RegisterView_NEW, name='RegisterView'),
-    url(r'^new-login/$', views.LoginView, name='LoginView'),
+
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
-    url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+    url(r'^new-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
     url(r'^layout/styles/landing/$', views.new_landing),
     url(r'^layout/styles/auth/$', views.new_auth),
     url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
     url(r'^login/$', views.LoginView, name='LoginView'),
     url(r'^$', views.HomeView_NEW.as_view(), name='home'),
-    url(r'^accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+    url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
     url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
     url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
-    
-
     # original
     url(r'^$', views.HomeView.as_view(), name='home'),
-
     url(r'^login/$',
         auth_views.LoginView.as_view(template_name='registration/login.html'),
         name='login'),
@@ -33,9 +29,20 @@ urlpatterns = [
              next_page='/'),
         auth_views.LogoutView.as_view(
         name='logout'),
-    url(r'^forgotpw', auth_views.PasswordResetView.as_view(
-        template_name='registration/page-forgot-password.html'), name='forgotpw'),
-
+    url(r'^password_reset/$', auth_views.password_reset,{
+        'template_name': 'v2/registration/password_reset_form.html',
+        'email_template_name': 'v2/registration/password_reset_subject.txt',
+        'html_email_template_name': 'v2/registration/password_reset_email.html',
+        'subject_template_name': 'v2/registration/password_reset_subject.txt',
+    }, name='password_reset'),
+    url(r'^password_reset/done/$', auth_views.password_reset_done,
+        {'template_name': 'v2/registration/password_reset_form.html'}, name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.password_reset_confirm,
+        {'template_name': 'v2/registration/password_reset_confirm.html'}, name='password_reset_confirm'),
+    url(r'^reset/done/$', auth_views.password_reset_complete,
+        {'template_name': 'v2/registration/password_reset_done.html'},
+        name='password_reset_complete'),
     url(r'password_reset_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.PasswordResetConfirmView.as_view(
             template_name='registration/page-password_reset_confirm.html'),
