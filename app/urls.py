@@ -17,41 +17,18 @@ urlpatterns = [
     url(r'^new-login/$', views.LoginView_NEW, name='LoginView'),
 
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
-
     url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
     url(r'^layout/styles/landing/$', views.new_landing),
     url(r'^layout/styles/auth/$', views.new_auth),
     url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
-
     url(r'^login/$', views.LoginView_NEW, name='LoginView'),
-
     url(r'^$', views.HomeView_NEW.as_view(), name='home'),
-
     url(r'^accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
-
     url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
 
-     #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch_NEW.as_view(), name='account-search'),
-
-    # Changes Old URLS
-    #     url(r'^old/$', views.HomeView.as_view(), name='home'),
-    #
-    #     url(r'^old-login/$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    #
-    #     url(r'^old-register/$', views.RegisterView.as_view(), name='register'),
-    #
-    #     url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-    #
-        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+    url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
 
     url(r'^$', views.HomeView.as_view(), name='home'),
-    # url(r'^login/$', views.login, name='login'),
-    # url(r'^logout/$', views.logout, name='logout'),
-
-    #url(r'^login/$', views.login, name='login'),
-    #url(r'^logout/$', views.logout, name='logout'),
-
-
 
     url(r'^login/$',
         auth_views.LoginView.as_view(template_name='registration/login.html'),
@@ -95,8 +72,12 @@ urlpatterns = [
     url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(),
         name = 'remove-account'),
     # url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
-    url(r'^account/(?P<pk>[\d]+)/network/$',
-        acc_views.AccountNetwork.as_view(), name='account-network'),
+    url(r'^account/(?P<pk>[\d]+)/account/$',
+        acc_views.AccountNetwork.as_view(), name='account-account'),
+
+    url(r'^new_account/(?P<pk>[\d]+)/account/$',
+            acc_views.AccountNetwork_NEW.as_view(),
+            name='account-new-account'),
     url(r'^account/(?P<pk>[\d]+)/messenger/$',
         acc_views.AccounMessenger.as_view(), name='account-messenger'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/$',
@@ -110,11 +91,11 @@ urlpatterns = [
         acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask.as_view(), name='account-task'),
-
     url(r'^new-account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask_NEW.as_view(), name='account-task-new'),
     url(r'^account/(?P<pk>[\d]+)/messenger/add$',
-        acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
+        acc_views.AccountMessengerCreate.as_view(),
+        name='account-messenger-add'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/add$',
         acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
     url(r'^account/messenger/(?P<pk>[\d]+)$',
@@ -123,15 +104,18 @@ urlpatterns = [
         acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
     url(r'^account/bottask/(?P<pk>[\d]+)$',
         acc_views.AccountBotTask.as_view(), name='bottask'),
-
     url(r'^account/messenger/(?P<pk>[\d]+)/delete$',
-        acc_views.AccountMessengerDelete.as_view(), name='messenger-campaign-delete'),
+        acc_views.AccountMessengerDelete.as_view(),
+        name='messenger-campaign-delete'),
     url(r'^account/campaigns/(?P<pk>[\d]+)/delete$',
-        acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
+        acc_views.AccountMessengerDelete.as_view(),
+        name='connector-campaign-delete'),
     url(r'^account/campaigns/(?P<pk>[\d]+)/active',
-        acc_views.AccountMessengerActive.as_view(), name='connector-campaign-active'),
+        acc_views.AccountMessengerActive.as_view(),
+        name='connector-campaign-active'),
     url(r'^account/messenger/(?P<pk>[\d]+)/active',
-        acc_views.AccountMessengerActive.as_view(), name='messenger-campaign-active'),
+        acc_views.AccountMessengerActive.as_view(),
+        name='messenger-campaign-active'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
         name='contact-status')
 ]

@@ -2,10 +2,12 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from django.shortcuts import get_object_or_404, render, redirect
+from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
+
 import requests
 
 from app.models import LinkedInUser
@@ -13,8 +15,6 @@ from app.models import LinkedInUser
 
 # from django.shortcuts import render
 login_decorators = (login_required, )
-
-
 
 @method_decorator(login_decorators, name="dispatch")
 class DashBoard(ListView):
@@ -33,6 +33,13 @@ class DashBoard(ListView):
         linkedin_user.bot_ip = ip
         linkedin_user.save()
         return redirect('dashboard')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(DashBoard, self).get_context_data(**kwargs)
+        # count connection number by
+        ctx['pk'] = self.kwargs.get('pk')
+        print('pk:', self)
+        return ctx
 
 
 class Proxy(TemplateView):

@@ -97,7 +97,7 @@ class RemoveAccount(View):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        # pk here is pk of linkeduser table, 
+        # pk here is pk of linkeduser table,
         if 'object' in ctx:
             if isinstance(ctx['object'], Campaign):
                 ctx['pk'] = ctx['object'].owner_id
@@ -342,7 +342,7 @@ class DataTable(object):
         qs = super(DataTable, self).get_queryset()
         qs = qs.filter(owner_id=self.kwargs.get('pk'))
 
-        # if 'my network' should limit 'connected' or 'old connected'
+        # if 'my account' should limit 'connected' or 'old connected'
         if self.is_connected:
             qs = qs.filter(is_connected=self.is_connected)
 
@@ -367,6 +367,20 @@ class DataTable(object):
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
+    template_name = 'account/account_network.html'
+    status = contact_statuses
+    is_connected = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AccountNetwork, self).get_context_data(**kwargs)
+        ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
+        ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
+
+        return ctx
+
+
+@method_decorator(decorators, name='dispatch')
+class AccountNetwork_NEW(AccountMixins, DataTable, ListView):
     template_name = 'account/account_network.html'
     status = contact_statuses
     is_connected = True
@@ -724,7 +738,7 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn                
+                # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
                                       connect_campaign=campaign)
                 self._clone_to_contact(search_results, campaign)

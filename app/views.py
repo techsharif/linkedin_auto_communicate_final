@@ -1,12 +1,10 @@
 from smtplib import SMTPException
-
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
-
 from django.urls.base import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -124,7 +122,6 @@ class HomeView(TemplateView):
             ctx[x.name] = x
         # print('ctx:', ctx)
         return ctx
-
 
 class RegisterView(CreateView):
     form_class = UserRegisterForm

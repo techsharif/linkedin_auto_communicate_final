@@ -20,7 +20,7 @@ $(document).ready(function() {
 		"28": "bg-green",
 	};
 	var path = window.location.pathname;
-	var inboxPage = path.indexOf('network')>=0? false: true;
+	var inboxPage = path.indexOf('account')>=0? false: true;
 	var status_index = 8;
 	
     var table = $('#campaign_people').DataTable( {
@@ -143,8 +143,8 @@ $(document).ready(function() {
 		header_buttons+= '<button class="btn btn-default mr" data-click="markUnread">Mark as unread</button>';
 		header_buttons+= '<button class="btn btn-default mr" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 		
-	}else if (path.indexOf('network')>=0){
-		//network page
+	}else if (path.indexOf('account')>=0){
+		//account page
 		
 		header_buttons+= '<span class="btn btn-default btn-datafilter mr-lg mb-lg"><input  type="checkbox" data-click="connector">&nbsp;&nbsp;Show Connector contacts</span>';
 		header_buttons+= '<span class="btn btn-default btn-datafilte mr-lg mb-lg"><input  type="checkbox" data-click="messenger">&nbsp;&nbsp;Show Messenger contacts</span>';
@@ -225,7 +225,7 @@ $(document).ready(function() {
 		console.log('rows_selected:', rows_selected);
 		swal({
 			  title: "Are you sure?",
-			  text: "Your connect contacts will be deleted but your network contats will be changed to 'Old connect'",
+			  text: "Your connect contacts will be deleted but your account contats will be changed to 'Old connect'",
 			  type: "warning",
 			  showCancelButton: true,
 			  confirmButtonClass: "btn-danger",
