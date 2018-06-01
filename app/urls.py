@@ -9,13 +9,13 @@ from . import views
 urlpatterns = [
     # NEW URLS
     url(r'^new-register/$', views.RegisterView_NEW, name='RegisterView'),
-    url(r'^new-login/$', views.LoginView_NEW, name='LoginView'),
+    url(r'^new-login/$', views.LoginView, name='LoginView'),
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
     url(r'^new-accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
     url(r'^layout/styles/landing/$', views.new_landing),
     url(r'^layout/styles/auth/$', views.new_auth),
     url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
-    url(r'^login/$', views.LoginView_NEW, name='LoginView'),
+    url(r'^login/$', views.LoginView, name='LoginView'),
     url(r'^$', views.HomeView_NEW.as_view(), name='home'),
     url(r'^accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
     url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
