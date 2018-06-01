@@ -49,7 +49,7 @@ urlpatterns = [
     # url(r'^logout/$', views.logout, name='logout'),
 
     #url(r'^login/$', views.login, name='login'),
-    #url(r'^logout/$', views.logout, name='logout'),    
+    #url(r'^logout/$', views.logout, name='logout'),
 
 
 
@@ -57,8 +57,6 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name='registration/login.html'),
         name='login'),
     url(r'^logout/$',
-
-    url(r'^logout/$', 
         auth_views.LogoutView.as_view(
             template_name='registration/logged_out.html',
              next_page='/'),
@@ -115,7 +113,6 @@ urlpatterns = [
 
     url(r'^new-account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask_NEW.as_view(), name='account-task-new'),
-    
     url(r'^account/(?P<pk>[\d]+)/messenger/add$',
         acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/add$',
