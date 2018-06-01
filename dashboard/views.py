@@ -61,7 +61,7 @@ class Proxy(TemplateView):
             for linked_user in linkedin_user:
                 action = ''
                 activate = ''
-                if linked_user.login_status:
+                if linked_user.status:
                     action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="setting('+str(linked_user.id)+')">setting</button>'
                     action += '<button class="btn btn-sm btn-danger btn-gradient waves-effect waves-light activat-button" onclick="update_status('+str(linked_user.id)+', 0)">Off</button>'
                     activate = '''<button class="btn btn-sm btn-primary btn-gradient
@@ -94,7 +94,7 @@ class Proxy(TemplateView):
         try:
             if request.POST.get('linked_id'):
                 linked_user = LinkedInUser.objects.filter(id=int(request.POST.get('linked_id')))
-                linked_user.update(login_status=int(request.POST.get('status')))
+                linked_user.update(status=int(request.POST.get('status')))
                 print(int(request.POST.get('linked_id')))
                 if int(request.POST.get('status')) == 1:
                     message = 'Activated Successfully!'
