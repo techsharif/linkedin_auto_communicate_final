@@ -53,7 +53,8 @@
     </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav ml-5 navbar-profile">
-        </li>--->
+        {% endif %}    
+        </li> 
     </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav navbar-notifications float-right">
@@ -77,7 +78,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle no-waves-effect" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
-                        <!--<span class="notification-number"></span>--->
+                        <span class="notification-number"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-md" aria-labelledby="navbar-notification-misc">
                         <li class="media">
@@ -88,7 +89,7 @@
                                     <div class="notification-text">
 
                                     </div>
-                                    <!--<span class="notification-time">Just now</span>-->
+                                    <span class="notification-time">Just now</span> -->
                                 </div>
                             </a>
                         </li>
