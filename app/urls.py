@@ -21,7 +21,9 @@ urlpatterns = [
 
         url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
 
-        #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch_NEW.as_view(), name='account-search'),
+        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch_NEW.as_view(), name='account-search'),
+
+        url(r'^accounts/search_result/$', acc_views.SearchResultView_NEW.as_view(), name='account-search-result'),
 
     # Changes Old URLS
     #     url(r'^old/$', views.HomeView.as_view(), name='home'),
@@ -30,9 +32,12 @@ urlpatterns = [
     #
     #     url(r'^old-register/$', views.RegisterView.as_view(), name='register'),
     #
-    #     url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-    #
-        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+        # url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+
+        #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+
+    # url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
+
 
 
 

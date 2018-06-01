@@ -32,9 +32,10 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
-# New views
+# ****************************************** New views *****************************************
 
 @method_decorator(decorators, name='dispatch')
 class AccountList_NEW(ListView):
@@ -71,8 +72,56 @@ class AccountSearch_NEW(View):
 
 
 
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class SearchResultView_NEW(View):
+    def _clone_to_contact(self, qs, campaign):
+        # is there a better way to do this??
+        for row in qs.all():
+            row.attach_to_campaign(campaign)
 
-# Old views
+    def post(self, request):
+        print(request.POST)
+        if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
+            return render(request, 'account/search_render/search_select.html')
+        print(request.POST['search_head'])
+        search_id = int(request.POST['search_head'])
+        search = get_object_or_404(Search, pk=search_id, owner__user=request.user)
+        if not search.result_status():
+            return render(request, 'account/search_render/search_waiting.html')
+
+        if not search.result_count():
+            return render(request, 'account/search_render/no_search_result.html')
+
+        item = []
+        if 'selected_items[]' in request.POST.keys():
+            item = list(map(int, request.POST.getlist('selected_items[]')))
+        elif 'selected_items' in request.POST.keys():
+            item += [int(request.POST.get('selected_items'))]
+        elif 'add_all_selected_item_button' in request.POST.keys():
+            search_results = SearchResult.objects.filter(search=search, status=None)
+            search_results.update(status=ContactStatus.IN_QUEUE_N)
+
+        if item:
+            if 'campaign' in request.POST.keys():
+                campaign = Campaign.objects.get(id=int(request.POST['campaign']))
+                search_results = SearchResult.objects.filter(search=search, pk__in=item)
+                # attache to a campagn
+                search_results.update(status=ContactStatus.IN_QUEUE_N,
+                                      connect_campaign=campaign)
+                self._clone_to_contact(search_results, campaign)
+
+        search_results = SearchResult.objects.filter(search=search)
+        return render(request, 'v2/account/search_render/search_render.html',
+                      {'search': search, 'search_results': search_results})
+
+
+
+
+
+
+
+
+# ******************************* Old views ****************************************
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -166,7 +215,7 @@ class AccountSettings(UpdateView):
         return context
 
 
-csrf_exempt_decorators = decorators + (csrf_exempt,)
+
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
