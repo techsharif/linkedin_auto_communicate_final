@@ -1,0 +1,225 @@
+{% extends 'v2/app/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+
+
+    <main class="main-content p-5" role="main">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Task Queue</h1>
+                        </div>
+                    </div>
+                    <div class="row mb-5 task-manager">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                     Outstanding Tasks
+                                    <!-- <p class="task-list-stats">
+                                        <span class="task-list-total">0</span> tasks created
+                                    </p> -->
+                                    <!-- <div class="header-btn-block">
+                                        <a href="task-list.html" class="btn btn-primary">
+                                            <i class="batch-icon batch-icon-eye"></i> 
+                                            See My Tasks
+                                        </a>
+                                        <a href="#" class="btn btn-outline-danger" id="delete-task">
+                                            <i class="batch-icon batch-icon-bin-alt-2"></i>
+                                        </a>
+                                    </div> -->
+                                </div>
+                                <!--
+                                    card-task-list: Accepts additional classes: no-strike-out
+                                -->
+                                <div class="card-task-list no-strike-out">
+                                    <ul class="task-list">
+                                        
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox active">
+                                                <input type="checkbox" class="custom-control-input" checked>
+                                                <label class="custom-control-label"><span class="badge badge-warning">High Priority</span>Aliquam vel tristique ipsum</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox active">
+                                                <input type="checkbox" class="custom-control-input" checked>
+                                                <label class="custom-control-label"><span class="badge badge-primary">Optional</span>Aenean vehicula, ligula sit amet varius maximus</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                           
+                                        </li>
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox active">
+                                                <input type="checkbox" class="custom-control-input" checked>
+                                                <label class="custom-control-label">Etiam varius neque sed sagittis fringilla</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input">
+                                                <label class="custom-control-label">Mauris rutrum quam at porta feugiat</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox active">
+                                                <input type="checkbox" class="custom-control-input" checked>
+                                                <label class="custom-control-label"><span class="badge badge-info">Low Priority</span>Sed velit augue, tincidunt vitae posuere</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+                                                                                                                                                      
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Completed Tasks
+                                    <!-- <p class="task-list-stats">
+                                        <span class="task-list-total">0</span> tasks created
+                                    </p> -->
+                                    
+                                </div>
+                                <!--
+                                    card-task-list: Accepts additional classes: no-strike-out
+                                -->
+                                <div class="card-task-list no-strike-out">
+                                    <ul class="task-list">
+                                       
+                                        
+                                      
+                                        
+                                        
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input">
+                                                <label class="custom-control-label">Mauris rutrum quam at porta feugiat</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                           
+                                        </li>
+
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox active">
+                                                <input type="checkbox" class="custom-control-input" checked>
+                                                <label class="custom-control-label"><span class="badge badge-info">Low Priority</span>Sed velit augue, tincidunt vitae posuere</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input">
+                                                <label class="custom-control-label"><span class="badge badge-warning">High Priority</span>Fusce in felis nec exdf</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                            
+                                        </li>
+
+                                        <li class="task-list-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input">
+                                                <label class="custom-control-label"><span class="badge badge-info">Low Priority</span>Aliquam vel tristique ipsum</label>
+                                            </div>
+                                            <div class="task-item-details">
+                                                Disrupt long shadow waterfall is so 2000 and late piverate .
+                                            </div>
+                                            <div class="task-item-controls">
+                                                <a role="button" class="btn btn-info btn-sm show-task" href="#">
+                                                    <span class="batch-icon batch-icon-arrow-down"></span>
+                                                </a>
+                                            </div>
+                                           
+                                        </li>
+                                        
+                                        
+                                        
+                                       
+                                        
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <footer>
+                                Powered by - <a href="http://base5builder.com/?click_source=quillpro_footer_link" target="_blank" style="font-weight:300;color:#ffffff;background:#1d1d1d;padding:0 3px;">Base<span style="color:#ffa733;font-weight:bold">5</span>Builder</a>
+                            </footer>
+                        </div>
+                    </div>
+                </main>
+
+  
+
+{% endblock content %}
