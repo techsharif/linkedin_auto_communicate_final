@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <nav class="navbar navbar-expand-lg navbar-light bg-primary bg-gradient">
     <a class="navbar-brand" href="#" style="padding-top:12px">
         <span class="head-title">B2B Prospects</span>
@@ -37,6 +38,7 @@
 
 
         <!---<li class="nav-item dropdown">
+
             <a class="nav-link dropdown-toggle" id="navbar-dropdown-menu-link" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                 <i class="batch-icon batch-icon-book-alt-"></i>
                 English
@@ -46,9 +48,12 @@
                 <li><a class="dropdown-item" href="#">Deutsche</a></li>
                 <li><a class="dropdown-item" href="#">Español</a></li>
             </ul>
+
+        </li>
+    </ul>
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-5 navbar-profile">
         </li>--->
-
-
     </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav navbar-notifications float-right">
@@ -122,12 +127,14 @@
 
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item">
+
                     <a class="nav-link" href="/login/" id="navbar-notification-search" >
+
                         <i class="batch-icon batch-icon-in"></i> Sign in
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/register/" id="navbar-notification-search" >
+                    <a class="nav-link" href="/new-register/" id="navbar-notification-search" >
                         <i class="batch-icon batch-icon-user-alt-add"></i> Sign up
                     </a>
                 </li>

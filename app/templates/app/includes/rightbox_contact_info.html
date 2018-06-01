@@ -6,7 +6,7 @@
 
 <div class="form-group">
 {# what is this https://href.li/?https://www.linkedin.com/in/nbuu07/ #}
-	<a href="#" class="btn btn-block btn-primary btn-flat" target="_blank">LinkedIn profile link</a>
+	<a href="https://www.linkedin.com/in/{{object.linkedin_id}}/" class="btn btn-block btn-primary btn-flat" target="_blank">LinkedIn profile link</a>
 </div><h4>Notes</h4>
 <form method="POST" action="{% url 'contact-update-note' pk=object.id %}">
 {% csrf_token %}

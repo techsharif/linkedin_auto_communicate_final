@@ -70,8 +70,6 @@ class AccountSearch_NEW(View):
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
 
-
-
 # Old views
 
 @method_decorator(decorators, name='dispatch')
@@ -83,6 +81,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
+
 
 
 @method_decorator(decorators, name='dispatch')
@@ -681,13 +680,15 @@ def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
+
 @method_decorator(decorators, name='dispatch')
-def remove_account(request, pk):
-    linekedin_user = LinkedInUser.objects.get(id=pk)
-    if linekedin_user.bot_ip:
-        FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-    linekedin_user.delete()
-    return redirect('accounts')
+class RemoveAccount(View):
+    def get(self, request, pk):
+        linekedin_user = LinkedInUser.objects.get(id=pk)
+        if linekedin_user.bot_ip:
+            FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
+        linekedin_user.delete()
+        return redirect('accounts')
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -731,3 +732,18 @@ class SearchResultView(View):
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
+
+@method_decorator(decorators, name='dispatch')
+class AccountTask_NEW(View):
+    template_name = 'v2/account/account_task_queue.html'
+
+    def get(self, request, pk):
+        linkedin_user = LinkedInUser.objects.get(user_id=pk)
+        all_task_queue = TaskQueue.objects.filter(owner=linkedin_user)
+        finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
+        upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
+
+        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk': pk}
+        context['linkedin_user'] = linkedin_user
+        context['pk'] = pk
+        return render(request, self.template_name, context)

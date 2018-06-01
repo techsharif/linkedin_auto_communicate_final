@@ -265,7 +265,9 @@
 
         function deleteAccount(linkedin_id) {
             {#linkedin_id = this.getAttribute('data_id');#}
+
                 $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
+
                 $('#remove_account').modal('show');
 
         }
@@ -296,8 +298,6 @@
                     interval = setInterval(function () {
                         load(data)
                     }, 10000);
-                    window.location.href = ''
-
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
