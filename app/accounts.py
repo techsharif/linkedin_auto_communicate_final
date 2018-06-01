@@ -37,12 +37,12 @@ decorators = (never_cache, login_required,)
 # New views
 
 @method_decorator(decorators, name='dispatch')
-class AccountList_NEW(ListView):
+class AccountList(ListView):
     model = LinkedInUser
     template_name = 'v2/account/accounts.html'
 
     def get_queryset(self):
-        qs = super(AccountList_NEW, self).get_queryset()
+        qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
 
@@ -73,14 +73,14 @@ class AccountSearch_NEW(View):
 # Old views
 
 @method_decorator(decorators, name='dispatch')
-class AccountList(ListView):
-    model = LinkedInUser
-    template_name = 'account/accounts.html'
-
-    def get_queryset(self):
-        qs = super(AccountList, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
+# class AccountList(ListView):
+#     model = LinkedInUser
+#     template_name = 'account/accounts.html'
+#
+#     def get_queryset(self):
+#         qs = super(AccountList, self).get_queryset()
+#         qs = qs.filter(user=self.request.user)
+#         return qs
 
 
 
@@ -317,7 +317,7 @@ class AjaxDatatableResponse(object):
 
 def Datedefault(o):
     if type(o) is datetime.date or type(o) is datetime.datetime:
-        return o.strftime("%m/%d/%Y @ %H:%M")
+        return o.strftime("%d/%m/%Y @ %H:%M")
 
 
 class DataTable(object):
@@ -367,7 +367,7 @@ class DataTable(object):
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_network.html'
+    template_name = 'new/account/network.html'
     status = contact_statuses
     is_connected = True
 
@@ -437,7 +437,8 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_inbox.html'
+    template_name = 'new/account/inbox.html'
+    # template_name = 'app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')

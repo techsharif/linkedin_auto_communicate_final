@@ -2,20 +2,21 @@
 
 	
 $(document).ready(function() {
+	var tmp_object;
 	var url = window.location.href;
 	var statusColors = {
 		"0": "btn-purple",
-		"22": "bg-maroon",
-		"21": "bg-gray",
+		"22": "bg-dark",
+		"21": "bg-blue",
 		"10": "bg-green",
 		"12": "bg-yellow",
-		"200": "bg-default",
+		"200": "bg-danger",
 		"3": "bg-default",
-		"1": "bg-default",
+		"1": "bg-info",
 		"23": "bg-default",
 		"20": "bg-default",
 		"7": "bg-default",
-		"100": "bg-default",
+		"100": "bg-elegant",
 		"6": "bg-default",
 		"28": "bg-green",
 	};
@@ -25,6 +26,7 @@ $(document).ready(function() {
 	
     var table = $('#campaign_people').DataTable( {
         "ajax": url,
+		"dom": '<"row"<"col-sm-4"l><"col-sm-4 text-center"p><"col-sm-4"f>>tip',
         'initComplete': function(settings){
             var api = this.api();
 			/* disale the disable checkbox now
@@ -71,7 +73,7 @@ $(document).ready(function() {
                 "data": null,
                 "render": function ( data, type, row ) {
                 	var v =  row[status_index];
-                	var btncolor = statusColors[v]? statusColors[v]: 'bg-maroon';
+                	var btncolor = statusColors[v]? statusColors[v]: 'btn-purple btn-gradient';
                 	
                     var html = '<span data-status="'+ v +'" data-contactid="'+ row[0] +'" class="btn '+ btncolor;
                     html+= ' btn-block" data-click="change_status" data-toggle="tooltip"';
@@ -116,17 +118,20 @@ $(document).ready(function() {
          "drawCallback": function( settings ) {
         	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
         	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect']
-        		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item ">Mark Later</a>';
-        		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item bg-gray ">Mark No Interest</a>';
-        		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item bg-green ">Mark Replied</a>';
-        		popover+= '<a href="#" data-status="12" data-click="changeStatus" class="list-group-item bg-yellow ">Mark Talking</a>';
-        		popover+= '<a href="#" data-status="22" data-click="changeStatus" class=" list-group-item bg-maroon">Mark Old Connect</a>';
+        		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item bg-light-blue btn-gradient">Mark Later</a>';
+        		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item bg-light-green btn-gradient">Mark No Interest</a>';
+        		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item bg-light btn-gradient">Mark Replied</a>';
+        		popover+= '<a href="#" data-status="12" data-click="changeStatus" class="list-group-item bg-mdb-color btn-gradient">Mark Talking</a>';
+        		popover+= '<a href="#" data-status="22" data-click="changeStatus" class=" list-group-item btn-blue btn-gradient">Mark Old Connect</a>';
         		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
+        	 $('[data-click="change_status"]').click(function(){
+        	 	tmp_object = this
+			 });
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
         		 placement: 'bottom',
-        		 target: 'body'
+        		 target: 'body',
         	 });
         	
           },
@@ -137,23 +142,20 @@ $(document).ready(function() {
     
 	var header_buttons = '';
 	if(inboxPage){
-		//inbox page
-		
-		header_buttons+= '<button class="btn btn-default mr" data-click="markRead">Mark as read</button>';
-		header_buttons+= '<button class="btn btn-default mr" data-click="markUnread">Mark as unread</button>';
-		header_buttons+= '<button class="btn btn-default mr" data-click="removeFromCampaign" data-cid="1">Delete</button>';
-		
+		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 	}else if (path.indexOf('network')>=0){
 		//network page
 		
-		header_buttons+= '<span class="btn btn-default btn-datafilter mr-lg mb-lg"><input  type="checkbox" data-click="connector">&nbsp;&nbsp;Show Connector contacts</span>';
-		header_buttons+= '<span class="btn btn-default btn-datafilte mr-lg mb-lg"><input  type="checkbox" data-click="messenger">&nbsp;&nbsp;Show Messenger contacts</span>';
-		header_buttons+= '<span class="btn btn-default btn-datafilte mr-lg mb-lg"><input  type="checkbox" data-click="talking">&nbsp;&nbsp;Show Talking contacts</span>';
-		header_buttons+= '<a class="btn btn-default mr" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a>';
-		header_buttons+= '<a class="btn btn-default mr" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a>';
+		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="connector">&nbsp;&nbsp;Show Connector contacts</span>';
+		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="messenger">&nbsp;&nbsp;Show Messenger contacts</span>';
+		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="talking">&nbsp;&nbsp;Show Talking contacts</span>';
+		header_buttons+= '&nbsp;<a class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a>';
+		header_buttons+= '&nbsp;<a class="btn btn-primary btn-gradient btn-sm waves-effect waves-light" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a>';
 	}
 	// plus csv export
-	header_buttons+= '<button class="btn btn-default export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
+	header_buttons+= '&nbsp;<button class="btnbtn btn-primary btn-gradient waves-effect waves-light export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
 	
 	$("div.toolbar").html(header_buttons);
 	$(".dataTables_filter").addClass("col-md-3 mt-sm  mb-sm");
@@ -175,23 +177,27 @@ $(document).ready(function() {
         .draw();
 	});
 	
-    $('table').on('click', 'a[data-click="changeStatus"]', function(e){
+    $('body').on('click', 'a[data-click="changeStatus"]', function(e){
         if($('.popoverButton').length>1)
 	        $('.popoverButton').popover('hide');
 	    $(e.target).popover('toggle');
-	    
 	    var parent = $(this).parent();
 	    parent.popover('hide');
-	    var statusbox = parent.prev();
+
+	    // var statusbox = parent.prev();
+		var statusbox = $(tmp_object);
+	    console.log( statusbox.data('contactid'));
+
 	    var contactid = statusbox.data('contactid');
 	    var old_status = statusbox.data('status');
 	    var new_status = $(this).data('status');
-	    changeContactStatus(contactid, new_status, old_status, function(contactid, new_status, old_status){
+	    changeContactStatus(contactid, new_status, old_status, function( contactid, new_status, old_status){
 	    	
 	    	var oldcolor = statusColors[old_status];
 	    	var newcolor = statusColors[new_status];
-	    	console.log('changing status:', old_status, oldcolor, newcolor, new_status);
-	    	spanbox = $('td>span[data-contactid="' + contactid + '"]');
+	    	var spanbox = $('td>span[data-contactid="' + contactid + '"]');
+	    	console.log('changing status:', old_status, oldcolor, contact_statuses[new_status], spanbox);
+
 	    	spanbox.text(contact_statuses[new_status]);
 	    	spanbox.removeClass(oldcolor).addClass(newcolor);
 	    	
@@ -202,7 +208,6 @@ $(document).ready(function() {
     function changeContactStatus(contactid, new_status, old_status, cb){
     	var url = "/account/contact/" + contactid + "/status?status="+new_status;
     	$.get(url).done(function(res){
-    		
     		if (res.ok){
     			cb(contactid, new_status, old_status);
     		}
@@ -217,7 +222,9 @@ $(document).ready(function() {
 	});
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
+
 		var rows_selected = table.column(0).checkboxes.selected();
+
 		if(rows_selected.length < 1){
 			alert_no_contact();
     		return;
@@ -249,8 +256,9 @@ $(document).ready(function() {
 	
 	//add selected
     $('#add_selected').click( function(e){
-    	
-    	var rows_selected = table.column(0).checkboxes.selected();
+    	var $table             = table.table().node();
+	    var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+    	var rows_selected = $chkbox_checked;
     	var contacts = [];
     	$.each(rows_selected, function(index, rowId){
     		contacts.push(rowId);
