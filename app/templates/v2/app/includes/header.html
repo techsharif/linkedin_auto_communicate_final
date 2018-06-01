@@ -34,29 +34,12 @@
     </ul>
 
     <div class="collapse navbar-collapse" id="navbar-header-content">
-    <ul class="navbar-nav navbar-language-translation mr-auto">
-
-
-        <!---<li class="nav-item dropdown">
-
-            <a class="nav-link dropdown-toggle" id="navbar-dropdown-menu-link" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
-                <i class="batch-icon batch-icon-book-alt-"></i>
-                English
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbar-dropdown-menu-link">
-                <li><a class="dropdown-item" href="#">Français</a></li>
-                <li><a class="dropdown-item" href="#">Deutsche</a></li>
-                <li><a class="dropdown-item" href="#">Español</a></li>
-            </ul>
-
-        </li>
-    </ul>
+        <ul class="navbar-nav navbar-language-translation mr-auto">
+        </ul>
         {% if user.is_authenticated %}
-            <ul class="navbar-nav ml-5 navbar-profile">
         {% endif %}    
+            <ul class="navbar-nav ml-5 navbar-profile">
         </li> 
-    </ul>
-        {% if user.is_authenticated %}
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-notification-search" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
@@ -89,7 +72,7 @@
                                     <div class="notification-text">
 
                                     </div>
-                                    <span class="notification-time">Just now</span> -->
+                                    <!--<span class="notification-time">Just now</span>-->
                                 </div>
                             </a>
                         </li>
@@ -97,9 +80,7 @@
                     </ul>
                 </li>
             </ul>
-
             <ul class="navbar-nav ml-5 navbar-profile">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-dropdown-navbar-profile" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <div class="profile-name">
