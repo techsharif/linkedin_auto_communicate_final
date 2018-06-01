@@ -1,0 +1,125 @@
+{% extends 'v2/app/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+
+
+    <main class="main-content p-5" role="main">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Task Queue</h1>
+                        </div>
+                    </div>
+                    <div class="row mb-5 task-manager">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                     Outstanding Tasks
+                                    <!-- <p class="task-list-stats">
+                                        <span class="task-list-total">0</span> tasks created
+                                    </p> -->
+                                    <!-- <div class="header-btn-block">
+                                        <a href="task-list.html" class="btn btn-primary">
+                                            <i class="batch-icon batch-icon-eye"></i> 
+                                            See My Tasks
+                                        </a>
+                                        <a href="#" class="btn btn-outline-danger" id="delete-task">
+                                            <i class="batch-icon batch-icon-bin-alt-2"></i>
+                                        </a>
+                                    </div> -->
+                                </div>
+                                <!--
+                                    card-task-list: Accepts additional classes: no-strike-out
+                                -->
+                                <div class="card-task-list no-strike-out">
+                                    <ul class="task-list">
+                                        {% if upcoming_tasks %}
+                                            <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            
+                                                            <th>Task Type</th>
+                                                            <th>Name</th>                               
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for task in upcoming_tasks %}
+                                                    <tr>
+                                                        <td>{{ task.queue_type }}</td>
+                                                        <td>{{task.content_object }}</td>
+
+                                                    </tr>
+
+                                                    {% endfor %}
+                                                        
+                                                    </tbody>
+                                            </table>
+                                        {% else %}
+                                            There are no tasks
+                                        {% endif %}    
+                                                                                                                                                      
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Completed Tasks
+                                    <!-- <p class="task-list-stats">
+                                        <span class="task-list-total">0</span> tasks created
+                                    </p> -->
+                                    
+                                </div>
+                                <!--
+                                    card-task-list: Accepts additional classes: no-strike-out
+                                -->
+                                <div class="card-task-list no-strike-out">
+                                    <ul class="task-list">
+                                       
+                                       {% if finished_tasks %}
+                                            <table class="table">
+                                                <thead>
+                                                        
+                                                    <tr>            
+                                                        <th>Task type</th>
+                                                        <th>Name</th>
+                                                        <th>Date completed</th>
+                               
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for task in finished_tasks %}
+
+                                                    <tr>
+                                                        <td>{{ task.queue_type }}</td>
+                                                        <td>{{ task.content_object }}</td>
+                                                        <td>{{ task.updated_at }}</td>
+
+                                                    </tr>
+
+        
+                                                {% endfor %}
+
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            There are no tasks
+                                        {% endif %} 
+                                                                              
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </main>
+
+  
+
+{% endblock content %}

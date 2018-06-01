@@ -1,11 +1,19 @@
 {% load static %}
-<nav id="sidebar" class="px-0 bg-dark bg-gradient sidebar">
+<nav id="sidebar" class="px-0 bg-dark bg-gradient sidebar sidebar-hidden">
     <ul class="nav nav-pills flex-column">
-        <li class="logo-nav-item">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'assets/img/logo-white.png' %}" width="145" height="32.3" alt="QuillPro">
-            </a>
+        <li class="logo-nav-item text-center">
+            <a class="navbar-brand" >
+                <div class="profile-picture bg-gradient bg-primary has-message float-right">
+                    <img src="{% static 'assets/img/profile-pic.jpg' %}" width="44" height="44">
 
+
+                </div>
+
+
+            </a>
+            <div>
+                parshotam.kumar32@gmail.com
+                </div>
         </li>
         <li>
             <h6 class="nav-header">General</h6>
@@ -23,6 +31,24 @@
                     Accounts <span class="sr-only">(current)</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-task-new' pk=user.id %}">
+                    <i class="batch-icon batch-icon-list"></i>
+                    Tasks Queue <span class="sr-only">(current)</span>
+            <li class="nav-item">
+                <a class="nav-link" href="/subscription/">
+                    <i class="batch-icon batch-icon-user-alt-3"></i>
+                    Subscription <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/new-search/">
+                    <i class="batch-icon batch-icon-search"></i>
+                    Search Results
+
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
                     <i class="batch-icon batch-icon-out"></i>
