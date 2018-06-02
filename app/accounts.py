@@ -127,7 +127,8 @@ class SearchResultView_NEW(View):
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
-    template_name = 'account/accounts.html'
+    template_name = 'v2/account/accounts.html'
+    # template_name = 'account/accounts.html'
 
     def get_queryset(self):
         qs = super(AccountList, self).get_queryset()

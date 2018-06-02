@@ -21,14 +21,40 @@
                     </a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding: 0 2.083rem 2.083rem 2.083rem">
 
-                <ul class="list-group list-group-flush">
+{#                <ul class="list-group list-group-flush">#}
+{##}
+{##}
+{#                    {% for item in object_list %}#}
+{##}
+{#                        <li class="list-group-item">#}
+{#                            {% if item.login_status %}#}
+{#                                <a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a>#}
+{#                            {% else %}#}
+{#                                <a href="#" id="inactive_account_click"#}
+{#                                   data-email="{{ item.email }}"#}
+{#                                   data-pass="{{ item.password }}">{{ item.email }}</a>#}
+{#                            {% endif %}#}
+{##}
+{##}
+{#                            <a href="#" onclick="return deleteAccount({{item.id}})"><i class="batch-icon batch-icon-bin-alt-2 float-right ml-3"></i></a>#}
+{##}
+{#                            <span class="float-right badge badge-{% if item.status %}success{% else %}warning{% endif %}">{% if item.status %}#}
+{#                            Active{% else %}Inactive{% endif %}</span>#}
+{#                        {% if item.login_status %}#}
+{#                                <a class="float-right badge badge-primary" style="margin-right: .5em"  href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"#}
+{#                                   data-original-title="" title="">Settings</a> {% endif %}#}
+{#                        </li>#}
+{##}
+{#                    {% endfor %}#}
+{#                </ul>#}
 
-
-                    {% for item in object_list %}
-
-                        <li class="list-group-item">
+                <table class="table" style="margin-top: 0">
+                     <tbody>
+                     {% for item in object_list %}
+                    <tr style="border-bottom:1px solid #eeeef4; ">
+                        <td style="border-top: 0">
                             {% if item.login_status %}
                                 <a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a>
                             {% else %}
@@ -36,18 +62,22 @@
                                    data-email="{{ item.email }}"
                                    data-pass="{{ item.password }}">{{ item.email }}</a>
                             {% endif %}
-
-                            {% if item.login_status %}
-                                <a href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"
-                                   data-original-title="" title="">Settings</a> {% endif %}
-                            <a href="#" onclick="return deleteAccount({{item.id}})"><i class="batch-icon batch-icon-bin-alt-2 float-right ml-3"></i></a>
-
+                        </td>
+                        <td style="border-top: 0">
                             <span class="float-right badge badge-{% if item.status %}success{% else %}warning{% endif %}">{% if item.status %}
                             Active{% else %}Inactive{% endif %}</span>
-                        </li>
+                        </td>
+                        <td style="border-top: 0">
+                            <a class="float-right badge badge-danger" href="#" onclick="return deleteAccount({{item.id}})">Delete</a>
+                             {% if item.login_status %}
+                                <a class="float-right badge badge-primary" style="margin-right: .5em"  href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip"
+                                   data-original-title="" title="">Settings</a> {% endif %}
 
+                        </td>
+                    </tr>
                     {% endfor %}
-                </ul>
+                     </tbody>
+                </table>
 
             </div>
             <div class="card-footer text-center">
