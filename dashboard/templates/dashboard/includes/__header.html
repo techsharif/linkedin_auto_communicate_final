@@ -4,15 +4,15 @@
         <li class="logo-nav-item">
             <a class="navbar-brand" href="#">
                 <img src="{% static 'images/logo.png' %}" width="145" height="32.3" alt="QuillPro">
+        </li>
             </a>
-        </li>
         <li>
-            <h6 class="nav-header">General</h6>
         </li>
-        <li class="nav-item">
             <a class="nav-link {% if request.path == '/dashboard/' %} active {% endif %}" href="{% url 'dashboard' %}">
-                <i class="batch-icon batch-icon-browser-alt"></i>
                 Dashboard
+        <li class="nav-item">
+            <h6 class="nav-header">General</h6>
+                <i class="batch-icon batch-icon-browser-alt"></i>
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>

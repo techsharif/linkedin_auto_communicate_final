@@ -1,41 +1,27 @@
-{% extends 'account/base.html' %}
+{% extends 'new/account/base.html' %}
 {% load static %}
-
-{% block extra_head %}
-    <link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css">
-{% endblock %}
-
 {% block title %}Inbox{% endblock title %}
-{% block pagetitle %}
-Inbox
-{% endblock %}
-
 {%block content%}
 <section class="content">
-   
-<div class="row">
-	<div class="col-md-9 bg-white " style="position:relative">
-	
-	
-		{% include 'app/includes/people_datatable.html' with contacts=object_list %}
-		
-		
-	</div>
-	<div class="col-md-3 bg-white" id="uinfo_box"><!-- DIRECT CHAT PRIMARY -->
-	
-
-	</div>
+<div class="row mb-4">
+    <div class="col-md-9 mb-5">
+        <div class="card">
+            <div class="card-body">
+               {% include 'app/includes/people_datatable.html' with contacts=object_list %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-5">
+        <div class="card">
+            <div class="card-body">
+                <div id="uinfo_box"></div>
+            </div>
+        </div>
+    </div>
 </div>
 </section>
-
 {%endblock%}
-
-
 {% block pagefooter%}
-
 {% include 'app/includes/datatable_pagefooter.html' %}
-
-
-
 {%endblock%}
 

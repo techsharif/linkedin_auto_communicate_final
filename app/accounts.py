@@ -32,109 +32,19 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
-csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
-# ****************************************** New views *****************************************
-
-@method_decorator(decorators, name='dispatch')
-class AccountList_NEW(ListView):
-    model = LinkedInUser
-    template_name = 'v2/account/accounts.html'
-
-    def get_queryset(self):
-        qs = super(AccountList_NEW, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountSearch_NEW(View):
-    template_name = 'v2/account/account_search.html'
-
-    def get(self, request, pk):
-        searches = Search.objects.filter(owner__pk=pk)
-        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
-        linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
-        return render(request, self.template_name,
-                      {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user': linkedin_user})
-
-    def post(self, request, pk):
-        search_form = SearchForm(request.POST)
-        if search_form.is_valid():
-            search = search_form.save(commit=False)
-            linkedin_user = LinkedInUser.objects.get(pk=pk)
-            search.owner = linkedin_user
-            search.save()
-            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH,
-                    extra_id=search.id).save()
-        return HttpResponseRedirect(reverse('account-search', args=[pk]))
-
-
-# Old views
-
-@method_decorator(csrf_exempt_decorators, name='dispatch')
-class SearchResultView_NEW(View):
-    def _clone_to_contact(self, qs, campaign):
-        # is there a better way to do this??
-        for row in qs.all():
-            row.attach_to_campaign(campaign)
-
-    def post(self, request):
-        print(request.POST)
-        if 'search_head' not in request.POST.keys() or (not request.POST['search_head'].isdigit()):
-            return render(request, 'account/search_render/search_select.html')
-        print(request.POST['search_head'])
-        search_id = int(request.POST['search_head'])
-        search = get_object_or_404(Search, pk=search_id, owner__user=request.user)
-        if not search.result_status():
-            return render(request, 'account/search_render/search_waiting.html')
-
-        if not search.result_count():
-            return render(request, 'account/search_render/no_search_result.html')
-
-        item = []
-        if 'selected_items[]' in request.POST.keys():
-            item = list(map(int, request.POST.getlist('selected_items[]')))
-        elif 'selected_items' in request.POST.keys():
-            item += [int(request.POST.get('selected_items'))]
-        elif 'add_all_selected_item_button' in request.POST.keys():
-            search_results = SearchResult.objects.filter(search=search, status=None)
-            search_results.update(status=ContactStatus.IN_QUEUE_N)
-
-        if item:
-            if 'campaign' in request.POST.keys():
-                campaign = Campaign.objects.get(id=int(request.POST['campaign']))
-                search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn
-                search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      connect_campaign=campaign)
-                self._clone_to_contact(search_results, campaign)
-
-        search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'v2/account/search_render/search_render.html',
-                      {'search': search, 'search_results': search_results})
-
-
-
-
-
-
-
-
-# ******************************* Old views ****************************************
+# New views
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
-    template_name = 'v2/account/accounts.html'
-    # template_name = 'account/accounts.html'
+    template_name = 'account/accounts.html'
 
     def get_queryset(self):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-
 
 
 @method_decorator(decorators, name='dispatch')
@@ -182,6 +92,7 @@ class AccountDetail(AccountMixins, DetailView):
     template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
@@ -217,7 +128,7 @@ class AccountSettings(UpdateView):
         return context
 
 
-
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -419,7 +330,7 @@ class DataTable(object):
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
-    template_name = 'new/account/network.html'
+    template_name = 'account/account_network.html'
     status = contact_statuses
     is_connected = True
 
@@ -457,7 +368,7 @@ class AccountCampaign(AccounMessenger):
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearch(View):
-    template_name = 'account/account_search.html'
+    template_name = 'v2/account/account_search.html'
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
@@ -489,8 +400,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'new/account/inbox.html'
-    # template_name = 'app/accounts_inbox.html'
+    template_name = 'app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')

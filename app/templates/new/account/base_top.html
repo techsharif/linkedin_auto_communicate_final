@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="en">
   <head>
-    {% include 'dashboard/includes/__head.html' %}
+    {% include 'new/account/includes/__head.html' %}
     <title>
       {% block title %}B2B Prospects {% endblock title %}
     </title>
@@ -14,20 +13,22 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-        {% include 'dashboard/includes/__sidebar.html' %}
+         {% include 'new/account/includes/__top_header.html' %}
+          
         <div class="right-column">
-         {% include 'dashboard/includes/__header.html' %}
+        {% include 'new/account/includes/__top_menu.html' %}
+            
           <main class="main-content p-5" role="main">
             {% block content %}
             {% endblock %}
           </main>
       </div>
     </div>
+     {% block pagefooter %}
+     {% endblock %}
   </div>
-    {% include 'dashboard/includes/__script.html' %}
+    {% include 'new/account/includes/__script.html' %}
     {% block extra_script %}
-
-
     {% endblock %}
   </body>
 </html>

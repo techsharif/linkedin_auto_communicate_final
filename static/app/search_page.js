@@ -42,7 +42,6 @@ $(document).ready(function () {
     }
 
     $(".search-item").click(function () {
-
         set_search_head($(this).context.firstElementChild.innerHTML);
         load_data();
 

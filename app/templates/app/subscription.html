@@ -1,157 +1,88 @@
-{% extends 'app/base.html' %}
-{% load static %}
-
-{% block title %}Home{% endblock title %}
-
-{%block sidebar%}
-   
-{%endblock%}
-
-{%block pagecss%}
-    <link href="{% static 'css/AdminLTE.css' %}" rel="stylesheet" type="text/css" id="maincss">
-    <link href="{% static 'css/account.css' %}" rel="stylesheet" type="text/css" id="maincss">
-{%endblock%}
-
+{% extends 'v2/app/base.html' %} {% load static %} {% block title %}Home{% endblock title %} 
+{%block sidebar%} {%endblock%}
 {% block content %}
 
-   <section class="content">
-   
-   	<div class="row">
-	<div class="col-sm-4">
-		<div class="info-box">
-			<span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-briefcase"></i></span>
-
-			<div class="info-box-content">
-			  <span class="info-box-text">Current plan</span>
-			  <span class="info-box-number">TRIAL</span>
-			  
-			  <span>4 days left			</span></div>
-		</div>
-	</div>
-	
-	<div class="col-sm-4">
-		<div class="info-box">
-			<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
-
-			<div class="info-box-content">
-			  <span class="info-box-text">Seats</span>
-			  <span class="info-box-number">1</span>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-sm-4">
-		<div class="info-box">
-			<span class="info-box-icon bg-green"><i class="fa fa-dollar"></i></span>
-
-			<div class="info-box-content">
-			  <span class="info-box-text">Cost</span>
-			  <span class="info-box-number">FREE</span>
-			  			</div>
-		</div>
-	</div>
-</div>
 
 <div class="row">
-
-<div class="text-center">
-		<p>To select one of the plans, you need to add a payment method.</p>
-		<a href="/profile/?act=add_card" class="btn btn-primary">Add Payment Method</a>
-</div>
-</div>
-
-<br>
-
-<div class="row">
-	<div class="col-md-2 col-md-offset-3">
-		<div class="box text-center plan">
-			<div class="box-header with-border">
-				<p>STARTER</p>
-				<p class="price">$35 / seat</p>
-			</div>
-			<div class="box-body">
-				<p>Up to <strong>500</strong> results per search</p>
-				<p><strong>10</strong> saved searches</p>
-				<p><strong>5</strong> campaigns</p>
-				<p>2 way communication</p>
-				<p>Welcome message</p>
-				<p>‐</p>
-				<p>‐</p>
-				<p>‐</p>
-				<p>‐</p>
-			</div>
+	<div class="col-md-6 col-lg-4 mb-5">
+		<div class="card card-sm bg-info">
+			<div class="card-body">
+				<div class="mb-4 clearfix">
+					<div class="float-left text-warning text-left">
+						<i class="fa batch-icon-tag-alt-3 batch-icon-xxl"></i>
 					</div>
-	</div>
-	
-	<div class="col-md-2">
-		<div class="box text-center plan">
-			<div class="box-header with-border">
-				<p>PROFESSIONAL</p>
-				<p class="price">$50 / seat</p>
-			</div>
-			<div class="box-body">
-				<p>Up to <strong>750</strong> results per search</p>
-				<p><strong>50</strong> saved searches</p>
-				<p><strong>25</strong> campaigns</p>
-				<p>2 way communication</p>
-				<p>Welcome message</p>
-				<p>Custom connect message</p>
-				<p>Company &amp; title search filter</p>
-				<p>Withdraw invites</p>
-				<p>‐</p>
-			</div>
+					<div class="float-right text-right">
+						<h6 class="m-0">Current plan</h6>
 					</div>
-	</div>
-	
-	<div class="col-md-2">
-		<div class="box text-center plan">
-			<div class="box-header with-border">
-				<p>BUSINESS</p>
-				<p class="price">$75 / seat</p>
-			</div>
-			<div class="box-body">
-				<p><strong>Unlimited</strong> results per search</p>
-				<p><strong>Unlimited</strong> saved searches</p>
-				<p><strong>Unlimited</strong> campaigns</p>
-				<p>2 way communication</p>
-				<p>Welcome message</p>
-				<p>Custom connect message</p>
-				<p>Company &amp; title search filter</p>
-				<p>Withdraw invites</p>
-				<p>Export to CSV</p>
-			</div>
-					</div>
-	</div>
-</div>
-<br>
-<div class="row">
-	<div class="col-md-8 col-md-offset-1">
-	<div class="box">
-		<div class="box-header with-border">
-			<h4>Payments</h4>
-		</div>
-		<div class="box-body table-responsive">
-				There are no payments yet.
 				</div>
-	</div>
-	</div>
-	
-	<div class="col-md-2">
-	<div class="box">
-		<div class="box-header with-border">
-			<h4>Invoices</h4>
-		</div>
-		<div class="box-body table-responsive">
-		<table class="table">
-			<tbody>
-						</tbody>
-		</table>
+				<div class="text-right clearfix">
+					<div class="display-4">TRIAL</div>
+					<div class="m-0">4 days left</div>
+				</div>
+			</div>
 		</div>
 	</div>
+	<div class="col-md-6 col-lg-4 mb-5">
+		<div class="card card-sm">
+			<div class="card-body">
+				<div class="mb-4 clearfix">
+					<div class="float-left text-warning text-left">
+						<i class="batch-icon batch-icon-star batch-icon-xxl"></i>
+					</div>
+					<div class="float-right text-right">
+						<h6 class="m-0">Reviews</h6>
+					</div>
+				</div>
+				<div class="text-right clearfix">
+					<div class="display-4">Seats</div>
+					<div class="m-0">
+						<a href="#">1</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-lg-4 mb-5">
+		<div class="card card-sm bg-danger">
+			<div class="card-body">
+				<div class="mb-4 clearfix">
+					<div class="float-left text-left">
+						<i class="batch-icon batch-icon-section batch-icon-xxl"></i>
+					</div>
+					<div class="float-right text-right">
+						<h6 class="m-0">Prince Plan</h6>
+					</div>
+				</div>
+				<div class="text-right clearfix">
+					<div class="display-4">Cost</div>
+					<div class="m-0">FREE</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+<div class="row my-5 pt-5 clearfix">
+	<div class="col-md-12">
+		<div class="price-list-type-2 clearfix">
+			{% include 'v2/app/includes/price_block.html' with price=Free %}
+            {% include 'v2/app/includes/price_block.html' with price=Professional %}
+            {% include 'v2/app/includes/price_block.html' with price=Business %}
+		</div>
+	</div>
+</div>
+<div class="text-center">
+	<p>To select one of the plans, you need to add a payment method.</p>
+	<a href="/profile/?act=add_card" class="btn btn-primary">Add Payment Method</a>
+</div>
 
-	</section>
-
+<style>
+	@media (min-width: 1200px) {
+		.price-list-type-2 .plan {
+			width: 30%;
+		}
+		.price-list-type-2 {
+			max-width: 1376px;
+		}
+	}
+ </style>
 {%endblock%}
-

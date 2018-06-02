@@ -1,6 +1,5 @@
-{% extends 'account/base.html' %}
+{% extends 'new/account/base.html' %}
 {% load static %}
-
 {% block extra_head %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.1.0/nouislider.css">
 {% endblock %}
@@ -9,17 +8,12 @@
 {% block pagetitle %}
 Account Settings
 {% endblock %}
-
-
 {% block content %}
+    <div class="row mb-1 justify-content-center">
+    <div class="col-md-8 mb-5">
+        <div class="card">
 
-    <section class="content">
-
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+            <div class="card-header">
                          <div class="row">
                              <div class="col-md-8">
                                  <h3>{{ object.email }} </h3>
@@ -72,21 +66,22 @@ Account Settings
                          </div>
                          </div>
                     </div>
-                    <div class="panel-body">
-                        <p>{{ connections }} CONNECTIONS</p>
-                    </div>
-                </div>
+            <div class="card-body">
+                <blockquote class="blockquote">
+                                   <p>{{ connections }} CONNECTIONS</p>
+
+                </blockquote>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                         <h3 class="panel-title">Schedule</h3>
-
+    </div>
+</div>
+    <div class="row mb-1 justify-content-center">
+    <div class="col-md-8 mb-5">
+          <div class="card">
+                    <div class="card-header">
+                         <h3 class="card-title">Schedule</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="box-body">
                         <form method="POST">
                             {% csrf_token %}
@@ -649,22 +644,12 @@ Account Settings
                     </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-
-    </section>
-
-
-
+    </div>
+</div>
 {% endblock %}
-
-
 {% block pagefooter %}
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.1.0/nouislider.js"></script>
     <script>
-
         var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         var sel = document.getElementById('tz');

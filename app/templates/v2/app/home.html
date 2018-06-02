@@ -1,15 +1,7 @@
 
 {% extends 'v2/app/base.html' %}
-
-
-
-
 {% block title %}Home{% endblock title %}
 {% block content %}
-
-
-
-
 <div class="row mb-5">
     <div class="col-md-12">
         <div class="card">
@@ -41,14 +33,11 @@
     </div>
 </div>
 <div class="row mb-5">
-    <div class="col-lg-12 ">
-
-        <div class="row">
-            {% include 'v2/app/includes/price_block.html' with price=Starter %}
-
+    <div class="col-md-12">
+           <div class="price-list-type-2 clearfix">
+            {% include 'v2/app/includes/price_block.html' with price=Free %}
             {% include 'v2/app/includes/price_block.html' with price=Professional %}
             {% include 'v2/app/includes/price_block.html' with price=Business %}
-
         </div>
     </div>
 </div>
@@ -59,6 +48,16 @@
         </footer>
     </div>
 </div>
+<style>
+   @media (min-width: 1200px) {
+       .price-list-type-2 .plan {
+           width: 30%;
+       }
+       .price-list-type-2 {
+           max-width: 1376px;
+       }
+   }
+</style>
 
 {% endblock content %}
 

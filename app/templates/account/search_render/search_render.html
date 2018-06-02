@@ -143,7 +143,7 @@
 
 
         function set_ajax_data(data) {
-
+            console.log(data)
             $('#ajax_data_render_field').html(JSON.stringify(data));
         }
 
@@ -160,7 +160,7 @@
 
 
         $("#search_submit_btn").click(function () {
-            
+            console.log($('#search_text_input').value);
             set_search_text($('#search_text_input')[0].value);
             load_data();
 
