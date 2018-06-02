@@ -335,13 +335,12 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
         ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
         ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
-
         return ctx
 
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
-    template_name = 'v2/account/account_messenger.html'
+    template_name = 'account/account_messenger.html'
     is_bulk = True
     model = Campaign
 
