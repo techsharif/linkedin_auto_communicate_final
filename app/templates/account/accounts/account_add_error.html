@@ -1,12 +1,7 @@
 <div class="col-md-12 mb-3 justify-content-center">
-        {% include 'account/accounts/progress_authentication.html' with step=0 %}
-        <div class="progress" id="progress_bar">
-            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar progress-bar-lg" role="progressbar" style="width: 25%;"
-                aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
         <div class="col-md-12">
             <div class="alert alert-warning" role="alert">
-                <strong>Please check the issues!</strong> 
+                <strong>Please check the issues!</strong> <br>
                     You can not add user with this email and password. .                
                     <ul>
                     <li>Account with this email is already exits</li>
@@ -16,6 +11,7 @@
         </div>
     </div>
 <script>
-    $('#add_account').show();
-    $('#modal-form').show();
+     setTimeout(function(){
+         $('.alert-warning').hide();
+    }, 5000);
 </script>

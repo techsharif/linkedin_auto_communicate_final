@@ -150,14 +150,20 @@
 		data.password = $('#password')[0].value;
 		$("#div_add_email").hide();
 		$(".progress-total").show();
-		$.ajax({
+		var counter = 0;
+
+        $.ajax({
 			url: '{% url 'add-account' %}',
 			type: "post",
 			data: data,
 			success: function (response) {
+			    counter++;
 				load(data)				
-				interval = setInterval(function () {
+				var interval = setInterval(function () {
 					load(data)
+                    if (counter >= 20){
+					    clearInterval(interval);
+                    }
 				}, 10000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -175,14 +181,13 @@
 	function addLinkedInAccount() {
 		$("#wizard-stage-1").submit();
 	}
-
 	function load(data) {
 		$.ajax({
 			url: '{% url 'account-info' %}',
 			type: "post",
 			data: data,
 			success: function (response) {
-				console.log(response)
+				console.log(response);
 				$('#modal-form').hide();
 				$('#add_connect_button').hide();
 				$('#step_result_form').html(response)
