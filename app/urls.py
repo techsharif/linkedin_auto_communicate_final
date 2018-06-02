@@ -10,7 +10,7 @@ urlpatterns = [
     # NEW URLS
     url(r'^layout/styles/landing/$', views.new_landing),
     url(r'^layout/styles/auth/$', views.new_auth),
-    url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
+    url(r'^register/$', views.RegisterView, name='register'),
     url(r'^login/$', views.LoginView, name='LoginView'),
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
@@ -49,10 +49,8 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_done.html'),
         name='password_reset_done'),
-    url(r'^register/$', views.RegisterView.as_view(), name='register'),
 
-    url(r'^registered/$', views.TemplateView.as_view(
-        template_name='registration/register_done.html'),
+    url(r'^registered/$', views.TemplateView.as_view(template_name='registration/register_done.html'),
         name='register_done'),
 
     url(r'^subscription/$', views.SubsriptionView.as_view(), name='subscription'),

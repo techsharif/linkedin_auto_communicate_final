@@ -99,19 +99,14 @@
                             </a>
                         </li>
                         <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        <li onclick="___log_out()"><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </li>
             </ul>
-
         {%else%}
-
-
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item">
-
                     <a class="nav-link" href="/login/" id="navbar-notification-search" >
-
                         <i class="batch-icon batch-icon-in"></i> Sign in
                     </a>
                 </li>
@@ -124,4 +119,32 @@
        {%endif%}
 
     </div>
-    </nav>
+</nav>
+
+{% block script %}
+    <script>
+    function ___log_out(){
+        $.confirm({
+            title: 'Are you sure sign out?',
+            icon:'fa fa-unlock',
+            theme:'material',
+            content: 'Are you sure Log out？',
+            autoClose: 'cancel|6000',
+            typeAnimated: true,
+            animationSpeed: 1000,
+            buttons: {
+                ok: {
+                    text: 'yes',
+                    action: function () {
+                        var strURL = "{% url 'logout' %}";
+                        window.location.href = strURL;
+                    }
+                },
+                cancel: {
+                    text: 'no'
+                }
+            }
+        });
+    }
+    </script>
+{% endblock script %}

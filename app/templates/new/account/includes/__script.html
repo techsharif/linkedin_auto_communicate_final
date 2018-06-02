@@ -14,3 +14,29 @@
 <script src="{%static 'dashboard/bower_components/jquery-confirm2/js/jquery-confirm.js'%}"></script>
 <script src="{%static 'dashboard/bower_components/izimodal/js/iziModal.min.js'%}"></script>
 <script type="text/javascript" src="{% static 'new/js/scripts.js' %}"></script>
+
+<script>
+    function ___log_out(){
+        $.confirm({
+            title: 'Are you sure sign out?',
+            icon:'fa fa-unlock',
+            theme:'material',
+            content: 'Are you sure Log out？',
+            autoClose: 'cancel|6000',
+            typeAnimated: true,
+            animationSpeed: 1000,
+            buttons: {
+                ok: {
+                    text: 'yes',
+                    action: function () {
+                        var strURL = "{% url 'logout' %}";
+                        window.location.href = strURL;
+                    }
+                },
+                cancel: {
+                    text: 'no'
+                }
+            }
+        });
+    }
+</script>
