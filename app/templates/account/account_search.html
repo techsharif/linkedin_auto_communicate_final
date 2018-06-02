@@ -1,7 +1,6 @@
 {% extends 'new/account/base.html' %} {% load static %} {% block extra_head %}
 <link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css"> {% endblock %} {% block title %}Settings{% endblock title %} {% block pagetitle %} Search {% endblock %} 
 {% block content %}
-
 <div class="col-md-12 mb-4">
     <div class="card card-lg">
         <div class="card-body">
@@ -75,17 +74,8 @@
 <section class="content" style="height:80%">
 
 </section>
-{% endblock %} {% block pagefooter %}
-
-
-
-
-
-
-
-
-
-
+{% endblock %} 
+{% block pagefooter %}
 <div>
     <form id="add_search" class="modal fade in" tabindex="-1" role="dialog" method="POST" action="" autocomplete="off" id="search_dialog">
         {% csrf_token %}
@@ -141,11 +131,8 @@
                                     <label>Industry</label>
                                     <input class="form-control" type="text" name="industry" id="search_industry">
                                 </div>
-<<<<<<< HEAD
                             </div>
-
                             <div role="tabpanel" class="tab-pane" id="search_url">
-
                                 <div class="form-group">
                                     <label>Insert LinkedIn search page URL below</label>
                                     <input class="form-control" type="url"  name="url_search"
@@ -153,15 +140,12 @@
                                     <p>If you want to use filters available directly on LinkedIn, run search on LinkedIn and copy-paste complete URL above.</p>
                                 </div>
                             </div>
-
                             <div role="tabpanel" class="tab-pane" id="search_sales">
-
                                 <div class="form-group">
                                     <label>Insert Sales Navigator search page URL below</label>
                                     <input class="form-control"  type="url" name="sales_search"
                                            id="sales_search">
                                     <p>If you want to use filters available directly in Sales Navigator, run search in Sales Navigator and copy-paste complete URL above.</p>
-=======
                                 <div class="form-group">
                                     <label>Company</label>
                                     <input class="form-control" type="text" name="company" id="search_company">
@@ -169,7 +153,6 @@
                                 <div class="form-group">
                                     <label>Title</label>
                                     <input class="form-control" type="text" name="title" id="search_title">
->>>>>>> develop
                                 </div>
                             </div>
                         </div>

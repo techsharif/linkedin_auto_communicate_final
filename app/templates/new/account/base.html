@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="en">
   <head>
     {% include 'new/account/includes/__head.html' %}
@@ -14,15 +13,9 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-<<<<<<< HEAD
-        {% include 'new/account/includes/__header.html' %}
-        <div class="right-column">
-         {% include 'new/account/includes/__sidebar.html' %}
-=======
         {% include 'new/account/includes/__sidebar.html' %}
         <div class="right-column">
          {% include 'new/account/includes/__header.html' %}
->>>>>>> develop
           <main class="main-content p-5" role="main">
             {% block content %}
             {% endblock %}
@@ -34,8 +27,6 @@
   </div>
     {% include 'new/account/includes/__script.html' %}
     {% block extra_script %}
-
-
     {% endblock %}
   </body>
 </html>
