@@ -65,10 +65,10 @@ def RegisterView_NEW(request):
 
         print( "msg = ")
         print (msg)
-    return render(request, 'v2/registration/register.html',{'msg':msg})
+    return render(request, 'v2/registration/register.html', {'msg': msg})
 
 
-def LoginView_NEW(request):
+def LoginView(request):
     msg=''
     if request.POST:
         email = request.POST.get('email')
