@@ -94,7 +94,7 @@ def LoginView_NEW(request):
     return render(request, 'v2/registration/login.html',{'msg' : msg})
   
 class HomeView_NEW(TemplateView):
-    template_name = 'v2/app/home.html'
+    template_name = 'v2/app/landing.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(HomeView_NEW, self).get_context_data(**kwargs)
