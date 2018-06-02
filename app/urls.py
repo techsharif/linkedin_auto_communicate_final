@@ -25,24 +25,6 @@ urlpatterns = [
 
         url(r'^account/(?P<pk>[\d]+)/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
 
-    # Changes Old URLS
-    #     url(r'^old/$', views.HomeView.as_view(), name='home'),
-    #
-    #     url(r'^old-login/$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    #
-    #     url(r'^old-register/$', views.RegisterView.as_view(), name='register'),
-    #
-        # url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-
-        #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
-
-        # url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
-
-        # url(r'^account/(?P<pk>[\d]+)/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
-
-
-
-
     # These are for user/page on our own
     url(r'^home/$', views.home),
 
