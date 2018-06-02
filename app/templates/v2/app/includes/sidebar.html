@@ -8,6 +8,7 @@
                 </div>
             </a>
             <div>
+                {{ user.username }}
             </div>
         </li>
         <li>
@@ -15,23 +16,32 @@
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">
+                <a class="nav-link {% if request.path == '/' %} active {% endif %}"  href="/">
                     <i class="batch-icon batch-icon-home"></i>
                     Home <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'accounts' %}">
+
+                <a class="nav-link {% if request.path == '/accounts/' %} active {% endif %}" href="/accounts/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Accounts <span class="sr-only">(current)</span>
                 </a>
             </li>
+
+            <!--<li class="nav-item">
+                <a class="nav-link " href="{% url 'account-task-new' pk=user.id %}">
+                    <i class="batch-icon batch-icon-list"></i>
+                    Tasks Queue <span class="sr-only">(current)</span>
+                </a>
+            </li>-->
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'subscription' %}">
+                <a class="nav-link {% if request.path == '/subscription/' %} active {% endif %}" href="/subscription/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Subscription <span class="sr-only">(current)</span>
                 </a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
                     <i class="batch-icon batch-icon-out"></i>

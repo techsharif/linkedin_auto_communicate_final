@@ -33,9 +33,24 @@
     </ul>
 
     <div class="collapse navbar-collapse" id="navbar-header-content">
-        <ul class="navbar-nav navbar-language-translation mr-auto">
-        </ul>
+    <ul class="navbar-nav navbar-language-translation mr-auto">
 
+
+        <!---<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbar-dropdown-menu-link" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
+                <i class="batch-icon batch-icon-book-alt-"></i>
+                English
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbar-dropdown-menu-link">
+                <li><a class="dropdown-item" href="#">Français</a></li>
+                <li><a class="dropdown-item" href="#">Deutsche</a></li>
+                <li><a class="dropdown-item" href="#">Español</a></li>
+            </ul>
+        </li>--->
+
+
+
+    </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item dropdown">
@@ -56,12 +71,13 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle no-waves-effect ml-3" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle no-waves-effect" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
+                        <!--<span class="notification-number"></span>--->
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-md" aria-labelledby="navbar-notification-misc">
                         <li class="media">
-                            <a href="#">
+                            <a href="task-list.html">
                                 <i class="batch-icon batch-icon-bell batch-icon-xl d-flex mr-3"></i>
                                 <div class="media-body">
                                     <h6 class="mt-0 mb-1 notification-heading">You have no notification</h6>
@@ -76,14 +92,16 @@
                     </ul>
                 </li>
             </ul>
+
             <ul class="navbar-nav ml-5 navbar-profile">
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-dropdown-navbar-profile" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <div class="profile-name">
                             {{ user.username }}
                         </div>
                         <div class="profile-picture bg-gradient bg-primary has-message float-right">
-                            <img src="{% static 'assets/img/profile-pic.jpg' %}" width="44" height="44">
+                            <img src="/static/images/linkedin-in.svg" alt="Jonathan Korkol" width="60" height="60" class="img-thumbnail img-rectangle">
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-dropdown-navbar-profile">
