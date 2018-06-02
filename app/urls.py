@@ -9,6 +9,50 @@ from . import views
 urlpatterns = [
 
     # NEW URLS
+        url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
+
+        url(r'^login/$', views.LoginView_NEW, name='LoginView'),
+
+        url(r'^$', views.HomeView_NEW.as_view(), name='home'),
+
+        url(r'^accounts/$', acc_views.AccountList_NEW.as_view(), name='accounts'),
+
+        url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
+
+        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch_NEW.as_view(), name='account-search'),
+
+        url(r'^accounts/search_result/$', acc_views.SearchResultView_NEW.as_view(), name='account-search-result'),
+
+    # Changes Old URLS
+    #     url(r'^old/$', views.HomeView.as_view(), name='home'),
+    #
+    #     url(r'^old-login/$', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    #
+    #     url(r'^old-register/$', views.RegisterView.as_view(), name='register'),
+    #
+        # url(r'^old-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+
+        #url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+
+    # url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
+
+
+
+
+
+    # These are for user/page on our own
+    url(r'^home/$', views.home),
+
+    #url(r'^login/$', views.login, name='login'),
+    #url(r'^logout/$', views.logout, name='logout'),    
+    # confirm email
+    # change password
+    # forgot passsword
+
+    url(r'^logout/$', 
+        auth_views.LogoutView.as_view(
+            template_name='registration/logged_out.html',
+             next_page='/'),
     url(r'^new-home/$', views.HomeView_NEW.as_view(), name='home'),
     url(r'^new-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
     url(r'^layout/styles/landing/$', views.new_landing),
@@ -48,22 +92,18 @@ urlpatterns = [
     url(r'password_reset_complete',
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_complete.html'),
-        name='password_reset_complete'),
-
-    url(r'password_reset_done',
+        name='password_reset_complete'),        
+    url(r'password_reset_done', 
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_done.html'),
         name='password_reset_done'),
-    url(r'^register/$', views.RegisterView.as_view(), name='register'),
+    
 
     url(r'^registered/$', views.TemplateView.as_view(
         template_name='registration/register_done.html'),
         name='register_done'),
-
     url(r'^subscription/$', views.SubsriptionView.as_view(), name='subscription'),
-
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
-
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.ActivateAccount.as_view(), name='activate'),
 
@@ -73,8 +113,9 @@ urlpatterns = [
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
-    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name = 'remove-account'),
-    # url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
+    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name='remove-account'),
+    #url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
+
     url(r'^account/(?P<pk>[\d]+)/network/$',
         acc_views.AccountNetwork.as_view(), name='account-network'),
     url(r'^account/(?P<pk>[\d]+)/messenger/$',

@@ -1,4 +1,47 @@
 ACCOUNT_SEARCH_URL = ''
+
+
+function getDataNEW(search_id) {
+    set_search_head(search_id);
+    load_data();
+
+    $(".search-item").removeClass('active');
+    //$(e).addClass('active');
+}
+
+function set_ajax_data(data) {
+    $('#ajax_data_render_field').html(JSON.stringify(data));
+}
+
+function get_ajax_data() {
+    data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
+    return data;
+}
+
+function set_search_head(head) {
+    data = get_ajax_data();
+    data.search_head = head;
+    set_ajax_data(data);
+}
+
+function load_data() {
+    data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
+    $.ajax({
+        url: ACCOUNT_SEARCH_URL,
+        type: "post",
+        data: data,
+        success: function (response) {
+            $('#search_people').html(response);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+
+
+    });
+}
+
 $(document).ready(function () {
     console.log("ready!");
 
@@ -23,65 +66,40 @@ $(document).ready(function () {
     $('#ajax_data_render_field').html(JSON.stringify(create_ajax_requst_data()));
 
 
-    function load_data() {
-        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
-        $.ajax({
-            url: ACCOUNT_SEARCH_URL,
-            type: "post",
-            data: data,
-            success: function (response) {
-                $('#search_people').html(response);
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
 
 
-        });
-    }
-
-    $(".search-item").click(function () {
-
-        set_search_head($(this).context.firstElementChild.innerHTML);
-        load_data();
-
-        $(".search-item").removeClass('active');
-        $(this).addClass('active');
 
 
-    });
+    // $(".search-item").click(function () {
+    //     console.log()
+    //     set_search_head($(this).context.firstElementChild.innerHTML);
+    //     load_data();
+    //
+    //     $(".search-item").removeClass('active');
+    //     $(this).addClass('active');
+    //
+    //
+    // });
 
 
     $(".delete_search_result").click(function (event) {
-        event.preventDefault()
+        // event.preventDefault()
         $('#remove_search').modal('show');
 
-        $('#account_delete_form_model')[0].setAttribute('action', window.location.pathname + 'delete/' + $(this).parent()[0].children[0].innerHTML + '/')
+        $('#account_delete_form_model')[0].setAttribute('action', window.location.pathname + 'delete/' + $(this).attr('item-id') + '/')
+        return false;
 
     });
 
 
-    function set_ajax_data(data) {
-        $('#ajax_data_render_field').html(JSON.stringify(data));
-    }
 
-    function get_ajax_data() {
-        data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
-        return data;
-    }
-
-    function set_search_head(head) {
-        data = get_ajax_data();
-        data.search_head = head;
-        set_ajax_data(data);
-    }
 
 
     load_data();
 
 
     $("#new_search").click(function () {
+
 
         $('#advance_search_data').hide();
         $('#search_keyword').value = '';
@@ -104,6 +122,7 @@ $(document).ready(function () {
 
 
     $("#add_search_task").click(function (event) {
+
         event.preventDefault();
 
         error = 0
@@ -125,8 +144,7 @@ $(document).ready(function () {
         if (error != 2) {
             $('#search_keyword').parent().removeClass('has-error');
         }
-        console.log(isURL($('#search_url_form')[0].value))
-        console.log($('#search_url_form')[0].value)
+
         if ($('#search_url_form').is(":visible")) {
             if (!isURL($.trim($('#search_url_form')[0].value))) {
                 $('#search_url_form').parent().addClass('has-error');
