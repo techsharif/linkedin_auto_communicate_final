@@ -7,8 +7,8 @@ from . import views
 
 
 urlpatterns = [
-
     # NEW URLS
+
 
         url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
 
@@ -38,6 +38,9 @@ urlpatterns = [
             template_name='registration/logged_out.html',
              next_page='/'),
 
+    # original
+    url(r'^$', views.HomeView.as_view(), name='home'),
+    
     url(r'^password_reset/$', auth_views.password_reset,{
         'template_name': 'v2/registration/password_reset_form.html',
         'email_template_name': 'v2/registration/password_reset_subject.txt',
