@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <nav class="navbar navbar-expand-lg navbar-light bg-primary bg-gradient">
     <a class="navbar-brand" href="#" style="padding-top:12px">
         <span class="head-title">B2B Prospects</span>
@@ -35,8 +36,10 @@
     <div class="collapse navbar-collapse" id="navbar-header-content">
         <ul class="navbar-nav navbar-language-translation mr-auto">
         </ul>
-
         {% if user.is_authenticated %}
+        
+            <ul class="navbar-nav ml-5 navbar-profile">
+        </li> 
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-notification-search" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
@@ -58,6 +61,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle no-waves-effect ml-3" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
+                        <span class="notification-number"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-md" aria-labelledby="navbar-notification-misc">
                         <li class="media">
@@ -95,14 +99,11 @@
                             </a>
                         </li>
                         <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        <li onclick="___log_out()"><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </li>
             </ul>
-
         {%else%}
-
-
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item">
                     <a class="nav-link" href="/login/" id="navbar-notification-search" >
@@ -118,4 +119,32 @@
        {%endif%}
 
     </div>
-    </nav>
+</nav>
+
+{% block script %}
+    <script>
+    function ___log_out(){
+        $.confirm({
+            title: 'Are you sure sign out?',
+            icon:'fa fa-unlock',
+            theme:'material',
+            content: 'Are you sure Log out？',
+            autoClose: 'cancel|6000',
+            typeAnimated: true,
+            animationSpeed: 1000,
+            buttons: {
+                ok: {
+                    text: 'yes',
+                    action: function () {
+                        var strURL = "{% url 'logout' %}";
+                        window.location.href = strURL;
+                    }
+                },
+                cancel: {
+                    text: 'no'
+                }
+            }
+        });
+    }
+    </script>
+{% endblock script %}

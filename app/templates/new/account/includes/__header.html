@@ -1,4 +1,6 @@
- {% load static %}
+
+{% load static %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
 	<a class="navbar-brand d-block d-sm-block d-md-block d-lg-none" href="#">
 		<img src="{% static 'new/img/logo-dark.png' %}" width="145" height="32.3" alt="QuillPro">
@@ -33,15 +35,11 @@
 		</li>
 	</ul>
 
-	<!--  DEPRECATED CODE:
-						<div class="navbar-collapse" id="navbarSupportedContent">
-					-->
 	<!-- USE THIS CODE Instead of the Commented Code Above -->
 	<!-- .collapse added to the element -->
 	<div class="collapse navbar-collapse" id="navbar-header-content">
 		<ul class="navbar-nav navbar-language-translation mr-auto">
 			<li class="nav-item dropdown">
-
 			</li>
 		</ul>
 		<ul class="navbar-nav navbar-notifications float-right">
@@ -130,8 +128,9 @@
 					<li>
 						<a class="dropdown-item" href="{% url 'account-settings' pk=pk %}">Settings</a>
 					</li>
-					<li>
-						<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+					<li onclick="___log_out()">
+						<a class="dropdown-item">Logout</a>
+
 					</li>
 				</ul>
 			</li>

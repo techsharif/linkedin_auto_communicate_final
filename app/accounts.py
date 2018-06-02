@@ -34,56 +34,16 @@ User = get_user_model()
 decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountList_NEW(ListView):
-    model = LinkedInUser
-    template_name = 'account/accounts.html'
-
-    def get_queryset(self):
-        qs = super(AccountList_NEW, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountSearch_NEW(View):
-    template_name = 'v2/account/account_search.html'
-
-    def get(self, request, pk):
-        searches = Search.objects.filter(owner__pk=pk)
-        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
-        linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
-        return render(request, self.template_name,
-                      {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user': linkedin_user})
-
-    def post(self, request, pk):
-        search_form = SearchForm(request.POST)
-        if search_form.is_valid():
-            search = search_form.save(commit=False)
-            linkedin_user = LinkedInUser.objects.get(pk=pk)
-            search.owner = linkedin_user
-            search.save()
-            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH,
-                    extra_id=search.id).save()
-        return HttpResponseRedirect(reverse('account-search', args=[pk]))
-
-
-
-# ******************************* Old views ****************************************
-
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
-    template_name = 'v2/account/accounts.html'
-    # template_name = 'account/accounts.html'
+    template_name = 'account/accounts.html'
 
     def get_queryset(self):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-
+      
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -165,7 +125,7 @@ class AccountSettings(UpdateView):
         return context
 
 
-
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')

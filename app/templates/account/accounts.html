@@ -1,11 +1,12 @@
  {% extends 'v2/app/base.html' %} {% load static %} {% block title %}Account{% endblock %} {% block content %}
 <div class="row mb-5 justify-content-center">
-	<div class="col-md-8">
+
+	<div class="col-md-7">
 		<div class="card">
-			<div class="card-header text-sm-center">
+			<div class="card-header">
 				<h2>
 					<i class="batch-icon batch-icon-user-alt-3 batch-icon-xl"></i>
-					Accounts
+					Linkedin Accounts
 				</h2>
 				<a data-toggle="modal" data-target=".add-linkedin-account" class="btn btn-primary waves-effect waves-light pull-right">
 					<i class="batch-icon batch-icon-user-alt-add"></i>
@@ -30,12 +31,13 @@
 						</td>
 						<td class="text-right">
 							{% if item.login_status %}
-							<a class="btn bg-primary btn-gradient" href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip" data-original-title=""
+
+							<a class="btn bg-primary btn-sm btn-gradient" href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip" data-original-title=""
 							    title="">
 								<i class="batch-icon-settings batch-icon"></i>
 							</a>
 							{% endif %}
-							<a class="btn bg-danger btn-gradient" onclick="return deleteAccount({{item.id}})">
+							<a class="btn bg-danger btn-sm btn-gradient" onclick="return deleteAccount({{item.id}})">
 								<span class="batch-icon batch-icon-bin-alt-2"></span>
 							</a>
 						</td>
@@ -50,7 +52,6 @@
 		</div>
 	</div>
 </div>
-
 <div class="modal fade add-linkedin-account" id="linkedin_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
     aria-hidden="true">
 	<div class="modal-dialog modal-lg">
@@ -159,7 +160,8 @@
 													</li>
 													<li class="previous">
 														<a class="btn btn-secondary" href="#">
-															<i class="batch-icon batch-icon-arrow-right"></i>
+															<i class="batch-icon batch-icon-arrow-left"></i>
+
 														</a>
 													</li>
 													<li class="next last" style="display:none;">
@@ -167,7 +169,8 @@
 													</li>
 													<li class="next">
 														<a class="btn btn-primary" href="#" onclick="return addLinkedInAccound()">
-															Next
+                                             <i class="batch-icon batch-icon-arrow-right"></i>
+
 														</a>
 													</li>
 												</ul>
