@@ -8,6 +8,6 @@ db.sqlite3
 .pydevproject
 .settings
 local_settings.py
-jetbuzz/wsgi.py
+# jetbuzz/wsgi.py
 venv/
 .idea/*
