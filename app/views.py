@@ -93,18 +93,6 @@ def LoginView(request):
 
     return render(request, 'v2/registration/login.html',{'msg' : msg})
   
-class HomeView_NEW(TemplateView):
-    template_name = 'v2/app/home.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super(HomeView_NEW, self).get_context_data(**kwargs)
-        for x in MembershipType.objects.all():
-            ctx[x.name] = x
-        # print('ctx:', ctx)
-        return ctx
-# OLD Views
-
-
 def home(request):
     return render(request, 'home/base.html')
 
@@ -116,13 +104,13 @@ def new_auth(request):
     return render(request, 'new/auth/base.html')
 
 class HomeView(TemplateView):
-    template_name = 'app/home.html'
-    print("template_name = " + template_name)
+    template_name = 'v2/app/home.html'
+    models = MembershipType
     def get_context_data(self, **kwargs):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         for x in MembershipType.objects.all():
             ctx[x.name] = x
-        # print('ctx:', ctx)
+        print('ctx:-------------------', ctx)
         return ctx
 
 
