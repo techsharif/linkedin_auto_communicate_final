@@ -366,7 +366,7 @@ class DataTable(object):
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
-    template_name = 'new/account/network.html'
+    template_name = 'account/account_network.html'
     status = contact_statuses
     is_connected = True
 
