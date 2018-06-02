@@ -16,6 +16,14 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
+
+       <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts' %}">
+                <i class="batch-icon batch-icon-user-alt-3 "></i>
+                Accounts
+                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
                 <i class="batch-icon batch-icon-bullhorn-alt"></i>
@@ -40,13 +48,7 @@
             </a>
         </li>
 
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="batch-icon batch-icon-user-alt-3 "></i>
-                Connector
-                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
-            </a>
-        </li> -->
+
         <li class="nav-item">
             <a class="nav-link" href="{% url 'account-search' pk=pk %}">
                 <i class="batch-icon batch-icon-search-alt"></i>

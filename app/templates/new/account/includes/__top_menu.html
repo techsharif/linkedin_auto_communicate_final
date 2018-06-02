@@ -9,6 +9,12 @@
                     Home
                 </a>
             </li>
+           <li class="nav-item">
+                <a class="nav-link" href="{% url 'accounts' %}">
+                    <i class="batch-icon batch-icon-user-alt-3 "></i>
+                    Accounts
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
                     <i class="batch-icon batch-icon-bullhorn-alt"></i>
