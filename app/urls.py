@@ -12,9 +12,9 @@ urlpatterns = [
 
         url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
 
-        url(r'^login/$', views.LoginView_NEW, name='LoginView'),
+        url(r'^login/$', views.LoginView, name='LoginView'),
 
-        url(r'^$', views.HomeView_NEW.as_view(), name='home'),
+
 
         url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
 
@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^logout/$', 
         auth_views.LogoutView.as_view(
             template_name='registration/logged_out.html',
-             next_page='/'),
+             next_page='/'), name='logout'),
 
     # original
     url(r'^$', views.HomeView.as_view(), name='home'),

@@ -444,7 +444,7 @@ class AccountTask(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):
-    template_name = 'account/accounts_messenger_add.html'
+    template_name = 'v2/account/accounts_messenger_add.html'
     form_class = CreateCampaignMesgForm
     is_bulk = True
 
@@ -524,7 +524,7 @@ class AccountMessengerActive(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
-    template_name = 'account/accounts_messenger_update.html'
+    template_name = 'v2/account/accounts_messenger_update.html'
     form_class = UpdateCampConnectForm
     model = Campaign
 

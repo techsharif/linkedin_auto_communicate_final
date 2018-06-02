@@ -5,12 +5,12 @@
     <title>
         {% block title %}
 
-        {% endblock title %}
+        {% endblock %}
     </title>
 
     {% include 'v2/account/includes/head.html' %}
     {% block head %}
-    {% endblock head %}
+    {% endblock %}
 
 </head>
 
@@ -24,7 +24,7 @@
 				<main class="main-content p-5" role="main">
 
                     {% block content %}
-                    {% endblock content %}
+                    {% endblock %}
 
 
                 </main>
@@ -40,6 +40,6 @@
 
 
 
-    {% endblock script %}
+    {% endblock %}
 </body>
 </html>

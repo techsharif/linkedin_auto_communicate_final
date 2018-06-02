@@ -1,5 +1,7 @@
 {% load static %}
 
+{% block script %}
+
 <script src="{% static 'js/datatables.min.js' %}"></script>
 <script src="{% static 'js/dataTables.checkboxes.min.js' %}"></script>
 <script type="text/javascript">
@@ -20,5 +22,5 @@
 	
 <script src="{% static 'app/inbox.js' %}?v=10"></script>
 		
-
+{% endblock %}
 

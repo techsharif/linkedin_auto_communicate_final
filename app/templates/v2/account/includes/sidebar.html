@@ -16,19 +16,19 @@
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="/">
+                <a class="nav-link {% if '/home/' in request.path %} active {% endif %} " href="/">
                     <i class="batch-icon batch-icon-home"></i>
                     Home <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/accounts/">
+                <a class="nav-link {% if request.path == '/accounts/' %} active {% endif %}" href="/accounts/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Accounts <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/subscription/">
+                <a class="nav-link {% if request.path == '/subscription/' %} active {% endif %}" href="/subscription/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Subscription <span class="sr-only">(current)</span>
                 </a>
@@ -47,31 +47,31 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account-messenger' pk=pk %}">
+                <a class="nav-link {% if 'messenger' in request.path %} active {% endif %}" href="{% url 'account-messenger' pk=pk %}">
                     <i class="batch-icon batch-icon-speech-bubble-left-tip-solid-text"></i>
                     Messenger <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account-campaign' pk=pk %}">
+                <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
                     <i class="batch-icon batch-icon-user"></i>
                     Connector <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account-search' pk=pk %}">
+                <a class="nav-link {% if 'search' in request.path %} active {% endif %}" href="{% url 'account-search' pk=pk %}">
                     <i class="batch-icon batch-icon-search-alt"></i>
                     Search <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account-all' pk=pk %}">
+                <a class="nav-link {% if 'all' in request.path %} active {% endif %}" href="{% url 'account-all' pk=pk %}">
                     <i class="batch-icon batch-icon-inbox"></i>
                     Inbox <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account-task' pk=pk %}">
+                <a class="nav-link {% if 'task' in request.path %} active {% endif %}" href="{% url 'account-task' pk=pk %}">
                     <i class="batch-icon batch-icon-marquee"></i>
                     Tasks Queue <span class="sr-only">(current)</span>
                 </a>
