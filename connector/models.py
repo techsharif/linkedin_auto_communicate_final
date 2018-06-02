@@ -15,8 +15,8 @@ class Search(CommonContactField):
     search_name = models.CharField(max_length=254)
     # how to deal with either of these 3 is null in form
     keyword = models.CharField(max_length=254, blank=True, null=True)
-    url_search = models.URLField(blank=True, null=True)
-    sales_search = models.URLField(blank=True, null=True)
+    url_search = models.URLField(blank=True, null=True, max_length=1000)
+    sales_search = models.URLField(blank=True, null=True, max_length=1000)
     location = models.CharField(max_length=254, blank=True, null=True)
     industry = models.CharField(max_length=254, blank=True, null=True)
     company = models.CharField(max_length=254, blank=True, null=True)

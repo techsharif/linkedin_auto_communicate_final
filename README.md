@@ -32,6 +32,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ## The best is to use virtuall environemtn
 
+## For ApplyNewLayout branch
+	Please do not change urls of current pages. 
+	So we can run the current branch on port 8001 and your development branch on 8000.
+	That way we can cross checking and merge with master branch easily.
+	
 
 ## Authors
 

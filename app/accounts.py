@@ -35,7 +35,6 @@ decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
-
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
@@ -45,6 +44,31 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
+
+
+@method_decorator(decorators, name='dispatch')
+class AccountSearch_NEW(View):
+    template_name = 'v2/account/account_search.html'
+
+    def get(self, request, pk):
+        searches = Search.objects.filter(owner__pk=pk)
+        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
+        linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
+        return render(request, self.template_name,
+                      {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user': linkedin_user})
+
+    def post(self, request, pk):
+        search_form = SearchForm(request.POST)
+        if search_form.is_valid():
+            search = search_form.save(commit=False)
+            linkedin_user = LinkedInUser.objects.get(pk=pk)
+            search.owner = linkedin_user
+            search.save()
+            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH,
+                    extra_id=search.id).save()
+        return HttpResponseRedirect(reverse('account-search', args=[pk]))
+
+
 
 
 @method_decorator(decorators, name='dispatch')
@@ -92,7 +116,6 @@ class AccountDetail(AccountMixins, DetailView):
     template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
-
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
@@ -400,7 +423,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_inbox.html'
+    template_name = 'app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')
@@ -643,13 +666,15 @@ def can_add_account(user):
     # check if the current user can add more linked account
     pass
 
+
 @method_decorator(decorators, name='dispatch')
-def remove_account(request, pk):
-    linekedin_user = LinkedInUser.objects.get(id=pk)
-    if linekedin_user.bot_ip:
-        FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-    linekedin_user.delete()
-    return redirect('accounts')
+class RemoveAccount(View):
+    def get(self, request, pk):
+        linekedin_user = LinkedInUser.objects.get(id=pk)
+        if linekedin_user.bot_ip:
+            FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
+        linekedin_user.delete()
+        return redirect('accounts')
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -693,3 +718,18 @@ class SearchResultView(View):
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
+
+@method_decorator(decorators, name='dispatch')
+class AccountTask_NEW(View):
+    template_name = 'v2/account/account_task_queue.html'
+
+    def get(self, request, pk):
+        linkedin_user = LinkedInUser.objects.get(user_id=pk)
+        all_task_queue = TaskQueue.objects.filter(owner=linkedin_user)
+        finished_tasks = all_task_queue.filter(status=BotTaskStatus.DONE)
+        upcoming_tasks = all_task_queue.exclude(status=BotTaskStatus.DONE)
+
+        context = {'finished_tasks': finished_tasks, 'upcoming_tasks': upcoming_tasks, 'pk': pk}
+        context['linkedin_user'] = linkedin_user
+        context['pk'] = pk
+        return render(request, self.template_name, context)

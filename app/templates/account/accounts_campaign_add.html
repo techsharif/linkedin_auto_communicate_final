@@ -1,4 +1,4 @@
-{% extends 'account/base.html' %}
+{% extends 'new/account/base.html' %}
 {% load static %}
 
 {% block title %}New Connector Campaign{% endblock title %}
@@ -7,32 +7,21 @@
     New Connector Campaign
 {% endblock %}
 
-
 {% block content %}
-    <section class="content">
 
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <form class="panel panel-info" method="POST">
-
-                    <div class="panel-heading">
-                        <h3 class="text-center">New Connector Campaign</h3>
-                    </div>
-
-                    {% include 'account/campaign/add_form.html' with form=form %}
-
-
-                    <div class="panel-footer">
-                        <input type="submit" name="save" class="btn btn-info btn-block"
-                               value="CREATE CONNECTOR CAMPAIGN">
-                    </div>
-                </form>
-
-                <!-- /.box -->
+<div class="row mb-5 justify-content-md-center">
+    <div class="col-md-5 mb-5">
+        <div class="card text-center">
+            <div class="card-header">
+                    New Connector Campaign
+            </div>
+            <div class="card-body">
+                <form method="post">
+                        {% include 'account/campaign/add_form.html' with form=form %}
+                        <input type="submit" name="save" class="btn btn-primary btn-gradient waves-effect waves-light btn-block" value="CREATE CONNECTOR CAMPAIGN">
+                </form>               
             </div>
         </div>
-    </section>
-
-
-
+    </div>
+</div>
 {% endblock %}

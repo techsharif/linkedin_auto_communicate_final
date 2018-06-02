@@ -14,31 +14,33 @@
             <div>
                 parshotam.kumar32@gmail.com
                 </div>
-
         </li>
         <li>
             <h6 class="nav-header">General</h6>
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="/new-home/">
                     <i class="batch-icon batch-icon-home"></i>
                     Home <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/accounts/">
+                <a class="nav-link" href="/new-accounts/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Accounts <span class="sr-only">(current)</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-task-new' pk=user.id %}">
+                    <i class="batch-icon batch-icon-list"></i>
+                    Tasks Queue <span class="sr-only">(current)</span>
             <li class="nav-item">
                 <a class="nav-link" href="/subscription/">
                     <i class="batch-icon batch-icon-user-alt-3"></i>
                     Subscription <span class="sr-only">(current)</span>
                 </a>
             </li>
-
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
@@ -47,17 +49,15 @@
                 </a>
             </li>
 
-
-
         {%else%}
             <li class="nav-item">
-                <a class="nav-link" href="/login/">
+                <a class="nav-link" href="/new-login/">
                     <i class="batch-icon batch-icon-in"></i>
                     Sign In <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/register/">
+                <a class="nav-link" href="/new-register/">
                     <i class="batch-icon batch-icon-user-alt-add"></i>
                     Sign Up <span class="sr-only">(current)</span>
                 </a>

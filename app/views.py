@@ -13,22 +13,22 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-
+from .models import AdminEmail
 from app.forms import UserRegisterForm
 from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
 from datetime import timedelta
+import datetime
 
 User = get_user_model()
+
 
 # New views
 
 def AccountSearch_NEW(request):
-    return render(request, 'v2/account/account_search.html')
-
-
-
+    return render(request, 'v2/account/account_search.html')  
+  
 def RegisterView_NEW(request):
     msg=''
     if request.POST:
@@ -65,10 +65,10 @@ def RegisterView_NEW(request):
 
         print( "msg = ")
         print (msg)
-    return render(request, 'v2/registration/register.html',{'msg':msg})
+    return render(request, 'v2/registration/register.html', {'msg': msg})
 
 
-def LoginView_NEW(request):
+def LoginView(request):
     msg=''
     if request.POST:
         email = request.POST.get('email')
@@ -78,7 +78,6 @@ def LoginView_NEW(request):
         USER = authenticate(username=email, password=password)
         print(USER)
         if USER is not None:
-
             USER.is_active = True
             USER.save()
             login(request, USER)
@@ -93,12 +92,7 @@ def LoginView_NEW(request):
             msg="invalid_user"
 
     return render(request, 'v2/registration/login.html',{'msg' : msg})
-
-
-
-
-
-
+  
 class HomeView_NEW(TemplateView):
     template_name = 'v2/app/home.html'
 
@@ -108,16 +102,18 @@ class HomeView_NEW(TemplateView):
             ctx[x.name] = x
         # print('ctx:', ctx)
         return ctx
-
-
-
-
 # OLD Views
+
 
 def home(request):
     return render(request, 'home/base.html')
 
+def new_landing(request):
+    return render(request, 'new/landing/base.html')
 
+
+def new_auth(request):
+    return render(request, 'new/auth/base.html')
 
 class HomeView(TemplateView):
     template_name = 'app/home.html'
@@ -128,9 +124,6 @@ class HomeView(TemplateView):
             ctx[x.name] = x
         # print('ctx:', ctx)
         return ctx
-
-
-
 
 
 class RegisterView(CreateView):
@@ -209,8 +202,21 @@ class ActivateAccount(View):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
+            # send welcome email to user
+            # site_name = get_current_site(self.request)
+            # todo: change hard code subject
+            subject = 'Getting started with JetBuzz'
+            message = render_to_string('app/account_activated_email.html', {
+                'current_date': datetime.datetime.now().strftime('%Y-%m-%d')
+            })
+            # send activation link to the user
+            bccs = AdminEmail.objects.all()
+            send_bcc = []
+            for bcc in bccs:
+                send_bcc.append(bcc.email)
+            user.email_user(subject, message, None, send_bcc)
             login(request, user)
-            ## add membership only
+            # add membership only
             # profile = user.profile
             # if profile.day_to_live <= 0:
             membership_type, created = MembershipType.objects.get_or_create(name='Free')
@@ -222,5 +228,3 @@ class ActivateAccount(View):
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
-
-

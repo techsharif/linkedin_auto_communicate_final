@@ -3,8 +3,12 @@ from django.core import serializers
 from django.core.serializers import json
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 User = get_user_model()
+
+
+
 
 
 class BotTaskStatus:
@@ -60,6 +64,9 @@ class LinkedInUser(models.Model):
     is_weekendwork = models.BooleanField(default=True)
     # for bot ip
     bot_ip = models.GenericIPAddressField(blank=True, null=True)
+
+    last_message_send_date = models.DateField(blank=True, null=True)
+    message_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.email
@@ -185,3 +192,10 @@ class FreeBotIP(models.Model):
 
     def __str__(self):
         return str(self.bot_ip)
+
+
+class AdminEmail(models.Model):
+    email = models.EmailField(max_length=70, blank=True)
+
+    def __str__(self):
+        return str(self.email)

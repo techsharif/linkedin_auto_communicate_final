@@ -8,9 +8,8 @@ from . import views
 
 urlpatterns = [
 
-
-
     # NEW URLS
+
         url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
 
         url(r'^login/$', views.LoginView_NEW, name='LoginView'),
@@ -38,30 +37,44 @@ urlpatterns = [
         auth_views.LogoutView.as_view(
             template_name='registration/logged_out.html',
              next_page='/'),
-        name='logout'),
-    url(r'^forgotpw', 
-        auth_views.PasswordResetView.as_view(
-            template_name='registration/page-forgot-password.html'),
-        name='forgotpw'),                  
-    url(r'password_reset_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+
+    url(r'^password_reset/$', auth_views.password_reset,{
+        'template_name': 'v2/registration/password_reset_form.html',
+        'email_template_name': 'v2/registration/password_reset_subject.txt',
+        'html_email_template_name': 'v2/registration/password_reset_email.html',
+        'subject_template_name': 'v2/registration/password_reset_subject.txt',
+    }, name='password_reset'),
+    url(r'^password_reset/done/$', auth_views.password_reset_done,
+        {'template_name': 'v2/registration/password_reset_form.html'}, name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.password_reset_confirm,
+        {'template_name': 'v2/registration/password_reset_confirm.html'}, name='password_reset_confirm'),
+    url(r'^reset/done/$', auth_views.password_reset_complete,
+        {'template_name': 'v2/registration/password_reset_done.html'},
+        name='password_reset_complete'),
+    url(r'password_reset_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.PasswordResetConfirmView.as_view(
             template_name='registration/page-password_reset_confirm.html'),
         name='password_reset_confirm'),
     url(r'password_reset_complete',
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_complete.html'),
-        name='password_reset_complete'),        
-    url(r'password_reset_done', 
+        name='password_reset_complete'),
+
+    url(r'password_reset_done',
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_done.html'),
         name='password_reset_done'),
-    
+    url(r'^register/$', views.RegisterView.as_view(), name='register'),
 
     url(r'^registered/$', views.TemplateView.as_view(
-        template_name='registration/register_done.html'), 
+        template_name='registration/register_done.html'),
         name='register_done'),
+
     url(r'^subscription/$', views.SubsriptionView.as_view(), name='subscription'),
+
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
+
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.ActivateAccount.as_view(), name='activate'),
 
@@ -71,9 +84,8 @@ urlpatterns = [
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
-    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name='remove-account'),
-    #url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
-
+    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name = 'remove-account'),
+    # url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
     url(r'^account/(?P<pk>[\d]+)/network/$',
         acc_views.AccountNetwork.as_view(), name='account-network'),
 
@@ -82,12 +94,14 @@ urlpatterns = [
 
     url(r'^account/(?P<pk>[\d]+)/search/delete/(?P<search_id>[\d]+)/$',
         acc_views.AccountSearchDelete.as_view(), name='account-search-delete'),
-    url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), 
+    url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(),
         name='account-search-result'),
     url(r'^account/(?P<pk>[\d]+)/all/$',
         acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask.as_view(), name='account-task'),
+    url(r'^new-account/(?P<pk>[\d]+)/tasks/$',
+        acc_views.AccountTask_NEW.as_view(), name='account-task-new'),
     url(r'^account/(?P<pk>[\d]+)/messenger/add$',
         acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/add$',
@@ -98,17 +112,10 @@ urlpatterns = [
         acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
     url(r'^account/bottask/(?P<pk>[\d]+)$',
         acc_views.AccountBotTask.as_view(), name='bottask'),
-
     url(r'^account/messenger/(?P<pk>[\d]+)/delete$',
         acc_views.AccountMessengerDelete.as_view(), name='messenger-campaign-delete'),
     url(r'^account/campaigns/(?P<pk>[\d]+)/delete$',
         acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
-    url(r'^account/campaigns/(?P<pk>[\d]+)/active', 
-        acc_views.AccountMessengerActive.as_view(), name='connector-campaign-active'),
-    url(r'^account/messenger/(?P<pk>[\d]+)/active',
-        acc_views.AccountMessengerActive.as_view(), name='messenger-campaign-active'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
         name='contact-status')
-    
-    
 ]
