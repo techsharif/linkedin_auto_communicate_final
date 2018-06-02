@@ -2,12 +2,10 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-from django.shortcuts import get_object_or_404, render, redirect
-from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
-
 import requests
 
 from app.models import LinkedInUser
@@ -15,6 +13,8 @@ from app.models import LinkedInUser
 
 # from django.shortcuts import render
 login_decorators = (login_required, )
+
+
 
 @method_decorator(login_decorators, name="dispatch")
 class DashBoard(ListView):
@@ -33,13 +33,6 @@ class DashBoard(ListView):
         linkedin_user.bot_ip = ip
         linkedin_user.save()
         return redirect('dashboard')
-
-    def get_context_data(self, **kwargs):
-        ctx = super(DashBoard, self).get_context_data(**kwargs)
-        # count connection number by
-        ctx['pk'] = self.kwargs.get('pk')
-        print('pk:', self)
-        return ctx
 
 
 class Proxy(TemplateView):
@@ -68,7 +61,7 @@ class Proxy(TemplateView):
             for linked_user in linkedin_user:
                 action = ''
                 activate = ''
-                if linked_user.status:
+                if linked_user.login_status:
                     action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="setting('+str(linked_user.id)+')">setting</button>'
                     action += '<button class="btn btn-sm btn-danger btn-gradient waves-effect waves-light activat-button" onclick="update_status('+str(linked_user.id)+', 0)">Off</button>'
                     activate = '''<button class="btn btn-sm btn-primary btn-gradient
@@ -101,7 +94,7 @@ class Proxy(TemplateView):
         try:
             if request.POST.get('linked_id'):
                 linked_user = LinkedInUser.objects.filter(id=int(request.POST.get('linked_id')))
-                linked_user.update(status=int(request.POST.get('status')))
+                linked_user.update(login_status=int(request.POST.get('status')))
                 print(int(request.POST.get('linked_id')))
                 if int(request.POST.get('status')) == 1:
                     message = 'Activated Successfully!'

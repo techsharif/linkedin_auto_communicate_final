@@ -34,9 +34,12 @@
     </ul>
 
     <div class="collapse navbar-collapse" id="navbar-header-content">
-    <ul class="navbar-nav navbar-language-translation mr-auto">
-    </ul>
+        <ul class="navbar-nav navbar-language-translation mr-auto">
+        </ul>
         {% if user.is_authenticated %}
+        
+            <ul class="navbar-nav ml-5 navbar-profile">
+        </li> 
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-notification-search" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
@@ -58,11 +61,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle no-waves-effect" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
-                        <!--<span class="notification-number"></span>--->
+                        <span class="notification-number"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-md" aria-labelledby="navbar-notification-misc">
                         <li class="media">
-                            <a href="task-list.html">
+                            <a href="#">
                                 <i class="batch-icon batch-icon-bell batch-icon-xl d-flex mr-3"></i>
                                 <div class="media-body">
                                     <h6 class="mt-0 mb-1 notification-heading">You have no notification</h6>
@@ -77,9 +80,7 @@
                     </ul>
                 </li>
             </ul>
-
             <ul class="navbar-nav ml-5 navbar-profile">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-dropdown-navbar-profile" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <div class="profile-name">
@@ -115,7 +116,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/new-register/" id="navbar-notification-search" >
+                    <a class="nav-link" href="/register/" id="navbar-notification-search" >
                         <i class="batch-icon batch-icon-user-alt-add"></i> Sign up
                     </a>
                 </li>

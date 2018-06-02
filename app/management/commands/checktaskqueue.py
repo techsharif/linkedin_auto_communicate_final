@@ -76,6 +76,7 @@ class Command(BaseCommand):
                         chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact,
                                                    campaign=connect_campaign,
                                                    text=message, time=timezone.now())
+                        chat_message.save()
                         BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
                                 name=connect_campaign)
                         connect_campaign.owner.message_count += 1

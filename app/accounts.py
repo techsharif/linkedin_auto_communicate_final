@@ -37,12 +37,12 @@ decorators = (never_cache, login_required,)
 # New views
 
 @method_decorator(decorators, name='dispatch')
-class AccountList_NEW(ListView):
+class AccountList(ListView):
     model = LinkedInUser
     template_name = 'v2/account/accounts.html'
 
     def get_queryset(self):
-        qs = super(AccountList_NEW, self).get_queryset()
+        qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
 
@@ -73,14 +73,14 @@ class AccountSearch_NEW(View):
 # Old views
 
 @method_decorator(decorators, name='dispatch')
-class AccountList(ListView):
-    model = LinkedInUser
-    template_name = 'account/accounts.html'
-
-    def get_queryset(self):
-        qs = super(AccountList, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
+# class AccountList(ListView):
+#     model = LinkedInUser
+#     template_name = 'account/accounts.html'
+#
+#     def get_queryset(self):
+#         qs = super(AccountList, self).get_queryset()
+#         qs = qs.filter(user=self.request.user)
+#         return qs
 
 
 
@@ -97,7 +97,7 @@ class RemoveAccount(View):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        # pk here is pk of linkeduser table,
+        # pk here is pk of linkeduser table, 
         if 'object' in ctx:
             if isinstance(ctx['object'], Campaign):
                 ctx['pk'] = ctx['object'].owner_id
@@ -129,7 +129,6 @@ class AccountDetail(AccountMixins, DetailView):
     template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
-
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by
@@ -342,7 +341,7 @@ class DataTable(object):
         qs = super(DataTable, self).get_queryset()
         qs = qs.filter(owner_id=self.kwargs.get('pk'))
 
-        # if 'my account' should limit 'connected' or 'old connected'
+        # if 'my network' should limit 'connected' or 'old connected'
         if self.is_connected:
             qs = qs.filter(is_connected=self.is_connected)
 
@@ -367,20 +366,6 @@ class DataTable(object):
 
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_network.html'
-    status = contact_statuses
-    is_connected = True
-
-    def get_context_data(self, **kwargs):
-        ctx = super(AccountNetwork, self).get_context_data(**kwargs)
-        ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
-        ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
-
-        return ctx
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountNetwork_NEW(AccountMixins, DataTable, ListView):
     template_name = 'account/account_network.html'
     status = contact_statuses
     is_connected = True
@@ -451,7 +436,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_inbox.html'
+    template_name = 'app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')
@@ -738,7 +723,7 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn
+                # attache to a campagn                
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
                                       connect_campaign=campaign)
                 self._clone_to_contact(search_results, campaign)
