@@ -32,9 +32,8 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
-
-# New views
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -69,18 +68,6 @@ class AccountSearch_NEW(View):
                     extra_id=search.id).save()
         return HttpResponseRedirect(reverse('account-search', args=[pk]))
 
-
-# Old views
-
-@method_decorator(decorators, name='dispatch')
-# class AccountList(ListView):
-#     model = LinkedInUser
-#     template_name = 'account/accounts.html'
-#
-#     def get_queryset(self):
-#         qs = super(AccountList, self).get_queryset()
-#         qs = qs.filter(user=self.request.user)
-#         return qs
 
 
 
@@ -164,7 +151,7 @@ class AccountSettings(UpdateView):
         return context
 
 
-csrf_exempt_decorators = decorators + (csrf_exempt,)
+
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
@@ -380,7 +367,7 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
-    template_name = 'account/account_messenger.html'
+    template_name = 'v2/account/account_messenger.html'
     is_bulk = True
     model = Campaign
 
@@ -404,7 +391,7 @@ class AccountCampaign(AccounMessenger):
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearch(View):
-    template_name = 'account/account_search.html'
+    template_name = 'v2/account/account_search.html'
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
@@ -729,7 +716,7 @@ class SearchResultView(View):
                 self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'account/search_render/search_render.html',
+        return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
 
 @method_decorator(decorators, name='dispatch')

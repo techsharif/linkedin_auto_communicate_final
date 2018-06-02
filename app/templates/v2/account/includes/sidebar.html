@@ -1,0 +1,109 @@
+{% load static %}
+<nav id="sidebar" class="px-0 bg-dark bg-gradient sidebar sidebar-hidden">
+    <ul class="nav nav-pills flex-column">
+        <li class="logo-nav-item text-center">
+            <a class="navbar-brand" >
+                <div class="profile-picture bg-gradient bg-primary has-message float-right">
+                    <img src="/static/images/linkedin-in.svg" alt="Jonathan Korkol" width="60" height="60" class="img-thumbnail img-rectangle">
+                </div>
+
+            </a>
+            <div> {{ linkedin_user.email }} </div>
+
+        </li>
+        <li>
+            <h6 class="nav-header">General</h6>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/">
+                    <i class="batch-icon batch-icon-home"></i>
+                    Home <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/accounts/">
+                    <i class="batch-icon batch-icon-user-alt-3"></i>
+                    Accounts <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/subscription/">
+                    <i class="batch-icon batch-icon-user-alt-3"></i>
+                    Subscription <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-network' pk=pk %}">
+                    <i class="batch-icon batch-icon-users"></i>
+                    My Network <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-messenger' pk=pk %}">
+                    <i class="batch-icon batch-icon-speech-bubble-left-tip-solid-text"></i>
+                    Messenger <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-campaign' pk=pk %}">
+                    <i class="batch-icon batch-icon-user"></i>
+                    Connector <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-search' pk=pk %}">
+                    <i class="batch-icon batch-icon-search-alt"></i>
+                    Search <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-all' pk=pk %}">
+                    <i class="batch-icon batch-icon-inbox"></i>
+                    Inbox <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account-task' pk=pk %}">
+                    <i class="batch-icon batch-icon-marquee"></i>
+                    Tasks Queue <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="batch-icon batch-icon-out"></i>
+                    logout <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+
+
+        {%else%}
+            <li class="nav-item">
+                <a class="nav-link" href="/login/">
+                    <i class="batch-icon batch-icon-in"></i>
+                    Sign In <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/register/">
+                    <i class="batch-icon batch-icon-user-alt-add"></i>
+                    Sign Up <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+        {%endif%}
+
+    </ul>
+
+
+</nav>

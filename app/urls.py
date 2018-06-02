@@ -8,24 +8,39 @@ from . import views
 
 urlpatterns = [
     # NEW URLS
-    url(r'^new-home/$', views.HomeView.as_view(), name='home'),
-    url(r'^new-accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-    url(r'^layout/styles/landing/$', views.new_landing),
-    url(r'^layout/styles/auth/$', views.new_auth),
-    url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
-    url(r'^login/$', views.LoginView, name='LoginView'),
-    url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
-    url(r'^new-search/$', views.AccountSearch_NEW, name='account-search'),
-    url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+
+
+        url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
+
+        url(r'^login/$', views.LoginView_NEW, name='LoginView'),
+
+        url(r'^$', views.HomeView_NEW.as_view(), name='home'),
+
+        url(r'^accounts/$', acc_views.AccountList.as_view(), name='accounts'),
+
+        url(r'^account/(?P<pk>[\d]+)/search/$', acc_views.AccountSearch.as_view(), name='account-search'),
+
+        url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(), name='account-search-result'),
+
+        url(r'^account/(?P<pk>[\d]+)/messenger/$', acc_views.AccounMessenger.as_view(), name='account-messenger'),
+
+    # These are for user/page on our own
+    url(r'^home/$', views.home),
+
+    #url(r'^login/$', views.login, name='login'),
+    #url(r'^logout/$', views.logout, name='logout'),    
+    # confirm email
+    # change password
+    # forgot passsword
+
+    url(r'^logout/$', 
+        auth_views.LogoutView.as_view(
+            template_name='registration/logged_out.html',
+             next_page='/'),
+
     # original
     url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^login/$',
-        auth_views.LoginView.as_view(template_name='registration/login.html'),
-        name='login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(
-        template_name='registration/logged_out.html', next_page='/'),
-        name='logout'),
+    
     url(r'^password_reset/$', auth_views.password_reset,{
         'template_name': 'v2/registration/password_reset_form.html',
         'email_template_name': 'v2/registration/password_reset_subject.txt',
@@ -76,8 +91,7 @@ urlpatterns = [
     # url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
     url(r'^account/(?P<pk>[\d]+)/network/$',
         acc_views.AccountNetwork.as_view(), name='account-network'),
-    url(r'^account/(?P<pk>[\d]+)/messenger/$',
-        acc_views.AccounMessenger.as_view(), name='account-messenger'),
+
     url(r'^account/(?P<pk>[\d]+)/campaigns/$',
         acc_views.AccountCampaign.as_view(), name='account-campaign'),
 
