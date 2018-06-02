@@ -32,9 +32,7 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
-
-
-# New views
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -45,8 +43,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-
-
+      
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -344,7 +341,7 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
-    template_name = 'account/account_messenger.html'
+    template_name = 'v2/account/account_messenger.html'
     is_bulk = True
     model = Campaign
 
@@ -421,7 +418,7 @@ class AccountTask(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):
-    template_name = 'account/accounts_messenger_add.html'
+    template_name = 'v2/account/accounts_messenger_add.html'
     form_class = CreateCampaignMesgForm
     is_bulk = True
 
@@ -501,7 +498,7 @@ class AccountMessengerActive(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
-    template_name = 'account/accounts_messenger_update.html'
+    template_name = 'v2/account/accounts_messenger_update.html'
     form_class = UpdateCampConnectForm
     model = Campaign
 
@@ -693,7 +690,7 @@ class SearchResultView(View):
                 self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'account/search_render/search_render.html',
+        return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
 
 @method_decorator(decorators, name='dispatch')

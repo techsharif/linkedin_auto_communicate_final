@@ -12,10 +12,12 @@ Account Settings
     <div class="row mb-1 justify-content-center">
     <div class="col-md-8 mb-5">
         <div class="card">
+
             <div class="card-header">
              <div class="row">
                  <div class="col-md-8">
                      <h3>{{ object.email }} </h3>
+
                         {% if object.status %}
                             <span class="badge badge-primary bg-blue btn-gradient">Active</span>
                         {% else %}
@@ -478,95 +480,41 @@ Account Settings
                                         <option value="Europe/Vaduz">Europe/Vaduz (UTC+2:00)</option>
                                         <option value="Europe/Vatican">Europe/Vatican (UTC+2:00)</option>
                                         <option value="Europe/Vienna">Europe/Vienna (UTC+2:00)</option>
-                                        <option value="Europe/Vilnius">Europe/Vilnius (UTC+3:00)</option>
-                                        <option value="Europe/Volgograd">Europe/Volgograd (UTC+3:00)</option>
-                                        <option value="Europe/Warsaw">Europe/Warsaw (UTC+2:00)</option>
-                                        <option value="Europe/Zagreb">Europe/Zagreb (UTC+2:00)</option>
-                                        <option value="Europe/Zaporozhye">Europe/Zaporozhye (UTC+3:00)</option>
-                                        <option value="Europe/Zurich">Europe/Zurich (UTC+2:00)</option>
-                                        <option value="Indian/Antananarivo">Indian/Antananarivo (UTC+3:00)</option>
-                                        <option value="Indian/Chagos">Indian/Chagos (UTC+6:00)</option>
-                                        <option value="Indian/Christmas">Indian/Christmas (UTC+7:00)</option>
-                                        <option value="Indian/Cocos">Indian/Cocos (UTC+6:30)</option>
-                                        <option value="Indian/Comoro">Indian/Comoro (UTC+3:00)</option>
-                                        <option value="Indian/Kerguelen">Indian/Kerguelen (UTC+5:00)</option>
-                                        <option value="Indian/Mahe">Indian/Mahe (UTC+4:00)</option>
-                                        <option value="Indian/Maldives">Indian/Maldives (UTC+5:00)</option>
-                                        <option value="Indian/Mauritius">Indian/Mauritius (UTC+4:00)</option>
-                                        <option value="Indian/Mayotte">Indian/Mayotte (UTC+3:00)</option>
-                                        <option value="Indian/Reunion">Indian/Reunion (UTC+4:00)</option>
-                                        <option value="Pacific/Apia">Pacific/Apia (UTC+13:00)</option>
-                                        <option value="Pacific/Auckland">Pacific/Auckland (UTC+12:00)</option>
-                                        <option value="Pacific/Bougainville">Pacific/Bougainville (UTC+11:00)</option>
-                                        <option value="Pacific/Chatham">Pacific/Chatham (UTC+12:45)</option>
-                                        <option value="Pacific/Chuuk">Pacific/Chuuk (UTC+10:00)</option>
-                                        <option value="Pacific/Easter">Pacific/Easter (UTC-5:00)</option>
-                                        <option value="Pacific/Efate">Pacific/Efate (UTC+11:00)</option>
-                                        <option value="Pacific/Enderbury">Pacific/Enderbury (UTC+13:00)</option>
-                                        <option value="Pacific/Fakaofo">Pacific/Fakaofo (UTC+13:00)</option>
-                                        <option value="Pacific/Fiji">Pacific/Fiji (UTC+12:00)</option>
-                                        <option value="Pacific/Funafuti">Pacific/Funafuti (UTC+12:00)</option>
-                                        <option value="Pacific/Galapagos">Pacific/Galapagos (UTC-6:00)</option>
-                                        <option value="Pacific/Gambier">Pacific/Gambier (UTC-9:00)</option>
-                                        <option value="Pacific/Guadalcanal">Pacific/Guadalcanal (UTC+11:00)</option>
-                                        <option value="Pacific/Guam">Pacific/Guam (UTC+10:00)</option>
-                                        <option value="Pacific/Honolulu">Pacific/Honolulu (UTC-10:00)</option>
-                                        <option value="Pacific/Kiritimati">Pacific/Kiritimati (UTC+14:00)</option>
-                                        <option value="Pacific/Kosrae">Pacific/Kosrae (UTC+11:00)</option>
-                                        <option value="Pacific/Kwajalein">Pacific/Kwajalein (UTC+12:00)</option>
-                                        <option value="Pacific/Majuro">Pacific/Majuro (UTC+12:00)</option>
-                                        <option value="Pacific/Marquesas">Pacific/Marquesas (UTC-10:30)</option>
-                                        <option value="Pacific/Midway">Pacific/Midway (UTC-11:00)</option>
-                                        <option value="Pacific/Nauru">Pacific/Nauru (UTC+12:00)</option>
-                                        <option value="Pacific/Niue">Pacific/Niue (UTC-11:00)</option>
-                                        <option value="Pacific/Norfolk">Pacific/Norfolk (UTC+11:00)</option>
-                                        <option value="Pacific/Noumea">Pacific/Noumea (UTC+11:00)</option>
-                                        <option value="Pacific/Pago_Pago">Pacific/Pago_Pago (UTC-11:00)</option>
-                                        <option value="Pacific/Palau">Pacific/Palau (UTC+9:00)</option>
-                                        <option value="Pacific/Pitcairn">Pacific/Pitcairn (UTC-8:00)</option>
-                                        <option value="Pacific/Pohnpei">Pacific/Pohnpei (UTC+11:00)</option>
-                                        <option value="Pacific/Port_Moresby">Pacific/Port_Moresby (UTC+10:00)</option>
-                                        <option value="Pacific/Rarotonga">Pacific/Rarotonga (UTC-10:00)</option>
-                                        <option value="Pacific/Saipan">Pacific/Saipan (UTC+10:00)</option>
-                                        <option value="Pacific/Tahiti">Pacific/Tahiti (UTC-10:00)</option>
-                                        <option value="Pacific/Tarawa">Pacific/Tarawa (UTC+12:00)</option>
-                                        <option value="Pacific/Tongatapu">Pacific/Tongatapu (UTC+13:00)</option>
-                                        <option value="Pacific/Wake">Pacific/Wake (UTC+12:00)</option>
-                                        <option value="Pacific/Wallis">Pacific/Wallis (UTC+12:00)</option>
-                                        <option value="UTC">UTC (UTC+0:00)</option>
-                                    </select>
+                                        <option value="Europe/Vilnius">Europe/Vilnius (UTC+3:00)</option>                                      
+                    
+                                </select>
 
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-3">
-                                        <label>From</label>
-                                        <select class="form-control" name="start_from" id="sch_from">
-                                            <option value="0" selected="">0 AM</option>
-                                            <option value="1">1 AM</option>
-                                            <option value="2">2 AM</option>
-                                            <option value="3">3 AM</option>
-                                            <option value="4">4 AM</option>
-                                            <option value="5">5 AM</option>
-                                            <option value="6">6 AM</option>
-                                            <option value="7">7 AM</option>
-                                            <option value="8">8 AM</option>
-                                            <option value="9">9 AM</option>
-                                            <option value="10">10 AM</option>
-                                            <option value="11">11 AM</option>
-                                            <option value="12">12 AM</option>
-                                            <option value="13">1 PM</option>
-                                            <option value="14">2 PM</option>
-                                            <option value="15">3 PM</option>
-                                            <option value="16">4 PM</option>
-                                            <option value="17">5 PM</option>
-                                            <option value="18">6 PM</option>
-                                            <option value="19">7 PM</option>
-                                            <option value="20">8 PM</option>
-                                            <option value="21">9 PM</option>
-                                            <option value="22">10 PM</option>
-                                            <option value="23">11 PM</option>
-                                            <option value="24">12 PM</option>
+                            </div>
 
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label>From</label>
+                                    <select class="form-control" name="start_from" id="sch_from">
+                                        <option value="0" selected="">0 AM</option>
+                                        <option value="1">1 AM</option>
+                                        <option value="2">2 AM</option>
+                                        <option value="3">3 AM</option>
+                                        <option value="4">4 AM</option>
+                                        <option value="5">5 AM</option>
+                                        <option value="6">6 AM</option>
+                                        <option value="7">7 AM</option>
+                                        <option value="8">8 AM</option>
+                                        <option value="9">9 AM</option>
+                                        <option value="10">10 AM</option>
+                                        <option value="11">11 AM</option>
+                                        <option value="12">12 AM</option>
+                                        <option value="13">1 PM</option>
+                                        <option value="14">2 PM</option>
+                                        <option value="15">3 PM</option>
+                                        <option value="16">4 PM</option>
+                                        <option value="17">5 PM</option>
+                                        <option value="18">6 PM</option>
+                                        <option value="19">7 PM</option>
+                                        <option value="20">8 PM</option>
+                                        <option value="21">9 PM</option>
+                                        <option value="22">10 PM</option>
+                                        <option value="23">11 PM</option>
+                                        <option value="24">12 PM</option>
                                         </select>
                                     </div>
 
@@ -632,12 +580,14 @@ Account Settings
                         </div>
                         </div>
                     </div>
+
         </div>
     </div>
 {% endblock %}
 {% block pagefooter %}
-
     <script src="{% static 'js/nouislider.js' %}"></script>
+{% endblock %}
+
     <script>
         var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         var sel = document.getElementById('tz');
