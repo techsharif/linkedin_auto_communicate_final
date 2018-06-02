@@ -110,7 +110,7 @@ class HomeView(TemplateView):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         for x in MembershipType.objects.all():
             ctx[x.name] = x
-        print('ctx:-------------------', ctx)
+
         return ctx
 
 
@@ -162,6 +162,14 @@ class RegisterView(CreateView):
 
 class SubsriptionView(TemplateView):
     template_name = 'app/subscription.html'
+    models = MembershipType
+
+    def get_context_data(self, **kwargs):
+        ctx = super(SubsriptionView, self).get_context_data(**kwargs)
+        for x in MembershipType.objects.all():
+            ctx[x.name] = x
+
+        return ctx
 
 
 class ProfileView(TemplateView):

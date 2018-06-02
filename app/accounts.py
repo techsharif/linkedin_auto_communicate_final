@@ -35,13 +35,14 @@ decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
+
 @method_decorator(decorators, name='dispatch')
-class AccountList(ListView):
+class AccountList_NEW(ListView):
     model = LinkedInUser
-    template_name = 'v2/account/accounts.html'
+    template_name = 'account/accounts.html'
 
     def get_queryset(self):
-        qs = super(AccountList, self).get_queryset()
+        qs = super(AccountList_NEW, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
 
@@ -70,6 +71,18 @@ class AccountSearch_NEW(View):
 
 
 
+# ******************************* Old views ****************************************
+
+@method_decorator(decorators, name='dispatch')
+class AccountList(ListView):
+    model = LinkedInUser
+    template_name = 'v2/account/accounts.html'
+    # template_name = 'account/accounts.html'
+
+    def get_queryset(self):
+        qs = super(AccountList, self).get_queryset()
+        qs = qs.filter(user=self.request.user)
+        return qs
 
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
@@ -116,6 +129,7 @@ class AccountDetail(AccountMixins, DetailView):
     template_name = 'account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountDetail, self).get_context_data(**kwargs)
         # count connection number by

@@ -10,6 +10,7 @@ urlpatterns = [
     # NEW URLS
 
 
+
         url(r'^register/$', views.RegisterView_NEW, name='RegisterView'),
 
         url(r'^login/$', views.LoginView, name='LoginView'),
@@ -103,8 +104,6 @@ urlpatterns = [
         acc_views.AccountInbox.as_view(), name='account-all'),
     url(r'^account/(?P<pk>[\d]+)/tasks/$',
         acc_views.AccountTask.as_view(), name='account-task'),
-    url(r'^new-account/(?P<pk>[\d]+)/tasks/$',
-        acc_views.AccountTask_NEW.as_view(), name='account-task-new'),
     url(r'^account/(?P<pk>[\d]+)/messenger/add$',
         acc_views.AccountMessengerCreate.as_view(), name='account-messenger-add'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/add$',
