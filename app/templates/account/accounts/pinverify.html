@@ -46,7 +46,7 @@
             pin_code: {
                 required: true,
                 minlength: 4,
-                maxlength: 4,
+                maxlength: 6,
                 digits: true,
             }
         },
@@ -71,7 +71,21 @@
             ajax_submit_pin_code();
         }
     });
+
+    $('#pin-code').val(localStorage.getItem('pin_code'));
+
+    $("#pin-code").keydown(function (e){
+
+        localStorage.setItem('pin_code', this.value + e.key);
+
+        console.log(localStorage.getItem('pin_code'), e.key);
+
+    });
+
     function ajax_submit_pin_code() {
+
+        localStorage.removeItem('pin_code');
+
         data_ = new Object();
         data_.id = '{{ object.id }}';
         data_.pin = $('#pin-code')[0].value;
