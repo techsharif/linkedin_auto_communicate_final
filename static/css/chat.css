@@ -3,6 +3,7 @@
   position: fixed;
   right:30px;
   bottom:-450px;
+  z-index: 2;
 }
 .first-section:hover{
   cursor: pointer;

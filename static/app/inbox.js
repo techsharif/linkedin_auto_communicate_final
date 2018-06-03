@@ -137,12 +137,10 @@ $(document).ready(function() {
 		header_buttons+= '<div class="row"><div class="col-md-6"><div class="row" id="filter-search-moved"></div><div class="row">&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="connector">Show Connector contacts</span>';
 		header_buttons+= '&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="messenger">Show Messenger contacts</span>';
 		header_buttons+= '&nbsp;<span class="btn btn-primary  btn-gradient waves-effect waves-light" data-click="talking">Show Talking contacts</span></div></div>';
-		header_buttons+= '<div class="col-md-6"><div class="row justify-content-end"><a class="btn pull-right btn-primary btn-gradient waves-effect waves-light" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
-		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary btn-gradient waves-effect pull-right waves-light" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="col-md-6"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
-
-	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default waves-effect waves-light pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
-	
+	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 
 	$(".dataTables_filter");
 	$(".dataTables_filter").css("width", "50%");
