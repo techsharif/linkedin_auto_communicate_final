@@ -1,23 +1,21 @@
-<div class="progress_custom">
-    <div class="circle_custom active">
-        <span class="label_custom">1</span>
-        <span class="title">Authentication</span>
-    </div>
-    <span class="bar_custom"></span>
-    <div class="circle_custom">
-        <span class="label_custom">2</span>
-        <span class="title">Verification</span>
-    </div>
-    <span class="bar_custom"></span>
-    <div class="circle_custom">
-        <span class="label_custom">3</span>
-        <span class="title">Sync</span>
-    </div>
-    <span class="bar_custom"></span>
-    <div class="circle_custom">
-        <span class="label_custom">4</span>
-        <span class="title">Activate</span>
-    </div>
-
+<div class="mb-4">
+    <ul class="nav nav-pills nav-justified" id="myTab-2" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link {% if step == 1 %} {{'active'}} {% endif %} "  id="progress-tab-1" data-toggle="tab" role="tab" aria-controls="home-2" aria-selected="false">
+                Authentication</a>
+        </li>
+        <li class="nav-item  ">
+            <a class="nav-link {% if step == 2 %} {{'active'}} {% endif %}" id="progress-tab-2" data-toggle="tab" role="tab" aria-controls="profile-2" aria-selected="false">
+                Verification
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  {% if step == 3 %} {{'active'}} {% endif %}" id="progress-tab-3" data-toggle="tab" role="tab" aria-controls="contact-2"
+                aria-selected="false">Sync</a>
+        </li>
+        <li class="nav-item  ">
+            <a class="nav-link {% if step == 4 %} {{'active'}} {% endif %}" id="progress-tab-4" data-toggle="tab"   role="tab" aria-controls="disabled-2"
+                aria-selected="false">Activate</a>
+        </li>
+    </ul>
 </div>
-

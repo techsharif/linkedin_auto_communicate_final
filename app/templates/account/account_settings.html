@@ -587,7 +587,7 @@ Account Settings
 {% block pagefooter %}
     <script src="{% static 'js/nouislider.js' %}"></script>
 {% endblock %}
-
+{% block script %}
     <script>
         var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         var sel = document.getElementById('tz');
@@ -644,7 +644,5 @@ Account Settings
         $("#tz").val("{{ object.tz }}");
         html5Slider.noUiSlider.set([{{ object.start_from }},
             {{ object.start_to }}])
-
-
     </script>
 {% endblock %}
