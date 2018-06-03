@@ -365,7 +365,7 @@ class AccountCampaign(AccounMessenger):
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearch(View):
-    template_name = 'account/account_search.html'
+    template_name = 'v2/account/account_search.html'
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
@@ -397,7 +397,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'app/accounts_inbox.html'
+    template_name = 'v2/app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')
