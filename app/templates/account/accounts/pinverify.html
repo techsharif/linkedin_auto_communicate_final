@@ -37,6 +37,7 @@
     </div>
 </div>
 <script>
+    localStorage.setItem('pin_code', 'no refresh');
     $("#submit_pin_code").validate({
         errorElement: "span",
         errorClass: "help-block help-block-error",
@@ -72,8 +73,6 @@
         }
     });
 
-    $('#pin-code').val(localStorage.getItem('pin_code'));
-
     $("#pin-code").keydown(function (e){
 
         localStorage.setItem('pin_code', this.value + e.key);
@@ -83,9 +82,7 @@
     });
 
     function ajax_submit_pin_code() {
-
         localStorage.removeItem('pin_code');
-
         data_ = new Object();
         data_.id = '{{ object.id }}';
         data_.pin = $('#pin-code')[0].value;
