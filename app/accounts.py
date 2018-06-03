@@ -397,7 +397,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'app/accounts_inbox.html'
+    template_name = 'v2/app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')

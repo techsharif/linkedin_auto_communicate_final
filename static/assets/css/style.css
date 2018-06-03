@@ -16,3 +16,7 @@
     color: #FFFFFF;
     font-weight: 400;
 }
+
+.cursor-pointer{
+    cursor: pointer !important;
+}

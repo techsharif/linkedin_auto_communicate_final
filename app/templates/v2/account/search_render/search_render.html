@@ -27,7 +27,7 @@
                     <div class="table-responsive">
                         <table id="datatable-1"  class="table table-datatable table-striped table-hover">
                             <thead>
-                            <tr>
+                            <tr style="cursor: pointer !important;">
                                 <th style="width: 5%"></th>
                                 <th class="cursor-pointer">Name
                                     <div class="torder" data-click="table_order" data-col="name"></div>
@@ -49,7 +49,7 @@
 
 
 
-                                <tr id="ctct_{{ search_result.pk }}">
+                                <tr style="cursor: pointer !important;" id="ctct_{{ search_result.pk }}">
                                     <td> {% if not search_result.search_result_status %}
                                         <input class="select_items" value="{{ search_result.pk }}" type="checkbox"> {% endif %}</td>
                                     <td>{{ search_result.name }}</td>
