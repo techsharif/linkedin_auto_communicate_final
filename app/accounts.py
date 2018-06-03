@@ -86,7 +86,7 @@ contact_statuses = [ContactStatus.CONNECTED_N, ContactStatus.OLD_CONNECT_N]
 
 @method_decorator(decorators, name='dispatch')
 class AccountDetail(AccountMixins, DetailView):
-    template_name = 'account/account_details.html'
+    template_name = 'v2/account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
 
@@ -595,7 +595,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(AccountMessengerDetail):
-    template_name = 'account/accounts_campaign_update.html'
+    template_name = 'v2/account/accounts_campaign_update.html'
     form_class = UpdateCampConnectForm
 
 

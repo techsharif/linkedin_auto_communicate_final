@@ -1,0 +1,83 @@
+{% extends 'v2/account/base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block title %}Connect Campaign Details{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h2>Connect Campaign Details</h2>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="steps-tab" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Stats</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab">
+                                    {% include 'v2/account/campaign/tab_1.html' %}
+                                </div>
+                                <div class="tab-pane fade" id="steps" role="tabpanel" aria-labelledby="steps-tab">
+                                    <form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
+                                        {% include 'account/campaign/tab_2_form.html' with messenger=1 %}
+
+
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                                    {% include 'account/campaign/tab_3.html' %}
+                                </div>
+                                <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+
+
+                                    <!-- /.tab-pane -->
+                                    {% include 'v2/account/campaign/tab_4.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+
+    {% include 'app/includes/campaigns/page_footer.html' %}
+    <script>
+        $('.table').DataTable()
+    </script>
+
+    <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
+    <script src="{% static 'js/campaignformset.js' %}?v=16"></script>
+<script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
+
+
+{% endblock %}
+
