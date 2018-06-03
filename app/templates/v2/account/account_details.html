@@ -1,0 +1,581 @@
+{% extends 'v2/account/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block pagetitle %} Home( {{ linkedin_user }}) {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-3 mb-5">
+            <div class="card card-tile card-xs bg-danger bg-gradient text-center">
+                <div class="card-body p-4">
+                    <!-- Accepts .invisible: Makes the items. Use this only when you want to have an animation called on it later -->
+                    <div class="tile-left">
+                        <i class="batch-icon batch-icon-user-alt batch-icon-xxl"></i>
+                    </div>
+                    <div class="tile-right">
+                        <div class="tile-number">1,359</div>
+                        <div class="tile-description">CAMPAIGN MEMBERS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3 mb-5">
+            <div class="card card-tile card-xs bg-secondary bg-gradient text-center">
+                <div class="card-body p-4">
+                    <div class="tile-left">
+                        <i class="batch-icon batch-icon-tag-alt-2 batch-icon-xxl"></i>
+                    </div>
+                    <div class="tile-right">
+                        <div class="tile-number">$7,349.90</div>
+                        <div class="tile-description">INVITIONS SENT</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3 mb-5">
+            <div class="card card-tile card-xs bg-success bg-gradient text-center">
+                <div class="card-body p-4">
+                    <div class="tile-left">
+                        <i class="batch-icon batch-icon-list batch-icon-xxl"></i>
+                    </div>
+                    <div class="tile-right">
+                        <div class="tile-number">26</div>
+                        <div class="tile-description">Connected Members</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3 mb-5">
+            <div class="card card-tile card-xs bg-primary bg-gradient text-center">
+                <div class="card-body p-4">
+                    <div class="tile-left">
+                        <i class="batch-icon batch-icon-star batch-icon-xxl"></i>
+                    </div>
+                    <div class="tile-right">
+                        <div class="tile-number">476</div>
+                        <div class="tile-description">Date and Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card bg-primary">
+
+                <div class="card-body">
+                    <div class="header-btn-block pull-right">
+										<span class="data-range dropdown">
+											<a href="#" class="btn btn-primary dropdown-toggle waves-effect waves-light"
+                                               id="navbar-dropdown-sales-overview-header-button" data-toggle="dropdown"
+                                               data-flip="false" aria-haspopup="true" aria-expanded="false">
+												<i class="batch-icon batch-icon-calendar"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right"
+                                                 aria-labelledby="navbar-dropdown-sales-overview-header-button"
+                                                 x-placement="bottom-end"
+                                                 style="position: absolute; transform: translate3d(52px, 31px, 0px); top: 0px; left: 0px; will-change: transform;">
+												<a class="dropdown-item" href="today">Today</a>
+												<a class="dropdown-item" href="week">This Week</a>
+												<a class="dropdown-item" href="month">This Month</a>
+												<a class="dropdown-item active" href="year">This Year</a>
+											</div>
+										</span>
+                    </div>
+                    <div style="height: 280px;">
+                        <div id="vmap" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-md bg-secondary">
+                <div class="card-header">
+                    <h6>PERCENTAGE INVITES TO <br> CONNECTIONS
+
+
+                    </h6>
+                    <div class="header-btn-block pull-right">
+										<span class="data-range dropdown">
+											<a href="#" class="btn btn-primary dropdown-toggle waves-effect waves-light"
+                                               id="navbar-dropdown-sales-overview-header-button" data-toggle="dropdown"
+                                               data-flip="false" aria-haspopup="true" aria-expanded="false">
+												<i class="batch-icon batch-icon-calendar"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right"
+                                                 aria-labelledby="navbar-dropdown-sales-overview-header-button"
+                                                 x-placement="bottom-end"
+                                                 style="position: absolute; transform: translate3d(52px, 31px, 0px); top: 0px; left: 0px; will-change: transform;">
+												<a class="dropdown-item" href="today">Today</a>
+												<a class="dropdown-item" href="week">This Week</a>
+												<a class="dropdown-item" href="month">This Month</a>
+												<a class="dropdown-item active" href="year">This Year</a>
+											</div>
+										</span>
+                    </div>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="card-body text-center">
+                        <canvas id="myChart" width="150px" height="150px"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+    <div class="col-md-12">
+        <div class="card card-md">
+            <div class="card-header">
+                <h6>COMMUNICATION STATUS</h6>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card-body text-center">
+                            <canvas id="myLineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <br><br>
+                        <h3>Backgrounds</h3>
+                        <span><strong>Construction campaign</strong></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                                 aria-valuenow="25"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <span><strong>Water campaign</strong></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <span><strong>Sale Reminder campaign</strong></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%"
+                                 aria-valuenow="75"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <span><strong>Fod campaign</strong></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+                                 aria-valuenow="100"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+
+                <div class="card-body">
+                    <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+
+                <div class="card-body">
+                    <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'assets/jvmap/maps/jquery.vmap.world.js' %}"></script>
+    <script>
+        var sample_data = {
+            "af": "16.63",
+            "al": "11.58",
+            "dz": "158.97",
+            "ao": "85.81",
+            "ag": "1.1",
+            "ar": "351.02",
+            "am": "8.83",
+            "au": "1219.72",
+            "at": "366.26",
+            "az": "52.17",
+            "bs": "7.54",
+            "bh": "21.73",
+            "bd": "105.4",
+            "bb": "3.96",
+            "by": "52.89",
+            "be": "461.33",
+            "bz": "1.43",
+            "bj": "6.49",
+            "bt": "1.4",
+            "bo": "19.18",
+            "ba": "16.2",
+            "bw": "12.5",
+            "br": "2023.53",
+            "bn": "11.96",
+            "bg": "44.84",
+            "bf": "8.67",
+            "bi": "1.47",
+            "kh": "11.36",
+            "cm": "21.88",
+            "ca": "1563.66",
+            "cv": "1.57",
+            "cf": "2.11",
+            "td": "7.59",
+            "cl": "199.18",
+            "cn": "5745.13",
+            "co": "283.11",
+            "km": "0.56",
+            "cd": "12.6",
+            "cg": "11.88",
+            "cr": "35.02",
+            "ci": "22.38",
+            "hr": "59.92",
+            "cy": "22.75",
+            "cz": "195.23",
+            "dk": "304.56",
+            "dj": "1.14",
+            "dm": "0.38",
+            "do": "50.87",
+            "ec": "61.49",
+            "eg": "216.83",
+            "sv": "21.8",
+            "gq": "14.55",
+            "er": "2.25",
+            "ee": "19.22",
+            "et": "30.94",
+            "fj": "3.15",
+            "fi": "231.98",
+            "fr": "2555.44",
+            "ga": "12.56",
+            "gm": "1.04",
+            "ge": "11.23",
+            "de": "3305.9",
+            "gh": "18.06",
+            "gr": "305.01",
+            "gd": "0.65",
+            "gt": "40.77",
+            "gn": "4.34",
+            "gw": "0.83",
+            "gy": "2.2",
+            "ht": "6.5",
+            "hn": "15.34",
+            "hk": "226.49",
+            "hu": "132.28",
+            "is": "12.77",
+            "in": "1430.02",
+            "id": "695.06",
+            "ir": "337.9",
+            "iq": "84.14",
+            "ie": "204.14",
+            "il": "201.25",
+            "it": "2036.69",
+            "jm": "13.74",
+            "jp": "5390.9",
+            "jo": "27.13",
+            "kz": "129.76",
+            "ke": "32.42",
+            "ki": "0.15",
+            "kr": "986.26",
+            "undefined": "5.73",
+            "kw": "117.32",
+            "kg": "4.44",
+            "la": "6.34",
+            "lv": "23.39",
+            "lb": "39.15",
+            "ls": "1.8",
+            "lr": "0.98",
+            "ly": "77.91",
+            "lt": "35.73",
+            "lu": "52.43",
+            "mk": "9.58",
+            "mg": "8.33",
+            "mw": "5.04",
+            "my": "218.95",
+            "mv": "1.43",
+            "ml": "9.08",
+            "mt": "7.8",
+            "mr": "3.49",
+            "mu": "9.43",
+            "mx": "1004.04",
+            "md": "5.36",
+            "mn": "5.81",
+            "me": "3.88",
+            "ma": "91.7",
+            "mz": "10.21",
+            "mm": "35.65",
+            "na": "11.45",
+            "np": "15.11",
+            "nl": "770.31",
+            "nz": "138",
+            "ni": "6.38",
+            "ne": "5.6",
+            "ng": "206.66",
+            "no": "413.51",
+            "om": "53.78",
+            "pk": "174.79",
+            "pa": "27.2",
+            "pg": "8.81",
+            "py": "17.17",
+            "pe": "153.55",
+            "ph": "189.06",
+            "pl": "438.88",
+            "pt": "223.7",
+            "qa": "126.52",
+            "ro": "158.39",
+            "ru": "1476.91",
+            "rw": "5.69",
+            "ws": "0.55",
+            "st": "0.19",
+            "sa": "434.44",
+            "sn": "12.66",
+            "rs": "38.92",
+            "sc": "0.92",
+            "sl": "1.9",
+            "sg": "217.38",
+            "sk": "86.26",
+            "si": "46.44",
+            "sb": "0.67",
+            "za": "354.41",
+            "es": "1374.78",
+            "lk": "48.24",
+            "kn": "0.56",
+            "lc": "1",
+            "vc": "0.58",
+            "sd": "65.93",
+            "sr": "3.3",
+            "sz": "3.17",
+            "se": "444.59",
+            "ch": "522.44",
+            "sy": "59.63",
+            "tw": "426.98",
+            "tj": "5.58",
+            "tz": "22.43",
+            "th": "312.61",
+            "tl": "0.62",
+            "tg": "3.07",
+            "to": "0.3",
+            "tt": "21.2",
+            "tn": "43.86",
+            "tr": "729.05",
+            "tm": 0,
+            "ug": "17.12",
+            "ua": "136.56",
+            "ae": "239.65",
+            "gb": "2258.57",
+            "us": "14624.18",
+            "uy": "40.71",
+            "uz": "37.72",
+            "vu": "0.72",
+            "ve": "285.21",
+            "vn": "101.99",
+            "ye": "30.02",
+            "zm": "15.69",
+            "zw": "5.57"
+        };
+    </script>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#vmap').vectorMap({
+                map: 'world_en',
+                backgroundColor: '#07a7e3',
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#666666',
+                enableZoom: false,
+                showTooltip: true,
+                scaleColors: ['#C8EEFF', '#006491'],
+                values: sample_data,
+                normalizeFunction: 'polynomial'
+            });
+        });
+    </script>
+
+    <script>
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["INVITES", "PENDING"],
+                datasets: [{
+
+                    data: [70, 30],
+                    backgroundColor: [
+                        'rgba(255, 255, 255, 1)',
+                        'rgba(54, 162, 235, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)'
+
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                }
+
+            }
+
+        });
+    </script>
+
+
+    <script>
+        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var config = {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'My First dataset',
+                    borderColor: window.chartColors.red,
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        10, 50, 150, 300, 200, 70, 100
+                    ],
+                }, {
+                    label: 'My Second dataset',
+                    borderColor: window.chartColors.blue,
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        60, 50, 300, 100, 80, 100, 150
+                    ],
+                }, {
+                    label: 'My Third dataset',
+                    borderColor: window.chartColors.green,
+                    backgroundColor: window.chartColors.green,
+                    data: [
+                        80, 90, 200, 150, 400, 50, 250
+                    ],
+                }, {
+                    label: 'My Third dataset',
+                    borderColor: window.chartColors.yellow,
+                    backgroundColor: window.chartColors.yellow,
+                    data: [
+                        40, 70, 80, 90, 100, 200, 300
+                    ],
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'COMMUNICATION STATE'
+                },
+                tooltips: {
+                    mode: 'index',
+                },
+                hover: {
+                    mode: 'index'
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+
+    </script>
+    <script>
+        var ctx = document.getElementById("myLineChart");
+        var myChart = new Chart(ctx, config);
+    </script>
+
+
+{% endblock %}

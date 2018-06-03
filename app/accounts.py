@@ -32,45 +32,7 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
-
-
-# New views
-
-@method_decorator(decorators, name='dispatch')
-class AccountList_NEW(ListView):
-    model = LinkedInUser
-    template_name = 'v2/account/accounts.html'
-
-    def get_queryset(self):
-        qs = super(AccountList_NEW, self).get_queryset()
-        qs = qs.filter(user=self.request.user)
-        return qs
-
-
-@method_decorator(decorators, name='dispatch')
-class AccountSearch_NEW(View):
-    template_name = 'v2/account/account_search.html'
-
-    def get(self, request, pk):
-        searches = Search.objects.filter(owner__pk=pk)
-        campaigns = Campaign.objects.filter(owner__pk=pk, is_bulk=False)
-        linkedin_user = LinkedInUser.objects.get(user=request.user, pk=pk)
-        return render(request, self.template_name,
-                      {'searches': searches, 'pk': pk, 'campaigns': campaigns, 'linkedin_user': linkedin_user})
-
-    def post(self, request, pk):
-        search_form = SearchForm(request.POST)
-        if search_form.is_valid():
-            search = search_form.save(commit=False)
-            linkedin_user = LinkedInUser.objects.get(pk=pk)
-            search.owner = linkedin_user
-            search.save()
-            BotTask(owner=linkedin_user, name=BotTaskType.SEARCH, task_type=BotTaskType.SEARCH,
-                    extra_id=search.id).save()
-        return HttpResponseRedirect(reverse('account-search', args=[pk]))
-
-
-# Old views
+csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -81,9 +43,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-
-
-
+      
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -126,7 +86,7 @@ contact_statuses = [ContactStatus.CONNECTED_N, ContactStatus.OLD_CONNECT_N]
 
 @method_decorator(decorators, name='dispatch')
 class AccountDetail(AccountMixins, DetailView):
-    template_name = 'account/account_details.html'
+    template_name = 'v2/account/account_details.html'
     model = LinkedInUser
     status = contact_statuses
 
@@ -265,7 +225,7 @@ class AccountInfo(View):
                 if self.check_data_sync(linkedin_user):
                     return HttpResponse(render_to_string('account/accounts/activate.html'))
                 else:
-                    return HttpResponse(render_to_string('account/accounts/data_sync.html'))
+                    return HttpResponse(render_to_string('account/accounts/data_sync.html',  {'object': linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
                 return HttpResponse(render_to_string('account/accounts/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
@@ -288,6 +248,7 @@ csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
+
 class AddPin(View):
     def post(self, request):
         if 'pin' in request.POST.keys():
@@ -375,7 +336,6 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
         ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
         ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
-
         return ctx
 
 
@@ -405,7 +365,7 @@ class AccountCampaign(AccounMessenger):
 
 @method_decorator(decorators, name='dispatch')
 class AccountSearch(View):
-    template_name = 'account/account_search.html'
+    template_name = 'v2/account/account_search.html'
 
     def get(self, request, pk):
         searches = Search.objects.filter(owner__pk=pk)
@@ -437,7 +397,7 @@ class AccountSearchDelete(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountInbox(AccountMixins, DataTable, ListView):
-    template_name = 'account/account_inbox.html'
+    template_name = 'v2/app/accounts_inbox.html'
 
 
 @method_decorator(decorators, name='dispatch')
@@ -458,7 +418,7 @@ class AccountTask(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerCreate(AccountMixins, CreateView):
-    template_name = 'account/accounts_messenger_add.html'
+    template_name = 'v2/account/accounts_messenger_add.html'
     form_class = CreateCampaignMesgForm
     is_bulk = True
 
@@ -538,7 +498,7 @@ class AccountMessengerActive(View):
 
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
-    template_name = 'account/accounts_messenger_update.html'
+    template_name = 'v2/account/accounts_messenger_update.html'
     form_class = UpdateCampConnectForm
     model = Campaign
 
@@ -635,7 +595,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(AccountMessengerDetail):
-    template_name = 'account/accounts_campaign_update.html'
+    template_name = 'v2/account/accounts_campaign_update.html'
     form_class = UpdateCampConnectForm
 
 
@@ -730,7 +690,7 @@ class SearchResultView(View):
                 self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
-        return render(request, 'account/search_render/search_render.html',
+        return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
 
 @method_decorator(decorators, name='dispatch')

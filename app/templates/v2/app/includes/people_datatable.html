@@ -1,0 +1,49 @@
+
+<div class="table-responsive">
+<table class="table table-datatable table-striped table-hover" id="campaign_people">
+	<thead>
+	{% include 'app/includes/people_datatable_headrow.html' with campaign=campaign%}
+	</thead>
+	<tbody>
+	{% for contact in contacts %}
+	 <tr class="contact cursor-pointer" style="cursor: pointer !important;">
+	  <td></td>
+	  <td>{{contact.name}}</td>
+	  <td>{{contact.name}}</td>
+	  <td>{{contact.industry}}</td>
+	  <td>{{contact.title}}</td>
+	  <td>{{contact.location}}</td>
+	  <td>{{contact.latest_activity}}</td>
+	  {%if campaign%}
+	  <td>{{contact.campaign}}</td>
+	  {%endif%}
+	  <td >{# how to deal with this #}
+	  <span data-contactid="{{contact.id}}" class="btn btn-orange btn-gradient waves-effect waves-light btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}"
+	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
+	  In Queue</span>
+	 </td>
+	</tr>
+	{%endfor%}
+	</tbody>
+	<tfoot>
+	{% include 'app/includes/people_datatable_headrow.html'  with campaign=campaign %}
+	</tfoot>
+</table>
+</div>
+
+{#<div class="popover fade bottom in" id="popover{{pk}}" display: none;">#}
+{#	<div class="arrow" style="left: 50%;"></div><div class="popover-content" style="padding:0">#}
+{#		<div class="list-group" style="margin:0" data-cid="2">#}
+{#			<a href="#" data-status="20" data-click="changeStatus" class="list-group-item">Mark Later</a>#}
+{#			<a href="#" data-status="21" data-click="changeStatus" class="list-group-item bg-gray">Mark No Interest</a>#}
+{#			<a href="#" data-status="10" data-click="changeStatus" class="list-group-item bg-green">Mark Replied</a>#}
+{#			<a href="#" data-status="12" data-click="changeStatus" class="list-group-item bg-yellow">Mark Talking</a>#}
+{#			<a href="#" data-status="22" data-click="changeStatus" class="list-group-item bg-maroon">Mark Old Connect</a>#}
+{#		</div>#}
+{#	</div>#}
+{#</div>#}
+{# a dummy form for delete accounts #}
+<form name="contacts-delete" action="{% url 'contacts-delete' %}" method="post">
+{% csrf_token %}
+<input name="cid" value="" type=hidden />
+</form>

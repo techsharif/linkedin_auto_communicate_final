@@ -34,29 +34,12 @@
     </ul>
 
     <div class="collapse navbar-collapse" id="navbar-header-content">
-    <ul class="navbar-nav navbar-language-translation mr-auto">
-
-
-        <!---<li class="nav-item dropdown">
-
-            <a class="nav-link dropdown-toggle" id="navbar-dropdown-menu-link" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
-                <i class="batch-icon batch-icon-book-alt-"></i>
-                English
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbar-dropdown-menu-link">
-                <li><a class="dropdown-item" href="#">Français</a></li>
-                <li><a class="dropdown-item" href="#">Deutsche</a></li>
-                <li><a class="dropdown-item" href="#">Español</a></li>
-            </ul>
-
-        </li>
-    </ul>
+        <ul class="navbar-nav navbar-language-translation mr-auto">
+        </ul>
         {% if user.is_authenticated %}
+        
             <ul class="navbar-nav ml-5 navbar-profile">
-        {% endif %}    
         </li> 
-    </ul>
-        {% if user.is_authenticated %}
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-notification-search" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
@@ -76,20 +59,20 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle no-waves-effect" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle no-waves-effect ml-3" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
                         <span class="notification-number"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-md" aria-labelledby="navbar-notification-misc">
                         <li class="media">
-                            <a href="task-list.html">
+                            <a href="#">
                                 <i class="batch-icon batch-icon-bell batch-icon-xl d-flex mr-3"></i>
                                 <div class="media-body">
                                     <h6 class="mt-0 mb-1 notification-heading">You have no notification</h6>
                                     <div class="notification-text">
 
                                     </div>
-                                    <span class="notification-time">Just now</span> -->
+                                    <!--<span class="notification-time">Just now</span>-->
                                 </div>
                             </a>
                         </li>
@@ -97,9 +80,7 @@
                     </ul>
                 </li>
             </ul>
-
             <ul class="navbar-nav ml-5 navbar-profile">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbar-dropdown-navbar-profile" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <div class="profile-name">
@@ -118,24 +99,19 @@
                             </a>
                         </li>
                         <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        <li onclick="___log_out()"><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </li>
             </ul>
-
         {%else%}
-
-
             <ul class="navbar-nav navbar-notifications float-right">
                 <li class="nav-item">
-
                     <a class="nav-link" href="/login/" id="navbar-notification-search" >
-
                         <i class="batch-icon batch-icon-in"></i> Sign in
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/new-register/" id="navbar-notification-search" >
+                    <a class="nav-link" href="/register/" id="navbar-notification-search" >
                         <i class="batch-icon batch-icon-user-alt-add"></i> Sign up
                     </a>
                 </li>
@@ -143,4 +119,32 @@
        {%endif%}
 
     </div>
-    </nav>
+</nav>
+
+{% block script %}
+    <script>
+    function ___log_out(){
+        $.confirm({
+            title: 'Are you sure sign out?',
+            icon:'fa fa-unlock',
+            theme:'material',
+            content: 'Are you sure Log out？',
+            autoClose: 'cancel|6000',
+            typeAnimated: true,
+            animationSpeed: 1000,
+            buttons: {
+                ok: {
+                    text: 'yes',
+                    action: function () {
+                        var strURL = "{% url 'logout' %}";
+                        window.location.href = strURL;
+                    }
+                },
+                cancel: {
+                    text: 'no'
+                }
+            }
+        });
+    }
+    </script>
+{% endblock script %}
