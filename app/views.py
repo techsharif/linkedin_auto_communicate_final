@@ -113,7 +113,8 @@ def new_auth(request):
 
 
 class HomeView(TemplateView):
-    template_name = 'v2/app/home.html'
+    template_name = 'v2/app/landing.html'
+    #template_name = 'v2/app/home.html'
     models = MembershipType
     def get_context_data(self, **kwargs):
         ctx = super(HomeView, self).get_context_data(**kwargs)
