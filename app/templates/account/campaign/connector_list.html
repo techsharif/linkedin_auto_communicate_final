@@ -20,7 +20,7 @@
                 <tr>
                     <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
                     <td>
-                        <span class="label bg-{%if mc.status%}green{%else%}black{%endif%}">{%if mc.status%}Active{%else%}Inactive{%endif%}</span>
+                        <span class="badge badge-{%if mc.status%}green{%else%}black{%endif%}">{%if mc.status%}Active{%else%}Inactive{%endif%}</span>
                     </td>
                     <td>{{ mc.contacts.all | length }}</td>
                     <td>{{ mc.count_sends }}</td>

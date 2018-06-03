@@ -341,7 +341,7 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
 
 @method_decorator(decorators, name='dispatch')
 class AccounMessenger(AccountMixins, ListView):
-    template_name = 'account/account_messenger.html'
+    template_name = 'v2/account/account_messenger.html'
     is_bulk = True
     model = Campaign
 
