@@ -26,10 +26,7 @@ User = get_user_model()
 
 # New views
 
-def AccountSearch_NEW(request):
-    return render(request, 'v2/account/account_search.html')  
-  
-def RegisterView_NEW(request):
+def RegisterView(request):
     msg=''
     if request.POST:
         email = request.POST.get('email')
@@ -67,7 +64,6 @@ def RegisterView_NEW(request):
         print (msg)
     return render(request, 'v2/registration/register.html', {'msg': msg})
 
-
 def LoginView(request):
     msg=''
     if request.POST:
@@ -92,21 +88,11 @@ def LoginView(request):
             msg="invalid_user"
 
     return render(request, 'v2/registration/login.html',{'msg' : msg})
-  
-class HomeView_NEW(TemplateView):
-    template_name = 'v2/app/home.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super(HomeView_NEW, self).get_context_data(**kwargs)
-        for x in MembershipType.objects.all():
-            ctx[x.name] = x
-        # print('ctx:', ctx)
-        return ctx
-# OLD Views
 
 
 def home(request):
     return render(request, 'home/base.html')
+
 
 def new_landing(request):
     return render(request, 'new/landing/base.html')
@@ -115,65 +101,28 @@ def new_landing(request):
 def new_auth(request):
     return render(request, 'new/auth/base.html')
 
+
 class HomeView(TemplateView):
-    template_name = 'app/home.html'
-    print("template_name = " + template_name)
+    template_name = 'v2/app/home.html'
+    models = MembershipType
     def get_context_data(self, **kwargs):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         for x in MembershipType.objects.all():
             ctx[x.name] = x
-        # print('ctx:', ctx)
+
         return ctx
-
-
-class RegisterView(CreateView):
-    form_class = UserRegisterForm
-    template_name = 'registration/register.html'
-    success_url = reverse_lazy('register_done')
-
-    def form_invalid(self, form):
-        # print('invalid:', form.errors)
-        return super(RegisterView, self).form_invalid(form)
-
-    def form_valid(self, form):
-        # return CreateView.form_valid(self, form)
-
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.email
-            user.is_active = False
-            user.save()
-            # create profile
-            # may be not use this model for now
-            # Profile(user=user).save()
-
-            # send validate email
-
-            # collect site name
-            site_name = get_current_site(self.request)
-            # todo: change hard code subject
-            subject = 'Activate account'
-
-            # generate message
-            # print(urlsafe_base64_encode(force_bytes(user.pk)))
-            message = render_to_string('app/account_activation_email.html', {
-                'user': user,
-                'domain': site_name.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode("utf-8"),
-                'token': account_activation_token.make_token(user),
-            })
-
-            # send activation link to the user
-            user.email_user(subject, message)
-
-            return super(RegisterView, self).form_valid(form)
-        else:
-
-            return super(RegisterView, self).form_invalid(form)
 
 
 class SubsriptionView(TemplateView):
     template_name = 'app/subscription.html'
+    models = MembershipType
+
+    def get_context_data(self, **kwargs):
+        ctx = super(SubsriptionView, self).get_context_data(**kwargs)
+        for x in MembershipType.objects.all():
+            ctx[x.name] = x
+
+        return ctx
 
 
 class ProfileView(TemplateView):
