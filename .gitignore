@@ -11,3 +11,4 @@ local_settings.py
 # jetbuzz/wsgi.py
 venv/
 .idea/*
+.DS_Store
