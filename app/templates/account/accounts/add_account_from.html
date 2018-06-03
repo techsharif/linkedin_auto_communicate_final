@@ -1,55 +1,30 @@
-<div class="row mb-0">
-    <div class="col-md-12 mb-0">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" id="progress_title">Add Account...</h4>
-                <div class="row justify-content-center" id="step_result_form">
-                </div>
-                <div class="row justify-content-center">
-                    <div class="add_linkedin_form col-md-8">
-                        <div id="div_add_email">
-                            <form method="post" id="wizard-stage-1">
-                                <div class="form-group">
-                                    <label class="control-label">Email address</label>
-                                    <input type="text" class="form-control wizard-stage-1-email" id="email" name="email" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Password</label>
-                                    <input type="password" class="form-control wizard-stage-1-password" id="password" name="password" />
-                                </div>
-                            </form>
-                        </div>              
-                    </div>
-                    <div class="alert alert-primary" id="progress_result" role="alert" style="display:none;">
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer" id="add_connect_button">
-                <ul class="pager wizard" id="page_wizard_next_pre">
-                    <li class="previous first" style="display:none;">
-                        <a class="btn btn-light" href="#">
-                            <i class="batch-icon batch-icon-arrow-right"></i>
-                            First
-                        </a>
-                    </li>
-                    <li class="previous">
-                        <a class="btn btn-secondary" style="display:none;" href="#">
-                            <i class="batch-icon batch-icon-arrow-left"></i>
-                        </a>
-                    </li>
-                    <li class="next last" style="display:none;">
-                        <a class="btn btn-primary" href="#">Last</a>
-                    </li>
-                    <li class="next">
-                        <a class="btn btn-primary btn-gradient" href="#" onclick="return addLinkedInAccount()">
-                            <i class="batch-icon batch-icon-user-alt-add-2"></i> submit                            
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<div class="progressbar_custom">
+    <div class="progress_custom">
+        <div class="circle_custom done">
+            <span class="label_custom">1</span>
+            <span class="title">Authentication</span>
         </div>
+        <span class="bar_custom done"></span>
+        <div class="circle_custom done">
+            <span class="label_custom">2</span>
+            <span class="title">Verification</span>
+        </div>
+        <span class="bar_custom done"></span>
+        <div class="circle_custom active">
+            <span class="label_custom">3</span>
+            <span class="title">Sync</span>
+        </div>
+        <span class="bar_custom"></span>
+        <div class="circle_custom">
+            <span class="label_custom">4</span>
+            <span class="title">Activate</span>
+        </div>
+
     </div>
 </div>
-{% block script %}
-{% endblock %}
+<br>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h4 class="text-center">Please wait while we sync your data <br> <small>Please be patient. This may take a few minutes...</small></h4>
+    </div>
+</div>
