@@ -5,40 +5,28 @@ $(document).ready(function() {
 	var tmp_object;
 	var url = window.location.href;
 	var statusColors = {
-		"0": "btn-purple",
-		"22": "bg-dark",
-		"21": "bg-blue",
-		"10": "bg-green",
-		"12": "bg-yellow",
-		"200": "bg-danger",
-		"3": "bg-default",
+		"0": "btn-purple ",
+		"22": "bg-default bg-",
+		"21": "bg-blue bg-",
+		"10": "bg-green bg-",
+		"12": "bg-yellow bg-",
+		"200": "bg-danger bg-",
+		"3": "bg-default bg-",
 		"1": "bg-info",
-		"23": "bg-default",
-		"20": "bg-default",
-		"7": "bg-default",
-		"100": "bg-elegant",
+		"23": "bg-default bg-gradient",
+		"20": "bg-default bg-gradient",
+		"7": "bg-default bg-gradient",
+		"100": "bg-elegant bg-gradient",
 		"6": "bg-default",
 		"28": "bg-green",
 	};
 	var path = window.location.pathname;
 	var inboxPage = path.indexOf('network')>=0? false: true;
 	var status_index = 8;
-	
-    var table = $('#campaign_people').DataTable( {
+	var table = $('#campaign_people').DataTable( {
         "ajax": url,
-		"dom": '<"row"<"col-sm-4"l><"col-sm-4 text-center"p><"col-sm-4"f>>tip',
         'initComplete': function(settings){
             var api = this.api();
-			/* disale the disable checkbox now
-            api.cells(
-               api.rows(function(idx, data, node){
-            	  //inqueue
-                  return (data[status_index] === 0) ? true : false;
-               }).indexes(),
-               0
-            ).checkboxes.disable();
-			*/
-            // filer by colums
             api.columns().every( function () {
                 var column = this;
                 if (column.index() === status_index){
@@ -63,10 +51,11 @@ $(document).ready(function() {
                 
             } );
          },
+		"autoWidth": false,
         'columnDefs': [
             {
                'targets': 0,
-               'checkboxes': true
+               'checkboxes': true,
             },
             {
                 "targets": status_index,
@@ -74,7 +63,6 @@ $(document).ready(function() {
                 "render": function ( data, type, row ) {
                 	var v =  row[status_index];
                 	var btncolor = statusColors[v]? statusColors[v]: 'btn-purple btn-gradient';
-                	
                     var html = '<span data-status="'+ v +'" data-contactid="'+ row[0] +'" class="btn '+ btncolor;
                     html+= ' btn-block" data-click="change_status" data-toggle="tooltip"';
                     html+= 'data-html="true" title="';
@@ -87,7 +75,6 @@ $(document).ready(function() {
                     html+= '<br><i>Click on status to change it manually</i>">';
                     html+= contact_statuses[v];
                     html+= '</span>';
-                    
                     return html;
                 },
             },
@@ -114,15 +101,14 @@ $(document).ready(function() {
             },
          ],
          'order': [[1, 'asc']],
-         
          "drawCallback": function( settings ) {
         	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
         	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect']
-        		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item bg-light-blue btn-gradient">Mark Later</a>';
-        		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item bg-light-green btn-gradient">Mark No Interest</a>';
-        		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item bg-light btn-gradient">Mark Replied</a>';
-        		popover+= '<a href="#" data-status="12" data-click="changeStatus" class="list-group-item bg-mdb-color btn-gradient">Mark Talking</a>';
-        		popover+= '<a href="#" data-status="22" data-click="changeStatus" class=" list-group-item btn-blue btn-gradient">Mark Old Connect</a>';
+        		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item">Mark Later</a>';
+        		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item">Mark No Interest</a>';
+        		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item">Mark Replied</a>';
+        		popover+= '<a href="#" data-status="12" data-click="changeStatus" class="list-group-item">Mark Talking</a>';
+        		popover+= '<a href="#" data-status="22" data-click="changeStatus" class="list-group-item">Mark Old Connect</a>';
         		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
         	 $('[data-click="change_status"]').click(function(){
@@ -135,7 +121,7 @@ $(document).ready(function() {
         	 });
         	
           },
-          "dom": '<"toolbar col-md-8 mt-sm mb-sm pull-left">frtip'
+          "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
         
     } );
     
@@ -148,18 +134,21 @@ $(document).ready(function() {
 	}else if (path.indexOf('network')>=0){
 		//network page
 		
-		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="connector">&nbsp;&nbsp;Show Connector contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="messenger">&nbsp;&nbsp;Show Messenger contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary btn-sm btn-gradient waves-effect waves-light"><input  type="checkbox" data-click="talking">&nbsp;&nbsp;Show Talking contacts</span>';
-		header_buttons+= '&nbsp;<a class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a>';
-		header_buttons+= '&nbsp;<a class="btn btn-primary btn-gradient btn-sm waves-effect waves-light" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a>';
+		header_buttons+= '<div class="row"><div class="col-md-6"><div class="row" id="filter-search-moved"></div><div class="row">&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="connector">Show Connector contacts</span>';
+		header_buttons+= '&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="messenger">Show Messenger contacts</span>';
+		header_buttons+= '&nbsp;<span class="btn btn-primary  btn-gradient waves-effect waves-light" data-click="talking">Show Talking contacts</span></div></div>';
+		header_buttons+= '<div class="col-md-6"><div class="row justify-content-end"><a class="btn pull-right btn-primary btn-gradient waves-effect waves-light" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary btn-gradient waves-effect pull-right waves-light" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
-	// plus csv export
-	header_buttons+= '&nbsp;<button class="btnbtn btn-primary btn-gradient waves-effect waves-light export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button>';
+
+	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default waves-effect waves-light pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 	
-	$("div.toolbar").html(header_buttons);
-	$(".dataTables_filter").addClass("col-md-3 mt-sm  mb-sm");
-    
+
+	$(".dataTables_filter");
+	$(".dataTables_filter").css("width", "50%");
+   	$("div.toolbar").html(header_buttons);
+   	$(".dataTables_filter").appendTo('#filter-search-moved');
+
 	$('section.content').on('click', 'input[data-click="connector"], input[data-click="messenger"]', function(e){
 		//campaign with is_bulk true or false
 		var that = $(this);
@@ -243,16 +232,12 @@ $(document).ready(function() {
 			},
 			function(){
 				var form = $('form[name="contacts-delete"]');
-				
 				var data = rows_selected.join(',');
 				form.find('input[name="cid"]').val(data);
 				do_post_action(form, function(){
 					table.ajax.reload();
 					swal("Deleted!", "Your contacts have been deleted.", "success");
 				});
-					
-				
-			  
 			});
 	});
 	

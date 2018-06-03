@@ -1,18 +1,24 @@
 {% extends 'new/account/base.html' %} 
-{% load static %} {% block title %}My Network{% endblock title %}
+{% load static %}
+{% block title %}My Network{% endblock title %}
+{% block extra_head %}
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+{% endblock extra_head %}
 {% block content%}
-<div class="row"  mb-4>
-    <div class="col-md-12 mb-5">
+
+<div class="row">
+    <div class="col-md-12  mb-4">
         <div id="accordion" role="tablist" aria-multiselectable="true">
             <div class="card">
                 <div class="card-header" role="tab" id="headingOne">
                     <h5 class="mb-0">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Want to communicate with your existing network?
                         </a>
                     </h5>
                 </div>
-                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" style="">
+
+                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                     <div class="card-body">
                         <ul>
                             <li>Messenger Campaign helps you facilitate communication with your network of contacts.
@@ -32,24 +38,117 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingTwo">
+                    <h5 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Collapsible Group Item #2
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingThree">
+                    <h5 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Collapsible Group Item #3
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-9 mb-5">
-        <div class="card">
-            <div class="card-body">
-                {% include 'app/includes/people_datatable.html' with contacts=object_list campaign=1 %}
-                {% include 'app/includes/hidden_people_table.html' with contacts=object_list_default campaign=1 %}
+    <div class="col-md-12 mb-4">
+        <div class="table100">
+            {% include 'app/includes/people_datatable.html' with contacts=object_list campaign=1 %}
+            {% include 'app/includes/hidden_people_table.html' with contacts=object_list_default campaign=1 %}
+        </div>
+    </div>
+    <div class="main-section">
+        <div class="row border-chat">
+            <div class="col-md-12 col-sm-12 col-xs-12 first-section">
+                <div class="row">
+                    <div class="col-md-8 col-sm-6 col-xs-6 left-first-section">
+                        <p style="font-size: 1.3em;"><i class="fa fa-comment fa-2x"></i> &nbsp;&nbsp;Direct Chat</p>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-6 right-first-section">
+                        <a href="#"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row border-chat">
+            <div class="col-md-12 col-sm-12 col-xs-12 second-section">
+                <div class="chat-section">
+                    <div class="card-body" id="uinfo_box">
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="row border-chat">
+            <div class="col-md-12 col-sm-12 col-xs-12 third-section">
+                <div class="text-bar">
+                    <input class="input-chat-message" type="text" placeholder="Write messege">
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-5">
-         <div class="card">
-            <div class="card-body" id="uinfo_box">
-            </div>
-         </div>
-    </div>
 </div>
+<style>
+    table {
+        background: white !important;
+        border-collapse: collapse;
+        border-radius: 0px;
+        overflow: hidden;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+    .dataTables_paginate {
+        position: relative;
+        left: 40%;
+    }
+    .dataTables_info{
+         position: relative;
+        left: 40%;
+    }
+    th input[type="checkbox"] {
+         box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        margin-left: 15px;
+    }
+
+     th select{
+         box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+         margin-left: 15px;
+         height: 30px;
+    }
+    table thead tr {
+        height: 60px;
+        background: #13353f;
+    }
+    .dt-checkboxes {
+        box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        margin-left: 15px;
+    }
+
+    .table100-head th{
+        font-size: 18px !important;
+        color: white !important;
+        font-weight: unset !important;
+        vertical-align: center !important;
+    }
+ </style>
 {% endblock %} {% block pagefooter %} {% include 'app/includes/datatable_pagefooter.html' %}
 <div class="modal fade" tabindex="-1" role="dialog" id="add2campaign">
     <div class="modal-dialog" role="document">
@@ -93,14 +192,31 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-
-
-
 <script src="{% static 'js/table2CSV.js' %}"></script>
 <script>
+    let toggle_chat = false;
     $(document).ready(function () {
-
+        $('.dt-checkboxes').addClass('custom-control-input');
+        $(".fa-minus").click(function(){
+            $('.main-section').toggleClass("open-more");
+            if(!toggle_chat){
+                $('.input-chat-message').hide();
+                toggle_chat =true;
+            }else{
+                $('.input-chat-message').show();
+                toggle_chat =false;
+            }
+        });
+        $(".left-first-section").click(function(){
+            $('.main-section').toggleClass("open-more");
+             if(!toggle_chat){
+                $('.input-chat-message').hide();
+                toggle_chat =true;
+            }else{
+                $('.input-chat-message').show();
+                toggle_chat =false;
+            }
+        });
         $(".export-to-csv").click(function () {
             var $table = $('#csv_convert_table');
             var csv = $table.table2CSV({
