@@ -225,7 +225,7 @@ class AccountInfo(View):
                 if self.check_data_sync(linkedin_user):
                     return HttpResponse(render_to_string('account/accounts/activate.html'))
                 else:
-                    return HttpResponse(render_to_string('account/accounts/data_sync.html'))
+                    return HttpResponse(render_to_string('account/accounts/data_sync.html',  {'object': linkedin_user}))
             elif bot_task.status == BotTaskStatus.PIN_CHECKING:
                 return HttpResponse(render_to_string('account/accounts/pin_checking.html'))
             elif bot_task.status == BotTaskStatus.ERROR:
@@ -248,6 +248,7 @@ csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
+
 class AddPin(View):
     def post(self, request):
         if 'pin' in request.POST.keys():

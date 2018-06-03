@@ -43,17 +43,18 @@ def limited_user():
 
 
 def pinverify():
-    try:
-        pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
-        pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
-        print("Please check your email address to verify.....")
-        pincode = raw_input("Enter pin code:")
-        pin_input_box.clear()
-        pin_input_box.send_keys(pincode)
-        pin_submit_btn.click()
-        return True
-    except Exception as e:
-        return False
+    pass
+    # try:
+    #     pin_input_box = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#verification-code")))
+    #     pin_submit_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input#btn-primary")))
+    #     print("Please check your email address to verify.....")
+    #     pincode = raw_input("Enter pin code:")
+    #     pin_input_box.clear()
+    #     pin_input_box.send_keys(pincode)
+    #     pin_submit_btn.click()
+    #     return True
+    # except Exception as e:
+    #     return False
 
 
 if __name__ == '__main__':

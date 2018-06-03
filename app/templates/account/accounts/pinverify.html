@@ -21,43 +21,74 @@
         </div>
     </div>
 </div>
-
 <br>
 <div class="row justify-content-center mb-5">
-        <div class="col-md-10">
-            {% if error %}
-                <p class="text-danger">The pin you entered is not correct. Please enter the latest pin</p>
-            {% endif %}
-            <div class="form-group">
-                <label for="pin_text">PIN Verification: </label>
-                <input type="text" class="form-control" id='pin_text' placeholder="Enter Your Pin">
+    <div class="col-md-10">
+         {% if error %}
+            <p class="text-danger">The pin you entered is not correct. Please enter the latest pin</p>
+        {% endif %}
+        <form id="submit_pin_code">
+             <div class="form-group">
+                <label for="pin-code">PIN Verification: </label>
+                <input type="text" class="form-control" id="pin-code" name="pin_code" value="" placeholder="Enter Your Pin"/>
             </div>
-            <button type="button" id="pin_submit" class="btn btn-info btn-gradient pull-right">Submit PIN</button>
-        </div>
+            <input type="button" id="pin_submit" class="btn btn-info btn-gradient pull-right" value="Submit PIN"/>
+    </form>
+    </div>
 </div>
 <script>
-    $("#pin_submit").click(function () {
-        console.log('ok')
-        data_ = new Object()
-        data_.id = '{{ object.id }}'
-        data_.pin = $('#pin_text')[0].value
+    $("#submit_pin_code").validate({
+        errorElement: "span",
+        errorClass: "help-block help-block-error",
+        focusInvalid: !1,
+        ignore: "",
+        rules: {
+            pin_code: {
+                required: true,
+                minlength: 4,
+                maxlength: 4,
+                digits: true,
+            }
+        },
+        errorPlacement: function (error, element) {
+            let placement = $(element).data('error');
+            if (placement) {
+                $(placement).append(error)
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (e) {
+            $(e).closest(".form-group").addClass("has-error")
+        },
+        unhighlight: function (e) {
+            $(e).closest(".form-group").removeClass("has-error")
+        },
+        success: function (e) {
+            e.closest(".form-group").removeClass("has-error")
+        },
+        submitHandler: function (e) {
+            ajax_submit_pin_code();
+        }
+    });
+    function ajax_submit_pin_code() {
+        data_ = new Object();
+        data_.id = '{{ object.id }}';
+        data_.pin = $('#pin-code')[0].value;
         $.ajax({
             url: "{% url 'account-info' %}",
             type: "post",
             data: data_,
             success: function (response) {
-                $('#add_account_modal_results').html(response)
-
+                $('#add_account_modal_results').html(response);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
             }
-
-
         });
-
-
+    }
+    $("#pin_submit").click(function () {
+        console.log('ok');
+        $('#submit_pin_code').submit();
     });
-
-
 </script>
