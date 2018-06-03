@@ -1,5 +1,7 @@
-{% extends 'new/account/base.html' %} {% load static %} {% block extra_head %}
-<link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css"> {% endblock %} {% block title %}Settings{% endblock title %} {% block pagetitle %} Search {% endblock %} 
+{% extends 'new/account/base.html' %}
+{% load static %}
+{% block extra_head %}
+<link href="{% static 'css/search_page.css' %}" rel="stylesheet" type="text/css"> {% endblock %} {% block title %}Settings{% endblock title %} {% block pagetitle %} Search {% endblock %}
 {% block content %}
 <div class="col-md-12 mb-4">
     <div class="card card-lg">
@@ -74,7 +76,7 @@
 <section class="content" style="height:80%">
 
 </section>
-{% endblock %} 
+{% endblock %}
 {% block pagefooter %}
 <div>
     <form id="add_search" class="modal fade in" tabindex="-1" role="dialog" method="POST" action="" autocomplete="off" id="search_dialog">
