@@ -112,7 +112,8 @@ $(document).ready(function() {
         		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
         	 $('[data-click="change_status"]').click(function(){
-        	 	tmp_object = this
+        	 	$('.bs-popover-bottom').hide();
+        	 	tmp_object = this;
 			 });
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
@@ -122,7 +123,6 @@ $(document).ready(function() {
         	
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
-        
     } );
     
     
@@ -165,12 +165,21 @@ $(document).ready(function() {
 	});
 	
     $('body').on('click', 'a[data-click="changeStatus"]', function(e){
+    	console.log($('.popoverButton').length);
         if($('.popoverButton').length>1)
 	        $('.popoverButton').popover('hide');
 	    $(e.target).popover('toggle');
 	    var parent = $(this).parent();
 	    parent.popover('hide');
-
+		if($('.main-section').is('.open-more')){
+		} else {
+			$('.main-section').toggleClass("open-more");
+			if($('.input-chat-message').is(':visible')){
+			$('.input-chat-message').hide();
+			} else {
+				$('.input-chat-message').show();
+			}
+		}
 	    // var statusbox = parent.prev();
 		var statusbox = $(tmp_object);
 	    console.log( statusbox.data('contactid'));
@@ -210,8 +219,8 @@ $(document).ready(function() {
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
 
-		var $table             = table.table().node();
-	    var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+		var $table = table.table().node();
+	    var $chkbox_checked  = $('tbody input[type="checkbox"]:checked', $table);
     	var rows_selected = $chkbox_checked;
 
 		if(rows_selected.length < 1){

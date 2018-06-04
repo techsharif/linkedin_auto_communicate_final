@@ -38,34 +38,6 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header" role="tab" id="headingTwo">
-                    <h5 class="mb-0">
-                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Collapsible Group Item #2
-                        </a>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" role="tab" id="headingThree">
-                    <h5 class="mb-0">
-                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Collapsible Group Item #3
-                        </a>
-                    </h5>
-                </div>
-                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -161,7 +133,6 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-
                 </div>
                 <div class="modal-body modal-body-input">
                     {% if messenger_campaigns_count > 0 %}
@@ -184,15 +155,12 @@
                         <button type="button" class="btn btn-primary add2bulk_button">Add to Messenger</button>
                         <button type="button" class="btn btn-info move2bulk_button hidden">Move</button>
                     {% endif %}
-
                 </div>
-
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
+
 <script src="{% static 'js/table2CSV.js' %}"></script>
 <script>
     let toggle_chat = false;
@@ -200,13 +168,12 @@
         $('.dt-checkboxes').addClass('custom-control-input');
         $(".fa-minus").click(function(){
             $('.main-section').toggleClass("open-more");
-            if(!toggle_chat){
+            if($('.input-chat-message').is(':visible')){
                 $('.input-chat-message').hide();
-                toggle_chat =true;
-            }else{
+            } else {
                 $('.input-chat-message').show();
-                toggle_chat =false;
             }
+
         });
         $(".left-first-section").click(function(){
             $('.main-section').toggleClass("open-more");
