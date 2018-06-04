@@ -21,7 +21,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import View
 from django.views.generic.edit import UpdateView, CreateView
-
 from connector.models import TaskQueue, SearchResult
 from messenger.forms import UpdateContactNoteForm, CreateChatMesgForm
 
@@ -85,7 +84,7 @@ class ContactDeleteView(AjaxHttpResponse, View):
         if contact.is_connected:
             # channged status only
             contact.change_status(ContactStatus.OLD_CONNECT_N)
-            # return
+            return
 
         SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
                                     owner=contact.owner).delete()

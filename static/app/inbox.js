@@ -101,7 +101,6 @@ $(document).ready(function() {
                 "targets": [ 9 ], //
                 "visible": false,
                 "searchable": false,
-
             },
          ],
          'order': [[1, 'asc']],
@@ -133,7 +132,6 @@ $(document).ready(function() {
         		 placement: 'bottom',
         		 target: 'body',
         	 });
-
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
@@ -141,9 +139,9 @@ $(document).ready(function() {
 
 	var header_buttons = '';
 	if(inboxPage){
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-info btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 	}else if (path.indexOf('network')>=0){
 		//network page
 
@@ -174,7 +172,8 @@ $(document).ready(function() {
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
-		let column = table.column( 7 );
+		let column = table.column(7);
+		console.log(column)
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
 
@@ -186,7 +185,6 @@ $(document).ready(function() {
 		let column = table.column( 7 );
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
-
     });
 
 	$('#show_messenger_contacts').click(function (e) {
@@ -194,7 +192,8 @@ $(document).ready(function() {
 		let column = table.column( 8 );
 		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
         .draw();
-    });
+  });
+
 	$('.btn-group-custom-checkbox').on('click', 'input[data-click="talking"]', function(e){
 		var that = $(this);
 		// check?
@@ -203,7 +202,7 @@ $(document).ready(function() {
         .draw();
 	});
 
-    $('body').on('click', 'a[data-click="changeStatus"]', function(e){
+  $('body').on('click', 'a[data-click="changeStatus"]', function(e){
     	console.log($('.popoverButton').length);
         if($('.popoverButton').length>1)
 	        $('.popoverButton').popover('hide');

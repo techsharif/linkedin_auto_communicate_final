@@ -15,9 +15,10 @@
 	  <td>{{contact.title}}</td>
 	  <td>{{contact.latest_activity}}</td>
 	  {%if campaign%}
-	  <td class="">{{contact.campaign}}</td>
+	  <td>{{contact.campaign}}</td>
 	  {%endif%}
-	  <td class="">{# how to deal with this #}
+	  <td>
+			{# how to deal with this #}
 	  <span data-contactid="{{contact.id}}" class="btn btn-orange btn-gradient waves-effect waves-light btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}"
 	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
 	  In Queue</span>
@@ -26,7 +27,6 @@
 	{%endfor%}
 	</tbody>
 </table>
-
 
 <form name="contacts-delete" action="{% url 'contacts-delete' %}" method="post">
 {% csrf_token %}
