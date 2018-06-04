@@ -129,8 +129,7 @@
                 {% csrf_token %}
 
                 <div class="modal-header">
-                   <h4 class="modal-title">Add Contacts to Messenger Campaign</h4>
-
+                    <h4 class="modal-title">Add Connector to Messenger Campaign</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -153,8 +152,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     {% if messenger_campaigns_count > 0 %}
-                    <button type="button" class="btn btn-primary add2bulk_button">Add to Messenger</button>
-                    <button type="button" class="btn btn-info move2bulk_button hidden">Move</button>
+                        <button type="button" class="btn btn-primary add2bulk_button">Add to Messenger</button>
+                        <button type="button" class="btn btn-info move2bulk_button hidden">Move</button>
                     {% endif %}
                 </div>
             </form>

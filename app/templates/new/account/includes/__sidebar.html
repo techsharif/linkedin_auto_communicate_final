@@ -8,7 +8,7 @@
             <a class="navbar-brand" href="#">
                 <img src="{% static 'images/if_linkedin_287735.svg' %}" width="145" height="80" alt="QuillPro">
             </a>
-            <h6 class="nav-header text-center" style="color: blueviolet;">{{ user.email }}</h6>
+            <h8 class="nav-header text-center" style="font-size:10px !important;">{{ user.email }}</h8>
         </li>
         <li>
             <h6 class="nav-header">General</h6>
@@ -20,22 +20,6 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
-
-       <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts' %}">
-                <i class="batch-icon batch-icon-user-alt-3 "></i>
-                Accounts
-                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
-                <i class="batch-icon batch-icon-bullhorn-alt"></i>
-                Campaigns
-                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
-            </a>
-        </li>
-
         <li class="nav-item">
             <a class="nav-link {% if 'network' in request.path %} active {% endif %}" href="{% url 'account-network' pk=pk %}">
                 <i class="batch-icon batch-icon-users"></i>
@@ -51,8 +35,13 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
-
-
+        <li class="nav-item">
+            <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
+                <i class="batch-icon batch-icon-bullhorn-alt"></i>
+                Connector
+                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'account-search' pk=pk %}">
                 <i class="batch-icon batch-icon-search-alt"></i>
@@ -77,3 +66,11 @@
         </li>
     </ul>
 </nav>
+
+
+
+
+
+
+
+
