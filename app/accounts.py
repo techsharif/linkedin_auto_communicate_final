@@ -43,7 +43,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-      
+
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -57,7 +57,7 @@ class RemoveAccount(View):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        # pk here is pk of linkeduser table, 
+        # pk here is pk of linkeduser table,
         if 'object' in ctx:
             if isinstance(ctx['object'], Campaign):
                 ctx['pk'] = ctx['object'].owner_id
@@ -685,7 +685,7 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn                
+                # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
                                       connect_campaign=campaign)
                 self._clone_to_contact(search_results, campaign)
@@ -710,4 +710,12 @@ class AccountTask_NEW(View):
         context['pk'] = pk
         return render(request, self.template_name, context)
 
+
 def remove_inbox(request):
+    model = Inbox
+    try:
+        if request.POST.get('cid'):
+            print(cid)
+    except Inbox.DoesNotExist:
+        pass
+    return JsonResponse({'message': 'message', 'response_code': 'response_code'})

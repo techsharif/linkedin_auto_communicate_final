@@ -1,6 +1,6 @@
 
 
-	
+
 $(document).ready(function() {
 	var tmp_object;
 	var url = window.location.href;
@@ -38,17 +38,17 @@ $(document).ready(function() {
                                 $(this).val()
                             );
                             var text = contact_statuses[val];
-     						console.log('text:', val, text);
+     												console.log('text:', val, text);
                             column
                                 .search( (val && val >= 0) ? text  : '', false, true )
                                 .draw();
                         } );
-     				var status_list = inboxPage? contact_statuses: mynetwork_statuses;
+     								var status_list = inboxPage? contact_statuses: mynetwork_statuses;
                     Object.keys(status_list).sort().forEach(function(k) {
                     	select.append( '<option value="'+ k +'">'+ contact_statuses[k] +'</option>' );
                     })
                 }
-                
+
             } );
          },
 		"sPaginationType": "full_numbers",
@@ -92,7 +92,7 @@ $(document).ready(function() {
                 		extrahtml =  "messenger";
                 	else if (row[9] === false)
                 		extrahtml =  "connector";
-                	
+
                 	extrahtml = (row[7]!== null?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
                 }
@@ -101,7 +101,7 @@ $(document).ready(function() {
                 "targets": [ 9 ], //
                 "visible": false,
                 "searchable": false,
-                
+
             },
          ],
          'order': [[1, 'asc']],
@@ -133,12 +133,12 @@ $(document).ready(function() {
         		 placement: 'bottom',
         		 target: 'body',
         	 });
-        	
+
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
 
-    
+
 	var header_buttons = '';
 	if(inboxPage){
 		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
@@ -146,7 +146,7 @@ $(document).ready(function() {
 		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 	}else if (path.indexOf('network')>=0){
 		//network page
-		
+
 		header_buttons+= '<div class="row">' +
 			'<div class="col-md-7">' +
 			'<div class="row" id="filter-search-moved">' +
@@ -202,7 +202,7 @@ $(document).ready(function() {
 		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
         .draw();
 	});
-	
+
     $('body').on('click', 'a[data-click="changeStatus"]', function(e){
     	console.log($('.popoverButton').length);
         if($('.popoverButton').length>1)
@@ -218,7 +218,7 @@ $(document).ready(function() {
 	    var old_status = statusbox.data('status');
 	    var new_status = $(this).data('status');
 	    changeContactStatus(contactid, new_status, old_status, function( contactid, new_status, old_status){
-	    	
+
 	    	var oldcolor = statusColors[old_status];
 	    	var newcolor = statusColors[new_status];
 	    	var spanbox = $('td>span[data-contactid="' + contactid + '"]');
@@ -226,11 +226,11 @@ $(document).ready(function() {
 
 	    	spanbox.text(contact_statuses[new_status]);
 	    	spanbox.removeClass(oldcolor).addClass(newcolor);
-	    	
+
 	    });
-	    
+
     });
-    
+
     function changeContactStatus(contactid, new_status, old_status, cb){
     	var url = "/account/contact/" + contactid + "/status?status="+new_status;
     	$.get(url).done(function(res){
@@ -239,12 +239,12 @@ $(document).ready(function() {
     		}
     	})
     }
-    
+
 	// buton click
 	//export to excel
 	$('button[data-click="export"]').click(function(e){
 		swal("alert!", "Will be done.", "success");
-		
+
 	});
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
@@ -267,10 +267,10 @@ $(document).ready(function() {
 			},
 			function(){
 				let form = $('form[name="contacts-delete"]');
-				let contact_id = [];
+				let contact_id = '';
 				for(let i = 0; i < rows_selected.length; i++){
 					if($(rows_selected[i]).is('.dt-checkboxes')){
-						contact_id.push($(rows_selected[i]).val())
+						contact_id += ($(rows_selected[i]).val())+',';
 					}
 				}
 
@@ -283,7 +283,7 @@ $(document).ready(function() {
 				});
 			});
 	});
-	
+
 	//add selected
     $('#add_selected').click( function(e){
     	var $table             = table.table().node();
@@ -300,7 +300,7 @@ $(document).ready(function() {
        			if (row[7] !== null)
            			contact_camps[row[7]] = 1;
     		}
-    		
+
     	});
     	if (contacts.length == 0){
     		// alert
@@ -311,15 +311,15 @@ $(document).ready(function() {
     	// show campain modal
     	show_add2campaign(contacts);
     });
-	
+
 	function alert_no_contact(){
 		swal("Alert!", "No selected contact", "error");
 	};
-	
+
 	//add_all filtered contact
-	
+
 	$('#add_allnew').click( function(e){
-    	
+
     	if( filtered_row_num < 1) {
     		alert_no_contact();
     		return;
@@ -331,16 +331,16 @@ $(document).ready(function() {
     			contact_camps[row[7]] = 1;
     	});
     	show_add2campaign(contacts);
-    	
-    	
+
+
     });
     function show_add2campaign(contacts) {
     	var cids = contacts.join(',');
     	$('#add2campaign input[name="cid"]').val(cids);
     	$("#add2campaign").modal('show');
-    	
+
     }
-	
+
 	//add2bulk_button
 	$('body').on('click', '.add2bulk_button', function (e) {
 		e.preventDefault();
@@ -353,89 +353,86 @@ $(document).ready(function() {
 		var camp_message = messenger.html();
 		if (camp_message === "" || camp_message.length < 5){
 			var url = messenger.data('url');
-			
+
 			var text = 'Your selected campaign <b>' + campaign_name + '</b> has not had any message yet.';
 			text+= ' Please add some <a href="' + url +'">here</a>.';
-			
+
 			show_camp_alert(text)
 			return;
 		}
-		
+
     	// check contact in other campaign
-    	
+
 		console.log('campaign_name:', campaign_name, contact_camps);
 		var othercamps = [];
 		var arr = Object.keys(contact_camps);
 		if (arr.length > 0){
 			arr.forEach(function(camp) {
 				console.log('checking:', camp);
-			
+
 				if (camp !== campaign_name){
 					othercamps.push(camp);
 				}
-					
+
 			});
-			
+
 			console.log('othercamps:', othercamps);
 			if (othercamps.length > 0){
 				// add move contacts button
-				
 				var text = 'Contacts in <b>'+ othercamps.join(', ') + '</b> campaign' + (othercamps.length>1?'s':'');
 				text+= ' will be moved into <b>' + campaign_name + '</b>';
-				
+
 				show_camp_alert(text);
 				$("#add2campaign .move2bulk_button").removeClass('hidden');
-				
+
 				return;
 			}
 		}
 		do_post_campaign(that);
-		
-		
-	
 	} );
 	$('body').on('click', '.move2bulk_button', function (e) {
 		e.preventDefault();
 		var that = $(this);
 		do_post_campaign(that);
-		
+
 	});
+
 	function show_camp_alert(text){
 		$("#add2campaign .add2bulk_button").hide();
 		$("#add2campaign .modal-body-input").hide();
 		var mbody = $("#add2campaign .modal-body-move");
-		
 		mbody.html(text);
 		mbody.show();
 	}
+
 	function do_post_campaign(that){
 		var form = that.closest('form');
 		do_post_action(form, function(){
 			table.ajax.reload();
 			$("#add2campaign").modal('hide');
 		});
-		
+
 	}
-	
+
 	function do_post_action(form, cb){
     	var data = form.serialize();
     	console.log('posted data:', form.attr('action'),  data);
 		$.post(form.attr('action'), data).done(function(res){
 			console.log('posted result:', data);
-			if(res.ok){				
+			if(res.ok){
 				cb(res);
 			}
 		});
 	}
-	
+
 	// filtered
 	table.on('search.dt', function() {
 	    //number of filtered rows
 	    filtered_row_num = table.rows( { filter : 'applied'} ).nodes().length;
 	    //filtered rows data as arrays
-	    filtered_rows = table.rows( { filter : 'applied'} ).data();                                  
-	}) 
-    
+	    filtered_rows = table.rows( { filter : 'applied'} ).data();
+	})
+
     // click row
 	$('#campaign_people tbody').on('click', 'tr', function () {
         var data = table.row( this ).data();
@@ -449,7 +446,7 @@ $(document).ready(function() {
 			$('#uinfo_box').html(res);
 		});
 	}
-	
+
 	//save notes
 	$('body').on('click', '#save_notes', function(e){
 		e.preventDefault();
@@ -463,19 +460,19 @@ $(document).ready(function() {
 		do_post_action(form, function(res){
 			console.log('notes is saved')
 			show_uinfo(current_uid);
-			
+
 			});
 	});
-	
+
 	setTimeout(function(){
 		var firstrow = $('#campaign_people tbody tr').first();
 		var data = table.row( firstrow ).data();
 		if( data)
         	show_uinfo(data[0])
 	}, 2000);
-	
-	
-	
+
+
+
 	// for collapse chat content
 	$("body").on('click', "[data-widget='collapse']", function(e) {
 		console.log('data widget');
@@ -492,5 +489,5 @@ $(document).ready(function() {
 	        bf.slideDown();
 	    }
 	});
-	
+
 });
