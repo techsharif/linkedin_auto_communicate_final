@@ -1,4 +1,4 @@
- {% extends 'new/account/base.html' %} {% load static %} {% block title %}Messenger{% endblock title %} {% block pagetitle%}
+ {% extends 'v2/account/base.html' %} {% load static %} {% block title %}Messenger{% endblock title %} {% block pagetitle%}
 Messenger {% endblock %} {%block content%}
 
 <div class="row mb-5">
@@ -32,4 +32,4 @@ Messenger {% endblock %} {%block content%}
 
 	</div>
 </div>
-{%include 'account/campaign/messenger_list.html' with object_list=object_list %} {%endblock%}
+{%include 'v2/account/campaign/messenger_list.html' with object_list=object_list %} {%endblock%}
