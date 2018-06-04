@@ -104,6 +104,8 @@ class AccountDetail(AccountMixins, DetailView):
         ctx['account_home'] = True
         ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
+        ctx['total_campaign_contact_list'] = Inbox.objects.filter(owner=self.object)
+        ctx['total_campaign_contact_count'] = len(ctx['total_campaign_contact_list'])
 
         return ctx
 
