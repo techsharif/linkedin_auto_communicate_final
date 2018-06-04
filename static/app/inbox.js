@@ -55,10 +55,10 @@ $(document).ready(function() {
             {
                'targets': 0,
                'checkboxes': true,
-				"render": function ( data, type, row ) {
-					let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+								"render": function ( data, type, row ) {
+									let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
                		return html;
-				}
+							  }
             },
             {
                 "targets": status_index,
@@ -103,6 +103,7 @@ $(document).ready(function() {
             },
          ],
          'order': [[1, 'asc']],
+				 "bAutoWidth": true,
          "drawCallback": function( settings ) {
         	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
         	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect'];
