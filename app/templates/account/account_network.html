@@ -3,6 +3,8 @@
 {% block title %}My Network{% endblock title %}
 {% block extra_head %}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+{#    <link href="{% static 'css/components-md.css' %}" rel="stylesheet">#}
+{#    <link href="{% static 'css/plugins-md.css' %}" rel="stylesheet">#}
 {% endblock extra_head %}
 {% block content%}
 
@@ -89,11 +91,10 @@
     }
     .dataTables_paginate {
         position: relative;
-        left: 40%;
+        float: inside;
     }
     .dataTables_info{
          position: relative;
-        left: 40%;
     }
     th input[type="checkbox"] {
          box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
@@ -198,6 +199,7 @@
             downloadLink.click();
             document.body.removeChild(downloadLink);
         });
+
     });
 </script>
 

@@ -6,17 +6,17 @@ $(document).ready(function() {
 	var url = window.location.href;
 	var statusColors = {
 		"0": "btn-purple ",
-		"22": "bg-default bg-",
-		"21": "bg-blue bg-",
-		"10": "bg-green bg-",
-		"12": "bg-yellow bg-",
-		"200": "bg-danger bg-",
-		"3": "bg-default bg-",
+		"22": "bg-default",
+		"21": "bg-blue",
+		"10": "bg-green",
+		"12": "bg-yellow",
+		"200": "bg-danger",
+		"3": "bg-default",
 		"1": "bg-info",
-		"23": "bg-default bg-gradient",
-		"20": "bg-default bg-gradient",
-		"7": "bg-default bg-gradient",
-		"100": "bg-elegant bg-gradient",
+		"23": "bg-default",
+		"20": "bg-red",
+		"7": "bg-default",
+		"100": "bg-elegant",
 		"6": "bg-default",
 		"28": "bg-green",
 	};
@@ -52,6 +52,7 @@ $(document).ready(function() {
             } );
          },
 		"autoWidth": false,
+		"sPaginationType": "full_numbers",
         'columnDefs': [
             {
                'targets': 0,
@@ -114,6 +115,15 @@ $(document).ready(function() {
         	 $('[data-click="change_status"]').click(function(){
         	 	$('.bs-popover-bottom').hide();
         	 	tmp_object = this;
+        	 	if($('.main-section').is('.open-more')){
+				} else {
+					$('.main-section').toggleClass("open-more");
+					if($('.input-chat-message').is(':visible')){
+					$('.input-chat-message').hide();
+					} else {
+						$('.input-chat-message').show();
+					}
+				}
 			 });
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
@@ -134,10 +144,19 @@ $(document).ready(function() {
 	}else if (path.indexOf('network')>=0){
 		//network page
 		
-		header_buttons+= '<div class="row"><div class="col-md-6"><div class="row" id="filter-search-moved"></div><div class="row">&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="connector">Show Connector contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="messenger">Show Messenger contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary  btn-gradient waves-effect waves-light" data-click="talking">Show Talking contacts</span></div></div>';
-		header_buttons+= '<div class="col-md-6"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="row">' +
+			'<div class="col-md-7">' +
+			'<div class="row" id="filter-search-moved">' +
+			'</div>' +
+			'<div class="btn-group btn-group-toggle btn-group-custom-checkbox" data-toggle="buttons">' +
+			'<span id="show_connector_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input  type="checkbox"  data-click="connector" >Show Connector contacts' +
+			'</span>';
+		header_buttons+= '<span id="show_messenger_contacts"  class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input type="checkbox" data-click="messenger">Show Messenger contacts</span>';
+		header_buttons+= '<span id="show_talking_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input type="checkbox" data-click="talking">Show Talking contacts</span></div></div>';
+		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
@@ -146,17 +165,34 @@ $(document).ready(function() {
 	$(".dataTables_filter").css("width", "50%");
    	$("div.toolbar").html(header_buttons);
    	$(".dataTables_filter").appendTo('#filter-search-moved');
+	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
+	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
 
-	$('section.content').on('click', 'input[data-click="connector"], input[data-click="messenger"]', function(e){
-		//campaign with is_bulk true or false
-		var that = $(this);
-		var val = that.data('click');
-		var column = table.column( 7 );
+	$('#show_connector_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let val = that.data('click');
+		let column = table.column( 7 );
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
-		
-	});
-	$('section.content').on('click', 'input[data-click="talking"]', function(e){
+
+    });
+
+	$('#show_talking_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let val = that.data('click');
+		let column = table.column( 7 );
+		column.search( that.is(':checked')? val:'' , false, true )
+        .draw();
+
+    });
+
+	$('#show_messenger_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let column = table.column( 8 );
+		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
+        .draw();
+    });
+	$('.btn-group-custom-checkbox').on('click', 'input[data-click="talking"]', function(e){
 		var that = $(this);
 		// check?
 		var column = table.column( 8 );
@@ -171,15 +207,7 @@ $(document).ready(function() {
 	    $(e.target).popover('toggle');
 	    var parent = $(this).parent();
 	    parent.popover('hide');
-		if($('.main-section').is('.open-more')){
-		} else {
-			$('.main-section').toggleClass("open-more");
-			if($('.input-chat-message').is(':visible')){
-			$('.input-chat-message').hide();
-			} else {
-				$('.input-chat-message').show();
-			}
-		}
+
 	    // var statusbox = parent.prev();
 		var statusbox = $(tmp_object);
 	    console.log( statusbox.data('contactid'));
