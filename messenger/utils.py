@@ -2,7 +2,7 @@ import datetime
 
 from django.utils import timezone
 
-from messenger.models import ChatMessage, Inbox
+from messenger.models import ChatMessage, Inbox, Campaign, ContactStatus
 
 
 def set_data(connection, time_diff_cmp, key, data):
@@ -54,3 +54,24 @@ def calculate_connections(linkedin_user_id, status):
 
     data['connection_count'] = len(connections)
     return data
+
+
+def calculate_dashboard_data(owner):
+    campaigns = Campaign.objects.filter(owner=owner, is_bulk=False)
+    campaign_members = 0
+    connected_members = 0
+    for campaign in campaigns:
+        campaign_members_list = campaign.contacts.all()
+        campaign_members += len(campaign_members_list)
+        connected_members += len(campaign_members_list.filter(is_connected=True).exclude(connected_date=None))
+
+    invitations_sent = len(
+        ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False, type=ContactStatus.CONNECT_REQ_N))
+
+    return {
+        'campaign_members': campaign_members,
+        'connected_members': connected_members,
+        'invitations_sent': invitations_sent,
+        'invitation_rate': int(invitations_sent/campaign_members),
+        'pending_rate': 100 - int(invitations_sent/campaign_members),
+    }

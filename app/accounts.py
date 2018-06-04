@@ -28,7 +28,7 @@ from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
 from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
 from django.core.exceptions import ObjectDoesNotExist
 
-from messenger.utils import calculate_communication_stats, calculate_connections
+from messenger.utils import calculate_communication_stats, calculate_connections, calculate_dashboard_data
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
@@ -105,7 +105,7 @@ class AccountDetail(AccountMixins, DetailView):
         ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
         ctx['total_campaign_contact_list'] = Inbox.objects.filter(owner=self.object)
-        ctx['total_campaign_contact_count'] = len(ctx['total_campaign_contact_list'])
+        ctx['dashboard_data'] = calculate_dashboard_data(self.object)
 
         return ctx
 
