@@ -106,8 +106,7 @@
                 <div class="card-body">
 
 
-
-                        <canvas id="myChart"></canvas>
+                    <canvas id="myChart"></canvas>
 
                 </div>
 
@@ -118,126 +117,133 @@
     </div>
     <br><br>
     <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h6>COMMUNICATION STATUS</h6>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6>COMMUNICATION STATUS</h6>
 
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-xl-8">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-8">
 
-                        <div>
-                            <canvas id="myLineChart"></canvas>
+                            <div>
+                                <canvas id="myLineChart"></canvas>
+                            </div>
+
                         </div>
+                        <div class="col-xl-4">
+                            <br><br>
+                            <h3>Backgrounds</h3>
+                            <span><strong>Contacts</strong></span>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {{ dashboard_data.campaign_members_p }}%"
+                                     aria-valuenow="{{ dashboard_data.campaign_members_p }}"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span><strong>Invitations Sent</strong></span>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar"
+                                     style="width: {{ dashboard_data.invitations_sent_p }}%"
+                                     aria-valuenow="{{ dashboard_data.invitations_sent_p }}"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span><strong>Replied</strong></span>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar"
+                                     style="width: {{ dashboard_data.replied_p }}%"
+                                     aria-valuenow="{{ dashboard_data.replied_p }}"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
 
+
+                        </div>
                     </div>
-                    <div class="col-xl-4">
-                        <br><br>
-                        <h3>Backgrounds</h3>
-                        <span><strong>Contacts</strong></span>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
-                                 aria-valuenow="25"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <span><strong>Invitations Sent</strong></span>
-                        <div class="progress">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <span><strong>Replied</strong></span>
-                        <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%"
-                                 aria-valuenow="75"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
 
-
-
-                    </div>
                 </div>
 
             </div>
-
         </div>
-    </div>
     </div>
     <br><br>
     <div class="row">
         <div class="col-md-6">
             <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Upcomming Tasks</div>
+
+                </div>
 
                 <div class="card-body">
-                    <table class="table">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <table class="table ">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Task type</th>
+                            <th>Name</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in upcoming_tasks %}
+                            <tr>
+                                <td>{{ task.queue_type }}</td>
+                                <td>{{ task.content_object }}</td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
         </div>
         <div class="col-md-6">
             <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Connector campaigns</div>
+
+                </div>
 
                 <div class="card-body">
-                    <table class="table">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                    </tbody>
-                </table>
+                    {% if object_list %}
+                        <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Contacts</th>
+                            <th>Connected</th>
+                            <th>Replied to<br>connection message</th>
+                            <th>Replied to<br>other messages</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for mc in object_list %}
+                            <tr>
+                                <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
+                                <td>
+                                <span class="label bg-{% if mc.status %}green{% else %}black{% endif %}">{% if mc.status %}
+                                    Active{% else %}Inactive{% endif %}</span>
+                                </td>
+                                <td>{{ mc.contacts.all | length }}</td>
+                                <td>{{ mc.count_sends }}</td>
+                                <td>{{ mc.count_replies }}</td>
+                                <td>{{ mc.count_reply_other }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+
+                    {% else %}
+                        <p>Currently you have no connector campaigns with this linkedin account</p>
+                    {% endif %}
+
+                    </table>
                 </div>
             </div>
 
@@ -489,33 +495,29 @@
 
 
     <script>
-        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var step_size = {{ connection_stat.max }}
+    step_size = parseInt(step_size/4) + 1
+
         var config = {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: {{ connection_stat.labels|safe }},
                 datasets: [{
-                    label: 'My First dataset',
+                    label: 'Contact List',
                     borderColor: window.chartColors.green,
                     backgroundColor: window.chartColors.green,
-                    data: [
-                        10, 50, 150, 300, 200, 70, 100
-                    ],
+                    data: {{ connection_stat.contacts_list|safe }},
                 }, {
-                    label: 'My Second dataset',
+                    label: 'Invitations List',
                     borderColor: window.chartColors.blue,
                     backgroundColor: window.chartColors.blue,
-                    data: [
-                        60, 50, 300, 100, 80, 100, 150
-                    ],
+                    data: {{ connection_stat.invitations_list|safe }},
                 }, {
-                    label: 'My Third dataset',
+                    label: 'Replied List',
                     borderColor: window.chartColors.yellow,
                     backgroundColor: window.chartColors.yellow,
-                    data: [
-                        80, 90, 200, 150, 400, 50, 250
-                    ],
-                }, ]
+                    data: {{ connection_stat.replied_list|safe }},
+                },]
             },
             options: {
                 legend: {
@@ -544,6 +546,9 @@
                         scaleLabel: {
                             display: true,
                             labelString: 'Value'
+                        },
+                        ticks: {
+                            stepSize: step_size
                         }
                     }]
                 }
