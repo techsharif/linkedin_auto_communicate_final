@@ -128,3 +128,7 @@
   border:15px solid transparent;
   border-top-color:#fff;
 }
+
+tr{
+  cursor: pointer !important;
+}
