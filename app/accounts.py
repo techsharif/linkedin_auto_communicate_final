@@ -476,6 +476,7 @@ class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
 
     def delete(self, request, *args, **kwargs):
+        print('request')
         self.get_object().delete()
         payload = {'deleted': 'ok'}
         return JsonResponse(json.dumps(payload), safe=False)
@@ -693,6 +694,7 @@ class SearchResultView(View):
         return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
 
+
 @method_decorator(decorators, name='dispatch')
 class AccountTask_NEW(View):
     template_name = 'v2/account/account_task_queue.html'
@@ -707,3 +709,5 @@ class AccountTask_NEW(View):
         context['linkedin_user'] = linkedin_user
         context['pk'] = pk
         return render(request, self.template_name, context)
+
+def remove_inbox(request):

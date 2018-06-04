@@ -51,12 +51,15 @@ $(document).ready(function() {
                 
             } );
          },
-		"autoWidth": false,
 		"sPaginationType": "full_numbers",
         'columnDefs': [
             {
                'targets': 0,
                'checkboxes': true,
+				"render": function ( data, type, row ) {
+					let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+               		return html;
+				}
             },
             {
                 "targets": status_index,
@@ -104,7 +107,7 @@ $(document).ready(function() {
          'order': [[1, 'asc']],
          "drawCallback": function( settings ) {
         	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
-        	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect']
+        	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect'];
         		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item">Mark Later</a>';
         		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item">Mark No Interest</a>';
         		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item">Mark Replied</a>';
@@ -134,7 +137,7 @@ $(document).ready(function() {
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
-    
+
     
 	var header_buttons = '';
 	if(inboxPage){
@@ -207,7 +210,6 @@ $(document).ready(function() {
 	    $(e.target).popover('toggle');
 	    var parent = $(this).parent();
 	    parent.popover('hide');
-
 	    // var statusbox = parent.prev();
 		var statusbox = $(tmp_object);
 	    console.log( statusbox.data('contactid'));
@@ -246,16 +248,14 @@ $(document).ready(function() {
 	});
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
-
 		var $table = table.table().node();
-	    var $chkbox_checked  = $('tbody input[type="checkbox"]:checked', $table);
+		var $chkbox_checked  = $('tbody input[type="checkbox"]:checked', $table);
     	var rows_selected = $chkbox_checked;
-
+		console.log('rows_selected:', $chkbox_checked);
 		if(rows_selected.length < 1){
 			alert_no_contact();
     		return;
 		}
-		console.log('rows_selected:', rows_selected);
 		swal({
 			  title: "Are you sure?",
 			  text: "Your connect contacts will be deleted but your network contats will be changed to 'Old connect'",
@@ -266,8 +266,16 @@ $(document).ready(function() {
 			  closeOnConfirm: false
 			},
 			function(){
-				var form = $('form[name="contacts-delete"]');
-				var data = rows_selected.join(',');
+				let form = $('form[name="contacts-delete"]');
+				let contact_id = [];
+				for(let i = 0; i < rows_selected.length; i++){
+					if($(rows_selected[i]).is('.dt-checkboxes')){
+						contact_id.push($(rows_selected[i]).val())
+					}
+				}
+
+				let data = contact_id;
+				console.log(data);
 				form.find('input[name="cid"]').val(data);
 				do_post_action(form, function(){
 					table.ajax.reload();

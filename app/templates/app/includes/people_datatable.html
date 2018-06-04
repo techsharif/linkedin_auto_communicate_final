@@ -6,8 +6,8 @@
 	</thead>
 	<tbody>
 	{% for contact in contacts %}
-	 <tr style="cursor: pointer !important;">
-	  <td></td>
+	 <tr  class="contact" style="cursor: pointer !important;">
+	  <td data-contactid="{{contact.id}}" ></td>
 	  <td>{{contact.name}}</td>
 	  <td>{{contact.name}}</td>
 	  <td>{{contact.industry}}</td>
