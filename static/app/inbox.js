@@ -51,7 +51,6 @@ $(document).ready(function() {
 
             } );
          },
-		"sPaginationType": "full_numbers",
         'columnDefs': [
             {
                'targets': 0,

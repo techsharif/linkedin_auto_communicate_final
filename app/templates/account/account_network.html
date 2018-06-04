@@ -192,6 +192,7 @@ tr{
             var csv = $table.table2CSV({
                 delivery: 'value'
             });
+
             var downloadLink = document.createElement("a");
             downloadLink.href = 'data:text/csv;charset=UTF-8,' +
                 encodeURIComponent(csv);

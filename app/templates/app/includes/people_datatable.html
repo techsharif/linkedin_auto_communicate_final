@@ -1,13 +1,13 @@
 
 
-<table class="table100-head table table-datatable table-striped table-hover" id="campaign_people">
-	<thead  class="align-middle">
+<table class="table100-head table table-striped table-hover" id="campaign_people">
+	<thead class="align-middle">
 	{% include 'app/includes/people_datatable_headrow.html' with campaign=campaign%}
 	</thead>
 	<tbody>
 	{% for contact in contacts %}
 	 <tr  class="contact" style="cursor: pointer !important;">
-	  <td data-contactid="{{contact.id}}" ></td>
+	  <td></td>
 	  <td>{{contact.name}}</td>
 	  <td>{{contact.name}}</td>
 	  <td>{{contact.industry}}</td>
@@ -21,7 +21,8 @@
 			{# how to deal with this #}
 	  <span data-contactid="{{contact.id}}" class="btn btn-orange btn-gradient waves-effect waves-light btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}"
 	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
-	  In Queue</span>
+	  In Queue
+	</span>
 	 </td>
 	</tr>
 	{%endfor%}
