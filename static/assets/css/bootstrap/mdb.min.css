@@ -75,3 +75,7 @@
  }
 
 
+@media screen and (min-width: 1024px) {
+      .p-5{padding:3rem!important;margin-left:200px;}
+   
+ }
