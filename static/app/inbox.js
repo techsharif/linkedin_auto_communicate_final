@@ -167,8 +167,13 @@ $(document).ready(function() {
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 
-	$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm');
-	$(".dataTables_filter").css("width", "50%");
+	if(inboxPage){
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm').addClass('col-md-3')
+	}else{
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm')
+		$(".dataTables_filter").addClass('col-md-5')
+		// $(".dataTables_filter").html('html')
+	}
   $("div.toolbar").html(header_buttons);
   $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
