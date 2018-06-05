@@ -154,6 +154,9 @@ EMAIL_USE_TLS = True
 # maximum campaign message per account
 MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
 
+#text for  site_title tag 
+SITE_TITLE = "B2B Prospecting Tool"
+
 try:
     from .local_settings import *
 except ImportError:

@@ -74,4 +74,31 @@
  	background: #8c1edb !important;
  }
 
+ 
+ @media screen and (min-width: 1024px) {
+  
 
+  .sidebar.bg-dark .hamburger, .sidebar .hamburger {
+    display: none;
+ }
+   	
+}   
+
+
+@media screen and (min-width: 480px) {
+  
+
+  .sidebar.bg-dark .hamburger, .sidebar .hamburger {
+    display: none;
+ }
+   	
+}   
+
+@media screen and (min-width: 411px) {
+  
+
+  .sidebar.bg-dark .hamburger, .sidebar .hamburger {
+    display: none;
+ }
+   	
+}   

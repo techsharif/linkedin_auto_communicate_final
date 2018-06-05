@@ -227,13 +227,16 @@ class Campaign(TimeStampedModel):
         return json.dumps((data))
 
     def count_reply_other(self):
-        return 0
+        return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(
+            replied_other_date=None))
 
     def count_replies(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None))
 
     def count_sends(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
+
+
 
 
 class CampaignStepField(models.Model):

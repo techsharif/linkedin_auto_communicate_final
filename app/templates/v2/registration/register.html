@@ -1,6 +1,6 @@
 
 {% extends 'v2/app/base_headless.html' %}
-
+{% load site_title %}
 {% load static %}
 
 {% block title %}Register{% endblock %}
@@ -22,7 +22,7 @@
 					</div>
 					<div class="col-md-5 order-md-1 signin-left-column bg-white px-5">
 						<a class="signin-logo d-sm-none d-md-block" href="/">
-							<h2 class="text-info">B2B Prospects</h2>
+							<h2 class="text-info">{% site_title %}</h2>
 						</a>
 						<form action="" id="registration-form" method="post">
                             {% csrf_token %}

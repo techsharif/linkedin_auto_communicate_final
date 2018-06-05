@@ -1,26 +1,27 @@
 
 
-	
+
 $(document).ready(function() {
 	var tmp_object;
 	var url = window.location.href;
 	var statusColors = {
 		"0": "btn-purple ",
-		"22": "bg-default bg-",
-		"21": "bg-blue bg-",
-		"10": "bg-green bg-",
-		"12": "bg-yellow bg-",
-		"200": "bg-danger bg-",
-		"3": "bg-default bg-",
+		"22": "bg-default",
+		"21": "bg-blue",
+		"10": "bg-green",
+		"12": "bg-yellow",
+		"200": "bg-danger",
+		"3": "bg-default",
 		"1": "bg-info",
-		"23": "bg-default bg-gradient",
-		"20": "bg-default bg-gradient",
-		"7": "bg-default bg-gradient",
-		"100": "bg-elegant bg-gradient",
+		"23": "bg-default",
+		"20": "bg-red",
+		"7": "bg-default",
+		"100": "bg-elegant",
 		"6": "bg-default",
 		"28": "bg-green",
 	};
 	var path = window.location.pathname;
+	console.log(url)
 	var inboxPage = path.indexOf('network')>=0? false: true;
 	var status_index = 8;
 	var table = $('#campaign_people').DataTable( {
@@ -30,7 +31,6 @@ $(document).ready(function() {
             api.columns().every( function () {
                 var column = this;
                 if (column.index() === status_index){
-                	//console.log(column.data());
                     var select = $('<select><option value=""></option></select>')
                         .appendTo( $(column.header()) )
                         .on( 'change', function () {
@@ -38,24 +38,27 @@ $(document).ready(function() {
                                 $(this).val()
                             );
                             var text = contact_statuses[val];
-     						console.log('text:', val, text);
+     												console.log('text:', val, text);
                             column
                                 .search( (val && val >= 0) ? text  : '', false, true )
                                 .draw();
                         } );
-     				var status_list = inboxPage? contact_statuses: mynetwork_statuses;
+     								var status_list = inboxPage? contact_statuses: mynetwork_statuses;
                     Object.keys(status_list).sort().forEach(function(k) {
                     	select.append( '<option value="'+ k +'">'+ contact_statuses[k] +'</option>' );
                     })
                 }
-                
+
             } );
          },
-		"autoWidth": false,
         'columnDefs': [
             {
                'targets': 0,
                'checkboxes': true,
+								"render": function ( data, type, row ) {
+									let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+               		return html;
+							  }
             },
             {
                 "targets": status_index,
@@ -78,6 +81,13 @@ $(document).ready(function() {
                     return html;
                 },
             },
+						{
+                "targets": 6,
+                "data": null,
+                "render": function ( data, type, row ) {
+                  return row[6];
+                },
+            },
             {
                 "targets": [ 7 ], //
                 "visible": !inboxPage,
@@ -88,7 +98,7 @@ $(document).ready(function() {
                 		extrahtml =  "messenger";
                 	else if (row[9] === false)
                 		extrahtml =  "connector";
-                	
+
                 	extrahtml = (row[7]!== null?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
                 }
@@ -97,13 +107,13 @@ $(document).ready(function() {
                 "targets": [ 9 ], //
                 "visible": false,
                 "searchable": false,
-                
             },
          ],
          'order': [[1, 'asc']],
+				 "bAutoWidth": true,
          "drawCallback": function( settings ) {
         	 var popover = '<div class="list-group" style="margin:0" data-cid="{{pk}}">';
-        	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect']
+        	 var status = ['Later', 'No Interest', 'Replied', 'Talking', 'Old Connect'];
         		popover+= '<a href="#" data-status="20" data-click="changeStatus" class="list-group-item">Mark Later</a>';
         		popover+= '<a href="#" data-status="21" data-click="changeStatus" class="list-group-item">Mark No Interest</a>';
         		popover+= '<a href="#" data-status="10" data-click="changeStatus" class="list-group-item">Mark Replied</a>';
@@ -112,74 +122,107 @@ $(document).ready(function() {
         		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
         	 $('[data-click="change_status"]').click(function(){
-        	 	$('.bs-popover-bottom').hide();
-        	 	tmp_object = this;
-			 });
+	        	 	$('.bs-popover-bottom').hide();
+							tmp_object = this;
+							setTimeout(function(){
+								if ($('.main-section').is('.open-more')) {
+										$('.main-section').toggleClass("open-more");
+										if ($('.input-chat-message').is(':visible')) {
+											$('.input-chat-message').hide();
+										} else {
+											$('.input-chat-message').show();
+										}
+								} else {
+								}
+							}, 10);
+
+			 		 });
+
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
         		 placement: 'bottom',
-        		 target: 'body',
+        		 target: 'table',
         	 });
-        	
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
-    
-    
+
+
 	var header_buttons = '';
 	if(inboxPage){
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-sm btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-info btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
+		header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 	}else if (path.indexOf('network')>=0){
 		//network page
-		
-		header_buttons+= '<div class="row"><div class="col-md-6"><div class="row" id="filter-search-moved"></div><div class="row">&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="connector">Show Connector contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary btn-gradient waves-effect waves-light" data-click="messenger">Show Messenger contacts</span>';
-		header_buttons+= '&nbsp;<span class="btn btn-primary  btn-gradient waves-effect waves-light" data-click="talking">Show Talking contacts</span></div></div>';
-		header_buttons+= '<div class="col-md-6"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
+
+		header_buttons+= '<div class="row">' +
+			'<div class="col-md-7">' +
+			'<div class="row" id="filter-search-moved">' +
+			'</div>' +
+			'<div class="btn-group btn-group-toggle btn-group-custom-checkbox" data-toggle="buttons">' +
+			'<span id="show_connector_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input  type="checkbox"  data-click="connector" >Show Connector contacts' +
+			'</span>';
+		header_buttons+= '<span id="show_messenger_contacts"  class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input type="checkbox" data-click="messenger">Show Messenger contacts</span>';
+		header_buttons+= '<span id="show_talking_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
+			'<input type="checkbox" data-click="talking">Show Talking contacts</span></div></div>';
+		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 
-	$(".dataTables_filter");
-	$(".dataTables_filter").css("width", "50%");
-   	$("div.toolbar").html(header_buttons);
-   	$(".dataTables_filter").appendTo('#filter-search-moved');
-
-	$('section.content').on('click', 'input[data-click="connector"], input[data-click="messenger"]', function(e){
-		//campaign with is_bulk true or false
-		var that = $(this);
-		var val = that.data('click');
-		var column = table.column( 7 );
+	if(inboxPage){
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm').addClass('col-md-3')
+	}else{
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm')
+		$(".dataTables_filter").addClass('col-md-5')
+		// $(".dataTables_filter").html('html')
+	}
+  $("div.toolbar").html(header_buttons);
+  $(".dataTables_filter").appendTo('#filter-search-moved');
+	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
+	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
+	$('#show_connector_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let val = that.data('click');
+		let column = table.column(7);
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
-		
-	});
-	$('section.content').on('click', 'input[data-click="talking"]', function(e){
+
+    });
+
+	$('#show_talking_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let val = that.data('click');
+		let column = table.column( 7 );
+		column.search( that.is(':checked')? val:'' , false, true )
+        .draw();
+    });
+
+	$('#show_messenger_contacts').click(function (e) {
+		let that = $(this).find('input');
+		let column = table.column( 8 );
+		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
+        .draw();
+  });
+
+	$('.btn-group-custom-checkbox').on('click', 'input[data-click="talking"]', function(e){
 		var that = $(this);
 		// check?
 		var column = table.column( 8 );
 		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
         .draw();
 	});
-	
-    $('body').on('click', 'a[data-click="changeStatus"]', function(e){
+
+  $('body').on('click', 'a[data-click="changeStatus"]', function(e){
     	console.log($('.popoverButton').length);
         if($('.popoverButton').length>1)
 	        $('.popoverButton').popover('hide');
 	    $(e.target).popover('toggle');
 	    var parent = $(this).parent();
 	    parent.popover('hide');
-		if($('.main-section').is('.open-more')){
-		} else {
-			$('.main-section').toggleClass("open-more");
-			if($('.input-chat-message').is(':visible')){
-			$('.input-chat-message').hide();
-			} else {
-				$('.input-chat-message').show();
-			}
-		}
 	    // var statusbox = parent.prev();
 		var statusbox = $(tmp_object);
 	    console.log( statusbox.data('contactid'));
@@ -188,7 +231,7 @@ $(document).ready(function() {
 	    var old_status = statusbox.data('status');
 	    var new_status = $(this).data('status');
 	    changeContactStatus(contactid, new_status, old_status, function( contactid, new_status, old_status){
-	    	
+
 	    	var oldcolor = statusColors[old_status];
 	    	var newcolor = statusColors[new_status];
 	    	var spanbox = $('td>span[data-contactid="' + contactid + '"]');
@@ -196,11 +239,10 @@ $(document).ready(function() {
 
 	    	spanbox.text(contact_statuses[new_status]);
 	    	spanbox.removeClass(oldcolor).addClass(newcolor);
-	    	
 	    });
-	    
     });
-    
+
+
     function changeContactStatus(contactid, new_status, old_status, cb){
     	var url = "/account/contact/" + contactid + "/status?status="+new_status;
     	$.get(url).done(function(res){
@@ -209,25 +251,23 @@ $(document).ready(function() {
     		}
     	})
     }
-    
+
 	// buton click
 	//export to excel
 	$('button[data-click="export"]').click(function(e){
 		swal("alert!", "Will be done.", "success");
-		
+
 	});
 	//delete
 	$('button[data-click="removeFromCampaign"]').click(function(e){
-
 		var $table = table.table().node();
-	    var $chkbox_checked  = $('tbody input[type="checkbox"]:checked', $table);
+		var $chkbox_checked  = $('tbody input[type="checkbox"]:checked', $table);
     	var rows_selected = $chkbox_checked;
-
+		console.log('rows_selected:', $chkbox_checked);
 		if(rows_selected.length < 1){
 			alert_no_contact();
     		return;
 		}
-		console.log('rows_selected:', rows_selected);
 		swal({
 			  title: "Are you sure?",
 			  text: "Your connect contacts will be deleted but your network contats will be changed to 'Old connect'",
@@ -238,8 +278,15 @@ $(document).ready(function() {
 			  closeOnConfirm: false
 			},
 			function(){
-				var form = $('form[name="contacts-delete"]');
-				var data = rows_selected.join(',');
+				let form = $('form[name="contacts-delete"]');
+				let contact_id = '';
+				for(let i = 0; i < rows_selected.length; i++){
+					if($(rows_selected[i]).is('.dt-checkboxes')){
+						contact_id += ($(rows_selected[i]).val())+',';
+					}
+				}
+
+				let data = contact_id;
 				form.find('input[name="cid"]').val(data);
 				do_post_action(form, function(){
 					table.ajax.reload();
@@ -247,7 +294,7 @@ $(document).ready(function() {
 				});
 			});
 	});
-	
+
 	//add selected
     $('#add_selected').click( function(e){
     	var $table             = table.table().node();
@@ -260,11 +307,10 @@ $(document).ready(function() {
     		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
     	      var row = table.row($row).data();
     		if (row){
-    			console.log('row:', row);
        			if (row[7] !== null)
            			contact_camps[row[7]] = 1;
     		}
-    		
+
     	});
     	if (contacts.length == 0){
     		// alert
@@ -275,15 +321,15 @@ $(document).ready(function() {
     	// show campain modal
     	show_add2campaign(contacts);
     });
-	
+
 	function alert_no_contact(){
 		swal("Alert!", "No selected contact", "error");
 	};
-	
+
 	//add_all filtered contact
-	
+
 	$('#add_allnew').click( function(e){
-    	
+
     	if( filtered_row_num < 1) {
     		alert_no_contact();
     		return;
@@ -295,16 +341,16 @@ $(document).ready(function() {
     			contact_camps[row[7]] = 1;
     	});
     	show_add2campaign(contacts);
-    	
-    	
+
+
     });
     function show_add2campaign(contacts) {
     	var cids = contacts.join(',');
     	$('#add2campaign input[name="cid"]').val(cids);
     	$("#add2campaign").modal('show');
-    	
+
     }
-	
+
 	//add2bulk_button
 	$('body').on('click', '.add2bulk_button', function (e) {
 		e.preventDefault();
@@ -317,92 +363,102 @@ $(document).ready(function() {
 		var camp_message = messenger.html();
 		if (camp_message === "" || camp_message.length < 5){
 			var url = messenger.data('url');
-			
+
 			var text = 'Your selected campaign <b>' + campaign_name + '</b> has not had any message yet.';
 			text+= ' Please add some <a href="' + url +'">here</a>.';
-			
+
 			show_camp_alert(text)
 			return;
 		}
-		
+
     	// check contact in other campaign
-    	
+
 		console.log('campaign_name:', campaign_name, contact_camps);
 		var othercamps = [];
 		var arr = Object.keys(contact_camps);
 		if (arr.length > 0){
 			arr.forEach(function(camp) {
 				console.log('checking:', camp);
-			
+
 				if (camp !== campaign_name){
 					othercamps.push(camp);
 				}
-					
+
 			});
-			
+
 			console.log('othercamps:', othercamps);
 			if (othercamps.length > 0){
 				// add move contacts button
-				
 				var text = 'Contacts in <b>'+ othercamps.join(', ') + '</b> campaign' + (othercamps.length>1?'s':'');
 				text+= ' will be moved into <b>' + campaign_name + '</b>';
-				
+
 				show_camp_alert(text);
 				$("#add2campaign .move2bulk_button").removeClass('hidden');
-				
+
 				return;
 			}
 		}
 		do_post_campaign(that);
-		
-		
-	
 	} );
 	$('body').on('click', '.move2bulk_button', function (e) {
 		e.preventDefault();
 		var that = $(this);
 		do_post_campaign(that);
-		
+
 	});
+
 	function show_camp_alert(text){
 		$("#add2campaign .add2bulk_button").hide();
 		$("#add2campaign .modal-body-input").hide();
 		var mbody = $("#add2campaign .modal-body-move");
-		
 		mbody.html(text);
 		mbody.show();
 	}
+
 	function do_post_campaign(that){
 		var form = that.closest('form');
 		do_post_action(form, function(){
 			table.ajax.reload();
 			$("#add2campaign").modal('hide');
 		});
-		
+
 	}
-	
+
 	function do_post_action(form, cb){
     	var data = form.serialize();
     	console.log('posted data:', form.attr('action'),  data);
 		$.post(form.attr('action'), data).done(function(res){
 			console.log('posted result:', data);
-			if(res.ok){				
+			if(res.ok){
 				cb(res);
 			}
 		});
 	}
-	
+
 	// filtered
 	table.on('search.dt', function() {
 	    //number of filtered rows
 	    filtered_row_num = table.rows( { filter : 'applied'} ).nodes().length;
 	    //filtered rows data as arrays
-	    filtered_rows = table.rows( { filter : 'applied'} ).data();                                  
-	}) 
-    
+	    filtered_rows = table.rows( { filter : 'applied'} ).data();
+	})
+
     // click row
 	$('#campaign_people tbody').on('click', 'tr', function () {
+		console.log(this)
         var data = table.row( this ).data();
+				if ($('.main-section').is('.open-more')) {
+
+					} else {
+					$('.main-section').toggleClass("open-more");
+
+					if ($('.input-chat-message').is(':visible')) {
+						$('.input-chat-message').hide();
+						} else {
+							$('.input-chat-message').show();
+						}
+
+				}
         show_uinfo(data[0])
     } );
 	var current_uid = 1;
@@ -413,7 +469,7 @@ $(document).ready(function() {
 			$('#uinfo_box').html(res);
 		});
 	}
-	
+
 	//save notes
 	$('body').on('click', '#save_notes', function(e){
 		e.preventDefault();
@@ -427,19 +483,19 @@ $(document).ready(function() {
 		do_post_action(form, function(res){
 			console.log('notes is saved')
 			show_uinfo(current_uid);
-			
+
 			});
 	});
-	
+
 	setTimeout(function(){
 		var firstrow = $('#campaign_people tbody tr').first();
 		var data = table.row( firstrow ).data();
 		if( data)
         	show_uinfo(data[0])
 	}, 2000);
-	
-	
-	
+
+
+
 	// for collapse chat content
 	$("body").on('click', "[data-widget='collapse']", function(e) {
 		console.log('data widget');
@@ -456,5 +512,5 @@ $(document).ready(function() {
 	        bf.slideDown();
 	    }
 	});
-	
+
 });

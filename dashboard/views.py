@@ -39,7 +39,7 @@ class Proxy(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(Proxy, self).get_context_data()
         print('path:', self.kwargs)
-        linkedin  = LinkedInUser.objects.get(pk=self.kwargs.get('pk'))
+        linkedin = LinkedInUser.objects.get(pk=self.kwargs.get('pk'))
         ip = linkedin.bot_ip
         rpath = '/'
         if 'log' in self.request.path:
