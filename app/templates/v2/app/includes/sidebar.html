@@ -7,7 +7,7 @@
                     {% if  user.is_authenticated %}
                         <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="display: none;">
                     {%else%}
-                        <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo">
+                        <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="border-radius: 50%;">
                     {%endif%}
                 </div>
             </a>
@@ -19,7 +19,7 @@
         </li>
         <li>
             {% if  user.is_authenticated %}
-            <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="margin-left: 30px;">
+            <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="margin-left: 30px;border-radius: 50%;">
             {%endif%}
             
         </li>
