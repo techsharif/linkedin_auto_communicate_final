@@ -161,7 +161,7 @@ class ContactField(CommonContactField):
     latest_activity = models.DateTimeField(blank=True, null=True)
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
-
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
     class Meta:
         abstract = True
 
@@ -327,7 +327,7 @@ class Inbox(ContactField):
 
     # to save notes at convesation on right
     notes = models.TextField(blank=True, null=True)
-    countrycode = models.CharField(max_length=3, blank=True, null=True)
+   
 
     class Meta():
         abstract = False
