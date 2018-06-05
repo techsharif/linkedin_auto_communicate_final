@@ -1,8 +1,11 @@
+import calendar
 import datetime
+import json
 
+import time
 from django.utils import timezone
 
-from messenger.models import ChatMessage, Inbox
+from messenger.models import ChatMessage, Inbox, Campaign, ContactStatus
 
 
 def set_data(connection, time_diff_cmp, key, data):
@@ -54,3 +57,71 @@ def calculate_connections(linkedin_user_id, status):
 
     data['connection_count'] = len(connections)
     return data
+
+
+def calculate_dashboard_data(owner):
+    campaigns = Campaign.objects.filter(owner=owner, is_bulk=False)
+    campaign_members = 0
+    connected_members = 0
+    for campaign in campaigns:
+        campaign_members_list = campaign.contacts.all()
+        campaign_members += len(campaign_members_list)
+        connected_members += len(campaign_members_list.filter(is_connected=True).exclude(connected_date=None))
+
+    all_chat_messages = ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False)
+
+    invitations_sent = len(all_chat_messages.filter(type=ContactStatus.CONNECT_REQ_N))
+    replied = len(all_chat_messages.exclude(replied_date=None))
+
+    return {
+        'campaign_members': campaign_members,
+        'connected_members': connected_members,
+        'invitations_sent': invitations_sent,
+        'invitation_rate': int(invitations_sent / campaign_members),
+        'pending_rate': 100 - int(invitations_sent / campaign_members),
+        'replied': replied,
+        'campaign_members_p': int(
+            max(campaign_members, invitations_sent, replied) / campaign_members * 100) if campaign_members else 0,
+        'invitations_sent_p': int(
+            max(campaign_members, invitations_sent, replied) / invitations_sent * 100) if invitations_sent else 0,
+        'replied_p': int(max(campaign_members, invitations_sent, replied) / replied * 100) if replied else 0,
+    }
+
+
+def calculate_connection_stat_graph(owner=None):
+    now = time.localtime()
+    last_12_months = [time.localtime(time.mktime((now.tm_year, now.tm_mon - n, 1, 0, 0, 0, 0, 0, 0)))[:2] for n in
+                      range(13)]
+    print(last_12_months)
+    labels = []
+    contacts_list = []
+    invitations_list = []
+    replied_list = []
+
+    campaigns = Campaign.objects.filter(owner=owner, is_bulk=False)
+
+    max_p = 0
+    for month in last_12_months:
+        labels += [calendar.month_name[month[1]] + ', ' + str(month[0])]
+        monthly_campaign = campaigns.filter(created_at__month=month[1], created_at__year=month[0])
+        for mc in monthly_campaign:
+            contacts_list_last = len(mc.contacts.all())
+            contacts_list += [contacts_list_last]
+            max_p = max_p if max_p > contacts_list_last else contacts_list_last
+            all_chat_messages = ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False, campaign__in=monthly_campaign)
+            invitations_list += [len(all_chat_messages.filter(type=ContactStatus.CONNECT_REQ_N))]
+            replied_list += [len(all_chat_messages.exclude(replied_date=None))]
+
+
+
+    labels = json.dumps(labels)
+    contacts_list = json.dumps(contacts_list)
+    invitations_list = json.dumps(invitations_list)
+    replied_list = json.dumps(replied_list)
+    return {
+        'labels': labels,
+        'contacts_list': contacts_list,
+        'invitations_list': invitations_list,
+        'replied_list':replied_list,
+        'max':max_p
+    }
