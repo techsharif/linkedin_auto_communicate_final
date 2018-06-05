@@ -116,21 +116,21 @@ $(document).ready(function() {
         	 $('[data-toggle="tooltip"]').tooltip();
         	 $('[data-click="change_status"]').click(function(){
         	 	$('.bs-popover-bottom').hide();
-        	 	tmp_object = this;
-        	 	if($('.main-section').is('.open-more')){
-				} else {
-					$('.main-section').toggleClass("open-more");
-					if($('.input-chat-message').is(':visible')){
-					$('.input-chat-message').hide();
-					} else {
-						$('.input-chat-message').show();
-					}
-				}
-			 });
+						  if ($('.main-section').is('.open-more')) {} else {
+						  $('.main-section').toggleClass("open-more");
+						  if ($('.input-chat-message').is(':visible')) {
+						    $('.input-chat-message').hide();
+						  } else {
+						    $('.input-chat-message').show();
+						  }
+							tmp_object = this;
+
+						}
+			 		 });
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
         		 placement: 'bottom',
-        		 target: 'body',
+        		 target: 'table',
         	 });
           },
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
@@ -225,10 +225,9 @@ $(document).ready(function() {
 
 	    	spanbox.text(contact_statuses[new_status]);
 	    	spanbox.removeClass(oldcolor).addClass(newcolor);
-
 	    });
-
     });
+		
 
     function changeContactStatus(contactid, new_status, old_status, cb){
     	var url = "/account/contact/" + contactid + "/status?status="+new_status;
