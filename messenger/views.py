@@ -65,7 +65,11 @@ class CampaignContactsView(AjaxHttpResponse, View):
     def post(self, request):
         data = request.POST
         campaign_id = data.get('campaign')
+
+        print(campaign_id)
+
         campaign = get_object_or_404(Campaign, pk=campaign_id)
+
         with transaction.atomic():
             
             cids = data.get('cid').split(',')

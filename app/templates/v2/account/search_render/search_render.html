@@ -27,31 +27,30 @@
                     <div class="table-responsive">
                         <table id="datatable-1"  class="table table-datatable table-striped table-hover">
                             <thead>
-                            <tr style="cursor: pointer !important;">
-                                <th style="width: 5%"></th>
-                                <th class="cursor-pointer">Name
-                                    <div class="torder" data-click="table_order" data-col="name"></div>
-                                </th>
-                                <th class="cursor-pointer">Company
-                                    <div class="torder" data-click="table_order" data-col="company"></div>
-                                </th>
-                                <th class="cursor-pointer">Title
-                                    <div class="torder" data-click="table_order" data-col="title"></div>
-                                </th>
-                                <th class="cursor-pointer">Location
-                                    <div class="torder" data-click="table_order" data-col="location"></div>
-                                </th>
-                                <th class="cursor-pointer">Status</th>
-                            </tr>
+                                <tr style="cursor: pointer !important;">
+                                    <th style="width: 5%"></th>
+                                    <th class="cursor-pointer">Name
+                                        <div class="torder" data-click="table_order" data-col="name"></div>
+                                    </th>
+                                    <th class="cursor-pointer">Company
+                                        <div class="torder" data-click="table_order" data-col="company"></div>
+                                    </th>
+                                    <th class="cursor-pointer">Title
+                                        <div class="torder" data-click="table_order" data-col="title"></div>
+                                    </th>
+                                    <th class="cursor-pointer">Location
+                                        <div class="torder" data-click="table_order" data-col="location"></div>
+                                    </th>
+                                    <th class="cursor-pointer">Status</th>
+                                </tr>
                             </thead>
                             <tbody>
                             {% for search_result in search_results %}
 
-
-
                                 <tr style="cursor: pointer !important;" id="ctct_{{ search_result.pk }}">
                                     <td> {% if not search_result.search_result_status %}
-                                        <input class="select_items" value="{{ search_result.pk }}" type="checkbox"> {% endif %}</td>
+                                        <input class="select_items" value="{{ search_result.pk }}" type="checkbox"> {% endif %}
+                                    </td>
                                     <td>{{ search_result.name }}</td>
                                     <td>{{ search_result.industry }}</td>
                                     <td>{{ search_result.title }}</td>
@@ -215,13 +214,20 @@
 
         $("#add_selected").click(function () {
 
-            checked_item = $('.select_items:checked');
+            checked_item = $('.select_items:checkbox:checked');
 
+            console.log("checked_item");
+            console.log(checked_item);
+
+
+            console.log(checked_item.length)
             if (checked_item.length) {
                 selected_items_list = new Array()
                 for (i = 0; i < checked_item.length; i++) {
                     selected_items_list[i] = checked_item[i].value;
                 }
+                console.log("selected_items_list");
+                console.log(selected_items_list)
                 data = get_ajax_data();
                 data.selected_items = selected_items_list;
                 set_ajax_data(data);
