@@ -115,18 +115,23 @@ $(document).ready(function() {
         		popover+= '</div>';
         	 $('[data-toggle="tooltip"]').tooltip();
         	 $('[data-click="change_status"]').click(function(){
-        	 	$('.bs-popover-bottom').hide();
-						  if ($('.main-section').is('.open-more')) {} else {
-						  $('.main-section').toggleClass("open-more");
-						  if ($('.input-chat-message').is(':visible')) {
-						    $('.input-chat-message').hide();
-						  } else {
-						    $('.input-chat-message').show();
-						  }
+	        	 	$('.bs-popover-bottom').hide();
 							tmp_object = this;
+							setTimeout(function(){
+								console.log('porver')
+								if ($('.main-section').is('.open-more')) {
+										$('.main-section').toggleClass("open-more");
+										if ($('.input-chat-message').is(':visible')) {
+											$('.input-chat-message').hide();
+										} else {
+											$('.input-chat-message').show();
+										}
+								} else {
+								}
+							}, 10);
 
-						}
 			 		 });
+
         	 $('[data-click="change_status"]').popover({
         		 template: popover,
         		 placement: 'bottom',
@@ -162,13 +167,12 @@ $(document).ready(function() {
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 
-	$(".dataTables_filter");
+	$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm');
 	$(".dataTables_filter").css("width", "50%");
-   	$("div.toolbar").html(header_buttons);
-   	$(".dataTables_filter").appendTo('#filter-search-moved');
+  $("div.toolbar").html(header_buttons);
+  $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
 	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
-
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
@@ -227,7 +231,7 @@ $(document).ready(function() {
 	    	spanbox.removeClass(oldcolor).addClass(newcolor);
 	    });
     });
-		
+
 
     function changeContactStatus(contactid, new_status, old_status, cb){
     	var url = "/account/contact/" + contactid + "/status?status="+new_status;
@@ -433,7 +437,21 @@ $(document).ready(function() {
 
     // click row
 	$('#campaign_people tbody').on('click', 'tr', function () {
+		console.log(this)
         var data = table.row( this ).data();
+				console.log('here');
+				if ($('.main-section').is('.open-more')) {
+
+					} else {
+					$('.main-section').toggleClass("open-more");
+
+					if ($('.input-chat-message').is(':visible')) {
+						$('.input-chat-message').hide();
+						} else {
+							$('.input-chat-message').show();
+						}
+
+				}
         show_uinfo(data[0])
     } );
 	var current_uid = 1;
