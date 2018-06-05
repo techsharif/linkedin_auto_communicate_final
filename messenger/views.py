@@ -51,9 +51,10 @@ class ContactStatusView(View):
         new_status = request.GET.get('status', None)
         if new_status is None or ContactStatus.valid_status(new_status):
             raise Exception("Invalid status")
-
+        contact = Inbox.objects.filter(id=pk)
+        print(contact)
         contact.status = new_status
-        contact.save
+        contact.update(status=int(new_status))
         json_data = json.dumps(dict(ok=True))
         return HttpResponse(json_data, content_type='application/json')
 

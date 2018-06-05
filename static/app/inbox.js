@@ -21,6 +21,7 @@ $(document).ready(function() {
 		"28": "bg-green",
 	};
 	var path = window.location.pathname;
+	console.log(url)
 	var inboxPage = path.indexOf('network')>=0? false: true;
 	var status_index = 8;
 	var table = $('#campaign_people').DataTable( {
@@ -30,7 +31,6 @@ $(document).ready(function() {
             api.columns().every( function () {
                 var column = this;
                 if (column.index() === status_index){
-                	//console.log(column.data());
                     var select = $('<select><option value=""></option></select>')
                         .appendTo( $(column.header()) )
                         .on( 'change', function () {
@@ -81,6 +81,13 @@ $(document).ready(function() {
                     return html;
                 },
             },
+						{
+                "targets": 6,
+                "data": null,
+                "render": function ( data, type, row ) {
+                  return row[6];
+                },
+            },
             {
                 "targets": [ 7 ], //
                 "visible": !inboxPage,
@@ -118,7 +125,6 @@ $(document).ready(function() {
 	        	 	$('.bs-popover-bottom').hide();
 							tmp_object = this;
 							setTimeout(function(){
-								console.log('porver')
 								if ($('.main-section').is('.open-more')) {
 										$('.main-section').toggleClass("open-more");
 										if ($('.input-chat-message').is(':visible')) {
@@ -167,8 +173,13 @@ $(document).ready(function() {
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 
-	$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm');
-	$(".dataTables_filter").css("width", "50%");
+	if(inboxPage){
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm').addClass('col-md-3')
+	}else{
+		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm')
+		$(".dataTables_filter").addClass('col-md-5')
+		// $(".dataTables_filter").html('html')
+	}
   $("div.toolbar").html(header_buttons);
   $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
@@ -177,7 +188,6 @@ $(document).ready(function() {
 		let that = $(this).find('input');
 		let val = that.data('click');
 		let column = table.column(7);
-		console.log(column)
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
 
@@ -277,7 +287,6 @@ $(document).ready(function() {
 				}
 
 				let data = contact_id;
-				console.log(data);
 				form.find('input[name="cid"]').val(data);
 				do_post_action(form, function(){
 					table.ajax.reload();
@@ -298,7 +307,6 @@ $(document).ready(function() {
     		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
     	      var row = table.row($row).data();
     		if (row){
-    			console.log('row:', row);
        			if (row[7] !== null)
            			contact_camps[row[7]] = 1;
     		}
@@ -439,7 +447,6 @@ $(document).ready(function() {
 	$('#campaign_people tbody').on('click', 'tr', function () {
 		console.log(this)
         var data = table.row( this ).data();
-				console.log('here');
 				if ($('.main-section').is('.open-more')) {
 
 					} else {

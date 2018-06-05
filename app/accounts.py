@@ -296,8 +296,15 @@ class DataTable(object):
         if self.request.is_ajax():
             # data = serializers.serialize('json', context['object_list'])
             data = [list(x) for x in context['object_list']]
+            _data = []
 
-            json_data = json.dumps(dict(data=data), default=Datedefault)
+            for x in context['object_list']:
+                list_data = list(x)
+                list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
+                _data.append(list_data)
+
+            print(_data[0], '---', data[0])
+            json_data = json.dumps(dict(data=_data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
 
         return super(DataTable, self).render_to_response(context, **response_kwargs)
@@ -321,10 +328,11 @@ class DataTable(object):
             return ctx
 
         # ctx['inbox_status'] = ContactStatus.inbox_statuses
-
+    
         ctx['object_list_default'] = ctx['object_list']
         for cc in ctx['object_list_default']:
-            print(cc.__dict__)
+            print('--------', cc.__dict__)
+            pass
         ctx['object_list'] = []
 
         return ctx
