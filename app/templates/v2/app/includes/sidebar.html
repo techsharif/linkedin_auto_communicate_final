@@ -3,11 +3,11 @@
     <ul class="nav nav-pills flex-column">
         <li class="logo-nav-item text-center">
             <a class="navbar-brand" >
-                <div class=" bg-gradient bg-primary has-message float-right">
+                <div class=" has-message float-right">
                     {% if  user.is_authenticated %}
-                        <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="display: none;">
+                        <img src="{% static 'new/img/B2B Logo-min.png' %}" width="80" height="80" style="border-radius: 50%; margin: 5px 2.5em" alt="QuillPro">
                     {%else%}
-                        <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="border-radius: 50%;">
+                        <img src="{% static 'new/img/B2B Logo-min.png' %}" width="80" height="80" style="border-radius: 50%; margin: 5px 2.5em" alt="QuillPro">
                     {%endif%}
                 </div>
             </a>
@@ -19,7 +19,7 @@
         </li>
         <li>
             {% if  user.is_authenticated %}
-            <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="margin-left: 30px;border-radius: 50%;">
+{#            <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="margin-left: 30px;border-radius: 50%;">#}
             {%endif%}
             
         </li>
