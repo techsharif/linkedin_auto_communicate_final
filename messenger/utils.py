@@ -5,7 +5,9 @@ import json
 import time
 from django.utils import timezone
 
+from connector.models import SearchResult
 from messenger.models import ChatMessage, Inbox, Campaign, ContactStatus
+from django.db.models import Count
 
 
 def set_data(connection, time_diff_cmp, key, data):
@@ -109,11 +111,10 @@ def calculate_connection_stat_graph(owner=None):
             contacts_list_last = len(mc.contacts.all())
             contacts_list += [contacts_list_last]
             max_p = max_p if max_p > contacts_list_last else contacts_list_last
-            all_chat_messages = ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False, campaign__in=monthly_campaign)
+            all_chat_messages = ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False,
+                                                           campaign__in=monthly_campaign)
             invitations_list += [len(all_chat_messages.filter(type=ContactStatus.CONNECT_REQ_N))]
             replied_list += [len(all_chat_messages.exclude(replied_date=None))]
-
-
 
     labels = json.dumps(labels)
     contacts_list = json.dumps(contacts_list)
@@ -123,6 +124,25 @@ def calculate_connection_stat_graph(owner=None):
         'labels': labels,
         'contacts_list': contacts_list,
         'invitations_list': invitations_list,
-        'replied_list':replied_list,
-        'max':max_p
+        'replied_list': replied_list,
+        'max': max_p
+    }
+
+
+def calculate_map_data(owner):
+    search_results = SearchResult.objects.filter(owner=owner).values('countrycode').annotate(
+        total=Count('countrycode')).order_by('countrycode')
+
+    result_data = {}
+    for result in search_results:
+        result['countrycode'] = result['countrycode'].lower()
+        if result['countrycode'] in result_data.keys():
+            result_data[result['countrycode']] += result['total']
+        else:
+            result_data[result['countrycode']] = result['total']
+    map_data = json.dumps(result_data)
+    print(map_data)
+    return {
+        'map_data': map_data
+
     }
