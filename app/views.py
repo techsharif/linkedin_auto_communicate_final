@@ -88,6 +88,16 @@ def LoginView(request):
             msg="invalid_user"
 
     return render(request, 'v2/registration/login.html',{'msg' : msg})
+  
+class HomeView_NEW(TemplateView):
+    template_name = 'v2/app/landing.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(HomeView_NEW, self).get_context_data(**kwargs)
+        for x in MembershipType.objects.all():
+            ctx[x.name] = x
+        # print('ctx:', ctx)
+        return ctx
 
 
 def home(request):
@@ -103,6 +113,7 @@ def new_auth(request):
 
 
 class HomeView(TemplateView):
+    # template_name = 'v2/app/landing.html'
     template_name = 'v2/app/home.html'
     models = MembershipType
     def get_context_data(self, **kwargs):
