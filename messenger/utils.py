@@ -85,6 +85,7 @@ def calculate_dashboard_data(owner):
         'invitations_sent_p': int(
             max(campaign_members, invitations_sent, replied) / invitations_sent * 100) if invitations_sent else 0,
         'replied_p': int(max(campaign_members, invitations_sent, replied) / replied * 100) if replied else 0,
+        'time': datetime.datetime.now(),
     }
 
 
