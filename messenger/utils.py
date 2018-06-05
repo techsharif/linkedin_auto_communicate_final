@@ -77,8 +77,8 @@ def calculate_dashboard_data(owner):
         'campaign_members': campaign_members,
         'connected_members': connected_members,
         'invitations_sent': invitations_sent,
-        'invitation_rate': int(invitations_sent / campaign_members),
-        'pending_rate': 100 - int(invitations_sent / campaign_members),
+        'invitation_rate': int(invitations_sent / campaign_members) if campaign_members else 0,
+        'pending_rate': 100 - int(invitations_sent / campaign_members) if campaign_members else 0,
         'replied': replied,
         'campaign_members_p': int(
             max(campaign_members, invitations_sent, replied) / campaign_members * 100) if campaign_members else 0,
