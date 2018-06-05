@@ -168,47 +168,69 @@
     </div>
     <br><br>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Upcomming Tasks</div>
+                    <div class="card-title">Existing Connections</div>
+                    <div class="header-btn-block" style="top: 15px;">
+                        <a href="{% url 'account-messenger-add' pk=pk %}" class="btn btn-primary waves-effect waves-light">
+                            <i class="batch-icon batch-icon-add"></i>
+                        </a>
+                    </div>
 
                 </div>
 
                 <div class="card-body">
-                    <table class="table ">
+                    {% if messengers %}
+                        <table class="table">
                         <thead class="thead-dark">
                         <tr>
-                            <th>Task type</th>
-                            <th>Name</th>
-
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Contacts</th>
+                            <th>Replied</th>
                         </tr>
                         </thead>
+
                         <tbody>
-                        {% for task in upcoming_tasks %}
+
+                        {% for mc in messengers %}
                             <tr>
-                                <td>{{ task.queue_type }}</td>
-                                <td>{{ task.content_object }}</td>
-
+                                <td><a href="{% url 'messenger-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
+                                <td>
+                                    <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
+                                        Active{% else %}Inactive{% endif %}</span>
+                                </td>
+                                <td>{{ mc.contacts.count }}</td>
+                                <td>{{ mc.count_replies }}</td>
                             </tr>
-
                         {% endfor %}
 
                         </tbody>
+
+                    {% else %}
+                        <p>Currently you have no existing campaigns with this linkedin account</p>
+                    {% endif %}
+
                     </table>
                 </div>
             </div>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Connector campaigns</div>
+                    <div class="header-btn-block" style="top: 15px;">
+                        <a href="{% url 'account-campaign-add' pk=pk %}" class="btn btn-primary waves-effect waves-light">
+                            <i class="batch-icon batch-icon-add"></i>
+                        </a>
+                    </div>
 
                 </div>
 
                 <div class="card-body">
-                    {% if object_list %}
+                    {% if connectors %}
                         <table class="table">
                         <thead class="thead-dark">
                         <tr>
@@ -223,11 +245,11 @@
 
                         <tbody>
 
-                        {% for mc in object_list %}
+                        {% for mc in connectors %}
                             <tr>
                                 <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
                                 <td>
-                                <span class="label bg-{% if mc.status %}green{% else %}black{% endif %}">{% if mc.status %}
+                                <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
                                     Active{% else %}Inactive{% endif %}</span>
                                 </td>
                                 <td>{{ mc.contacts.all | length }}</td>
@@ -495,8 +517,8 @@
 
 
     <script>
-    var step_size = {{ connection_stat.max }}
-    step_size = parseInt(step_size/4) + 1
+        var step_size = {{ connection_stat.max }}
+            step_size = parseInt(step_size / 4) + 1
 
         var config = {
             type: 'line',
