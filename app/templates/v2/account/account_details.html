@@ -1,7 +1,9 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
+
 {% block title %}Home{% endblock title %}
 {% block pagetitle %} Home( {{ linkedin_user }}) {% endblock %}
+
 
 {% block content %}
     <div class="row">
@@ -52,8 +54,8 @@
                         <i class="batch-icon batch-icon-clock batch-icon-xxl"></i>
                     </div>
                     <div class="tile-right">
-                        <br><br>
-                        <div class="tile-description">{{ dashboard_data.time }}</div>
+                        <div class="tile-number">{{ dashboard_data.time|date:"d M" }}</div>
+                        <div class="tile-description"> {{ dashboard_data.time|time:"h:i A" }}</div>
                     </div>
                 </div>
             </div>
@@ -411,6 +413,7 @@
         var connect_ctx = document.getElementById("myLineChart");
         var connectionChart = new Chart(connect_ctx, config);
     </script>
+{#    <script src="{% static 'assets/js/misc/circle-progress.min.js' %}"></script>#}
 
 
 {% endblock %}
