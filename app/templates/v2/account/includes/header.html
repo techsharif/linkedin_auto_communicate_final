@@ -115,7 +115,7 @@
 {#                                <span class="badge badge-danger badge-pill float-right">3</span>#}
 {#                            </a>#}
 {#                        </li>#}
-                        <li><a class="dropdown-item" href="{% url 'account-settings' pk=pk %}">Settings</a></li>
+                        <li><a class="dropdown-item" href="{% if pk %} {% url 'account-settings' pk=pk %} {% endif %}">Settings</a></li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </li>
