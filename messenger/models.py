@@ -325,6 +325,7 @@ class Inbox(ContactField):
 
     # to save notes at convesation on right
     notes = models.TextField(blank=True, null=True)
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta():
         abstract = False

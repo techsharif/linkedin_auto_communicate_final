@@ -50,6 +50,7 @@ class SearchResult(ContactField):
     connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
                               default=ContactStatus.CONNECT_REQ_N)
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
     
 
     class Meta:
