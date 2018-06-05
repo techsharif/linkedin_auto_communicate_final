@@ -159,7 +159,9 @@ class ContactField(CommonContactField):
     linkedin_id = models.CharField(max_length=50, unique=False)
     name = models.CharField(max_length=100, db_index=True)
     latest_activity = models.DateTimeField(blank=True, null=True)
-
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
     class Meta:
         abstract = True
 
@@ -315,8 +317,8 @@ class ChatMessage(MessageField):
 class Inbox(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='inboxes',
                               on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
+    # first_name = models.CharField(max_length=50, blank=True, null=True)
+    # last_name = models.CharField(max_length=50, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.inbox_statuses,
                                  default=ContactStatus.OLD_CONNECT_N)
     is_connected = models.BooleanField(default=False)
@@ -325,6 +327,7 @@ class Inbox(ContactField):
 
     # to save notes at convesation on right
     notes = models.TextField(blank=True, null=True)
+   
 
     class Meta():
         abstract = False

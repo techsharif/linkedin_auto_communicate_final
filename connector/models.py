@@ -51,6 +51,7 @@ class SearchResult(ContactField):
     status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
                               default=ContactStatus.CONNECT_REQ_N)
     
+    
 
     class Meta:
         db_table = 'connector_searchresult'
