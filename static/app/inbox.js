@@ -55,10 +55,10 @@ $(document).ready(function() {
             {
                'targets': 0,
                'checkboxes': true,
-				"render": function ( data, type, row ) {
-               		let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
-               		return html;
-				  }
+								"render": function ( data, type, row ) {
+				               		let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+				               		return html;
+							  }
             },
             {
                 "targets": status_index,
@@ -94,13 +94,13 @@ $(document).ready(function() {
                 "searchable": true,
                 "render": function(data, type, row){
                 	var extrahtml =  "";
-                	console.log('-----', row);
-                	if (row[9] === true)
+                	if (row[9])
                 		extrahtml =  "messenger";
-                	else if (row[9] === false)
+                	else if (!row[9])
                 		extrahtml =  "connector";
+                	extrahtml = (row[7]?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
+									console.log(extrahtml);
 
-                	extrahtml = (row[7]!== null?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
                 }
             },
@@ -188,8 +188,10 @@ $(document).ready(function() {
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
+		console.log('-------', val);
+		
 		let column = table.column(7);
-		column.search( that.is(':checked')? val:'' , false, true )
+		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();
 
     });
@@ -200,7 +202,7 @@ $(document).ready(function() {
 		console.log('-------', val);
 
 		let column = table.column( 7 );
-		column.search( that.is(':checked')? val:'' , false, true )
+		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();
     });
 
