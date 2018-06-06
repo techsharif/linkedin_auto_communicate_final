@@ -9,6 +9,9 @@
         border: 1px solid #eee;
         margin-left: -1px;
     }
+    .has-error {
+      color:red;
+    }
 </style>
 
     <div class="row mb-5">
@@ -72,9 +75,7 @@
                                         {% endif %}
                                     </td>
                                 </tr>
-
                             {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
@@ -83,42 +84,60 @@
             </div>
         </div>
     </div>
-
 <script>
     $('.table').DataTable()
     $(document).ready(function () {
-
-        /*oTable = $('.table').DataTable({
-            "lengthChange": false,
-            "pageLength": 15,
-            {#            searching: false,#}
-            "dom": '<"top"ip>rt<"bottom"><"clear">',
-            "language": {
-                "paginate": {
-                    "previous": '<i class="glyphicon glyphicon-chevron-left"></i>',
-                    "next": '<i class="glyphicon glyphicon-chevron-right"></i>'
-                }
-            },
-
-             'columns'           : [         // see https://datatables.net/reference/option/columns.searchable
-                { 'orderable': false },
-                null,
-                null,
-                null,
-                null,
-                null
-            ]
-        });*/
 
         $('#search_input_datatable').keyup(function () {
             console.log('ok')
             oTable.search($(this).val()).draw();
         })
-
+        $("#add_connector_camapaign_form").validate({
+                errorElement: "span",
+                errorClass: "help-block help-block-error",
+                focusInvalid: !1,
+                ignore: "",
+                rules: {
+                    first_name: {
+                        required: true,
+                    },
+                    last_name: {
+                        required: true,
+                    },
+                    countrycode: {
+                      required: true,
+                    },
+                },
+                errorPlacement: function (error, element) {
+                    let placement = $(element).data('error');
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function (e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function (e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+                success: function (e) {
+                    e.closest(".form-group").removeClass("has-error")
+                },
+                submitHandler: function (e) {
+                  add();
+                }
+            });
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-
-        function load_data() {
+        function load_data(param) {
             data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
+            if(param){
+              data.first_name = param[0].value;
+              data.last_name = param[1].value;
+              data.countrycode = param[2].value;
+            }
+            console.log(data)
 
             $.ajax({
                 url: ACCOUNT_SEARCH_URL,
@@ -144,6 +163,7 @@
 
         function get_ajax_data() {
             data = JSON.parse($('#ajax_data_render_field')[0].innerHTML);
+            console.log(data);
             return data;
         }
 
@@ -162,10 +182,7 @@
         });
         {##}
         $("#select_all_items").change(function () {
-
             $('.select_items').prop('checked', this.checked);
-
-
         });
         {##}
         $(".select_an_item_to_campaign").click(function () {
@@ -193,33 +210,28 @@
         		$('#add2campaign .modal-body').html(text);
         		return;
         	}
-
-
-            $('#add2campaign').modal('hide');
-
-            data = get_ajax_data();
-            data.campaign = camp_id;
-            set_ajax_data(data);
-
-
-            load_data();
-            data = get_ajax_data();
-            if (data.selected_items) delete data.selected_items;
-            if (data.add_all_selected_item_button) delete data.add_all_selected_item_button;
-            if (data.campaign) delete data.campaign;
-            set_ajax_data(data)
-
-
+          // if(!$('#add_connector_camapaign_form').valid()){
+          //   return
+          // };
+          // $("#country").val($("#country").countrySelect("getSelectedCountryData").iso2);
+          // var extra_data = $('#add_connector_camapaign_form').serializeArray();
+          $('#add2campaign').modal('hide');
+          // $('#add_connector_camapaign_form')[0].reset();
+          data = get_ajax_data();
+          data.campaign = camp_id;
+          set_ajax_data(data);
+          load_data();
+          data = get_ajax_data();
+          if (data.selected_items) delete data.selected_items;
+          if (data.add_all_selected_item_button) delete data.add_all_selected_item_button;
+          if (data.campaign) delete data.campaign;
+          set_ajax_data(data);
         });
 
         $("#add_selected").click(function () {
-
             checked_item = $('.select_items:checkbox:checked');
-
             console.log("checked_item");
             console.log(checked_item);
-
-
             console.log(checked_item.length)
             if (checked_item.length) {
                 selected_items_list = new Array()
@@ -235,24 +247,23 @@
                 $('#add2campaign').modal('show');
 
             } else {
-                alert('No item selected')
+              swal({
+                  title: "Warring",
+                  text: "No item selected!",
+                  icon: "warring",
+                  button: "Ok!",
+              });
             }
 
 
         });
 
         $("#add_allnew").click(function () {
-
             checked_item = $('.select_items:checked');
-
             data = get_ajax_data();
             data.add_all_selected_item_button = true;
             set_ajax_data(data);
-
-
             $('#add2campaign').modal('show');
-
-
         });
 
 

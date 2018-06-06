@@ -39,7 +39,7 @@ class Search(CommonContactField):
 
     def result_count(self):
         return 0 if self.resultcount == None else self.resultcount
-        
+
 
 class SearchResult(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='searchresults',
@@ -48,10 +48,10 @@ class SearchResult(ContactField):
                                on_delete=models.CASCADE, default=1)
     # name = models.CharField(max_length=200)
     connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
-    status = models.IntegerField(choices=ContactStatus.search_result_statuses, 
+    status = models.IntegerField(choices=ContactStatus.search_result_statuses,
                               default=ContactStatus.CONNECT_REQ_N)
-    
-    
+
+
 
     class Meta:
         db_table = 'connector_searchresult'
@@ -67,23 +67,28 @@ class SearchResult(ContactField):
             return 1
         else:
             return 0
-        
+
     def attach_to_campaign(self, campaign):
-        
+
         # clone to Inbox
         name = self.name if self.name else self.id
-        
-        contact, created = Inbox.objects.get_or_create(name=name, title=self.title, 
-                             company=self.company, industry=self.industry,
+
+        contact, created = Inbox.objects.get_or_create(name=name, title=self.title,
+                             company=self.company,
+                             industry=self.industry,
                              latest_activity=self.latest_activity,
-                             location=self.location, linkedin_id=self.linkedin_id,
-                             is_connected=False, status=self.status,
+                             location=self.location,
+                             linkedin_id=self.linkedin_id,
+                             is_connected=False,
+                             status=self.status,
+                             last_name=self.last_name,
+                             countrycode=self.countrycode,
                              owner=self.owner
             )
-        
+
         contact.attach_to_campaign(campaign)
-        
-        
+
+
 
 
 # this is not used now, may be remvoed later
@@ -91,28 +96,28 @@ class ConnectorCampaign(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='connectorcampaigns',
                                 on_delete=models.CASCADE, default=1)
     connector_name = models.CharField(max_length=200)
-     
+
     copy_connector = models.ForeignKey('self', on_delete=models.SET_NULL,
                                        blank=True, null=True)
-    
+
     created_at = models.DateTimeField()
     status = models.BooleanField()
     connectors = models.ManyToManyField(Inbox)
-    
+
     def __str__(self):
         return self.connector_name
-    
-# this is not used now, may be remvoed later    
+
+# this is not used now, may be remvoed later
 class ConnectorStep(TimeStampedModel, CampaignStepField):
     campaign = models.ForeignKey(ConnectorCampaign, related_name='campaignsteps',
                                  on_delete=models.CASCADE)
-    
-# this is not used now, may be remvoed later    
+
+# this is not used now, may be remvoed later
 class ConnectMessage(MessageField):
-    
+
     requestee = models.ForeignKey(Inbox, related_name='requestees',
                                on_delete=models.SET_NULL, null=True)
-    type = models.CharField(max_length=50, blank=True, 
+    type = models.CharField(max_length=50, blank=True,
                             choices=ContactStatus.MESSSAGETYPES,
                             default=ContactStatus.TALKING)
     connector = models.ForeignKey(ConnectorCampaign, related_name='connector_messages',
@@ -120,10 +125,10 @@ class ConnectMessage(MessageField):
                                   null=True)
     is_connected = models.BooleanField(default=False)
     is_replied_other = models.BooleanField(default=False)
-    
+
     class Meta():
         abstract = False
-        
+
 class TaskQueue(models.Model):
     owner = models.ForeignKey(LinkedInUser, related_name='taskqueues',
                                 on_delete=models.CASCADE, default=1)
@@ -136,5 +141,5 @@ class TaskQueue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     # the date to be placed in action(send task to bottask)
-    due_date = models.DateTimeField(blank=True, null=True, 
+    due_date = models.DateTimeField(blank=True, null=True,
                                     default=timezone.now)

@@ -684,6 +684,9 @@ class SearchResultView(View):
             return render(request, 'account/search_render/no_search_result.html')
 
         item = []
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        countrycode = request.POST.get('countrycode')
         if 'selected_items[]' in request.POST.keys():
             item = list(map(int, request.POST.getlist('selected_items[]')))
         elif 'selected_items' in request.POST.keys():
