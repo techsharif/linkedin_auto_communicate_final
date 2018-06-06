@@ -94,13 +94,12 @@ $(document).ready(function() {
                 "searchable": true,
                 "render": function(data, type, row){
                 	var extrahtml =  "";
+									console.log('-----------',row[9], row[7])
                 	if (row[9])
                 		extrahtml =  "messenger";
-                	else if (!row[9])
+                	else
                 		extrahtml =  "connector";
                 	extrahtml = (row[7]?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
-									console.log(extrahtml);
-
                 	return extrahtml;
                 }
             },
@@ -185,11 +184,11 @@ $(document).ready(function() {
   $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
 	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
+
+
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
-		console.log('-------', val);
-		
 		let column = table.column(7);
 		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();
@@ -199,7 +198,6 @@ $(document).ready(function() {
 	$('#show_messenger_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
-		console.log('-------', val);
 
 		let column = table.column( 7 );
 		column.search( !that.is(':checked')? val:'' , false, true )
@@ -295,17 +293,17 @@ $(document).ready(function() {
 
 	//add selected
     $('#add_selected').click( function(e){
-    	var $table             = table.table().node();
-	    var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
-    	var rows_selected = $chkbox_checked;
+			var rows_selected = table.column(0).checkboxes.selected();
     	var contacts = [];
     	$.each(rows_selected, function(index, rowId){
+				console.log(index)
+				console.log(index)
     		contacts.push(rowId);
     		// find its row
     		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
-    	      var row = table.row($row).data();
+    	  var row = table.row($row).data();
     		if (row){
-       			if (row[7] !== null)
+       			if (row[7])
            			contact_camps[row[7]] = 1;
     		}
 
