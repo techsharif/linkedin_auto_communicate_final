@@ -6,8 +6,8 @@ from messenger.models import Campaign, CampaignStep, ChatMessage, Inbox
 from django.forms.models import inlineformset_factory
 
 css_form_attrs = {'class': 'form-control'}
-textarea_css = css_form_attrs
-textarea_css.update({'rows': 3})
+textarea_css = {'class': 'summernote'}
+# textarea_css.update({'rows': 20})
 
 class CreateCampaignForm(forms.ModelForm):
     
