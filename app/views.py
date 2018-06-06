@@ -178,7 +178,7 @@ class ActivateAccount(View):
                 send_bcc.append(bcc.email)
             # bcc is not working
             print(send_bcc)
-            user.email_user(subject, message, None, send_bcc)
+            # user.email_user(subject, message, None, send_bcc)
             msg = EmailMessage(subject, message, None, [user.email], send_bcc)
             msg.send()
             # user.email_user(subject, message)

@@ -299,7 +299,8 @@ class DataTable(object):
             _data = []
             for x in context['object_list']:
                 list_data = list(x)
-                list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
+                if list_data[6] is not None:
+                    list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
                 _data.append(list_data)
 
             json_data = json.dumps(dict(data=_data), default=Datedefault)

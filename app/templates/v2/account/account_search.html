@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins\country\css\countrySelect.min.css' %}">
+
 
 {% endblock head %}
 
@@ -201,7 +203,7 @@
                 </div>
                 <div class="modal-body">
                     <h5>Are you sure you want to delete this search ?</h5>
-                    <p class="text-red">All of your search data will be permanently deleted from B2B Prospecting 
+                    <p class="text-red">All of your search data will be permanently deleted from B2B Prospecting
                         servers and can't be restored.</p>
 
                 </div>
@@ -238,11 +240,28 @@
                 <div class="modal-body">
                     {% if campaigns %}
                     <p>Choose campaign</p>
-                    <select id="campaign_select" class="form-control">
+                    <div class="row">
 
-                    {% include 'app/includes/campaigns/list_select.html' with campaigns=campaigns %}
+                      <div class="form-group col-md-12">
+                        <select id="campaign_select" class="form-control">
+                           {% include 'app/includes/campaigns/list_select.html' with campaigns=campaigns %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-6">
+                          <input class="form-control" type="text" name="first_name" placeholder="Fist Name">
+                      </div>
+                      <div class="form-group col-md-6">
+                          <input class="form-control" type="text" name="last_name" placeholder="Last Name">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-12">
+                        <input class="form-control" name="countrycode" type="text" id="country">
+                      </div>
+                    </div>
 
-                    </select>
                     {% else %}
                     <p>Please <a href="{% url 'account-campaign-add' pk=pk %}">add</a> a campaign first</p>
                     {% endif %}
@@ -265,9 +284,10 @@
 
 
      <script src="{% static 'assets/scripts/search_page.js' %}?id=5"></script>
+     <script src="{% static 'plugins\country\js\countrySelect.min.js' %}"></script>
     <script>
-            ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-
+        ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
+        $("#country").countrySelect();
     </script>
 
 
