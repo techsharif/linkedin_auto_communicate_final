@@ -69,16 +69,10 @@
                                             <p class="pt-lg text-center">Please check your emaill to activate your account!</p>
                                             <br/>
                                             <p class="text-center pv">Have an account?</p>
-
-
                                          </div>
                                     </div>
                                     <div class="modal-footer">
-<<<<<<< Updated upstream
                                         <button type="button" class="btn btn-primary"><a href="{% url 'login' %}" style="color:white">Login</a></button>
-=======
-                                        <button type="button" class="btn btn-primary"><a href="{% url 'LoginView' %}" style="color:white">Login</a></button>
->>>>>>> Stashed changes
                                     </div>
                                 </div>
                             </div>
@@ -90,21 +84,12 @@
 		</div>
 	</div>
 
-
     {% endblock content %}
 
-
     {% block script %}
-
         <script>
             var msg = "{{ msg }}";
-
-
         </script>
         <script type="text/javascript" src="{% static 'assets/plugins/form-validator/jquery.form-validator.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'assets/scripts/register.js' %}"></script>
-
-
-
-
     {% endblock script %}
