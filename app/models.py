@@ -56,7 +56,7 @@ class LinkedInUser(models.Model):
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)
-    message_limit = models.IntegerField(default=0)
+    message_limit_default = models.IntegerField(default=75)
     is_weekendwork = models.BooleanField(default=True)
     # for bot ip
     bot_ip = models.GenericIPAddressField(blank=True, null=True)
