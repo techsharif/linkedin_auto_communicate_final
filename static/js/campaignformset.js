@@ -8,7 +8,7 @@ $(function() {
         // name of the related model, with camel-case converted to underscores.
         prefix: 'stepmessages',
         addText: 'Add another message',          // Text for the add link
-        deleteText: 'Remove this message',            // Text for the delete link
+        deleteText: 'AAAADD Remove this message',            // Text for the delete link
         addCssClass: 'add-row btn btn-primary',          // CSS class applied to the add link
         deleteCssClass: 'delete-row btn btn-danger mb-xl',    // CSS class applied to the delete link
     });
