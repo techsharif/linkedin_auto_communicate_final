@@ -39,6 +39,7 @@ $(function() {
     	var that = $(this);
     	var form = that.closest('form');
     	var data = form.serialize();
+    	console.log(data)
     	$.post(form.attr('action'), data).done(function(res){
     		console.log('resutl:', res);
     		try{
