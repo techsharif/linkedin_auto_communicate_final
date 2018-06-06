@@ -171,9 +171,9 @@ class ContactField(CommonContactField):
 class Contact(TimeStampedModel, ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='contacts',
                                 on_delete=models.CASCADE)
-    
-    status = models.CharField(max_length=20, 
-                              choices=ContactStatus.contact_statues, 
+
+    status = models.CharField(max_length=20,
+                              choices=ContactStatus.contact_statues,
                               default=ContactStatus.OLD_CONNECT)
     notes = models.TextField()
 
@@ -327,7 +327,9 @@ class Inbox(ContactField):
 
     # to save notes at convesation on right
     notes = models.TextField(blank=True, null=True)
-   
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta():
         abstract = False

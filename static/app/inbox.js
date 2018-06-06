@@ -97,7 +97,8 @@ $(document).ready(function() {
 									console.log('-----------',row[9], row[7])
                 	if (row[9] === true)
                 		extrahtml =  "messenger";
-                	else if (row[9] === false)
+									else
+                	// else if (row[9] === false)
                 		extrahtml =  "connector";
                 	extrahtml = (row[7]?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
