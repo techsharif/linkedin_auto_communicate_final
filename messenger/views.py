@@ -136,7 +136,7 @@ class ContactUpdateNoteView(UpdateView):
         contact = ctx['object']
         owner = contact.owner
         qs = ChatMessage.objects.filter(owner=owner,
-                                        contact=contact).order_by('-time')
+                                        contact=contact).order_by('time')
         ctx['chats'] = qs.all()[:10]
         ctx['chatform'] = CreateChatMesgForm()
         # print('ctx:', ctx)

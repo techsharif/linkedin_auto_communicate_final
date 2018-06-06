@@ -97,7 +97,6 @@ class AccountDetail(AccountMixins, DetailView):
         linkedIn_user = ctx['object']
         ctx['linkedin_user'] = self.object
         ctx['pk'] = self.object.pk
-
         ctx['connection'] = calculate_connections(self.object.pk, self.status)
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
@@ -116,7 +115,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status','message_limit']
     template_name = 'account/account_settings.html'
 
     def get_success_url(self):
@@ -296,15 +295,13 @@ class DataTable(object):
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
             # data = serializers.serialize('json', context['object_list'])
-            data = [list(x) for x in context['object_list']]
+            # data = [list(x) for x in context['object_list']]
             _data = []
-
             for x in context['object_list']:
                 list_data = list(x)
                 list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
                 _data.append(list_data)
 
-            print(_data[0], '---', data[0])
             json_data = json.dumps(dict(data=_data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
 
@@ -329,10 +326,10 @@ class DataTable(object):
             return ctx
 
         # ctx['inbox_status'] = ContactStatus.inbox_statuses
-    
+
         ctx['object_list_default'] = ctx['object_list']
         for cc in ctx['object_list_default']:
-            print('--------', cc.__dict__)
+            print('--------', cc.__dict__, '\n')
             pass
         ctx['object_list'] = []
 
@@ -722,13 +719,3 @@ class AccountTask_NEW(View):
         context['linkedin_user'] = linkedin_user
         context['pk'] = pk
         return render(request, self.template_name, context)
-
-
-def remove_inbox(request):
-    model = Inbox
-    try:
-        if request.POST.get('cid'):
-            print(cid)
-    except Inbox.DoesNotExist:
-        pass
-    return JsonResponse({'message': 'message', 'response_code': 'response_code'})

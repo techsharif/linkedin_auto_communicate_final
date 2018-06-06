@@ -56,8 +56,8 @@ $(document).ready(function() {
                'targets': 0,
                'checkboxes': true,
 								"render": function ( data, type, row ) {
-									let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
-               		return html;
+				               		let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+				               		return html;
 							  }
             },
             {
@@ -94,12 +94,13 @@ $(document).ready(function() {
                 "searchable": true,
                 "render": function(data, type, row){
                 	var extrahtml =  "";
-                	if (row[9] === true)
+                	if (row[9])
                 		extrahtml =  "messenger";
-                	else if (row[9] === false)
+                	else if (!row[9])
                 		extrahtml =  "connector";
+                	extrahtml = (row[7]?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
+									console.log(extrahtml);
 
-                	extrahtml = (row[7]!== null?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
                 }
             },
@@ -147,7 +148,6 @@ $(document).ready(function() {
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
 
-
 	var header_buttons = '';
 	if(inboxPage){
 		header_buttons+= '&nbsp;<button class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
@@ -181,40 +181,38 @@ $(document).ready(function() {
 		// $(".dataTables_filter").html('html')
 	}
   $("div.toolbar").html(header_buttons);
+
   $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
 	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
+		console.log('-------', val);
+		
 		let column = table.column(7);
-		column.search( that.is(':checked')? val:'' , false, true )
+		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();
 
-    });
-
-	$('#show_talking_contacts').click(function (e) {
-		let that = $(this).find('input');
-		let val = that.data('click');
-		let column = table.column( 7 );
-		column.search( that.is(':checked')? val:'' , false, true )
-        .draw();
     });
 
 	$('#show_messenger_contacts').click(function (e) {
 		let that = $(this).find('input');
+		let val = that.data('click');
+		console.log('-------', val);
+
+		let column = table.column( 7 );
+		column.search( !that.is(':checked')? val:'' , false, true )
+        .draw();
+    });
+
+	$('#show_talking_contacts').click(function (e) {
+		let that = $(this).find('input');
+		console.log(that.is(':checked'))
 		let column = table.column( 8 );
-		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
+		column.search( !that.is(':checked')?contact_statuses[12]:'' , false, true )
         .draw();
   });
-
-	$('.btn-group-custom-checkbox').on('click', 'input[data-click="talking"]', function(e){
-		var that = $(this);
-		// check?
-		var column = table.column( 8 );
-		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
-        .draw();
-	});
 
   $('body').on('click', 'a[data-click="changeStatus"]', function(e){
     	console.log($('.popoverButton').length);

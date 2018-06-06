@@ -57,13 +57,14 @@ def RegisterView(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode("utf-8"),
                 'token': account_activation_token.make_token(user),
             })
-            msg="register_success"
+            msg = "register_success"
             # send activation link to the user
             user.email_user(subject, message)
 
         print( "msg = ")
         print (msg)
     return render(request, 'v2/registration/register.html', {'msg': msg})
+
 
 def LoginView(request):
     msg=''
@@ -83,7 +84,7 @@ def LoginView(request):
             # if profile.day_to_live <= 0:
             membership_type, created = MembershipType.objects.get_or_create(name='Free')
             membership_add_subscription(USER, membership_type, True)
-            redirect_url='/accounts'
+            redirect_url = '/accounts'
             return HttpResponseRedirect(redirect_url)
         else:
             msg = "invalid_user"
@@ -167,18 +168,20 @@ class ActivateAccount(View):
             message = render_to_string('app/account_activated_email.html', {
                 'current_date': datetime.datetime.now().strftime('%Y-%m-%d'),
                 'site_title': settings.SITE_TITLE,
+                'user': user,
             })
             # send activation link to the user
             bccs = AdminEmail.objects.all()
             send_bcc = []
             for bcc in bccs:
                 send_bcc.append(bcc.email)
-            # bcc is not workig
-            # user.email_user(subject, message, None, send_bcc)
-            
-            user.email_user(subject, message)
-            
-            
+            # bcc is not working
+            print(send_bcc)
+            user.email_user(subject, message, None, send_bcc)
+            msg = EmailMessage(subject, message, None, [user.email], send_bcc)
+            msg.send()
+            # user.email_user(subject, message)
+
             login(request, user)
             # add membership only
             # profile = user.profile
