@@ -98,6 +98,4 @@ urlpatterns = [
         acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
         name='contact-status'),
-    url(r'^inbox/remove/$', acc_views.remove_inbox, name='remove-inbox')
-
 ]

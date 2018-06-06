@@ -94,7 +94,7 @@ $(document).ready(function() {
                 "searchable": true,
                 "render": function(data, type, row){
                 	var extrahtml =  "";
-                	console.log('-----', row[8]);
+                	console.log('-----', row);
                 	if (row[9] === true)
                 		extrahtml =  "messenger";
                 	else if (row[9] === false)
@@ -194,29 +194,23 @@ $(document).ready(function() {
 
     });
 
-	$('#show_talking_contacts').click(function (e) {
+	$('#show_messenger_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
 		console.log('-------', val);
+
 		let column = table.column( 7 );
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();
     });
 
-	$('#show_messenger_contacts').click(function (e) {
+	$('#show_talking_contacts').click(function (e) {
 		let that = $(this).find('input');
+		console.log(that.is(':checked'))
 		let column = table.column( 8 );
-		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
+		column.search( !that.is(':checked')?contact_statuses[12]:'' , false, true )
         .draw();
   });
-
-	$('.btn-group-custom-checkbox').on('click', 'input[data-click="talking"]', function(e){
-		var that = $(this);
-		// check?
-		var column = table.column( 8 );
-		column.search( that.is(':checked')?contact_statuses[12]:'' , false, true )
-        .draw();
-	});
 
   $('body').on('click', 'a[data-click="changeStatus"]', function(e){
     	console.log($('.popoverButton').length);
