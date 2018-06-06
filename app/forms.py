@@ -16,7 +16,7 @@ class RegisterForm(forms.Form):
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
-        
+
 
 class PinForm(forms.Form):
     pincode = forms.CharField(max_length=6)
@@ -54,12 +54,12 @@ class UserRegisterForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         user = User.objects.filter(email=email).first()
-        if user is not None:            
+        if user is not None:
             raise forms.ValidationError(
                 self.error_messages2['email_exists'],
                 code='email_exists',
             )
-            
+
         return email
 
     email = forms.EmailField(
@@ -74,7 +74,7 @@ class UserRegisterForm(UserCreationForm):
             'class': 'form-control',
             'type': 'password',
         }))
-    
+
     password2 = forms.CharField(
         label='Confirm Password',
         widget=forms.PasswordInput(attrs={
