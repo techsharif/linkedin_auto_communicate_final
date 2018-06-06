@@ -115,7 +115,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status','message_limit']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status','message_limit_default']
     template_name = 'account/account_settings.html'
 
     def get_success_url(self):
