@@ -611,9 +611,15 @@ Account Settings
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-3">
-                                        <label>Message Limit</label>
+                                        <label>Daily message limit</label>
                                         <input type="number" min="75" max="125" name="message_limit" value={{ object.message_limit }}>
-                                        </select>
+                                        
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                    <label>Work on weekends</label></br>
+                                        <input type="checkbox" name="is_weekendwork" value="1"
+                                            {% if object.is_weekendwork %} checked {% endif %}/>
                                     </div>
 
                                 
@@ -629,9 +635,7 @@ Account Settings
                                 <input style="display: none" type="checkbox" name="status" {% if object.status %}
                                        checked {% endif %} id="">
                                 <div class="form-group checkbox">
-                                    <label><input type="checkbox" name="is_weekendwork" value="1"
-                                            {% if object.is_weekendwork %} checked {% endif %}>Work on
-                                        weekends</label>
+                                    
                                 </div>
                                 <br>
                                 <div class="form-group">
