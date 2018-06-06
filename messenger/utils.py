@@ -135,6 +135,8 @@ def calculate_map_data(owner):
 
     result_data = {}
     for result in search_results:
+        if not result['countrycode']:
+            continue
         result['countrycode'] = result['countrycode'].lower()
         if result['countrycode'] in result_data.keys():
             result_data[result['countrycode']] += result['total']
