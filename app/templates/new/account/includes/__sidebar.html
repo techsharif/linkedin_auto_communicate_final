@@ -6,7 +6,7 @@
         </li>
         <li class="logo-nav-item">
             <a class="navbar-brand" href="#">
-                <img src="{% static 'images/if_linkedin_287735.svg' %}" width="145" height="80" alt="QuillPro">
+                <img src="{% static 'new/img/B2B_Logo.png' %}" style="width:130px; margin: 0 1.5em" alt="QuillPro" class="mCS_img_loaded">
             </a>
             <h8 class="nav-header text-center" style="font-size:10px !important;">{{ user.email }}</h8>
         </li>
@@ -56,7 +56,6 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
-
         <li class="nav-item ">
             <a class="nav-link {% if 'task' in request.path %} active {% endif %}" href="{% url 'account-task' pk=pk %}">
                 <i class="batch-icon batch-icon-envelope"></i>

@@ -74,7 +74,6 @@ urlpatterns = [
         acc_views.AccounMessenger.as_view(), name='account-messenger'),
     url(r'^account/(?P<pk>[\d]+)/campaigns/$',
         acc_views.AccountCampaign.as_view(), name='account-campaign'),
-
     url(r'^account/(?P<pk>[\d]+)/search/delete/(?P<search_id>[\d]+)/$',
         acc_views.AccountSearchDelete.as_view(), name='account-search-delete'),
     url(r'^accounts/search_result/$', acc_views.SearchResultView.as_view(),
@@ -98,5 +97,5 @@ urlpatterns = [
     url(r'^account/campaigns/(?P<pk>[\d]+)/delete$',
         acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
-        name='contact-status')
+        name='contact-status'),
 ]

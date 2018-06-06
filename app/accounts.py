@@ -28,7 +28,8 @@ from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
 from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
 from django.core.exceptions import ObjectDoesNotExist
 
-from messenger.utils import calculate_communication_stats, calculate_connections
+from messenger.utils import calculate_communication_stats, calculate_connections, calculate_dashboard_data, \
+    calculate_connection_stat_graph, calculate_map_data
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
@@ -43,7 +44,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-      
+
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -57,7 +58,7 @@ class RemoveAccount(View):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        # pk here is pk of linkeduser table, 
+        # pk here is pk of linkeduser table,
         if 'object' in ctx:
             if isinstance(ctx['object'], Campaign):
                 ctx['pk'] = ctx['object'].owner_id
@@ -96,7 +97,6 @@ class AccountDetail(AccountMixins, DetailView):
         linkedIn_user = ctx['object']
         ctx['linkedin_user'] = self.object
         ctx['pk'] = self.object.pk
-
         ctx['connection'] = calculate_connections(self.object.pk, self.status)
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
@@ -104,6 +104,10 @@ class AccountDetail(AccountMixins, DetailView):
         ctx['account_home'] = True
         ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
+        ctx['total_campaign_contact_list'] = Inbox.objects.filter(owner=self.object)
+        ctx['dashboard_data'] = calculate_dashboard_data(self.object)
+        ctx['connection_stat'] = calculate_connection_stat_graph(self.object)
+        ctx['map'] = calculate_map_data(self.object)
 
         return ctx
 
@@ -111,7 +115,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status','message_limit']
     template_name = 'account/account_settings.html'
 
     def get_success_url(self):
@@ -291,9 +295,14 @@ class DataTable(object):
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
             # data = serializers.serialize('json', context['object_list'])
-            data = [list(x) for x in context['object_list']]
+            # data = [list(x) for x in context['object_list']]
+            _data = []
+            for x in context['object_list']:
+                list_data = list(x)
+                list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
+                _data.append(list_data)
 
-            json_data = json.dumps(dict(data=data), default=Datedefault)
+            json_data = json.dumps(dict(data=_data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
 
         return super(DataTable, self).render_to_response(context, **response_kwargs)
@@ -320,7 +329,8 @@ class DataTable(object):
 
         ctx['object_list_default'] = ctx['object_list']
         for cc in ctx['object_list_default']:
-            print(cc.__dict__)
+            print('--------', cc.__dict__, '\n')
+            pass
         ctx['object_list'] = []
 
         return ctx
@@ -476,6 +486,7 @@ class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
 
     def delete(self, request, *args, **kwargs):
+        print('request')
         self.get_object().delete()
         payload = {'deleted': 'ok'}
         return JsonResponse(json.dumps(payload), safe=False)
@@ -684,7 +695,7 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn                
+                # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
                                       connect_campaign=campaign)
                 self._clone_to_contact(search_results, campaign)
@@ -692,6 +703,7 @@ class SearchResultView(View):
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountTask_NEW(View):

@@ -1,11 +1,10 @@
-{% extends 'new/account/base.html' %} 
+{% extends 'new/account/base.html' %}
 {% load static %}
 {% block title %}My Network{% endblock title %}
 {% block extra_head %}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
 {% endblock extra_head %}
 {% block content%}
-
 <div class="row">
     <div class="col-md-12  mb-4">
         <div id="accordion" role="tablist" aria-multiselectable="true">
@@ -89,11 +88,10 @@
     }
     .dataTables_paginate {
         position: relative;
-        left: 40%;
+        float: inside;
     }
     .dataTables_info{
          position: relative;
-        left: 40%;
     }
     th input[type="checkbox"] {
          box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
@@ -167,7 +165,6 @@
         </div>
     </div>
 </div>
-
 <script src="{% static 'js/table2CSV.js' %}"></script>
 <script>
     let toggle_chat = false;
@@ -197,6 +194,7 @@
             var csv = $table.table2CSV({
                 delivery: 'value'
             });
+
             var downloadLink = document.createElement("a");
             downloadLink.href = 'data:text/csv;charset=UTF-8,' +
                 encodeURIComponent(csv);
@@ -205,6 +203,7 @@
             downloadLink.click();
             document.body.removeChild(downloadLink);
         });
+
     });
 </script>
 

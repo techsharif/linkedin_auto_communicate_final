@@ -4,11 +4,7 @@ from django.core.serializers import json
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
 User = get_user_model()
-
-
-
 
 
 class BotTaskStatus:
@@ -51,7 +47,6 @@ class MemberShipField(models.Model):
 class LinkedInUser(models.Model):
     user = models.ForeignKey(User, related_name='linkedusers',
                              on_delete=models.CASCADE)
-
     membership = models.ManyToManyField('Membership')
     email = models.CharField(max_length=254, unique=True)
     password = models.CharField(max_length=32)
@@ -61,6 +56,7 @@ class LinkedInUser(models.Model):
     tz = models.CharField(max_length=50, default='America/New_York')
     start_from = models.IntegerField(default=0)
     start_to = models.IntegerField(default=12)
+    message_limit = models.IntegerField(default=0)
     is_weekendwork = models.BooleanField(default=True)
     # for bot ip
     bot_ip = models.GenericIPAddressField(blank=True, null=True)

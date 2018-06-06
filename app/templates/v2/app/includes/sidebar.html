@@ -3,13 +3,25 @@
     <ul class="nav nav-pills flex-column">
         <li class="logo-nav-item text-center">
             <a class="navbar-brand" >
-                <div class="profile-picture bg-gradient bg-primary has-message float-right">
-                    <img src="{% static 'assets/img/profile-pic.jpg' %}" width="44" height="44">
+                <div class=" has-message float-right">
+                    {% if  user.is_authenticated %}
+                        <img src="{% static 'new/img/B2B_Logo.png' %}" style="width:130px; margin: 0 1.5em" alt="QuillPro" class="mCS_img_loaded">
+                    {%else%}
+                        <img src="{% static 'new/img/B2B_Logo.png' %}" style="width:130px; margin: 0 1.5em" alt="QuillPro" class="mCS_img_loaded">
+                    {%endif%}
                 </div>
             </a>
             <div>
-                {{ user.username }}
+                <!-- {% if  user.is_authenticated %}
+                    {{ user.username }}
+                {%endif%}   -->  
             </div>
+        </li>
+        <li>
+            {% if  user.is_authenticated %}
+{#            <img src="{% static 'new/img/logo_new.jpg' %}" width="44" height="44" alt="logo" style="margin-left: 30px;border-radius: 50%;">#}
+            {%endif%}
+            
         </li>
         <li>
             <h6 class="nav-header">General</h6>

@@ -159,7 +159,9 @@ class ContactField(CommonContactField):
     linkedin_id = models.CharField(max_length=50, unique=False)
     name = models.CharField(max_length=100, db_index=True)
     latest_activity = models.DateTimeField(blank=True, null=True)
-
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    countrycode = models.CharField(max_length=3, blank=True, null=True)
     class Meta:
         abstract = True
 
@@ -227,13 +229,16 @@ class Campaign(TimeStampedModel):
         return json.dumps((data))
 
     def count_reply_other(self):
-        return 0
+        return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(
+            replied_other_date=None))
 
     def count_replies(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None))
 
     def count_sends(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
+
+
 
 
 class CampaignStepField(models.Model):
@@ -312,8 +317,8 @@ class ChatMessage(MessageField):
 class Inbox(ContactField):
     owner = models.ForeignKey(LinkedInUser, related_name='inboxes',
                               on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
+    # first_name = models.CharField(max_length=50, blank=True, null=True)
+    # last_name = models.CharField(max_length=50, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.inbox_statuses,
                                  default=ContactStatus.OLD_CONNECT_N)
     is_connected = models.BooleanField(default=False)
@@ -322,6 +327,7 @@ class Inbox(ContactField):
 
     # to save notes at convesation on right
     notes = models.TextField(blank=True, null=True)
+   
 
     class Meta():
         abstract = False
