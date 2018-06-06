@@ -55,10 +55,10 @@ $(document).ready(function() {
             {
                'targets': 0,
                'checkboxes': true,
-								"render": function ( data, type, row ) {
-									let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
+				"render": function ( data, type, row ) {
+               		let html = '<input type="checkbox" class="dt-checkboxes" value="'+row[0]+'">';
                		return html;
-							  }
+				  }
             },
             {
                 "targets": status_index,
@@ -94,6 +94,7 @@ $(document).ready(function() {
                 "searchable": true,
                 "render": function(data, type, row){
                 	var extrahtml =  "";
+                	console.log('-----', row[8]);
                 	if (row[9] === true)
                 		extrahtml =  "messenger";
                 	else if (row[9] === false)
@@ -147,7 +148,6 @@ $(document).ready(function() {
           "dom": '<"toolbar col-md-12 mt-sm mb-sm">frtip'
     } );
 
-
 	var header_buttons = '';
 	if(inboxPage){
 		header_buttons+= '&nbsp;<button class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
@@ -181,6 +181,7 @@ $(document).ready(function() {
 		// $(".dataTables_filter").html('html')
 	}
   $("div.toolbar").html(header_buttons);
+
   $(".dataTables_filter").appendTo('#filter-search-moved');
 	$('#campaign_people_previous').find('a').html('<i class="fa fa-arrow-left" aria-hidden="true"></i>');
 	$('#campaign_people_next').find('a').html('<i class="fa fa-arrow-right" aria-hidden="true"></i>');
@@ -196,6 +197,7 @@ $(document).ready(function() {
 	$('#show_talking_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
+		console.log('-------', val);
 		let column = table.column( 7 );
 		column.search( that.is(':checked')? val:'' , false, true )
         .draw();

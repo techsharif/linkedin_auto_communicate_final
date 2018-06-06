@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'connector',
     'messenger',
     'dashboard',
-
 ]
 
 MIDDLEWARE = [
