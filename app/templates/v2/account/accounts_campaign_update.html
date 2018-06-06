@@ -18,6 +18,7 @@
                     <div class="row mb-5">
                         <div class="col-md-12">
                             <h2>Connect Campaign Details</h2>
+
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
@@ -25,13 +26,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="steps-tab" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Stats</a>
-                                </li>
+
+
                             </ul>
+
+
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab">
                                     {% include 'v2/account/campaign/tab_1.html' %}
@@ -39,8 +38,6 @@
                                 <div class="tab-pane fade" id="steps" role="tabpanel" aria-labelledby="steps-tab">
                                     <form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
                                         {% include 'account/campaign/tab_2_form.html' with messenger=1 %}
-
-
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
