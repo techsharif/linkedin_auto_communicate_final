@@ -28,7 +28,9 @@ User = get_user_model()
 # New views
 
 def RegisterView(request):
-    msg=''
+    msg = ''
+    email = ''
+    password = ''
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -61,9 +63,8 @@ def RegisterView(request):
             # send activation link to the user
             user.email_user(subject, message)
 
-        print( "msg = ")
-        print (msg)
-    return render(request, 'v2/registration/register.html', {'msg': msg})
+    return render(request, 'v2/registration/register.html', {
+    'msg': msg, 'email': email, 'password': password})
 
 
 def LoginView(request):

@@ -37,27 +37,10 @@
         <ul class="navbar-nav navbar-language-translation mr-auto">
         </ul>
         {% if user.is_authenticated %}
-        
+
             <ul class="navbar-nav ml-5 navbar-profile">
-        </li> 
-            <ul class="navbar-nav navbar-notifications float-right">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbar-notification-search" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
-                        <i class="batch-icon batch-icon-search"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-fullscreen" aria-labelledby="navbar-notification-search">
-                        <li>
-                            <form class="form-inline my-2 my-lg-0 no-waves-effect">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for..." aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary btn-gradient waves-effect waves-light" type="button">Search</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
+        </li>
+            <ul class="navbar-nav navbar-notifications float-right">              
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle no-waves-effect ml-3" id="navbar-notification-misc" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false">
                         <i class="clr-white batch-icon batch-icon-bell "></i>
