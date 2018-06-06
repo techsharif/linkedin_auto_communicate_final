@@ -20,6 +20,7 @@ from app.tokens import account_activation_token
 from django.utils import timezone
 from datetime import timedelta
 import datetime
+from django.conf import settings
 
 User = get_user_model()
 
@@ -162,16 +163,22 @@ class ActivateAccount(View):
             # send welcome email to user
             # site_name = get_current_site(self.request)
             # todo: change hard code subject
-            subject = 'Getting started with JetBuzz'
+            subject = 'Getting started with {0}'.format(settings.SITE_TITLE)
             message = render_to_string('app/account_activated_email.html', {
-                'current_date': datetime.datetime.now().strftime('%Y-%m-%d')
+                'current_date': datetime.datetime.now().strftime('%Y-%m-%d'),
+                'site_title': settings.SITE_TITLE,
             })
             # send activation link to the user
             bccs = AdminEmail.objects.all()
             send_bcc = []
             for bcc in bccs:
                 send_bcc.append(bcc.email)
-            user.email_user(subject, message, None, send_bcc)
+            # bcc is not workig
+            # user.email_user(subject, message, None, send_bcc)
+            
+            user.email_user(subject, message)
+            
+            
             login(request, user)
             # add membership only
             # profile = user.profile

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.conf.global_settings import DEFAULT_FROM_EMAIL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -150,6 +151,8 @@ EMAIL_HOST_USER = 'info@mdanerichardson.com'
 EMAIL_HOST_PASSWORD = 'Snow1007!'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # maximum campaign message per account
 MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
