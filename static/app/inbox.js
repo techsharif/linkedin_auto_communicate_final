@@ -95,9 +95,9 @@ $(document).ready(function() {
                 "render": function(data, type, row){
                 	var extrahtml =  "";
 									console.log('-----------',row[9], row[7])
-                	if (row[9])
+                	if (row[9] === true)
                 		extrahtml =  "messenger";
-                	else
+                	else if (row[9] === false)
                 		extrahtml =  "connector";
                 	extrahtml = (row[7]?row[7]:"") + '<span class="hidden">' + extrahtml + '</span>';
                 	return extrahtml;
@@ -189,6 +189,7 @@ $(document).ready(function() {
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
+		console.log('---', val)
 		let column = table.column(7);
 		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();
