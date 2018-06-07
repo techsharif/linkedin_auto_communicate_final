@@ -47,7 +47,7 @@ urlpatterns = [
 
     url(r'password_reset_done',
         auth_views.PasswordResetDoneView.as_view(
-            template_name='registration/page-password_reset_done.html'),
+            template_name='registration/page-password_reset_donaccount/campaignse.html'),
         name='password_reset_done'),
 
     url(r'^registered/$', views.TemplateView.as_view(template_name='registration/register_done.html'),
