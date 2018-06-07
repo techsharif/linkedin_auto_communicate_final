@@ -42,7 +42,7 @@
                     </div>
                     <div class="tile-right">
                         <div class="tile-number">{{ dashboard_data.connected_members }}</div>
-                        <div class="tile-description">Connected Members</div>
+                        <div class="tile-description">CONNECTED MEMBERS</div>
                     </div>
                 </div>
             </div>
@@ -134,46 +134,42 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <h6>COMMUNICATION STATUS</h6>
-
-                </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-8">
+                        <div class="col-xl-12">
 
                             <div>
                                 <canvas id="myLineChart"></canvas>
                             </div>
 
                         </div>
-                        <div class="col-xl-4">
-                            <br><br>
-                            <h3>Backgrounds</h3>
-                            <span><strong>Contacts</strong></span>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar"
-                                     style="width: {{ dashboard_data.campaign_members_p }}%"
-                                     aria-valuenow="{{ dashboard_data.campaign_members_p }}"
-                                     aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span><strong>Invitations Sent</strong></span>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" role="progressbar"
-                                     style="width: {{ dashboard_data.invitations_sent_p }}%"
-                                     aria-valuenow="{{ dashboard_data.invitations_sent_p }}"
-                                     aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span><strong>Replied</strong></span>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar"
-                                     style="width: {{ dashboard_data.replied_p }}%"
-                                     aria-valuenow="{{ dashboard_data.replied_p }}"
-                                     aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-
-
-                        </div>
+{#                        <div class="col-xl-4">#}
+{#                            <br><br>#}
+{#                            <h3>Backgrounds</h3>#}
+{#                            <span><strong>Contacts</strong></span>#}
+{#                            <div class="progress">#}
+{#                                <div class="progress-bar bg-success" role="progressbar"#}
+{#                                     style="width: {{ dashboard_data.campaign_members_p }}%"#}
+{#                                     aria-valuenow="{{ dashboard_data.campaign_members_p }}"#}
+{#                                     aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                            </div>#}
+{#                            <span><strong>Invitations Sent</strong></span>#}
+{#                            <div class="progress">#}
+{#                                <div class="progress-bar bg-info" role="progressbar"#}
+{#                                     style="width: {{ dashboard_data.invitations_sent_p }}%"#}
+{#                                     aria-valuenow="{{ dashboard_data.invitations_sent_p }}"#}
+{#                                     aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                            </div>#}
+{#                            <span><strong>Replied</strong></span>#}
+{#                            <div class="progress">#}
+{#                                <div class="progress-bar bg-warning" role="progressbar"#}
+{#                                     style="width: {{ dashboard_data.replied_p }}%"#}
+{#                                     aria-valuenow="{{ dashboard_data.replied_p }}"#}
+{#                                     aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                            </div>#}
+{##}
+{##}
+{#                        </div>#}
                     </div>
 
                 </div>
@@ -439,7 +435,7 @@
             },
             options: {
                 legend: {
-                    display: false
+                    display: true
                 },
                 responsive: true,
                 title: {
