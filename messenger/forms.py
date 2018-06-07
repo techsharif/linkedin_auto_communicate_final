@@ -7,8 +7,12 @@ from django.forms.models import inlineformset_factory
 
 css_form_attrs = {'class': 'form-control',
                   'placeholder': 'Textarea'}
-textarea_css = {'class': 'summernote', 'placeholder': 'Textarea'}
+textarea_css = {'class': 'summernote'}
 # textarea_css.update({'rows': 20})
+
+# css_form_attrs = {'class': 'form-control'}
+# textarea_css = css_form_attrs
+# textarea_css.update({'rows': 3})
 
 class CreateCampaignForm(forms.ModelForm):
     
@@ -41,6 +45,7 @@ class CreateCampaignForm(forms.ModelForm):
         fields = ('title', 'copy_campaign', )
 
 class CreateChatMesgForm(forms.ModelForm):
+    textarea_css['placeholder'] = 'Introduce yourself to the contact'
     text = forms.CharField(
         widget=forms.Textarea(attrs=textarea_css))
     
@@ -110,7 +115,7 @@ STEP_TIMES = (
 )
         
 class UpdateCampConnectForm(forms.ModelForm):
-    
+    textarea_css['placeholder'] = 'Introduce yourself to the contact'
     connection_message = forms.CharField(
         widget=forms.Textarea(attrs=textarea_css))
     
@@ -123,9 +128,10 @@ class CampaignStepForm(forms.ModelForm):
         widget=forms.Select(attrs=css_form_attrs),
         choices=STEP_TIMES,
         )
-    
+    textarea_css['placeholder'] = 'Send your welcome message to the contact'
     message = forms.CharField(
         label=_('Welcome Message'),
+
         widget=forms.Textarea(attrs=textarea_css))
     
     class Meta:
