@@ -13,73 +13,9 @@
     </div>
 
 
-    <div class="col-md-12 p0" >
-        <label class="switch pull-left" >
-          {% include 'app/includes/campaigns/switch_button.html' with object=object %}
-        </label>
-
-        <h6 style="padding-top:10px;">&nbsp;Campaign is active</h6>
-
-        <a href="#" class="btn btn-flat btn-danger" data-click="removeCampaign" data-accid="{{object.owner_id}}" data-cid="{{object.id}}">DELETE MESSENGER CAMPAIGN</a>
 
 
-
-    </div>
-
-    <div class="col-md-12 p0 mt-2" >
-
-        <div class="card card-tile card-xs bg-primary bg-gradient text-center">
-            <div class="card-body p-4">
-                <!-- Accepts .invisible: Makes the items. Use this only when you want to have an animation called on it later -->
-                <div class="tile-left">
-                    <i class="batch-icon batch-icon-user-alt batch-icon-xxl"></i>
-                </div>
-                <div class="tile-right">
-                    <div class="tile-number">{{ contacts_stat.contacts }}</div>
-                    <div class="tile-description">Contacts</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 p0  mt-3" >
-        <div class="card card-tile card-xs bg-success bg-gradient text-center">
-            <div class="card-body p-4">
-                <!-- Accepts .invisible: Makes the items. Use this only when you want to have an animation called on it later -->
-                <div class="tile-left">
-                    <div id="epc-demo-1" style="height: 65px;" class="chart chart-epc" data-percent="{{ contacts_stat.message_percent }}" data-chart-color-1="#07a7e3" data-chart-color-2="#0ad251" data-chart-color-3="#fce418" data-chart-color-4="#f43a59">
-                        <span class="percent">{{ contacts_stat.message_percent }}%</span>
-                    </div>
-                </div>
-                <div class="tile-right">
-                    <div class="tile-number">{{ contacts_stat.message_contacts }}</div>
-                    <div class="tile-description">Messages</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-md-12 p0  mt-3" >
-        <div class="card card-tile card-xs bg-info bg-gradient text-center">
-            <div class="card-body p-4">
-                <!-- Accepts .invisible: Makes the items. Use this only when you want to have an animation called on it later -->
-                <div class="tile-left">
-                    <div id="epc-demo-3"  style="height: 65px;"  class="chart chart-epc" data-percent="{{ contacts_stat.reply_percent }}" data-chart-color-1="#0ad251">
-                        <span class="percent">{{ contacts_stat.reply_percent }}%</span>
-                    </div>
-                </div>
-                <div class="tile-right">
-                    <div class="tile-number">{{ contacts_stat.reply_contacts }}</div>
-                    <div class="tile-description">Replied</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-
-    <!---<div id="accordion" role="tablist" aria-multiselectable="true">
+    <div id="accordion" role="tablist" aria-multiselectable="true">
 
 
 
@@ -128,7 +64,7 @@
             </div>
         </div>
 
-    </div>---->
+    </div>
 
 
 </div>
