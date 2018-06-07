@@ -82,13 +82,12 @@ class SearchResult(ContactField):
                              is_connected=False,
                              status=self.status,
                              last_name=self.last_name,
+                             first_name=self.first_name,
                              countrycode=self.countrycode,
                              owner=self.owner
             )
 
         contact.attach_to_campaign(campaign)
-
-
 
 
 # this is not used now, may be remvoed later

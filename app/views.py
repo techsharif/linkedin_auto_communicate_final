@@ -181,7 +181,6 @@ class ActivateAccount(View):
             # user.email_user(subject, message, None, send_bcc)
             msg = EmailMessage(subject, message, None, [user.email], send_bcc)
             msg.send()
-            # user.email_user(subject, message)
 
             login(request, user)
             # add membership only

@@ -351,5 +351,5 @@ class Inbox(ContactField):
         self.change_status(ContactStatus.IN_QUEUE_N)
         campaign.contacts.add(self)
 
-    def first_name(self):
-        return self.name.split(' ')[0]
+    # def first_name(self):
+    #     return self.name.split(' ')[0]

@@ -130,14 +130,9 @@
                 }
             });
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-        function load_data(param) {
+        function load_data() {
             data = JSON.parse($('#ajax_data_render_field')[0].innerHTML)
-            if(param){
-              data.first_name = param[0].value;
-              data.last_name = param[1].value;
-              data.countrycode = param[2].value;
-            }
-            console.log(data)
+            console.log('======', data)
 
             $.ajax({
                 url: ACCOUNT_SEARCH_URL,
