@@ -204,6 +204,12 @@ class Campaign(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def format_message(self, contact):
+        return self.connection_message.format(Name=contact.name,
+                                  FirstName=contact.first_name(),
+                                  Company=contact.company,
+                                  Title=contact.title)
+
     def copy_step_message(self):
         copy_campaign = self.copy_campaign
         self.welcome_message = copy_campaign.welcome_message
