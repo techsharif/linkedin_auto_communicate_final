@@ -51,11 +51,25 @@ $(function() {
 
     		var alertbox = $('.alert-box');
     		if (res.ok) {
-    			swal("alert!", 'Message has been saved successfully!', "success");
+    			// swal("alert!", 'Message has been saved successfully!', "success");
+
+				swal({
+					  title: "alert!",
+					  text: "Message has been saved successfully!",
+					  type: "success",
+					  confirmButtonText: "OK"
+					},
+					function(isConfirm){
+					  if (isConfirm) {
+						window.location.reload();
+					  }
+					});
     			//alertbox.html('Message has been saved successfully!');
     			//alertbox.addClass('text-success').removeClass('text-danger');
+
     			return;
     		}
+
     		if ( res.error){
     			var html = "";
     			for(var key in  res.error) {

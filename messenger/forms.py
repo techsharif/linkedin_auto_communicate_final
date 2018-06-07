@@ -4,9 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from messenger.models import Campaign, CampaignStep, ChatMessage, Inbox
 from django.forms.models import inlineformset_factory
 
-css_form_attrs = {'class': 'form-control'}
-textarea_css = css_form_attrs
-textarea_css.update({'rows': 3})
+
+css_form_attrs = {'class': 'form-control',
+                  'placeholder': 'Textarea'}
+textarea_css = {'class': 'summernote', 'placeholder': 'Textarea'}
+# textarea_css.update({'rows': 20})
 
 
 class CreateCampaignForm(forms.ModelForm):
@@ -128,6 +130,7 @@ class CampaignStepForm(forms.ModelForm):
     )
 
     message = forms.CharField(
+        label=_('Welcome Message'),
         widget=forms.Textarea(attrs=textarea_css))
 
     class Meta:
