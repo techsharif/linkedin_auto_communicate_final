@@ -684,14 +684,12 @@ class SearchResultView(View):
             return render(request, 'account/search_render/no_search_result.html')
 
         item = []
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        countrycode = request.POST.get('countrycode')
         if 'selected_items[]' in request.POST.keys():
             item = list(map(int, request.POST.getlist('selected_items[]')))
         elif 'selected_items' in request.POST.keys():
             item += [int(request.POST.get('selected_items'))]
         elif 'add_all_selected_item_button' in request.POST.keys():
+            print('here', ContactStatus.IN_QUEUE_N)
             search_results = SearchResult.objects.filter(search=search, status=None)
             search_results.update(status=ContactStatus.IN_QUEUE_N)
 
