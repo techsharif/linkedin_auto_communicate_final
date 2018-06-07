@@ -684,17 +684,17 @@ class SearchResultView(View):
             return render(request, 'account/search_render/no_search_result.html')
 
         item = []
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        countrycode = request.POST.get('countrycode')
         if 'selected_items[]' in request.POST.keys():
             item = list(map(int, request.POST.getlist('selected_items[]')))
         elif 'selected_items' in request.POST.keys():
             item += [int(request.POST.get('selected_items'))]
         elif 'add_all_selected_item_button' in request.POST.keys():
-            print('here', ContactStatus.IN_QUEUE_N)
-            search_results = SearchResult.objects.filter(search=search, status=None)
-            search_results.update(status=ContactStatus.IN_QUEUE_N)
+            if 'campaign' in request.POST.keys():
+                campaign = Campaign.objects.get(id=int(request.POST['campaign']))
+                search_results = SearchResult.objects.filter(search=search, status=ContactStatus.CONNECT_REQ_N)
+                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
+                print('here', campaign)
+                # self._clone_to_contact(search_results, campaign)
 
         if item:
             if 'campaign' in request.POST.keys():
@@ -702,10 +702,9 @@ class SearchResultView(View):
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      connect_campaign=campaign, countrycode=countrycode,
-                                      first_name=first_name,
-                                      last_name=last_name)
+                                      connect_campaign=campaign,)
                 self._clone_to_contact(search_results, campaign)
+                print('here', campaign)
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'v2/account/search_render/search_render.html',
