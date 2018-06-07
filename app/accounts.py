@@ -684,6 +684,9 @@ class SearchResultView(View):
             return render(request, 'account/search_render/no_search_result.html')
 
         item = []
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        countrycode = request.POST.get('countrycode')
         if 'selected_items[]' in request.POST.keys():
             item = list(map(int, request.POST.getlist('selected_items[]')))
         elif 'selected_items' in request.POST.keys():
@@ -699,7 +702,9 @@ class SearchResultView(View):
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      connect_campaign=campaign)
+                                      connect_campaign=campaign, countrycode=countrycode,
+                                      first_name=first_name,
+                                      last_name=last_name)
                 self._clone_to_contact(search_results, campaign)
 
         search_results = SearchResult.objects.filter(search=search)
