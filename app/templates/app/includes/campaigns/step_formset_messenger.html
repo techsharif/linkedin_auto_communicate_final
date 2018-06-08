@@ -3,8 +3,6 @@
 	<div class="box">
 	<div class="text alert-box"></div>
 		<div class="box-body campaignsteps-row">
-		
-		
 
 						
 			{% for form in campaignsteps.forms %}
@@ -24,8 +22,7 @@
                     	<label>Message {{ forloop.counter }}</label>
                     	{% render_field form.message placeholder='Your next message after the first message' %}
                     </div>           
-                           
-                           
+
                     
                 </div>
                 
