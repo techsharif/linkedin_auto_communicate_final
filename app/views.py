@@ -110,12 +110,12 @@ class HomeView(TemplateView):
     models = MembershipType
 
     def get(self, request):
+        redirect_url = reverse_lazy('login')
         if request.user.is_authenticated:
-            redirect_url = '/accounts'
-            return HttpResponseRedirect(redirect_url)
-        else:
-            return render(request, self.template_name)
-
+            redirect_url = 'accounts'
+            
+        return HttpResponseRedirect(redirect_url)
+        
     def get_context_data(self, **kwargs):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         for x in MembershipType.objects.all():
