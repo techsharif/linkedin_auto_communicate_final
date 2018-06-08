@@ -1,3 +1,50 @@
+function load_followup_list() {
+        $.ajax
+        ({
+            type: "get",
+            url: followup_url,
+            success: function (html) {
+                $('#followup_list').html(html)
+            }
+        });
+    }
+
+    function load_stored(cpk, fpk) {
+
+        data = new Object()
+        data['cpk'] = cpk
+        data['fpk'] = fpk
+
+        $.ajax({
+            url: data_stored,
+            type: "post",
+            data: data,
+            success: function (response) {
+               $('#data_already_stored').html(response)
+                $('.summernote').summernote(summernote_data);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+
+
+        });
+
+    }
+
+    function load_new() {
+        $.ajax
+        ({
+            type: "get",
+            url: data_new,
+            success: function (html) {
+                $('#data_new').html(html)
+                $('.summernote').summernote(summernote_data);
+            }
+        });
+    }
+
 
 $(document).ready(function () {
 
@@ -74,42 +121,10 @@ $(document).ready(function () {
     }
     $('.summernote').summernote(summernote_data);
 
-    function load_followup_list() {
-    $.ajax
-    ({
-        type: "get",
-        url: followup_url,
-        success: function (html) {
-            $('#followup_list').html(html)
-        }
-    });
-}
 
-function load_stored() {
-    $.ajax
-    ({
-        type: "get",
-        url: data_stored,
-        success: function (html) {
-            $('#data_already_stored').html(html)
-            $('.summernote').summernote(summernote_data);
-        }
-    });
-}
 
-function load_new() {
-    $.ajax
-    ({
-        type: "get",
-        url: data_new,
-        success: function (html) {
-            $('#data_new').html(html)
-            $('.summernote').summernote(summernote_data);
-        }
-    });
-}
-load_followup_list()
-    load_stored()
+    load_followup_list()
+    load_stored(cpk,'init')
     load_new()
 });
 
@@ -131,7 +146,7 @@ function activate_new() {
     $('#data_already_stored').addClass('hidden')
 }
 
-$(document).on('click', '#add_followup', function(){
+$(document).on('click', '#add_followup', function () {
     $("#add_followup")[0].setAttribute('disabled', '')
     $("#new_followup").removeClass('hidden')
     $('.list-group-item').removeClass('active')
@@ -141,15 +156,16 @@ $(document).on('click', '#add_followup', function(){
 });
 
 
-
-
-    $(document).on('click', '.list-group-item', function(){
+$(document).on('click', '.list-group-item', function () {
     $('.list-group-item').removeClass('active')
     $(this).addClass('active')
     if ($(this)[0].getAttribute('data_val') == 'new')
         activate_new()
-    else
+    else{
+        load_stored(cpk, $(this)[0].getAttribute('data_val'))
         activate_stored()
+    }
+
 
     if (!e) var e = window.event;
     e.cancelBubble = true;
@@ -157,8 +173,7 @@ $(document).on('click', '#add_followup', function(){
 });
 
 
-
-$(document).on('click', '#btn-save-followup', function(){
+$(document).on('click', '#btn-save-followup', function () {
     form = $("#form-save")
     $.ajax({
         url: form.attr('action'),

@@ -24,7 +24,7 @@ from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskSt
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
-    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
+    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm, STEP_TIMES
 from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage, CampaignStep
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -736,12 +736,28 @@ class AccountFollowups(View):
         campaign_steps = CampaignStep.objects.filter(campaign=campaign)
         return render(request, 'v2/messenger/fillowup_list.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountFollowup(View):
-    def get(self, request, pk):
-        campaign = Campaign.objects.get(pk=pk)
-        campaign_steps = CampaignStep.objects.filter(campaign=campaign)
-        return render(request, 'v2/messenger/data_stored.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
+    def post(self, request):
+        print(request.POST)
+        if 'cpk' in request.POST.keys() and 'fpk' in request.POST.keys():
+            cpk = request.POST['cpk']
+            fpk = request.POST['fpk']
+            data = {}
+            data['cpk'] = cpk
+            data['fpk'] = fpk
+            if fpk == 'init':
+                campaign = Campaign.objects.get(pk=int(cpk))
+                data['name'] = "Initial Email"
+                data['message'] = campaign.connection_message
+
+            else:
+                campaign_step = CampaignStep.objects.get(pk=int(fpk))
+                data['name'] = "Followup Email"
+                data['step_time'] = campaign_step.step_time
+                data['message'] = campaign_step.message
+                data['steps'] = STEP_TIMES
+            return render(request, 'v2/messenger/data_stored.html', data)
 
 @method_decorator(decorators, name='dispatch')
 class AccountNewFollowup(View):

@@ -92,7 +92,7 @@ urlpatterns = [
 
     url(r'^account/messenger/followups/(?P<pk>[\d]+)$',
         acc_views.AccountFollowups.as_view(), name='messenger-followups'),
-    url(r'^account/messenger/followup/(?P<pk>[\d]+)$',
+    url(r'^account/messenger/followup/$',
         acc_views.AccountFollowup.as_view(), name='messenger-followup'),
     url(r'^account/messenger/new-followup/$',
         acc_views.AccountNewFollowup.as_view(), name='messenger-new-followup'),

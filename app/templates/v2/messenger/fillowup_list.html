@@ -3,21 +3,16 @@
         <strong>Initial Email</strong>
 
     </button>
-    <button type="button" data_val="1" class="list-group-item list-group-item-action"><strong>Followup
-        01</strong>
+
+    {% for campaign_step in campaign_steps %}
+    <button type="button" data_val="{{ campaign_step.pk }}" class="list-group-item list-group-item-action"><strong>Followup
+         {{ forloop.counter }}</strong>
         <i class="batch-icon batch-icon-delete text-right pull-right" onclick="abc(this,3)"></i>
-        <span style="margin-right: 1em" class="badge badge-light pull-right"> 6 days</span></li>
+        <span style="margin-right: 1em" class="badge badge-light pull-right"> {{ campaign_step.step_time }} days</span></li>
     </button>
-    <button data_val="2" type="button" class="list-group-item list-group-item-action"><strong>Followup
-        02</strong>
-        <i class="batch-icon batch-icon-delete text-right pull-right" onclick="abc(this,5)"></i>
-        <span style="margin-right: 1em" class="badge badge-light pull-right"> 6 days</span></li>
-    </button>
-    <button data_val="3" type="button" class="list-group-item list-group-item-action"><strong>Followup
-        03</strong>
-        <i class="batch-icon batch-icon-delete text-right pull-right" onclick="abc(this,7)"></i>
-        <span style="margin-right: 1em" class="badge badge-light pull-right"> 6 days</span></li>
-    </button>
+    {% endfor %}
+
+
     <button data_val="new" id="new_followup" type="button"
             class="list-group-item list-group-item-action hidden"><strong class="text-danger">New
         Followup
