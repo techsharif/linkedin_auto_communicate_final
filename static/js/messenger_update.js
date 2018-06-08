@@ -132,8 +132,35 @@ $(document).ready(function () {
 });
 
 
-function abc(data, val) {
-    console.log(val)
+function delete_email(fpk) {
+    console.log(fpk)
+
+
+    data = new Object()
+        data['fpk'] = fpk
+
+        $.ajax({
+            url: '/account/messenger/delete-followup/',
+            type: "post",
+            data: data,
+            success: function (response) {
+               load_followup_list()
+            load_stored(cpk,'init')
+            load_new(cpk)
+            activate_stored()
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+
+
+        });
+
+
+
+
+
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();

@@ -813,3 +813,11 @@ class AccountMessengerActive(View):
         campaign.status = int(request.GET['active'])
         campaign.save()
         return HttpResponse('done')
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountFollowupDelete(View):
+    def post(self, request):
+        fpk = request.POST['fpk']
+        campaign_step = CampaignStep.objects.get(pk=int(fpk))
+        campaign_step.delete()
+        return HttpResponse('done')
