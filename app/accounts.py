@@ -1,5 +1,6 @@
 import datetime
 import json
+import re
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -35,6 +36,11 @@ User = get_user_model()
 decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 
+def cleanhtml(raw_html):
+  cleanr = re.compile('<.*?>')
+  cleantext = re.sub(cleanr, '', raw_html)
+  return cleantext
+
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
     model = LinkedInUser
@@ -66,6 +72,7 @@ class AccountMixins(object):
                 ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
+        ctx['apk'] = self.kwargs.get('pk')
 
         # add this current account into context for
         ctx['account'] = get_object_or_404(LinkedInUser, pk=ctx['pk'],
@@ -482,7 +489,7 @@ class AccountCampaignCreate(AccountMessengerCreate):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
 
@@ -605,7 +612,39 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         return super(AccountMessengerDetail, self).form_invalid(form)
 
     def post(self, request, pk):
-        return HttpResponse('{"ok":1}', content_type='application/json')
+
+        print(request.POST)
+
+        if 'cpk' in request.POST.keys():
+            type = request.POST['type']
+            cpk = request.POST['cpk']
+
+            if type=='save':
+                fpk = request.POST['fpk']
+                message = request.POST['message']
+                message = cleanhtml(message)
+                if fpk=='init':
+                    campaign = Campaign.objects.get(pk=cpk)
+                    campaign.connection_message=message
+                    campaign.save()
+                else:
+                    campaign_step = CampaignStep.objects.get(pk=int(fpk))
+                    step = request.POST['step']
+                    campaign_step.message = message
+                    campaign_step.step_time=step
+                    campaign_step.save()
+                    return HttpResponse('{"ok":1}', content_type='application/json')
+            elif type=='add':
+                message = request.POST['message']
+                message = cleanhtml(message)
+                step = request.POST['step']
+                campaign = Campaign.objects.get(pk=cpk)
+                CampaignStep(message=message,step_time=step, campaign=campaign).save()
+
+                return HttpResponse('{"ok":1}', content_type='application/json')
+
+
+
 
 
 @method_decorator(decorators, name='dispatch')
@@ -759,7 +798,18 @@ class AccountFollowup(View):
                 data['steps'] = STEP_TIMES
             return render(request, 'v2/messenger/data_stored.html', data)
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountNewFollowup(View):
-    def get(self, request):
-        return render(request, 'v2/messenger/data_new.html')
+    def post(self, request):
+        data = {}
+        data['cpk'] = request.POST['cpk']
+        data['steps'] = STEP_TIMES
+        return render(request, 'v2/messenger/data_new.html', data)
+
+@method_decorator(decorators, name='dispatch')
+class AccountMessengerActive(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign.status = int(request.GET['active'])
+        campaign.save()
+        return HttpResponse('done')

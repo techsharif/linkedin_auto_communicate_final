@@ -107,11 +107,11 @@
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
     <script>
-    followup_url = "{% url 'messenger-followups' pk=pk%}"
+    followup_url = "{% url 'messenger-followups' pk=apk%}"
     data_stored = "{% url 'messenger-followup' %}"
     data_new = "{% url 'messenger-new-followup' %}"
-    cpk = {{ pk }}
+    cpk = {{ apk }}
     </script>
-    <script src="{% static 'js/messenger_update.js' %}?v=2"></script>
+    <script src="{% static 'js/messenger_update.js' %}?v=3"></script>
 
 {% endblock %}

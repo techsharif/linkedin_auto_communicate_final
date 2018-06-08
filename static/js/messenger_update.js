@@ -33,11 +33,14 @@ function load_followup_list() {
 
     }
 
-    function load_new() {
+    function load_new(cpk) {
+     data = new Object()
+        data['cpk'] = cpk
         $.ajax
         ({
-            type: "get",
+            type: "post",
             url: data_new,
+            data: data,
             success: function (html) {
                 $('#data_new').html(html)
                 $('.summernote').summernote(summernote_data);
@@ -125,7 +128,7 @@ $(document).ready(function () {
 
     load_followup_list()
     load_stored(cpk,'init')
-    load_new()
+    load_new(cpk)
 });
 
 
@@ -182,6 +185,26 @@ $(document).on('click', '#btn-save-followup', function () {
         data: form.serialize(),
         success: function (data) {
             alert('Submitted');
+        },
+        error: function (xhr, err) {
+            alert('Error');
+        }
+    });
+});
+
+
+$(document).on('click', '#btn-add-followup', function () {
+    form = $("#form-add")
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        dataType: 'json',
+        data: form.serialize(),
+        success: function (data) {
+            load_followup_list()
+            load_stored(cpk,'init')
+            load_new(cpk)
+            activate_stored()
         },
         error: function (xhr, err) {
             alert('Error');

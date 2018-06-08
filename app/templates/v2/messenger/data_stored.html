@@ -11,6 +11,7 @@
         <form id="form-save" method="post">
             {% csrf_token %}
             <input name="cpk" type="hidden" value="{{ cpk }}">
+            <input name="type" type="hidden" value="save">
             <input name="fpk" type="hidden" value="{{ fpk }}">
             <textarea name="message" class="summernote">{{ message }}</textarea>
             {% if steps %}

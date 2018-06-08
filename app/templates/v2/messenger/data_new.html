@@ -10,7 +10,23 @@
     <div class="card-body">
         <form id="form-add" method="post">
             {% csrf_token %}
-            <textarea name="data" class="summernote"></textarea>
+            <input name="cpk" type="hidden" value="{{ cpk }}">
+            <input name="type" type="hidden" value="add">
+            <textarea name="message" class="summernote"></textarea>
+            {% if steps %}
+                <br>
+                <div class="form-group">
+                    <label for="step">Step Time</label>
+                    <select name="step" class="form-control" id="step">
+
+                        {% for step in steps %}
+                            <option value="{{ step.0 }}" {% if step.0 == step_time %} selected {% endif %}>{{ step.1 }}</option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+            {% endif %}
         </form>
     </div>
 </div>
