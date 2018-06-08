@@ -1,22 +1,40 @@
 {% csrf_token %}
-	  		
-			<div class="row">
-				<div class="col-md-9">
-					<div class="box">
-						<div class="box-body">
-							<div class="form-group">
-								<label>{%if not messenger %}Connection {%endif%}Invitation Message</label>
-								{{form.connection_message}}
-							</div>
-							
-						</div>
-					</div>
-					
-					{% include 'app/includes/campaigns/step_formset.html' with campaignsteps=campaignsteps %}
-											
-						
-						
-				</div>
-				{% include 'app/includes/campaigns/msg_var.html' %}
-				
-			</div>
+
+<div class="row">
+    <div class="col-md-9">
+        {#					<div class="box">#}
+        {#						<div class="box-body">#}
+        {#							<div class="form-group">#}
+        {#								<label>{%if not messenger %}Connection {%endif%}Invitation Message</label>#}
+        {#								{{form.connection_message}}#}
+        {#							</div>#}
+        {##}
+        {#						</div>#}
+        {#					</div>#}
+        {##}
+        {#					{% include 'app/includes/campaigns/step_formset.html' with campaignsteps=campaignsteps %}#}
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <div id="followup_list">
+
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div id="data_already_stored">
+
+                </div>
+                <div id="data_new" class="hidden">
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    {% include 'app/includes/campaigns/msg_var.html' %}
+
+</div>
+

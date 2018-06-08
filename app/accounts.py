@@ -25,7 +25,7 @@ from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
     UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
-from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
+from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage, CampaignStep
 from django.core.exceptions import ObjectDoesNotExist
 
 from messenger.utils import calculate_communication_stats, calculate_connections, calculate_dashboard_data, \
@@ -522,7 +522,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             print('data:', data)
 
             json_data = json.dumps(dict(data=data), default=Datedefault)
-            return HttpResponse(json_data, content_type='application/json')
+            return HttpResponse('{"ok"}', content_type='application/json')
 
         return super(AccountMessengerDetail, self).render_to_response(context, **response_kwargs)
 
@@ -603,6 +603,9 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             return HttpResponse(json_data, content_type='application/json')
 
         return super(AccountMessengerDetail, self).form_invalid(form)
+
+    def post(self, request, pk):
+        return HttpResponse('{"ok":1}', content_type='application/json')
 
 
 @method_decorator(decorators, name='dispatch')
@@ -725,3 +728,22 @@ class AccountTask_NEW(View):
         context['linkedin_user'] = linkedin_user
         context['pk'] = pk
         return render(request, self.template_name, context)
+
+@method_decorator(decorators, name='dispatch')
+class AccountFollowups(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign_steps = CampaignStep.objects.filter(campaign=campaign)
+        return render(request, 'v2/messenger/fillowup_list.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
+
+@method_decorator(decorators, name='dispatch')
+class AccountFollowup(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign_steps = CampaignStep.objects.filter(campaign=campaign)
+        return render(request, 'v2/messenger/data_stored.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
+
+@method_decorator(decorators, name='dispatch')
+class AccountNewFollowup(View):
+    def get(self, request):
+        return render(request, 'v2/messenger/data_new.html')
