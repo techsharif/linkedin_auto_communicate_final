@@ -1,0 +1,22 @@
+{% csrf_token %}
+	  		{% load widget_tweaks %}
+			<div class="row">
+				<div class="col-md-9">
+					<div class="box">
+						<div class="box-body">
+							<div class="form-group">
+								<label>{%if not messenger %}Connection {%endif%}Message</label>
+								{% render_field form.connection_message placeholder='Your message to the contact' %}
+							</div>
+							
+						</div>
+					</div>
+					
+					{% include 'app/includes/campaigns/step_formset_messenger.html' with campaignsteps=campaignsteps %}
+											
+						
+						
+				</div>
+				{% include 'app/includes/campaigns/msg_var.html' %}
+				
+			</div>
