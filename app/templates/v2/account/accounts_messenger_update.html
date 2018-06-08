@@ -64,6 +64,8 @@
 
                                 </div>
                                 <div class="tab-pane fade" id="steps" role="tabpanel" aria-labelledby="steps-tab">
+                                    <form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
+                                        {% include 'account/campaign/tab_2_messenger_form.html' with messenger=1 %}
 
                                         {% include 'account/campaign/tab_2_form.html' with messenger=1 %}
 
