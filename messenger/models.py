@@ -166,6 +166,8 @@ class ContactField(CommonContactField):
         abstract = True
 
 
+
+
 # this is not a real entity, the list inbox with is_connected = True
 """
 class Contact(TimeStampedModel, ContactField):
@@ -358,4 +360,16 @@ class Inbox(ContactField):
         campaign.contacts.add(self)
 
     def first_name(self):
-        return self.name.split(' ')[0]
+        f_name=None
+        if self.first_name is not None:
+            f_name = self.first_name
+        if self.last_name is not None:
+            if f_name is not None:
+                f_name = f_name + ' ' +self.last_name
+            else:
+                f_name = self.last_name
+        return f_name
+        # if self.first_name is None and self.last_name is None:
+        #     return self.name.split(' ')[0]
+        # else:
+        #     return self.name.split(' ')[0]
