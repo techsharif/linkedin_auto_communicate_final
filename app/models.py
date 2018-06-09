@@ -78,6 +78,12 @@ class LinkedInUser(models.Model):
 
     def is_now_campaign_active(self):
         hour = timezone.now().hour
+        print("self.start_from == ")
+        print(self.start_from)
+        print("hour === ")
+        print(hour)
+        print("self.start_to ===== ")
+        print(self.start_to)
         return self.start_from <= hour <= self.start_to
 
     def activate(self):
