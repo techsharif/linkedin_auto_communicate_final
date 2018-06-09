@@ -111,4 +111,6 @@ urlpatterns = [
         acc_views.AccountMessengerActive.as_view(), name='connector-messenger-active'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
         name='contact-status'),
+    url(r'^account/(?P<pk>[\d]+)/report/$',
+        acc_views.AccountReport.as_view(), name='account-report'),
 ]
