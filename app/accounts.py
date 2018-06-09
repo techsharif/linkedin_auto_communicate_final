@@ -821,3 +821,46 @@ class AccountFollowupDelete(View):
         campaign_step = CampaignStep.objects.get(pk=int(fpk))
         campaign_step.delete()
         return HttpResponse('done')
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountReport(View):
+    
+    def get(self, request, pk):
+        print("pk",request)  
+        data={}
+        data.update({'pk':pk})
+        return render(request, 'v2/account/account_report.html',data)
+
+    def post(self,request,pk):
+        data={}
+        data.update({'pk':pk})
+        start =  request.POST.get('start_date')
+        end = request.POST.get('end_date')    
+        start_in = start
+        end_in = end 
+        
+        start_out = datetime.datetime(*[int(v) for v in start_in.replace('T', '-').replace(':', '-').split('-')])
+        
+        end_out = datetime.datetime(*[int(v) for v in end_in.replace('T', '-').replace(':', '-').split('-')])
+        
+        print (start_out.date())
+
+        if end_out < start_out:
+            
+            data.update({'pk':pk,'msg':"End Date is greaterthan start date"})
+            return render(request, 'v2/account/account_report.html',data)
+
+        searchobj = Search.objects.filter(owner=pk,searchdate__range=(start_out,end_out))    
+        conncetion_request_sent = 0
+        if searchobj:
+
+            for obj in searchobj:
+                request_sent = SearchResult.objects.filter(owner=pk,search=obj.id,status=ContactStatus.CONNECT_REQ_N).count()
+                conncetion_request_sent = conncetion_request_sent + request_sent
+                            
+        inv_accepted = Inbox.objects.filter(owner_id=pk,connected_date__range=(start_out,end_out)).count()
+        number_of_conn = Inbox.objects.filter(owner_id=pk,is_connected=1).count()
+        data.update({'pk':pk,'inv_accepted':inv_accepted,"number_of_conn":number_of_conn,"conncetion_request_sent":conncetion_request_sent})
+        return render(request, 'v2/account/account_report.html',data)
+
+

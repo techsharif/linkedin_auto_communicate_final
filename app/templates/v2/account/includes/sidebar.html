@@ -64,6 +64,15 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if 'account' in request.path %} active {% endif %}" href="{% url 'account-report' pk=pk %}">
+                <i class="batch-icon batch-icon-list-alt"></i>
+                Report
+                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
+            </a>
+        </li>
+
     </ul>
 </nav>
 
