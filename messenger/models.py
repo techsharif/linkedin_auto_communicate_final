@@ -246,7 +246,15 @@ class Campaign(TimeStampedModel):
     def count_sends(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
 
-
+    def connected_count(self):
+        # messenger one, all are connected
+        if self.is_bulk:
+            return 0
+        
+        qs = self.contacts.exclude(connected_date=None).filter(is_connected=True)
+        return qs.count()
+        
+        
 
 
 class CampaignStepField(models.Model):
