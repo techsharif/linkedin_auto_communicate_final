@@ -1,6 +1,7 @@
 import datetime
 import json
 import re
+import calendar
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -843,8 +844,8 @@ class AccountReport(View):
         
         end_out = datetime.datetime(*[int(v) for v in end_in.replace('T', '-').replace(':', '-').split('-')])
         
-        print (start_out.date())
-
+        print ("----",start_out.date(),type(start_out.date()))
+        year_filter = start_out.year
         if end_out < start_out:
             
             data.update({'pk':pk,'msg':"End Date is greaterthan start date"})
@@ -860,7 +861,17 @@ class AccountReport(View):
                             
         inv_accepted = Inbox.objects.filter(owner_id=pk,connected_date__range=(start_out,end_out)).count()
         number_of_conn = Inbox.objects.filter(owner_id=pk,is_connected=1).count()
-        data.update({'pk':pk,'inv_accepted':inv_accepted,"number_of_conn":number_of_conn,"conncetion_request_sent":conncetion_request_sent})
+        year_data = []
+        for x in range(1,13):
+            month_con = "Month(connected_date)='" + str(x) +"'"   
+            year_con = "year(connected_date)='" + str(year_filter) + "'"
+            owner_id = "owner_id='" + str(pk) + "'"    
+            month_x = Inbox.objects.extra(where=[month_con, year_con,owner_id]).count()
+            year_data.append({'y':month_x,"indexLabel":calendar.month_name[x]})
+
+        
+
+        data.update({'pk':pk,'inv_accepted':inv_accepted,"number_of_conn":number_of_conn,"conncetion_request_sent":conncetion_request_sent,"graph":json.dumps(year_data),"year_filter":year_filter})
         return render(request, 'v2/account/account_report.html',data)
 
 
