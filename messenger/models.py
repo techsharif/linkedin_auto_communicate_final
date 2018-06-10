@@ -360,16 +360,8 @@ class Inbox(ContactField):
         campaign.contacts.add(self)
 
     def first_name(self):
-        f_name=None
+
         if self.first_name is not None:
-            f_name = self.first_name
-        if self.last_name is not None:
-            if f_name is not None:
-                f_name = f_name + ' ' +self.last_name
-            else:
-                f_name = self.last_name
-        return f_name
-        # if self.first_name is None and self.last_name is None:
-        #     return self.name.split(' ')[0]
-        # else:
-        #     return self.name.split(' ')[0]
+            return self.first_name
+        else:
+            return self.name.split(' ')[0]

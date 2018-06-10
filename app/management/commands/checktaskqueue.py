@@ -56,7 +56,6 @@ class Command(BaseCommand):
                     TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
 
                 for contact in contacts:
-
                     try:
                         get_chat_message = ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
                                                                    campaign=connect_campaign)
