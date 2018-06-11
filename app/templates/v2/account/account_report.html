@@ -1,7 +1,35 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
 {% block title %} Report{% endblock title %}
-
+{% block head %}
+    {% autoescape off %}
+    <script type="text/javascript">
+window.onload = function () {
+   
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+        title:{
+            text: "Connection Report Each month " 
+        },
+        legend: {
+            maxWidth: 350,
+            itemWidth: 120
+        },
+        data: [
+        {
+            type: "pie",
+            showInLegend: true,
+            legendText: "{indexLabel}",
+            dataPoints: {{ graph }}
+        }
+        ]
+    });
+    chart.render();
+}
+</script>
+{% endautoescape %}
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+{% endblock %}
 {% block content %}
 <div class="row mb-5 justify-content-md-center">
     <div class="col-md-5 mb-5">
@@ -38,7 +66,7 @@
         </div>
     </div>
     {% if number_of_conn %}
-    <div class="row mb-5">
+    
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
@@ -70,6 +98,19 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if graph %}
+     <div class="col-md-12">
+        <div class="card">
+            <!-- <div class="card-header">
+                <h3>Connection Report Graph  </h3>
+            </div> -->
+            <!-- /.box-header -->
+            <div class="card-body" id="bulk_campaigns_list">
+               <div id="chartContainer" style="height: 300px; width: 100%;"></div>
             </div>
         </div>
     </div>
