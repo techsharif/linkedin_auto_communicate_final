@@ -21,7 +21,11 @@
                     </div>
                      <div class="form-group">
                     	{{ form.message.errors.as_ul }}
-                    	<label>Message {{ forloop.counter }}</label>
+                         {%  if  forloop.counter0  == 0%}
+                    	    <label>Thanks for connecting with me message</label>
+                         {% else %}
+                            <label>Thanks for connecting with me message {{ forloop.counter0 }}</label>
+                         {% endif %}
                          <div class="note-btn-group btn-group note-mybutton float-right">
                             <button type="button" onclick="addText(this, '{Name}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Name</button>
                             <button type="button" onclick="addText(this, '{FirstName}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">First name</button>
@@ -31,7 +35,7 @@
 
 
                         {% render_field form.message  maxlength="300" style="height: 8rem;" %}
-                        <small class="form-text text-muted" style="margin-top:-.50rem">Chars </small>
+                        <small class="form-text text-muted" style="margin-top:-.50rem">Chars 300</small>
                     </div>           
                            
                            
