@@ -24,11 +24,17 @@
                             <br>
                             <div class="form-group">
                                 <label class="control-label">Start Date</label>
-                                <input type="datetime-local" class="date_time form-control" autocomplete="off" name="start_date" required>
+                                <select class="form-control"  name="opt">
+                                        <option value="day">Day</option>
+                                        <option value="week">Week</option>
+                                        <option value="month">Month</option>
+                                        <option value="quarter">Quarter</option>
+                                </select>        
                                 <br>
                                 <label class="control-label">End Date
                                 </label>
-                                <input type="datetime-local" class="date_time form-control" autocomplete="off"  name="end_date" required>
+                                <input type="number"  autocomplete="off"  
+                                name="start" required>
 
                             </div>
                             
