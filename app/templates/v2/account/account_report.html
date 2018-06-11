@@ -21,15 +21,14 @@
                     <form id="form-add" method="post">
                         {% csrf_token %}
                         
-                            <br>
                             <div class="form-group">
                                        
                                 <label class="control-label">Last
                                 </label>
-                                <input type="number"  autocomplete="off"  
+                                <input type="number"  class="form-control" autocomplete="off"  
                                 name="start" required>
                                 <br>
-                                <br>
+                                
                                 <label class="control-label">Calendar</label>
                                 <select class="form-control"  name="opt">
                                         <option value="day">Day</option>
