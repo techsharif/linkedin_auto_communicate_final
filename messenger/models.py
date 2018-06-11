@@ -208,7 +208,7 @@ class Campaign(TimeStampedModel):
 
     def format_message(self, contact):
         return self.connection_message.format(Name=contact.name,
-                                  FirstName=contact.first_name(),
+                                  FirstName=contact.first_name,
                                   Company=contact.company,
                                   Title=contact.title)
 
@@ -367,9 +367,9 @@ class Inbox(ContactField):
         self.change_status(ContactStatus.IN_QUEUE_N)
         campaign.contacts.add(self)
 
-    def first_name(self):
-
-        if self.first_name is not None:
-            return self.first_name
-        else:
-            return self.name.split(' ')[0]
+    # def first_name(self):
+    #
+    #     if self.first_name is not None:
+    #         return self.first_name
+    #     else:
+    #         return self.name.split(' ')[0]
