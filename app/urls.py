@@ -88,7 +88,18 @@ urlpatterns = [
         acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
     url(r'^account/messenger/(?P<pk>[\d]+)$',
         acc_views.AccountMessengerDetail.as_view(), name='messenger-campaign'),
+
+
+    url(r'^account/messenger/followups/(?P<pk>[\d]+)$',
+        acc_views.AccountFollowups.as_view(), name='messenger-followups'),
+    url(r'^account/messenger/followup/$',
+        acc_views.AccountFollowup.as_view(), name='messenger-followup'),
+    url(r'^account/messenger/delete-followup/$',
+    acc_views.AccountFollowupDelete.as_view(), name='messenger-followup-delete'),
+    url(r'^account/messenger/new-followup/$',
+        acc_views.AccountNewFollowup.as_view(), name='messenger-new-followup'),
     url(r'^account/campaigns/(?P<pk>[\d]+)$',
+
         acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
     url(r'^account/bottask/(?P<pk>[\d]+)$',
         acc_views.AccountBotTask.as_view(), name='bottask'),
@@ -96,6 +107,10 @@ urlpatterns = [
         acc_views.AccountMessengerDelete.as_view(), name='messenger-campaign-delete'),
     url(r'^account/campaigns/(?P<pk>[\d]+)/delete$',
         acc_views.AccountMessengerDelete.as_view(), name='connector-campaign-delete'),
+    url(r'^account/messenger/(?P<pk>[\d]+)/active',
+        acc_views.AccountMessengerActive.as_view(), name='connector-messenger-active'),
     url(r'^account/contact/(?P<pk>[\d]+)/status', contact_v.ContactStatusView.as_view(),
         name='contact-status'),
+    url(r'^account/(?P<pk>[\d]+)/report/$',
+        acc_views.AccountReport.as_view(), name='account-report'),
 ]

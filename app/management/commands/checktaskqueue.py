@@ -28,6 +28,7 @@ class Command(BaseCommand):
         for pending_task in pending_task_list:
 
             try:
+
                 search = Search.objects.get(id=pending_task.extra_id)
                 queue_type = ContentType.objects.get_for_model(search)
                 task_queue = TaskQueue.objects.filter(object_id=search.id, queue_type=queue_type)
@@ -39,6 +40,8 @@ class Command(BaseCommand):
                     search = Search.objects.get(id=pending_task.extra_id)
                     TaskQueue(content_object=search, owner=pending_task.owner).save()
             except:
+                print("ERROR pending_task.extra_id =")
+                print(pending_task.extra_id)
                 pass
 
     def check_or_add_campaign_task(self):
@@ -53,10 +56,10 @@ class Command(BaseCommand):
                     TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
 
                 for contact in contacts:
-
                     try:
                         get_chat_message = ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
                                                                    campaign=connect_campaign)
+
                         if get_chat_message.is_sent and not (
                                     get_chat_message.replied_date or get_chat_message.replied_other_date):
                             check_task_type = BotTaskType.CHECKCONNECT if task_type == BotTaskType.POSTCONNECT else BotTaskType.CHECKMESSAGE
@@ -65,25 +68,23 @@ class Command(BaseCommand):
                                                           name=connect_campaign)
                         continue
                     except:
-                        try:
-                            if connect_campaign.owner.last_message_send_date == datetime.date.today() and \
-                                            connect_campaign.owner.message_count >= min(
-                                        MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT, connect_campaign.owner.message_limit_default):
-                                continue
+                        if connect_campaign.owner.last_message_send_date == datetime.date.today() and \
+                                        connect_campaign.owner.message_count >= min(
+                                    MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT, connect_campaign.owner.message_limit_default):
+                            continue
 
-                            if connect_campaign.owner.last_message_send_date != datetime.date.today():
-                                connect_campaign.owner.last_message_send_date = datetime.date.today()
-                                connect_campaign.owner.message_count = 0
-                                connect_campaign.owner.save()
-
-                            message = connect_campaign.format_message(contact)
-                            chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact,
-                                                       campaign=connect_campaign,
-                                                       text=message, time=timezone.now())
-                            chat_message.save()
-                            BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
-                                    name=connect_campaign)
-                            connect_campaign.owner.message_count += 1
+                        if connect_campaign.owner.last_message_send_date != datetime.date.today():
+                            connect_campaign.owner.last_message_send_date = datetime.date.today()
+                            connect_campaign.owner.message_count = 0
                             connect_campaign.owner.save()
-                        except:
-                            pass
+
+                        message = connect_campaign.format_message(contact)
+                        chat_message = ChatMessage(owner=connect_campaign.owner, contact=contact,
+                                                   campaign=connect_campaign,
+                                                   text=message, time=timezone.now())
+                        chat_message.save()
+                        BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
+                                name=connect_campaign)
+                        connect_campaign.owner.message_count += 1
+                        connect_campaign.owner.save()
+

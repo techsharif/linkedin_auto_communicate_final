@@ -1,5 +1,7 @@
 import datetime
 import json
+import re
+import calendar
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -24,8 +26,8 @@ from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskSt
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
-    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
-from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage
+    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm, STEP_TIMES
+from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage, CampaignStep
 from django.core.exceptions import ObjectDoesNotExist
 
 from messenger.utils import calculate_communication_stats, calculate_connections, calculate_dashboard_data, \
@@ -34,6 +36,11 @@ from messenger.utils import calculate_communication_stats, calculate_connections
 User = get_user_model()
 decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
+
+def cleanhtml(raw_html):
+  cleanr = re.compile('<.*?>')
+  cleantext = re.sub(cleanr, '', raw_html)
+  return cleantext
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -66,6 +73,7 @@ class AccountMixins(object):
                 ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
+        ctx['apk'] = self.kwargs.get('pk')
 
         # add this current account into context for
         ctx['account'] = get_object_or_404(LinkedInUser, pk=ctx['pk'],
@@ -482,7 +490,7 @@ class AccountCampaignCreate(AccountMessengerCreate):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
 
@@ -522,7 +530,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             print('data:', data)
 
             json_data = json.dumps(dict(data=data), default=Datedefault)
-            return HttpResponse(json_data, content_type='application/json')
+            return HttpResponse('{"ok"}', content_type='application/json')
 
         return super(AccountMessengerDetail, self).render_to_response(context, **response_kwargs)
 
@@ -603,6 +611,41 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
             return HttpResponse(json_data, content_type='application/json')
 
         return super(AccountMessengerDetail, self).form_invalid(form)
+
+    def post(self, request, pk):
+
+        print(request.POST)
+
+        if 'cpk' in request.POST.keys():
+            type = request.POST['type']
+            cpk = request.POST['cpk']
+
+            if type=='save':
+                fpk = request.POST['fpk']
+                message = request.POST['message']
+                message = cleanhtml(message)
+                if fpk=='init':
+                    campaign = Campaign.objects.get(pk=cpk)
+                    campaign.connection_message=message
+                    campaign.save()
+                else:
+                    campaign_step = CampaignStep.objects.get(pk=int(fpk))
+                    step = request.POST['step']
+                    campaign_step.message = message
+                    campaign_step.step_time=step
+                    campaign_step.save()
+                    return HttpResponse('{"ok":1}', content_type='application/json')
+            elif type=='add':
+                message = request.POST['message']
+                message = cleanhtml(message)
+                step = request.POST['step']
+                campaign = Campaign.objects.get(pk=cpk)
+                CampaignStep(message=message,step_time=step, campaign=campaign).save()
+
+                return HttpResponse('{"ok":1}', content_type='application/json')
+
+
+
 
 
 @method_decorator(decorators, name='dispatch')
@@ -725,3 +768,110 @@ class AccountTask_NEW(View):
         context['linkedin_user'] = linkedin_user
         context['pk'] = pk
         return render(request, self.template_name, context)
+
+@method_decorator(decorators, name='dispatch')
+class AccountFollowups(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign_steps = CampaignStep.objects.filter(campaign=campaign)
+        return render(request, 'v2/messenger/fillowup_list.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountFollowup(View):
+    def post(self, request):
+        print(request.POST)
+        if 'cpk' in request.POST.keys() and 'fpk' in request.POST.keys():
+            cpk = request.POST['cpk']
+            fpk = request.POST['fpk']
+            data = {}
+            data['cpk'] = cpk
+            data['fpk'] = fpk
+            if fpk == 'init':
+                campaign = Campaign.objects.get(pk=int(cpk))
+                data['name'] = "Initial Email"
+                data['message'] = campaign.connection_message
+
+            else:
+                campaign_step = CampaignStep.objects.get(pk=int(fpk))
+                data['name'] = "Followup Email"
+                data['step_time'] = campaign_step.step_time
+                data['message'] = campaign_step.message
+                data['steps'] = STEP_TIMES
+            return render(request, 'v2/messenger/data_stored.html', data)
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountNewFollowup(View):
+    def post(self, request):
+        data = {}
+        data['cpk'] = request.POST['cpk']
+        data['steps'] = STEP_TIMES
+        return render(request, 'v2/messenger/data_new.html', data)
+
+@method_decorator(decorators, name='dispatch')
+class AccountMessengerActive(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign.status = int(request.GET['active'])
+        campaign.save()
+        return HttpResponse('done')
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountFollowupDelete(View):
+    def post(self, request):
+        fpk = request.POST['fpk']
+        campaign_step = CampaignStep.objects.get(pk=int(fpk))
+        campaign_step.delete()
+        return HttpResponse('done')
+
+@method_decorator(csrf_exempt_decorators, name='dispatch')
+class AccountReport(View):
+    
+    def get(self, request, pk):
+        print("pk",request)  
+        data={}
+        data.update({'pk':pk})
+        return render(request, 'v2/account/account_report.html',data)
+
+    def post(self,request,pk):
+        data={}
+        data.update({'pk':pk})
+        start =  request.POST.get('start_date')
+        end = request.POST.get('end_date')    
+        start_in = start
+        end_in = end 
+        
+        start_out = datetime.datetime(*[int(v) for v in start_in.replace('T', '-').replace(':', '-').split('-')])
+        
+        end_out = datetime.datetime(*[int(v) for v in end_in.replace('T', '-').replace(':', '-').split('-')])
+        
+        print ("----",start_out.date(),type(start_out.date()))
+        year_filter = start_out.year
+        if end_out < start_out:
+            
+            data.update({'pk':pk,'msg':"End Date is greaterthan start date"})
+            return render(request, 'v2/account/account_report.html',data)
+
+        searchobj = Search.objects.filter(owner=pk,searchdate__range=(start_out,end_out))    
+        conncetion_request_sent = 0
+        if searchobj:
+
+            for obj in searchobj:
+                request_sent = SearchResult.objects.filter(owner=pk,search=obj.id,status=ContactStatus.CONNECT_REQ_N).count()
+                conncetion_request_sent = conncetion_request_sent + request_sent
+                            
+        inv_accepted = Inbox.objects.filter(owner_id=pk,connected_date__range=(start_out,end_out)).count()
+        number_of_conn = Inbox.objects.filter(owner_id=pk,is_connected=1).count()
+        year_data = []
+        for x in range(1,13):
+            month_con = "Month(connected_date)='" + str(x) +"'"   
+            year_con = "year(connected_date)='" + str(year_filter) + "'"
+            owner_id = "owner_id='" + str(pk) + "'"    
+            month_x = Inbox.objects.extra(where=[month_con, year_con,owner_id]).count()
+            year_data.append({'y':month_x,"indexLabel":calendar.month_name[x]})
+
+        
+
+        data.update({'pk':pk,'inv_accepted':inv_accepted,"number_of_conn":number_of_conn,"conncetion_request_sent":conncetion_request_sent,"graph":json.dumps(year_data),"year_filter":year_filter})
+        return render(request, 'v2/account/account_report.html',data)
+
+

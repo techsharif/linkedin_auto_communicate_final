@@ -166,6 +166,8 @@ class ContactField(CommonContactField):
         abstract = True
 
 
+
+
 # this is not a real entity, the list inbox with is_connected = True
 """
 class Contact(TimeStampedModel, ContactField):
@@ -244,7 +246,15 @@ class Campaign(TimeStampedModel):
     def count_sends(self):
         return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
 
-
+    def connected_count(self):
+        # messenger one, all are connected
+        if self.is_bulk:
+            return 0
+        
+        qs = self.contacts.exclude(connected_date=None).filter(is_connected=True)
+        return qs.count()
+        
+        
 
 
 class CampaignStepField(models.Model):
@@ -357,5 +367,9 @@ class Inbox(ContactField):
         self.change_status(ContactStatus.IN_QUEUE_N)
         campaign.contacts.add(self)
 
-    # def first_name(self):
-    #     return self.name.split(' ')[0]
+    def first_name(self):
+
+        if self.first_name is not None:
+            return self.first_name
+        else:
+            return self.name.split(' ')[0]

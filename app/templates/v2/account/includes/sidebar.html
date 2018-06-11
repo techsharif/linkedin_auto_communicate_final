@@ -16,14 +16,14 @@
         <li class="nav-item">
             <a class="nav-link {% if request.path == '/dashboard/' %} active {% endif %}" href="{% url 'account-detail' pk=pk %}">
                 <i class="batch-icon batch-icon-browser-alt"></i>
-                Home
+                Dashboard
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {% if 'network' in request.path %} active {% endif %}" href="{% url 'account-network' pk=pk %}">
                 <i class="batch-icon batch-icon-users"></i>
-                My Network
+                Existing Connections
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
@@ -64,6 +64,15 @@
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if 'report' in request.path %} active {% endif %}" href="{% url 'account-report' pk=pk %}">
+                <i class="batch-icon batch-icon-list-alt"></i>
+                Report
+                <span class="batch-icon batch-icon-arrow-right pull-right"></span>
+            </a>
+        </li>
+
     </ul>
 </nav>
 
