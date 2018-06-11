@@ -426,6 +426,7 @@ class AccountSearch(View):
 
     def post(self, request, pk):
         search_form = SearchForm(request.POST)
+        print('this is search post', search_form.is_valid)
         if search_form.is_valid():
             search = search_form.save(commit=False)
             linkedin_user = LinkedInUser.objects.get(pk=pk)
@@ -674,9 +675,6 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                 CampaignStep(message=message,step_time=step, campaign=campaign).save()
 
                 return HttpResponse('{"ok":1}', content_type='application/json')
-
-
-
 
 
 @method_decorator(decorators, name='dispatch')
