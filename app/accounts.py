@@ -865,9 +865,10 @@ class AccountReport(View):
 
     def post(self,request,pk):
         data={}
-        data.update({'pk':pk})
         start =  request.POST.get('opt')
-        end = request.POST.get('start')    
+        end = request.POST.get('start')
+        last = request.POST.get('start')
+        data.update({'pk':pk,"last":last})    
         start_in = start
         end_in = end 
         today = datetime.datetime.now()
@@ -876,26 +877,29 @@ class AccountReport(View):
             end = today - datetime.timedelta(days=int(end))
             start_out =  end
             end_out = today
+            data.update({'day':1}) 
 
         if start == "week":
             week_days = (int(end) * 7)
             st_date = today - datetime.timedelta(days=int(week_days))
             start_out =  st_date
             end_out = today
-
+            data.update({'week':1})
 
         if start == "month":
             
             st_date = today - relativedelta(months=int(end))
             start_out =  st_date
-            end_out = today 
+            end_out = today
+            data.update({'month':1}) 
 
         if start == "quarter":
             
             quarter = (int(end) * 4)
             st_date = today - relativedelta(months=int(quarter))
             start_out =  st_date
-            end_out = today                 
+            end_out = today
+            data.update({'quarter':1})                 
 
 
         # start_out = datetime.datetime(*[int(v) for v in start_in.replace('T', '-').replace(':', '-').split('-')])
