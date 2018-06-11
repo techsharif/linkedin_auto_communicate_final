@@ -8,7 +8,7 @@
 						<div class="box-body">
 							<div class="form-group">
 								<label>
-                                    {%if not messenger %}Connection {%endif%}Message
+                                    {%if not messenger %}Connection {%endif%}Thanks for connecting with me message
 
 
 
@@ -20,7 +20,7 @@
                                         <button type="button" onclick="addText(this, '{Title}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Title</button>
                                     </div>
 								{% render_field form.connection_message  maxlength="300" style="height: 8rem;" %}
-                                <small class="form-text text-muted" style="margin-top:-.50rem">Chars </small>
+                                <small class="form-text text-muted" style="margin-top:-.50rem">Chars 300</small>
 							</div>
 
 						</div>
@@ -40,10 +40,11 @@
                             $(this).next('small').removeClass('text-danger')
                             var txt_count = $(this).val().length ;
                             if(parseInt(txt_count)>=300){
-                                $(this).next('small').text('Please enter the less than 300 character.').addClass('text-danger');
-                            }else{
-                                $(this).next('small').text('Chars ' + txt_count);
+                                $(this).next('small').text('Message is maxium 300 chars.').addClass('text-danger');
                             }
+                            //else{
+                            //    $(this).next('small').text('Chars ' + txt_count);
+                            //}
 
 
                         }catch (e){}
@@ -56,12 +57,14 @@
                 $('textarea').bind('input propertychange', function(e) {
                     $(e.target).next('small').removeClass('text-danger');
                     var txt_count = $(e.target).val().length ;
-                    $(e.target).next('small').text('Chars ' + txt_count)
+                    //$(e.target).next('small').text('Chars ' + txt_count)
                     if(parseInt(txt_count)>=300){
-                        $(e.target).next('small').text('Please enter the less than 300 character.').addClass('text-danger');
-                    }else{
-                        $(e.target).next('small').text('Chars ' + txt_count);
+                        $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
+                        swal("alert!", 'Message is maxium 300 chars!', "error");
                     }
+                    //else{
+                      //  $(e.target).next('small').text('Chars ' + txt_count);
+                    //}
 
                 });
 
@@ -69,7 +72,11 @@
                     $(e).parent().next('textarea').next('small').removeClass('text-danger');
                     $(e).parent().next('textarea').append(val);
                     var txt_count = $(e).parent().next('textarea').val().length ;
-                   $(e).parent().next('textarea').next('small').text('Chars ' + txt_count).addClass('text-danger');
+                    if(parseInt(txt_count)>=300){
+                        $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
+                        swal("alert!", 'Message is maxium 300 chars!', "error");
+                    }
+                   //$(e).parent().next('textarea').next('small').text('Chars ' + txt_count).addClass('text-danger');
 
                 }
 
