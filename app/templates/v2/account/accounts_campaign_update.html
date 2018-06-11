@@ -35,7 +35,7 @@
                                     <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="steps-tab" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
+                                    <a class="nav-link" id="steps-tab" onclick="loadTextCount()" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
                                 </li>
 
 
@@ -55,9 +55,6 @@
                                     {% include 'account/campaign/tab_3.html' %}
                                 </div>
                                 <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-
-
-                                    <!-- /.tab-pane -->
                                     {% include 'v2/account/campaign/tab_4.html' %}
                                 </div>
                             </div>
@@ -79,6 +76,7 @@
     {% include 'app/includes/campaigns/page_footer.html' %}
     <script>
         $('.table').DataTable()
+
     </script>
 
     <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
