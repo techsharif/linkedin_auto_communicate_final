@@ -43,9 +43,10 @@
                             if(parseInt(txt_count)>=300){
                                 $(this).next('small').text('Message is maxium 300 chars.').addClass('text-danger');
                             }
-                            //else{
-                            //    $(this).next('small').text('Chars ' + txt_count);
-                            //}
+                            else{
+                                var remain_count = 300 - parseInt(txt_count)
+                                $(this).next('small').text('Chars ' + remain_count);
+                            }
 
 
                         }catch (e){}
@@ -63,9 +64,10 @@
                         $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
                         swal("alert!", 'Message is maxium 300 chars!', "error");
                     }
-                    //else{
-                      //  $(e.target).next('small').text('Chars ' + txt_count);
-                    //}
+                    else{
+                        var remain_count = 300 - parseInt(txt_count)
+                        $(e.target).next('small').text('Chars ' + remain_count);
+                    }
 
                 });
 
@@ -76,6 +78,9 @@
                     if(parseInt(txt_count)>=300){
                         $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
                         swal("alert!", 'Message is maxium 300 chars!', "error");
+                    }else{
+                        var remain_count = 300 - parseInt(txt_count)
+                        $(e).parent().next('textarea').next('small').text('Chars ' + remain_count)   //.addClass('text-danger');
                     }
                    //$(e).parent().next('textarea').next('small').text('Chars ' + txt_count).addClass('text-danger');
 
