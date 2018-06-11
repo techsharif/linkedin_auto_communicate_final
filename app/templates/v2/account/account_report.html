@@ -54,7 +54,7 @@
                 <h3>Connection Report</h3>
             </div>
             <!-- /.box-header -->
-            <div class="card-body" id="bulk_campaigns_list">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-datatable table-striped table-hover">
                         <thead>
@@ -75,7 +75,7 @@
                                 </td>
                                 <td>{{ inv_accepted }}</td>
                                 <td>{{ number_of_conn }}</td>
-                                <td>{{ con_growth }} </td>
+                                <td>{{ con_growth |floatformat:2 }} </td>
                             </tr>
                         
                         </tbody>
