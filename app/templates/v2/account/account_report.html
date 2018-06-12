@@ -2,33 +2,7 @@
 {% load static %}
 {% block title %} Report{% endblock title %}
 {% block head %}
-    {% autoescape off %}
-    <script type="text/javascript">
-window.onload = function () {
    
-    var chart = new CanvasJS.Chart("chartContainer",
-    {
-        title:{
-            text: "Connection Report Each month " 
-        },
-        legend: {
-            maxWidth: 350,
-            itemWidth: 120
-        },
-        data: [
-        {
-            type: "pie",
-            showInLegend: true,
-            legendText: "{indexLabel}",
-            dataPoints: {{ graph }}
-        }
-        ]
-    });
-    chart.render();
-}
-</script>
-{% endautoescape %}
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 {% endblock %}
 {% block content %}
 <div class="row mb-5 justify-content-md-center">
@@ -47,14 +21,21 @@ window.onload = function () {
                     <form id="form-add" method="post">
                         {% csrf_token %}
                         
-                            <br>
                             <div class="form-group">
-                                <label class="control-label">Start Date</label>
-                                <input type="datetime-local" class="date_time form-control" autocomplete="off" name="start_date" required>
-                                <br>
-                                <label class="control-label">End Date
+                                       
+                                <label class="control-label">Last
                                 </label>
-                                <input type="datetime-local" class="date_time form-control" autocomplete="off"  name="end_date" required>
+                                <input type="number"  class="form-control" autocomplete="off"  
+                                name="start" value= {{ last }} required>
+                                <br>
+                                
+                                <label class="control-label">Calendar</label>
+                                <select class="form-control"  name="opt">
+                                        <option value="day" {% if day %} selected {% endif %}">Day</option>
+                                        <option value="week" {% if week %} selected {% endif %}">Week</option>
+                                        <option value="month" {% if month %} selected {% endif %}">Month</option>
+                                        <option value="quarter" {% if quarter %} selected {% endif %}">Quarter</option>
+                                </select> 
 
                             </div>
                             
@@ -73,7 +54,7 @@ window.onload = function () {
                 <h3>Connection Report</h3>
             </div>
             <!-- /.box-header -->
-            <div class="card-body" id="bulk_campaigns_list">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-datatable table-striped table-hover">
                         <thead>
@@ -81,6 +62,7 @@ window.onload = function () {
                             <th>connection invitations</th>
                             <th>Invitations Accepted</th>
                             <th>Number of existing contacts</th>
+                            <th>Connection Growth </th>
                             
                         </tr>
                         </thead>
@@ -93,6 +75,7 @@ window.onload = function () {
                                 </td>
                                 <td>{{ inv_accepted }}</td>
                                 <td>{{ number_of_conn }}</td>
+                                <td>{{ con_growth |floatformat:2 }} </td>
                             </tr>
                         
                         </tbody>
@@ -102,19 +85,7 @@ window.onload = function () {
         </div>
     </div>
     {% endif %}
-    {% if graph %}
-     <div class="col-md-12">
-        <div class="card">
-            <!-- <div class="card-header">
-                <h3>Connection Report Graph  </h3>
-            </div> -->
-            <!-- /.box-header -->
-            <div class="card-body" id="bulk_campaigns_list">
-               <div id="chartContainer" style="height: 300px; width: 100%;"></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+    
 
     
 

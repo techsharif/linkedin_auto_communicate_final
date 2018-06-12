@@ -110,7 +110,6 @@ $(document).ready(function () {
         $('#search_name').value = '';
         $('#search_url').value = '';
         $('#search_sales').value = '';
-
         $('#add_search').modal('show');
     });
 
@@ -165,8 +164,8 @@ $(document).ready(function () {
             $('#search_sales').parent().removeClass('has-error');
         }
         if (error == 0)
+            console.log('submiting')
             $('#add_search').submit();
-
         console.log(error)
 
     });

@@ -146,7 +146,9 @@ $(document).ready(function () {
             $('#search_sales').parent().removeClass('has-error');
         }
         if (error == 0)
-            $('#add_search').submit();
+            console.log('here');
+            return;
+            // $('#add_search').submit();
 
         console.log(error)
 

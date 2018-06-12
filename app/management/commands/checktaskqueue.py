@@ -22,13 +22,10 @@ class Command(BaseCommand):
         self.check_or_add_campaign_task()
 
     def check_or_add_search_task(self):
-
         pending_task_list = BotTask.objects.filter(task_type=BotTaskType.SEARCH).exclude(
             status__in=[BotTaskStatus.DONE, BotTaskStatus.ERROR])
         for pending_task in pending_task_list:
-
             try:
-
                 search = Search.objects.get(id=pending_task.extra_id)
                 queue_type = ContentType.objects.get_for_model(search)
                 task_queue = TaskQueue.objects.filter(object_id=search.id, queue_type=queue_type)
@@ -54,9 +51,10 @@ class Command(BaseCommand):
                 task_type = BotTaskType.POSTMESSAGE if connect_campaign.is_bulk else BotTaskType.POSTCONNECT
                 if not task_queue:
                     TaskQueue(owner=connect_campaign.owner, content_object=connect_campaign).save()
-
                 for contact in contacts:
                     try:
+                        print('contact', contact, 'campaign', connect_campaign)
+
                         get_chat_message = ChatMessage.objects.get(owner=connect_campaign.owner, contact=contact,
                                                                    campaign=connect_campaign)
 
@@ -83,8 +81,8 @@ class Command(BaseCommand):
                                                    campaign=connect_campaign,
                                                    text=message, time=timezone.now())
                         chat_message.save()
-                        BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
+                        bot_task = BotTask(owner=connect_campaign.owner, task_type=task_type, extra_id=chat_message.id,
                                 name=connect_campaign)
+                        bot_task.save()
                         connect_campaign.owner.message_count += 1
                         connect_campaign.owner.save()
-
