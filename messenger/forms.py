@@ -7,7 +7,7 @@ from django.forms.models import inlineformset_factory
 
 css_form_attrs = {'class': 'form-control',
                   'placeholder': 'Textarea'}
-textarea_css = {'class': 'summernote'}
+textarea_css = {'class': ''}
 # textarea_css.update({'rows': 20})
 
 
