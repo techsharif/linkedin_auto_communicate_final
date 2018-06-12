@@ -4,7 +4,6 @@ import re
 import calendar
 from dateutil.relativedelta import relativedelta
 
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -28,11 +27,12 @@ from app.models import LinkedInUser, Membership, BotTask, BotTaskType, BotTaskSt
 from checkuser.checkuser import exist_user
 from connector.models import Search, TaskQueue, SearchResult
 from messenger.forms import CreateCampaignForm, CreateCampaignMesgForm, \
-    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm
+    UpdateCampWelcomeForm, InlineCampaignStepFormSet, UpdateCampConnectForm, STEP_TIMES
 from messenger.models import Inbox, ContactStatus, Campaign, ChatMessage, CampaignStep
 from django.core.exceptions import ObjectDoesNotExist
 
-from messenger.utils import calculate_communication_stats, calculate_connections
+from messenger.utils import calculate_communication_stats, calculate_connections, calculate_dashboard_data, \
+    calculate_connection_stat_graph, calculate_map_data
 
 User = get_user_model()
 decorators = (never_cache, login_required,)
@@ -71,11 +71,11 @@ def calculate_report_data(owner,start_date,end_date):
     }
 
 
+
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
   cleantext = re.sub(cleanr, '', raw_html)
   return cleantext
-
 
 @method_decorator(decorators, name='dispatch')
 class AccountList(ListView):
@@ -86,7 +86,7 @@ class AccountList(ListView):
         qs = super(AccountList, self).get_queryset()
         qs = qs.filter(user=self.request.user)
         return qs
-      
+
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
@@ -100,7 +100,7 @@ class RemoveAccount(View):
 class AccountMixins(object):
     def get_context_data(self, **kwargs):
         ctx = super(AccountMixins, self).get_context_data(**kwargs)
-        # pk here is pk of linkeduser table, 
+        # pk here is pk of linkeduser table,
         if 'object' in ctx:
             if isinstance(ctx['object'], Campaign):
                 ctx['pk'] = ctx['object'].owner_id
@@ -108,6 +108,7 @@ class AccountMixins(object):
                 ctx['pk'] = ctx['object'].id
         else:
             ctx['pk'] = self.kwargs.get('pk')
+        ctx['apk'] = self.kwargs.get('pk')
 
         # add this current account into context for
         ctx['account'] = get_object_or_404(LinkedInUser, pk=ctx['pk'],
@@ -139,7 +140,6 @@ class AccountDetail(AccountMixins, DetailView):
         linkedIn_user = ctx['object']
         ctx['linkedin_user'] = self.object
         ctx['pk'] = self.object.pk
-
         ctx['connection'] = calculate_connections(self.object.pk, self.status)
         camp_qs = Campaign.objects.filter(owner=linkedIn_user)
         ctx['messengers'] = camp_qs.filter(is_bulk=True)
@@ -147,6 +147,10 @@ class AccountDetail(AccountMixins, DetailView):
         ctx['account_home'] = True
         ctx['upcoming_tasks'] = TaskQueue.objects.filter(owner=self.object).exclude(status=BotTaskStatus.DONE)
         ctx['calculate_communication_stats'] = calculate_communication_stats(self.object.pk)
+        ctx['total_campaign_contact_list'] = Inbox.objects.filter(owner=self.object)
+        ctx['dashboard_data'] = calculate_dashboard_data(self.object)
+        ctx['connection_stat'] = calculate_connection_stat_graph(self.object)
+        ctx['map'] = calculate_map_data(self.object)
 
         return ctx
 
@@ -154,7 +158,7 @@ class AccountDetail(AccountMixins, DetailView):
 @method_decorator(decorators, name='dispatch')
 class AccountSettings(UpdateView):
     model = LinkedInUser
-    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status']
+    fields = ['start_from', 'start_to', 'is_weekendwork', 'tz', 'status','message_limit_default']
     template_name = 'account/account_settings.html'
 
     def get_success_url(self):
@@ -334,9 +338,15 @@ class DataTable(object):
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
             # data = serializers.serialize('json', context['object_list'])
-            data = [list(x) for x in context['object_list']]
+            # data = [list(x) for x in context['object_list']]
+            _data = []
+            for x in context['object_list']:
+                list_data = list(x)
+                if list_data[6] is not None:
+                    list_data[6] = list_data[6].strftime('%b/%d/%Y %H:%M %p')
+                _data.append(list_data)
 
-            json_data = json.dumps(dict(data=data), default=Datedefault)
+            json_data = json.dumps(dict(data=_data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
 
         return super(DataTable, self).render_to_response(context, **response_kwargs)
@@ -363,7 +373,8 @@ class DataTable(object):
 
         ctx['object_list_default'] = ctx['object_list']
         for cc in ctx['object_list_default']:
-            print(cc.__dict__)
+            print('--------', cc.__dict__, '\n')
+            pass
         ctx['object_list'] = []
 
         return ctx
@@ -419,7 +430,6 @@ class AccountSearch(View):
 
     def post(self, request, pk):
         search_form = SearchForm(request.POST)
-        print('this is search post', search_form.is_valid)
         if search_form.is_valid():
             search = search_form.save(commit=False)
             linkedin_user = LinkedInUser.objects.get(pk=pk)
@@ -488,6 +498,7 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         data = self.get_context_data()
         acc_id = self.kwargs.get('pk')
         # print('data:', self.kwargs, data)
+
         camp = form.instance
         camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
@@ -514,11 +525,12 @@ class AccountCampaignCreate(AccountMessengerCreate):
         return reverse_lazy('account-campaign', kwargs=self.kwargs)
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountMessengerDelete(AccountMixins, DeleteView):
     model = Campaign
 
     def delete(self, request, *args, **kwargs):
+        print('request')
         self.get_object().delete()
         payload = {'deleted': 'ok'}
         return JsonResponse(json.dumps(payload), safe=False)
@@ -540,7 +552,7 @@ class AccountMessengerActive(View):
 
 
 @method_decorator(decorators, name='dispatch')
-class AccountMessengerDetail(AccountMixins, UpdateView):
+class AccountMessengerDetailNEW(AccountMixins, UpdateView):
     template_name = 'v2/account/accounts_messenger_update.html'
     form_class = UpdateCampConnectForm
     model = Campaign
@@ -554,6 +566,105 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
             json_data = json.dumps(dict(data=data), default=Datedefault)
             return HttpResponse(json_data, content_type='application/json')
+
+        return super(AccountMessengerDetailNEW, self).render_to_response(context, **response_kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(AccountMessengerDetailNEW, self).get_context_data(**kwargs)
+        row = data['object']
+        print('row object:', row, type(row))
+        if self.request.POST:
+            data['campaignsteps'] = InlineCampaignStepFormSet(self.request.POST,
+                                                              instance=row)
+        else:
+            data['campaignsteps'] = InlineCampaignStepFormSet(instance=row)
+
+        contact_count = row.contacts.all().count()
+        message_contacts = []
+        reply_contacts = []
+
+        messages = ChatMessage.objects.filter(campaign=row)
+        for message in messages:
+            if message.is_direct:
+                message_contacts += [message.contact.pk]
+                if message.replied_date:
+                    reply_contacts += [message.contact.pk]
+
+        message_contacts = len(set(message_contacts))
+        reply_contacts = len(set(reply_contacts))
+
+        # contact_count = 50
+        # message_contacts = 35
+        # reply_contacts = 17
+        message_percent = int(message_contacts / contact_count * 100) if contact_count else 0
+        reply_percent = int(reply_contacts / contact_count * 100) if contact_count else 0
+        message_above_50 = True if message_percent > 50 else False
+        reply_above_50 = True if reply_percent > 50 else False
+        data['contacts_stat'] = {
+            'contacts': contact_count,
+            'message_contacts': message_contacts,
+            'message_percent': message_percent,
+            'reply_contacts': reply_contacts,
+            'reply_percent': reply_percent,
+            'message_above_50': message_above_50,
+            'reply_above_50': reply_above_50
+        }
+
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        campaignsteps = context['campaignsteps']
+        print('form_valid form:', form.is_valid(), form.errors)
+
+        with transaction.atomic():
+            self.object = form.save()
+            print('campaignsteps:', campaignsteps.is_valid(), campaignsteps.errors)
+            if campaignsteps.is_valid():
+                campaignsteps.instance = self.object
+                campaignsteps.save()
+                print('campaignsteps:', campaignsteps)
+                if self.request.is_ajax():
+                    payload = {'ok': True}
+                    return JsonResponse(json.dumps(payload), safe=False)
+            else:
+
+                if self.request.is_ajax():
+                    payload = {'error': campaignsteps.errors}
+                    return JsonResponse(json.dumps(payload), safe=False)
+
+        return super(AccountMessengerDetailNEW, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('messenger-campaign', kwargs=self.kwargs)
+
+    def form_invalid(self, form):
+        print('form invalid:', form.errors)
+        if self.request.is_ajax():
+            context = dict(error=form.errors)
+            json_data = json.dumps(context)
+            return HttpResponse(json_data, content_type='application/json')
+
+        return super(AccountMessengerDetailNEW, self).form_invalid(form)
+
+
+
+
+@method_decorator(decorators, name='dispatch')
+class AccountMessengerDetail(AccountMixins, UpdateView):
+    template_name = 'v2/account/accounts_messenger_update.html'
+    form_class = UpdateCampConnectForm
+    model = Campaign
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            data = [[x.id, x.name, x.company, x.industry,
+                     x.title, x.location, x.latest_activity,
+                     "", x.status, x.campaigns.first().is_bulk] for x in context['object'].contacts.all()]
+            print('data:', data)
+
+            json_data = json.dumps(dict(data=data), default=Datedefault)
+            return HttpResponse('{"ok"}', content_type='application/json')
 
         return super(AccountMessengerDetail, self).render_to_response(context, **response_kwargs)
 
@@ -636,13 +747,16 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         return super(AccountMessengerDetail, self).form_invalid(form)
 
     def post(self, request, pk):
+
+        print(request.POST)
+
         if 'cpk' in request.POST.keys():
-            type = request.POST.get('type')
-            cpk = request.POST.get('cpk')
+            type = request.POST['type']
+            cpk = request.POST['cpk']
 
             if type=='save':
-                fpk = request.POST.get('fpk')
-                message = request.POST.get('message')
+                fpk = request.POST['fpk']
+                message = request.POST['message']
                 message = cleanhtml(message)
                 if fpk=='init':
                     campaign = Campaign.objects.get(pk=cpk)
@@ -650,15 +764,15 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                     campaign.save()
                 else:
                     campaign_step = CampaignStep.objects.get(pk=int(fpk))
-                    step = request.POST.get('step')
+                    step = request.POST['step']
                     campaign_step.message = message
                     campaign_step.step_time=step
                     campaign_step.save()
                     return HttpResponse('{"ok":1}', content_type='application/json')
             elif type=='add':
-                message = request.POST.get('message')
+                message = request.POST['message']
                 message = cleanhtml(message)
-                step = request.POST.get('step')
+                step = request.POST['step']
                 campaign = Campaign.objects.get(pk=cpk)
                 CampaignStep(message=message,step_time=step, campaign=campaign).save()
 
@@ -666,8 +780,10 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
 
 
+
+
 @method_decorator(decorators, name='dispatch')
-class AccountCampaignDetail(AccountMessengerDetail):
+class AccountCampaignDetail(AccountMessengerDetailNEW):
     template_name = 'v2/account/accounts_campaign_update.html'
     form_class = UpdateCampConnectForm
 
@@ -750,21 +866,27 @@ class SearchResultView(View):
         elif 'selected_items' in request.POST.keys():
             item += [int(request.POST.get('selected_items'))]
         elif 'add_all_selected_item_button' in request.POST.keys():
-            search_results = SearchResult.objects.filter(search=search, status=None)
-            search_results.update(status=ContactStatus.IN_QUEUE_N)
+            if 'campaign' in request.POST.keys():
+                campaign = Campaign.objects.get(id=int(request.POST['campaign']))
+                search_results = SearchResult.objects.filter(search=search, status=ContactStatus.CONNECT_REQ_N)
+                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
+                print('here', campaign)
+                # self._clone_to_contact(search_results, campaign)
 
         if item:
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
-                # attache to a campagn                
+                # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      connect_campaign=campaign)
+                                      connect_campaign=campaign,)
                 self._clone_to_contact(search_results, campaign)
+                print('here', campaign)
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'v2/account/search_render/search_render.html',
                       {'search': search, 'search_results': search_results})
+
 
 @method_decorator(decorators, name='dispatch')
 class AccountTask_NEW(View):
@@ -781,15 +903,12 @@ class AccountTask_NEW(View):
         context['pk'] = pk
         return render(request, self.template_name, context)
 
-
-
 @method_decorator(decorators, name='dispatch')
 class AccountFollowups(View):
     def get(self, request, pk):
         campaign = Campaign.objects.get(pk=pk)
         campaign_steps = CampaignStep.objects.filter(campaign=campaign)
         return render(request, 'v2/messenger/fillowup_list.html', {'campaign_steps':campaign_steps, 'campaign':campaign})
-
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountFollowup(View):
@@ -822,6 +941,13 @@ class AccountNewFollowup(View):
         data['steps'] = STEP_TIMES
         return render(request, 'v2/messenger/data_new.html', data)
 
+@method_decorator(decorators, name='dispatch')
+class AccountMessengerActive(View):
+    def get(self, request, pk):
+        campaign = Campaign.objects.get(pk=pk)
+        campaign.status = int(request.GET['active'])
+        campaign.save()
+        return HttpResponse('done')
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountFollowupDelete(View):
@@ -831,33 +957,10 @@ class AccountFollowupDelete(View):
         campaign_step.delete()
         return HttpResponse('done')
 
-
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountReport(View):
-
+    
     def get(self, request, pk):
-        print("pk", request)
-        data = {}
-        data.update({'pk': pk})
-        return render(request, 'v2/account/account_report.html', data)
-
-    def post(self, request, pk):
-        data = {}
-        data.update({'pk': pk})
-        start = request.POST.get('start_date')
-        end = request.POST.get('end_date')
-        start_in = start
-        end_in = end
-
-        start_out = datetime.datetime(*[int(v) for v in start_in.replace('T', '-').replace(':', '-').split('-')])
-
-        end_out = datetime.datetime(*[int(v) for v in end_in.replace('T', '-').replace(':', '-').split('-')])
-
-        print ("----", start_out.date(), type(start_out.date()))
-        year_filter = start_out.year
-        if end_out < start_out:
-            data.update({'pk': pk, 'msg': "End Date is greaterthan start date"})
-            return render(request, 'v2/account/account_report.html', data)
         print("pk",request)  
         data={}
         data.update({'pk':pk})
@@ -937,7 +1040,7 @@ class AccountReport(View):
         #              "year_filter": year_filter})
         # return render(request, 'v2/account/account_report.html', data)
         dash = calculate_report_data(pk,start_out,end_out)                    
-        inv_accepted = dash['accept_inv']
+        inv_accepted = Inbox.objects.filter(owner_id=pk,connected_date__range=(start_out,end_out)).count()
         inv_accepted_before_start_date = Inbox.objects.filter(owner_id=pk,connected_date__lte=(start_out),is_connected=1).count()
         print("---",inv_accepted_before_start_date)
         number_of_conn = Inbox.objects.filter(owner_id=pk,is_connected=1).count()
