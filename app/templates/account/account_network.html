@@ -12,13 +12,13 @@
                 <div class="card-header" role="tab" id="headingOne">
                     <h5 class="mb-0">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Want to communicate with your existing network?
+                            Send Messages to Your Existing Connections.
                         </a>
                     </h5>
                 </div>
 
                 <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-body">
+                    <div class="card-body pad-reduce">
                         Now you can manage with ease messaging Existing Connections. Have different Existing Connections in different Campaigns or No Campaigns. You have full control.
 Direct Chat allows to to not leave the platform to manage an active conversation, also you now can with one click see all active conversations.
                     </div>
@@ -111,6 +111,11 @@ Direct Chat allows to to not leave the platform to manage an active conversation
     }
     .hidden{
         display: none;
+    }
+    .pad-reduce{
+
+        padding: 1.0rem !important;
+
     }
  </style>
 {% endblock %} {% block pagefooter %} {% include 'app/includes/datatable_pagefooter.html' %}

@@ -1,12 +1,27 @@
 {% csrf_token %}
+{% load widget_tweaks %}
+
 
 			<div class="row">
 				<div class="col-md-9">
 					<div class="box">
 						<div class="box-body">
 							<div class="form-group">
-								<label>{%if not messenger %}Connection {%endif%}Message</label>
-								{{form.connection_message}}
+								<label>
+                                    {%if not messenger %}Connection {%endif%}Please connect with me message
+
+
+
+                                </label>
+                                    <div class="note-btn-group btn-group note-mybutton float-right">
+
+                                        <button type="button" onclick="addText(this, '{FirstName}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">First name</button>
+                                        <button type="button" onclick="addText(this, '{Company}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Company</button>
+                                        <button type="button" onclick="addText(this, '{Title}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Title</button>
+                                        <button type="button" onclick="addText(this, '{Location}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Location</button>
+                                    </div>
+								{% render_field form.connection_message  maxlength="300" style="height: 8rem;" %}
+                                <small class="form-text text-muted" style="margin-top:-.50rem">Chars 300</small>
 							</div>
 
 						</div>
@@ -18,5 +33,60 @@
 
 				</div>
 				{% include 'app/includes/campaigns/msg_var.html' %}
+            <script>
+                function loadTextCount() {
+                    $("textarea").each(function(e){
+                        try{
+
+                            $(this).next('small').removeClass('text-danger')
+                            var txt_count = $(this).val().length ;
+                            if(parseInt(txt_count)>=300){
+                                $(this).next('small').text('Message is maxium 300 chars.').addClass('text-danger');
+                            }
+                            else{
+                                var remain_count = 300 - parseInt(txt_count)
+                                $(this).next('small').text('Chars ' + remain_count);
+                            }
+
+
+                        }catch (e){}
+
+
+                    });
+                }
+
+
+                $('textarea').bind('input propertychange', function(e) {
+                    $(e.target).next('small').removeClass('text-danger');
+                    var txt_count = $(e.target).val().length ;
+                    //$(e.target).next('small').text('Chars ' + txt_count)
+                    if(parseInt(txt_count)>=300){
+                        $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
+                        swal("alert!", 'Message is maxium 300 chars!', "error");
+                    }
+                    else{
+                        var remain_count = 300 - parseInt(txt_count)
+                        $(e.target).next('small').text('Chars ' + remain_count);
+                    }
+
+                });
+
+                function addText(e,val){
+                    $(e).parent().next('textarea').next('small').removeClass('text-danger');
+                    $(e).parent().next('textarea').append(val);
+                    var txt_count = $(e).parent().next('textarea').val().length ;
+                    if(parseInt(txt_count)>=300){
+                        $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
+                        swal("alert!", 'Message is maxium 300 chars!', "error");
+                    }else{
+                        var remain_count = 300 - parseInt(txt_count)
+                        $(e).parent().next('textarea').next('small').text('Chars ' + remain_count)   //.addClass('text-danger');
+                    }
+                   //$(e).parent().next('textarea').next('small').text('Chars ' + txt_count).addClass('text-danger');
+
+                }
+
+            </script>
+
 
 			</div>

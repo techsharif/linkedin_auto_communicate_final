@@ -25,13 +25,17 @@
 
                     
                 </div>
+
+
                 
-                
-            	{% endfor %}	
+            	{% endfor %}
+
 				{{ campaignsteps.management_form }}
 
 
 		</div>
+                <input type="hidden" name="cpk" value="{{ pk }}">
+
     <input type="submit" class="btn btn-primary btn-block btn-save bg-primary bg-gradient" style="width: 210px !important;" name="save" value="SAVE">
 	</div>            		
             		
