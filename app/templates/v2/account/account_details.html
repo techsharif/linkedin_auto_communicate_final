@@ -354,7 +354,13 @@
 {% block script %}
     <script type="text/javascript" src="{% static 'assets/jvmap/maps/jquery.vmap.world.js' %}"></script>
     <script>
-        var sample_data = {{ map.map_data|safe }};
+        
+        {% if map.map_data %}
+            var sample_data = {{ map.map_data|safe }};
+        {% else %}
+             var sample_data = 0;
+        {% endif %}
+
     </script>
 
     <script>
@@ -409,8 +415,13 @@
 
 
     <script>
-        var step_size = {{ connection_stat.max }}
-            step_size = parseInt(step_size / 4) + 1
+        {% if connection_stat.max %}
+            var step_size = {{ connection_stat.max }}
+        {% else %}
+             var step_size = 1;
+        {% endif %}
+        
+        step_size = parseInt(step_size / 4) + 1
 
         var config = {
             type: 'line',

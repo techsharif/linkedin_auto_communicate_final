@@ -37,6 +37,40 @@ User = get_user_model()
 decorators = (never_cache, login_required,)
 csrf_exempt_decorators = decorators + (csrf_exempt,)
 
+
+def calculate_report_data(owner,start_date,end_date):
+    campaigns = Campaign.objects.filter(owner=owner, is_bulk=False,created_at__range=(start_date,end_date))
+    campaign_members = 0
+    connected_members = 0
+    inv_accept = 0
+    for campaign in campaigns:
+        campaign_members_list = campaign.contacts.all()
+        campaign_members += len(campaign_members_list)
+        connected_members += len(campaign_members_list.filter(is_connected=True).exclude(connected_date=None))
+        inv_accept += len(campaign_members_list.filter(is_connected=True,connected_date__range=(start_date,end_date)))
+    all_chat_messages = ChatMessage.objects.filter(owner=owner, campaign__is_bulk=False)
+
+    invitations_sent = len(all_chat_messages.filter(type=ContactStatus.CONNECT_REQ_N))
+    replied = len(all_chat_messages.exclude(replied_date=None))
+
+    return {
+        'accept_inv':inv_accept,
+        'campaign_members': campaign_members,
+        'connected_members': connected_members,
+        'invitations_sent': invitations_sent,
+        'invitation_rate': int(invitations_sent / campaign_members) if campaign_members else 0,
+        'pending_rate': 100 - int(invitations_sent / campaign_members) if campaign_members else 0,
+        'replied': replied,
+        'campaign_members_p': int(
+            max(campaign_members, invitations_sent, replied) / campaign_members * 100) if campaign_members else 0,
+        'invitations_sent_p': int(
+            max(campaign_members, invitations_sent, replied) / invitations_sent * 100) if invitations_sent else 0,
+        'replied_p': int(max(campaign_members, invitations_sent, replied) / replied * 100) if replied else 0,
+       
+    }
+
+
+
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
   cleantext = re.sub(cleanr, '', raw_html)
@@ -950,6 +984,7 @@ class AccountReport(View):
             data.update({'pk':pk,'msg':"End Date is greaterthan start date"})
             return render(request, 'v2/account/account_report.html',data)
 
+
         searchobj = Search.objects.filter(owner=pk,searchdate__range=(start_out,end_out))    
         conncetion_request_sent = 0
         if searchobj:
@@ -971,6 +1006,53 @@ class AccountReport(View):
         
 
         data.update({'pk':pk,'inv_accepted':inv_accepted,"number_of_conn":number_of_conn,"conncetion_request_sent":conncetion_request_sent,"graph":json.dumps(year_data),"year_filter":year_filter})
+
+        # searchobj = Search.objects.filter(owner=pk, searchdate__range=(start_out, end_out))
+        # conncetion_request_sent = 0
+        # if searchobj:
+
+        #     for obj in searchobj:
+        #         request_sent = SearchResult.objects.filter(owner=pk, search=obj.id,
+        #                                                    status=ContactStatus.CONNECT_REQ_N).count()
+        #         conncetion_request_sent = conncetion_request_sent + request_sent
+
+        # inv_accepted = Inbox.objects.filter(owner_id=pk, connected_date__range=(start_out, end_out)).count()
+        # number_of_conn = Inbox.objects.filter(owner_id=pk, is_connected=1).count()
+        # year_data = []
+        # for x in range(1, 13):
+        #     month_con = "Month(connected_date)='" + str(x) + "'"
+        #     year_con = "year(connected_date)='" + str(year_filter) + "'"
+        #     owner_id = "owner_id='" + str(pk) + "'"
+        #     month_x = Inbox.objects.extra(where=[month_con, year_con, owner_id]).count()
+        #     year_data.append({'y': month_x, "indexLabel": calendar.month_name[x]})
+
+        # data.update({'pk': pk, 'inv_accepted': inv_accepted, "number_of_conn": number_of_conn,
+        #              "conncetion_request_sent": conncetion_request_sent, "graph": json.dumps(year_data),
+        #              "year_filter": year_filter})
+        # return render(request, 'v2/account/account_report.html', data)
+        dash = calculate_report_data(pk,start_out,end_out)                    
+        inv_accepted = dash['accept_inv']
+        inv_accepted_before_start_date = Inbox.objects.filter(owner_id=pk,connected_date__lte=(start_out),is_connected=1).count()
+        print("---",inv_accepted_before_start_date)
+        number_of_conn = Inbox.objects.filter(owner_id=pk,is_connected=1).count()
+        year_data = []
+        con_growth = 0
+        if inv_accepted_before_start_date > 0:
+            con_growth = (number_of_conn - inv_accepted_before_start_date) /(100/inv_accepted_before_start_date)
+        # for x in range(1,13):
+        #     month_con = "Month(connected_date)='" + str(x) +"'"   
+        #     year_con = "year(connected_date)='" + str(year_filter) + "'"
+        #     owner_id = "owner_id='" + str(pk) + "'"    
+        #     month_x = Inbox.objects.extra(where=[month_con, year_con,owner_id]).count()
+        #     year_data.append({'y':month_x,"indexLabel":calendar.month_name[x]})
+
+        
+        diff  =  end_out.date() - start_out.date()
+        print("------------------con_growth------",con_growth)
+        
+            
+        data.update({'pk':pk,'inv_accepted':dash['accept_inv'],"number_of_conn":number_of_conn,"conncetion_request_sent":dash['invitations_sent'],"year_filter":year_filter,"con_growth":con_growth})
+
         return render(request, 'v2/account/account_report.html',data)
 
 
