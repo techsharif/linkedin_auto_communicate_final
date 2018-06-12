@@ -40,7 +40,6 @@ csrf_exempt_decorators = decorators + (csrf_exempt,)
 
 
 def calculate_report_data(owner,start_date,end_date):
-    print ("--------")
     campaigns = Campaign.objects.filter(owner=owner, is_bulk=False,created_at__range=(start_date,end_date))
     campaign_members = 0
     connected_members = 0
@@ -865,8 +864,6 @@ class AccountReport(View):
         return render(request, 'v2/account/account_report.html',data)
 
     def post(self,request,pk):
-        import pdb
-        pdb.set_trace()
         data={}
         start =  request.POST.get('opt')
         end = request.POST.get('start')
