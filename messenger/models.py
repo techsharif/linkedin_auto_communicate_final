@@ -210,7 +210,8 @@ class Campaign(TimeStampedModel):
         return self.connection_message.format(Name=contact.name,
                                   FirstName=contact.first_name,
                                   Company=contact.company,
-                                  Title=contact.title)
+                                  Title=contact.title,
+                                  Location=contact.location)
 
     def copy_step_message(self):
         copy_campaign = self.copy_campaign
