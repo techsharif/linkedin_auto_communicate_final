@@ -1,3 +1,4 @@
+import pycountry
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -71,7 +72,15 @@ class SearchResult(ContactField):
     def attach_to_campaign(self, campaign):
 
         # clone to Inbox
+        
+        mapping = {country.name: country.alpha_2 for country in pycountry.countries}
+        
         name = self.name if self.name else self.id
+        if self.location:
+            code = mapping.get(self.location)
+            if code is None:
+                code = 'US'
+
 
         contact, created = Inbox.objects.get_or_create(name=name, title=self.title,
                              company=self.company,
@@ -83,7 +92,7 @@ class SearchResult(ContactField):
                              status=self.status,
                              last_name=self.last_name,
                              first_name=self.first_name,
-                             countrycode=self.countrycode,
+                             countrycode=code,
                              owner=self.owner
             )
 
