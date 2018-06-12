@@ -21,7 +21,7 @@
                     </div>
                      <div class="form-group">
                     	{{ form.message.errors.as_ul }}
-                         {%  if  forloop.counter0  == 0%}
+                         {%  if  forloop.counter0  == 0 %}
                     	    <label>Thanks for connecting with me message</label>
                          {% else %}
                             <label>Autoresponder Message {{ forloop.counter0 }}</label>
