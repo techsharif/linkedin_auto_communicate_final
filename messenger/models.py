@@ -237,14 +237,16 @@ class Campaign(TimeStampedModel):
         return json.dumps((data))
 
     def count_reply_other(self):
-        return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(
-            replied_other_date=None))
+        #return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(replied_other_date=None))
+        return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(replied_other_date=None).count()
 
     def count_replies(self):
-        return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None))
+        #return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None))
+        return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).count()
 
     def count_sends(self):
-        return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
+        #return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
+        return ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True).count()
 
     def connected_count(self):
         # messenger one, all are connected
