@@ -18,7 +18,7 @@
                 </div>
 
                 <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-body">
+                    <div class="card-body pad-reduce">
                         Now you can manage with ease messaging Existing Connections. Have different Existing Connections in different Campaigns or No Campaigns. You have full control.
 Direct Chat allows to to not leave the platform to manage an active conversation, also you now can with one click see all active conversations.
                     </div>
@@ -111,6 +111,11 @@ Direct Chat allows to to not leave the platform to manage an active conversation
     }
     .hidden{
         display: none;
+    }
+    .pad-reduce{
+
+        padding: 1.0rem !important;
+
     }
  </style>
 {% endblock %} {% block pagefooter %} {% include 'app/includes/datatable_pagefooter.html' %}
