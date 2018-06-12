@@ -45,7 +45,7 @@
                                     <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="false">People</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="steps-tab" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="true">Steps</a>
+                                    <a class="nav-link" onclick="loadTextCount()" id="steps-tab" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="true">Steps</a>
                                 </li>
 
                             </ul>
@@ -64,8 +64,9 @@
 
                                 </div>
                                 <div class="tab-pane fade" id="steps" role="tabpanel" aria-labelledby="steps-tab">
-
+                                    <form name="campaign" method="POST" action="{% url 'messenger-campaign' pk=object.pk %}">
                                         {% include 'account/campaign/tab_2_messenger_form.html' with messenger=1 %}
+                                    </form>
                                 </div>
                                 <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                                     {% include 'account/campaign/tab_3.html' %}
@@ -101,12 +102,13 @@
 
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
-    <script>
-    followup_url = "{% url 'messenger-followups' pk=apk%}"
-    data_stored = "{% url 'messenger-followup' %}"
-    data_new = "{% url 'messenger-new-followup' %}"
-    cpk = {{ apk }}
-    </script>
-    <script src="{% static 'js/messenger_update.js' %}?v=3"></script>
+{#    <script>#}
+{#    followup_url = "{% url 'messenger-followups' pk=apk%}"#}
+{#    data_stored = "{% url 'messenger-followup' %}"#}
+{#    data_new = "{% url 'messenger-new-followup' %}"#}
+{#    cpk = {{ apk }}#}
+{#    </script>#}
+{#    <script src="{% static 'js/messenger_update.js' %}?v=3"></script>#}
+    <script src="{% static 'assets/scripts/messenger_compaign.js' %}"></script>
 
 {% endblock %}
