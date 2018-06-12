@@ -495,7 +495,6 @@ class AccountMessengerCreate(AccountMixins, CreateView):
         data = self.get_context_data()
         acc_id = self.kwargs.get('pk')
         # print('data:', self.kwargs, data)
-
         camp = form.instance
         camp.owner_id = acc_id
         camp.is_bulk = self.is_bulk
@@ -645,16 +644,13 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
         return super(AccountMessengerDetail, self).form_invalid(form)
 
     def post(self, request, pk):
-
-        print(request.POST)
-
         if 'cpk' in request.POST.keys():
-            type = request.POST['type']
-            cpk = request.POST['cpk']
+            type = request.POST.get('type')
+            cpk = request.POST.get('cpk')
 
             if type=='save':
-                fpk = request.POST['fpk']
-                message = request.POST['message']
+                fpk = request.POST.get('fpk')
+                message = request.POST.get('message')
                 message = cleanhtml(message)
                 if fpk=='init':
                     campaign = Campaign.objects.get(pk=cpk)
@@ -662,15 +658,15 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                     campaign.save()
                 else:
                     campaign_step = CampaignStep.objects.get(pk=int(fpk))
-                    step = request.POST['step']
+                    step = request.POST.get('step')
                     campaign_step.message = message
                     campaign_step.step_time=step
                     campaign_step.save()
                     return HttpResponse('{"ok":1}', content_type='application/json')
             elif type=='add':
-                message = request.POST['message']
+                message = request.POST.get('message')
                 message = cleanhtml(message)
-                step = request.POST['step']
+                step = request.POST.get('step')
                 campaign = Campaign.objects.get(pk=cpk)
                 CampaignStep(message=message,step_time=step, campaign=campaign).save()
 

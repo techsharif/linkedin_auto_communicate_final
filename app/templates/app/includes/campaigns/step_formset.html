@@ -32,22 +32,19 @@
                                         <button type="button" onclick="addText(this, '{Title}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Title</button>
                                         <button type="button" onclick="addText(this, '{Location}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Location</button>
                         </div>
-
-
                         {% render_field form.message  maxlength="300" style="height: 8rem;" %}
                         <small class="form-text text-muted" style="margin-top:-.50rem">Chars 300</small>
-                    </div>           
-                           
-                           
+                    </div>
+
                     
                 </div>
-                
-                
             	{% endfor %}	
 				{{ campaignsteps.management_form }}
 
 
 		</div>
+                            <input type="hidden" name="cpk" value="{{ pk }}">
+
     <input type="submit" class="btn btn-primary btn-block btn-save bg-primary bg-gradient" style="width: 210px !important;" name="save" value="SAVE">
 	</div>            		
             		
