@@ -121,13 +121,23 @@ $(document).ready(function () {
 
 
     $("#add_search_task").click(function (event) {
-
         event.preventDefault();
+
+        $('#search_label').removeClass('text-danger');
+        $('#search_name').removeClass('border-danger');
+        $("#search_error").text("");
         error = 0
         if ($.trim($('#search_name')[0].value) == '') {
-            $('#search_input_error').css('color', 'red').html('if this field is empty, search is not saved!');
+
+            // $('#search_name').parent().addClass('has-error');
             error = 1;
-            return
+            $('#search_label').addClass('text-danger');
+            $('#search_name').addClass('border-danger');
+            $("#search_error").text("Please enter a Search name");
+//             $('#search_input_error').css('color', 'red').html('if this field is empty, search is not saved!');
+            error = 1;
+            return false
+
 
         } else {
             $('#search_input_error').html('');
@@ -164,8 +174,11 @@ $(document).ready(function () {
         if (error != 4) {
             $('#sales_search_error').css('color', 'black');
         }
-        if (error == 0)
+
+        if (error == 0){
             $('#add_search').submit();
+        }
+
         console.log(error)
     });
 

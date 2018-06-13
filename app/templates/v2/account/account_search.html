@@ -33,7 +33,10 @@
                             </button>
                         </div>
                         <div class="card-media-list p0 m0" style="height: 450px !important;;">
-                            <ul class="list-group list-group-flush p0 m0" style="height: 450px !important;">
+
+
+                            <ul class="list-group list-group-flush p0 m0" style="">
+
                                 {% for search in searches %}
                                     <li onclick="return getDataNEW({{ search.id }})" class="list-group-item media clickable" style="margin: 0px !important;padding: 0px !important; padding-right: 15px !important;margin-top: 5px !important">
                                             <div class="col-md-12 col-lg-12 col-xl-12 float-left" style="">
@@ -84,10 +87,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+
                     <div class="form-group col-md-12">
-                        <label>Search name</label>
+                        <label id="search_label">Search name</label>
                         <input class="form-control" id="search_name" type="text" required="true" name="search_name">
-                        <p id="search_input_error"></p>
+                        <div class="form-control-feedback text-danger" id="search_error"></div>
                     </div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
@@ -117,6 +121,7 @@
                             <div class="text-center"><a class="text-center" href="#" data-toggle="collapse" href="#advance_search_data" aria-expanded="false" aria-controls="collapseExample" id="advanced_search_toggle">Advanced</a>
                             </div>
                             <div class="collapse"  id="advance_search_data">
+
                                 <div class="form-group">
                                     <label>Location</label>
                                     <input class="form-control" type="text" name="location"
@@ -244,7 +249,6 @@
      <script src="{% static 'plugins\country\js\countrySelect.min.js' %}"></script>
     <script>
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-        // $("#country").countrySelect();
     </script>
 
 
