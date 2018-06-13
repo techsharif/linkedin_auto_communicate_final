@@ -29,6 +29,7 @@
                                 </div>
 
                             </h2>
+                                    <input type="hidden" id="__search_url__" value="{%url 'account-search' pk=object.owner_id %}"/>
 
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
@@ -78,12 +79,10 @@
         $('.table').DataTable()
 
     </script>
-
-    <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
-    <script src="{% static 'js/campaignformset.js' %}?v=16"></script>
+<script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
+<script src="{% static 'js/campaignformset.js' %}?v=16"></script>
 <script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
 <script src="{% static 'assets/scripts/messenger_compaign.js' %}"></script>
-
 {% endblock %}
 

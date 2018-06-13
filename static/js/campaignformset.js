@@ -50,7 +50,7 @@ $(function() {
     		var alertbox = $('.alert-box');
     		if (res.ok) {
 				var url = window.location.href;
-				var search_url = $('#__search_url__').attr('href');
+				var search_url = $('#__search_url__').val();
 				var network_url = $('#__my_network_url__').attr('href');
 				console.log(search_url, network_url)
 				url = search_url === undefined?network_url:search_url;
