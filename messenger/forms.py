@@ -29,14 +29,14 @@ class CreateCampaignForm(forms.ModelForm):
                 is_bulk=is_bulk)
 
     title = forms.CharField(
-        label=_('Connector Campaign name'),
+        label=_('NAME YOUR CONNECTION CAMPAIGN'),
         widget=forms.TextInput(
             attrs=css_form_attrs)
     )
 
     copy_campaign = forms.ModelChoiceField(
         required=False,
-        label=_('Copy Connector Campaign steps from'),
+        label=_('COPY STEPS FROM AN EXISTING CONNECTION CAMPAIGN'),
         widget=forms.Select(attrs=css_form_attrs),
         queryset=Campaign.objects.all()
     )

@@ -47,29 +47,30 @@ $(function() {
     		}catch(e){
     			console.log('error', e);
     		}
-
-
     		var alertbox = $('.alert-box');
     		if (res.ok) {
-    			// swal("alert!", 'Message has been saved successfully!', "success");
-
+				var url = window.location.href;
+				var search_url = $('#__search_url__').val();
+				var network_url = $('#__my_network_url__').attr('href');
+				console.log(search_url, network_url)
+				url = search_url === undefined?network_url:search_url;
+				let text = 'Your message has been saved successfully. <a style="color: blue;" href="'+url+'">' +
+					'Click HERE </a> to select search and contacts and start your campaign';
 				swal({
-					  title: "alert!",
-					  text: "Message has been saved successfully!",
-					  type: "success",
-					  confirmButtonText: "OK"
-					},
-					function(isConfirm){
-					  if (isConfirm) {
-						window.location.reload();
-					  }
-					});
-    			//alertbox.html('Message has been saved successfully!');
-    			//alertbox.addClass('text-success').removeClass('text-danger');
+				  title: "Congratulations!.",
+				  text: text,
+				  type: "success",
+				  confirmButtonColor: "#DD6B55",
+				  confirmButtonText: "Ok",
+				  html:　true
+				},
+				function(isConfirm){
+				  if (isConfirm) {
 
+				  }
+				});
     			return;
     		}
-
     		if ( res.error){
     			var html = "";
     			for(var key in  res.error) {

@@ -54,9 +54,9 @@
                                     <h4>To get things going with this Messenger Campaign:</h4>
                                     <p>1. Go to
                                     {% if object.is_bulk %}
-                                        <a href="{%url 'account-network' pk=object.owner_id %}">My Network</a>
+                                        <a id="__my_network_url__" href="{%url 'account-network' pk=object.owner_id %}">My Network</a>
                                     {%else%}
-                                    <a href="{%url 'account-search' pk=object.owner_id %}">Search</a>
+                                    <a id="__search_url__" href="{%url 'account-search' pk=object.owner_id %}">Search</a>
                                     {%endif%}
                                     .</p>
                                     <p>2. Find people you would like to add to this Messenger Campaign.</p>
