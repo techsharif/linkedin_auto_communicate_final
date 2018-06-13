@@ -53,6 +53,25 @@ class Proxy(TemplateView):
         # print('context:', ctx)
         return ctx
 
+    @staticmethod
+    def check_bot_status(request, pk):
+        linkedin = LinkedInUser.objects.get(pk=pk)
+        ip = linkedin.bot_ip
+        rpath = '/'
+        url = 'http://{ip}:8080{path}'.format(ip=ip, path=rpath)
+        print('url:', url)
+        try:
+            res = requests.get(url, timeout=3)
+            res = res.json()
+        except requests.exceptions.Timeout:
+            res = {'status': False}
+
+        except Exception as e:
+            print('error--->:', e)
+            res = {'status': False}
+        return JsonResponse(res)
+
+    @staticmethod
     def get_linkedin_user_list(request):
         send_data = []
         try:
@@ -66,9 +85,14 @@ class Proxy(TemplateView):
                 else:
                     activate = '<button class="btn btn-sm btn-info btn-gradient waves-effect waves-light activat-button">InActive</button>'
                 if linked_user.bot_ip:
-                    action = '<a class="btn btn-sm btn-success btn-gradient waves-effect waves-light activat-button" href="'+url+str(linked_user.id)+'">bot status</a>'
+                    if Proxy.__check_bot_status(linked_user.id) is not False:
+                        action = '<a class="btn btn-sm btn-success btn-gradient waves-effect waves-light activat-button" href="' + url + str(
+                            linked_user.id) + '">bot running</a>'
+                    else:
+                        action = '<a class="btn btn-sm btn-danger btn-gradient waves-effect waves-light activat-button">bot stoped</a>'
                 else:
                     action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="add_ip('+str(linked_user.id)+', 1)">Add Ip</button>'
+
                 index += 1
                 send_data.append({
                     'user': linked_user.id,
@@ -84,6 +108,7 @@ class Proxy(TemplateView):
         data = {'data': send_data}
         return JsonResponse(data)
 
+    @staticmethod
     def update_status(request):
         message = ''
         response_code = 0
@@ -103,6 +128,26 @@ class Proxy(TemplateView):
             message = 'Update error!'
         return JsonResponse({'message': message, 'response_code': response_code, 'data': '' })
 
+    @staticmethod
+    def __check_bot_status(pk):
+        linkedin = LinkedInUser.objects.get(pk=pk)
+        ip = linkedin.bot_ip
+        rpath = '/'
+        url = 'http://{ip}:8080{path}'.format(ip=ip, path=rpath)
+        print('url:', url)
+        res = False
+        try:
+            requests.get(url, timeout=3)
+            res = True
+        except requests.exceptions.Timeout:
+            pass
+
+        except Exception as e:
+            print('error--->:', e)
+            pass
+        return res
+
+    @staticmethod
     def update_ip(request):
         message = ''
         response_code = 0
@@ -122,6 +167,7 @@ class Proxy(TemplateView):
         json_data = json.dumps(context['data'])
         return HttpResponse(json_data, content_type='application/json')
 
+    @staticmethod
     def bot_list(request, pk):
         linkedin_user = LinkedInUser.objects.get(pk=pk)
         bot_tasks = BotTask.objects.filter(owner=linkedin_user)
@@ -136,6 +182,7 @@ class Proxy(TemplateView):
             })
         return JsonResponse({'data': send_data})
 
+    @staticmethod
     def bot_list_view(request, pk):
         template = loader.get_template('dashboard/bot_list.html')
         linkedin_user = LinkedInUser.objects.get(pk=pk)
@@ -143,3 +190,6 @@ class Proxy(TemplateView):
             'linkedin_account': linkedin_user,
         }
         return HttpResponse(template.render(content, request))
+
+
+

@@ -6,7 +6,7 @@ from .views import DashBoard, Proxy
 
 
 urlpatterns = [
-    url(r'bot_status/(?P<pk>(\d+))', Proxy.as_view(), name='bot-status'),
+    url(r'bot_status/(?P<pk>(\d+))', Proxy.check_bot_status, name='bot-status'),
     url(r'bot_log/(?P<pk>(\d+))', Proxy.bot_list_view, name='bot-log'),
     url(r'bot_list/(?P<pk>(\d+))', Proxy.bot_list, name='bot-list'),
     url(r'^$', DashBoard.as_view(), name='dashboard'),
