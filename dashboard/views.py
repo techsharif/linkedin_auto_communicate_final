@@ -6,14 +6,15 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from django.template import loader
 import requests
 
-from app.models import LinkedInUser
+
+from app.models import LinkedInUser, BotTask
 
 
 # from django.shortcuts import render
 login_decorators = (login_required, )
-
 
 
 @method_decorator(login_decorators, name="dispatch")
@@ -35,6 +36,7 @@ class DashBoard(ListView):
         return redirect('dashboard')
 
 
+@method_decorator(login_decorators, name="dispatch")
 class Proxy(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(Proxy, self).get_context_data()
@@ -56,13 +58,15 @@ class Proxy(TemplateView):
         try:
             user = request.user
             linkedin_user = LinkedInUser.objects.filter(user_id=user)
-            print(linkedin_user)
+            url = '/dashboard/bot_log/'
             index = 0
             for linked_user in linkedin_user:
-                action = ''
-                activate = ''
+                if linked_user.login_status:
+                    activate = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button">Active</button>'
+                else:
+                    activate = '<button class="btn btn-sm btn-info btn-gradient waves-effect waves-light activat-button">InActive</button>'
                 if linked_user.bot_ip:
-                    action = '<button class="btn btn-sm btn-success btn-gradient waves-effect waves-light activat-button" >botstatus</button>'
+                    action = '<a class="btn btn-sm btn-success btn-gradient waves-effect waves-light activat-button" href="'+url+str(linked_user.id)+'">bot status</a>'
                 else:
                     action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="add_ip('+str(linked_user.id)+', 1)">Add Ip</button>'
                 index += 1
@@ -117,3 +121,25 @@ class Proxy(TemplateView):
     def render_to_response(self, context, **response_kwargs):
         json_data = json.dumps(context['data'])
         return HttpResponse(json_data, content_type='application/json')
+
+    def bot_list(request, pk):
+        linkedin_user = LinkedInUser.objects.get(pk=pk)
+        bot_tasks = BotTask.objects.filter(owner=linkedin_user)
+        send_data = []
+        for bot_task in bot_tasks:
+            send_data.append({
+                "id": bot_task.id,
+                "task_type": bot_task.task_type,
+                "name": bot_task.name,
+                "status": bot_task.status,
+                "completed_date": bot_task.completed_date.strftime('%b/%d/%Y %H:%M %p')
+            })
+        return JsonResponse({'data': send_data})
+
+    def bot_list_view(request, pk):
+        template = loader.get_template('dashboard/bot_list.html')
+        linkedin_user = LinkedInUser.objects.get(pk=pk)
+        content = {
+            'linkedin_account': linkedin_user,
+        }
+        return HttpResponse(template.render(content, request))
