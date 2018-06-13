@@ -166,7 +166,7 @@ class AccountSettings(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(AccountSettings, self).get_context_data(**kwargs)
-        context['connections'] = len(Inbox.objects.filter(owner=self.object, is_connected=True))
+        context['connections'] = Inbox.objects.filter(owner=self.object, is_connected=True).count()
         context['linkedin_user'] = self.object
         context['pk'] = self.object.pk
         return context
@@ -386,10 +386,17 @@ class AccountNetwork(AccountMixins, DataTable, ListView):
     status = contact_statuses
     is_connected = True
 
+    def get_queryset(self):
+        qs = super(AccountNetwork, self).get_queryset()
+        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
+        return qs
+
+
     def get_context_data(self, **kwargs):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
         ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
-        ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
+        #ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
+        ctx['messenger_campaigns_count'] = self.get_queryset().count()
         return ctx
 
 
