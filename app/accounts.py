@@ -538,6 +538,11 @@ class AccountMessengerDelete(AccountMixins, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         print('request')
+        
+        inbox_obj = self.get_object().contacts.filter(is_connected=True)
+        for inb in inbox_obj:
+            inb.status = ContactStatus.OLD_CONNECT_N
+            inb.save()
         self.get_object().contacts.filter(is_connected=False).delete()
         self.get_object().delete()
         payload = {'deleted': 'ok'}
@@ -1072,5 +1077,4 @@ class AccountReport(View):
             
         data.update({'pk':pk,'inv_accepted':dash['accept_inv'],"number_of_conn":number_of_conn,"conncetion_request_sent":dash['invitations_sent'],"year_filter":year_filter,"con_growth":con_growth})
         return render(request, 'v2/account/account_report.html',data)
-
 
