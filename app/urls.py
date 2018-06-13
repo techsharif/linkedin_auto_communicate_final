@@ -97,7 +97,6 @@ urlpatterns = [
     url(r'^account/messenger/new-followup/$',
         acc_views.AccountNewFollowup.as_view(), name='messenger-new-followup'),
     url(r'^account/campaigns/(?P<pk>[\d]+)$',
-
         acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
     url(r'^account/bottask/(?P<pk>[\d]+)$',
         acc_views.AccountBotTask.as_view(), name='bottask'),

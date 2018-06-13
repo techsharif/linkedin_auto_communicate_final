@@ -792,9 +792,6 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                 return HttpResponse('{"ok":1}', content_type='application/json')
 
 
-
-
-
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(AccountMessengerDetailNEW):
     template_name = 'v2/account/accounts_campaign_update.html'

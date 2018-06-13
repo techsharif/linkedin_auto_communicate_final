@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function() {
 	var tmp_object;
 	var url = window.location.href;
@@ -21,7 +18,6 @@ $(document).ready(function() {
 		"28": "bg-green",
 	};
 	var path = window.location.pathname;
-	console.log(url)
 	var inboxPage = path.indexOf('network')>=0? false: true;
 	var status_index = 8;
 	var table = $('#campaign_people').DataTable( {
@@ -150,12 +146,18 @@ $(document).ready(function() {
 
 	var header_buttons = '';
 	if(inboxPage){
-		header_buttons+= '&nbsp;<button class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-info btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
-		header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+		console.log('------------------------------------inbox', path.indexOf('campaigns'))
+		if(path.indexOf('campaigns')>=0){
+			header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+
+		}else{
+			header_buttons+= '&nbsp;<button id="mark_as_read" class="btn btn-primary btn-gradient waves-effect waves-light" data-click="markRead">Mark as read</button>';
+			header_buttons+= '&nbsp;<button id="mark_as_un_read" class="btn btn-info btn-gradient waves-effect waves-light" data-click="markUnread">Mark as unread</button>';
+			header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
+		}
+
 	}else if (path.indexOf('network')>=0){
 		//network page
-
 		header_buttons+= '<div class="row">' +
 			'<div class="col-md-7">' +
 			'<div class="row" id="filter-search-moved">' +
@@ -172,7 +174,6 @@ $(document).ready(function() {
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
-
 	if(inboxPage){
 		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm').addClass('col-md-3')
 	}else{
