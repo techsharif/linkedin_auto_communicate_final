@@ -105,7 +105,6 @@ $(function() {
 	});
 
     $('body').on('click', '#confirm_dialog >div #confirm_button', function(e){
-
     	var url = window.location.href;
     	var data = $('body').find('form[name="campaign"]').serialize();
     	$.post(url+"/delete", data).done(function(res){
