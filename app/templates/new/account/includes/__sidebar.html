@@ -21,6 +21,31 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link nav-parent" href="#">
+                <i class="batch-icon batch-icon-layout-content-left"></i>
+                My Network
+            </a>
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if 'network' in request.path %} active {% endif %}" href="{% url 'account-network' pk=pk %}">
+                        <i class="batch-icon batch-icon-users"></i>
+                        Existing Connections
+                        
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if 'messenger' in request.path %} active {% endif %}" href="{% url 'account-messenger' pk=pk %}">
+                        <i class="batch-icon batch-icon-speech-bubble-left-tip-solid-text"></i>
+                         Messenger
+                        
+                    </a>
+                </li>
+
+            </ul>
+        </li>        
+
+        <!-- <li class="nav-item">
             <a class="nav-link {% if 'network' in request.path %} active {% endif %}" href="{% url 'account-network' pk=pk %}">
                 <i class="batch-icon batch-icon-users"></i>
                 Existing Connections
@@ -34,7 +59,7 @@
                  Messenger
                 <span class="batch-icon batch-icon-arrow-right pull-right"></span>
             </a>
-        </li>
+        </li> -->
         <li class="nav-item">
             <a class="nav-link {% if 'campaigns' in request.path %} active {% endif %}" href="{% url 'account-campaign' pk=pk %}">
                 <i class="batch-icon batch-icon-bullhorn-alt"></i>

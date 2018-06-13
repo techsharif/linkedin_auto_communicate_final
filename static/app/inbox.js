@@ -298,8 +298,6 @@ $(document).ready(function() {
 			var rows_selected = table.column(0).checkboxes.selected();
     	var contacts = [];
     	$.each(rows_selected, function(index, rowId){
-				console.log(index)
-				console.log(index)
     		contacts.push(rowId);
     		// find its row
     		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
@@ -321,7 +319,7 @@ $(document).ready(function() {
     });
 
 	function alert_no_contact(){
-		swal("Alert!", "No selected contact", "error");
+		swal("Warning!", "No selected contact", "warning");
 	};
 
 	//add_all filtered contact
@@ -361,10 +359,8 @@ $(document).ready(function() {
 		var camp_message = messenger.html();
 		if (camp_message === "" || camp_message.length < 5){
 			var url = messenger.data('url');
-
 			var text = 'Your selected campaign <b>' + campaign_name + '</b> has not had any message yet.';
 			text+= ' Please add some <a href="' + url +'">here</a>.';
-
 			show_camp_alert(text)
 			return;
 		}
@@ -383,7 +379,6 @@ $(document).ready(function() {
 				}
 
 			});
-
 			console.log('othercamps:', othercamps);
 			if (othercamps.length > 0){
 				// add move contacts button
@@ -416,8 +411,8 @@ $(document).ready(function() {
 	function do_post_campaign(that){
 		var form = that.closest('form');
 		do_post_action(form, function(){
-			table.ajax.reload();
 			$("#add2campaign").modal('hide');
+			table.ajax.reload();
 		});
 
 	}
@@ -426,7 +421,7 @@ $(document).ready(function() {
     	var data = form.serialize();
     	console.log('posted data:', form.attr('action'),  data);
 		$.post(form.attr('action'), data).done(function(res){
-			console.log('posted result:', data);
+			console.log('posted result:', res);
 			if(res.ok){
 				cb(res);
 			}
