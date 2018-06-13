@@ -146,8 +146,7 @@ $(document).ready(function() {
 
 	var header_buttons = '';
 	if(inboxPage){
-		console.log('------------------------------------inbox', path.indexOf('campaigns'))
-		if(path.indexOf('campaigns')>=0){
+		if(path.indexOf('campaigns')>=0||path.indexOf('messenger')>=0){
 			header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 
 		}else{
