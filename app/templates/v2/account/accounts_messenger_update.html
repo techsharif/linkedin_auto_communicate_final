@@ -1,12 +1,38 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
-{% block head %}
-    <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
-{% endblock %}
+
 {% block title %}Messenger Details{% endblock title %}
+{% block head %}
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <style>
+    .note-editor.note-frame .note-editing-area {
+    overflow: hidden;
+    border: 1px solid #e0dbdb;
+    margin-top: .5em;
+    border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
+}
+    .note-editor.note-frame {
+    border: 0;
+}
+    .popover {
+    z-index: 0;
+}
+    .note-popover .popover-content, .panel-heading.note-toolbar {
+    padding: 0;
+    margin: 0;
+}
+
+    .btn.disabled, .btn:disabled {
+    text-decoration: none;
+    cursor: not-allowed;
+}
+    </style>
+{% endblock %}
+
 
 {% block content %}
+
     <div class="row mb-5">
         <div class="col-md-12">
             <div class="card">
@@ -47,14 +73,22 @@
             </div>
         </div>
     </div>
+
+
+
+
 {% endblock %}
+
 {%  block script %}
 {% include 'app/includes/campaigns/page_footer.html' %}
     <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
     <script src="{% static 'js/campaignformset.js' %}?v=16"></script>
+    <script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
     <script src="{% static 'assets/scripts/messenger_compaign.js' %}"></script>
 {% endblock %}
