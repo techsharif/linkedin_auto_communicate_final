@@ -8,6 +8,7 @@ from app.models import LinkedInUser, BotTaskStatus
 from messenger.models import CommonContactField, TimeStampedModel, \
     CampaignStepField, ContactStatus, Inbox, MessageField, Campaign, \
     ContactField
+import pycountry
 
 
 class Search(CommonContactField):
@@ -69,6 +70,14 @@ class SearchResult(ContactField):
         else:
             return 0
 
+    def getCountryCode(self,country_name):
+        countries = {'USA':'us'}
+        for country in pycountry.countries:
+            countries[country.name] = country.alpha_2
+
+        codes = countries.get(country_name, 'us')
+        return codes
+
     def attach_to_campaign(self, campaign):
 
         # clone to Inbox
@@ -76,10 +85,16 @@ class SearchResult(ContactField):
         mapping = {country.name: country.alpha_2 for country in pycountry.countries}
         
         name = self.name if self.name else self.id
-        if self.location:
-            code = mapping.get(self.location)
-            if code is None:
-                code = 'US'
+
+        country_code = self.countrycode
+        if country_code is None:
+            country_code = self.getCountryCode(self.location)
+
+#         if self.location:
+#             code = mapping.get(self.location)
+#             if code is None:
+#                 code = 'US'
+
 
 
         contact, created = Inbox.objects.get_or_create(name=name, title=self.title,
@@ -92,7 +107,9 @@ class SearchResult(ContactField):
                              status=self.status,
                              last_name=self.last_name,
                              first_name=self.first_name,
-                             countrycode=code,
+
+                             countrycode=country_code,
+#                              countrycode=code,
                              owner=self.owner
             )
 
