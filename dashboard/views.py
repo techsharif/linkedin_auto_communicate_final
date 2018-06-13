@@ -133,7 +133,7 @@ class Proxy(TemplateView):
         linkedin = LinkedInUser.objects.get(pk=pk)
         ip = linkedin.bot_ip
         rpath = '/'
-        url = 'http://{ip}:8080{path}'.format(ip=ip, path=rpath)
+        url = 'http://{ip}:8081{path}'.format(ip=ip, path=rpath)
         print('url:', url)
         res = False
         try:
