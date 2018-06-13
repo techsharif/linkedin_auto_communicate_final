@@ -602,10 +602,8 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
                 message_contacts += [message.contact.pk]
                 if message.replied_date:
                     reply_contacts += [message.contact.pk]
-
         message_contacts = len(set(message_contacts))
         reply_contacts = len(set(reply_contacts))
-
         # contact_count = 50
         # message_contacts = 35
         # reply_contacts = 17
@@ -639,7 +637,7 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
                 print('campaignsteps:', campaignsteps)
                 if self.request.is_ajax():
                     payload = {'ok': True}
-                    return JsonResponse(json.dumps(payload), safe=False)
+                    return JsonRespaccount/campaignsonse(json.dumps(payload), safe=False)
             else:
 
                 if self.request.is_ajax():
@@ -659,8 +657,6 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
             return HttpResponse(json_data, content_type='application/json')
 
         return super(AccountMessengerDetailNEW, self).form_invalid(form)
-
-
 
 
 @method_decorator(decorators, name='dispatch')
