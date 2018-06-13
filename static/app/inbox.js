@@ -168,7 +168,7 @@ $(document).ready(function() {
 			'<input type="checkbox" data-click="messenger">Show Messenger contacts</span>';
 		header_buttons+= '<span id="show_talking_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
 			'<input type="checkbox" data-click="talking">Show Talking contacts</span></div></div>';
-		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">ADD EXISTING CONNECTION CAMPAIGN</a></div>';
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
@@ -321,7 +321,7 @@ $(document).ready(function() {
     });
 
 	function alert_no_contact(){
-		swal("Alert!", "No selected contact", "error");
+		swal("Warning!", "No selected contact", "warning");
 	};
 
 	//add_all filtered contact
@@ -416,8 +416,24 @@ $(document).ready(function() {
 	function do_post_campaign(that){
 		var form = that.closest('form');
 		do_post_action(form, function(){
-			table.ajax.reload();
 			$("#add2campaign").modal('hide');
+			var url = window.location.href;
+			url = url.replace('network', 'search');
+			let text = 'Your message has been saved successfully. <a style="color: blue;" href="'+url+'">' +
+				'Click HERE </a> to select search and contacts and start your campaign';
+			swal({
+			  title: "Congratulations!.",
+			  text: text,
+			  type: "success",
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Ok",
+			  html:　true
+			},
+			function(isConfirm){
+			  if (isConfirm) {
+			  	table.ajax.reload();
+			  }
+			});
 		});
 
 	}
@@ -426,7 +442,7 @@ $(document).ready(function() {
     	var data = form.serialize();
     	console.log('posted data:', form.attr('action'),  data);
 		$.post(form.attr('action'), data).done(function(res){
-			console.log('posted result:', data);
+			console.log('posted result:', res);
 			if(res.ok){
 				cb(res);
 			}
