@@ -61,16 +61,8 @@ class Proxy(TemplateView):
             for linked_user in linkedin_user:
                 action = ''
                 activate = ''
-                if linked_user.login_status:
-                    action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="setting('+str(linked_user.id)+')">setting</button>'
-                    action += '<button class="btn btn-sm btn-danger btn-gradient waves-effect waves-light activat-button" onclick="update_status('+str(linked_user.id)+', 0)">Off</button>'
-                    activate = '''<button class="btn btn-sm btn-primary btn-gradient
-                     waves-effect waves-light activat-button">active</button>'''
-                else:
-                    action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="update_status('+str(linked_user.id)+', 1)">On</button>'
-                    activate = '<button class="btn btn-sm btn-danger btn-gradient waves-effect waves-light activat-button" >inactive</button>'
                 if linked_user.bot_ip:
-                    pass
+                    action = '<button class="btn btn-sm btn-success btn-gradient waves-effect waves-light activat-button" >botstatus</button>'
                 else:
                     action = '<button class="btn btn-sm btn-primary btn-gradient waves-effect waves-light activat-button" onclick="add_ip('+str(linked_user.id)+', 1)">Add Ip</button>'
                 index += 1
