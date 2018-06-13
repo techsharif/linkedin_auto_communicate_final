@@ -383,20 +383,20 @@ class DataTable(object):
 @method_decorator(decorators, name='dispatch')
 class AccountNetwork(AccountMixins, DataTable, ListView):
     template_name = 'account/account_network.html'
+    is_bulk = True
     status = contact_statuses
     is_connected = True
 
-    def get_queryset(self):
-        qs = super(AccountNetwork, self).get_queryset()
-        qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
-        return qs
-
+    # def get_queryset(self):
+    #     qs = super(AccountNetwork, self).get_queryset()
+    #     qs = qs.filter(is_bulk=self.is_bulk, owner_id=self.kwargs.get('pk'))
+    #     return qs
 
     def get_context_data(self, **kwargs):
         ctx = super(AccountNetwork, self).get_context_data(**kwargs)
         ctx['messenger_campaigns'] = ctx['account'].get_messenger_campaigns()
-        #ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
-        ctx['messenger_campaigns_count'] = self.get_queryset().count()
+        ctx['messenger_campaigns_count'] = len(ctx['messenger_campaigns'])
+        # ctx['messenger_campaigns_count'] = self.get_queryset().count()
         return ctx
 
 
