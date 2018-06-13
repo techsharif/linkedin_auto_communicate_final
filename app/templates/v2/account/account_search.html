@@ -37,7 +37,7 @@
 
                         <div class="card-media-list p0 m0" style="height: 450px !important;;">
 
-                            <ul class="list-group list-group-flush p0 m0" style="height: 450px !important;">
+                            <ul class="list-group list-group-flush p0 m0" style="">
                                 {% for search in searches %}
                                     <li onclick="return getDataNEW({{ search.id }})" class="list-group-item media clickable" style="margin: 0px !important;padding: 0px !important; padding-right: 15px !important;margin-top: 5px !important">
 
@@ -113,8 +113,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                            <label>Search name</label>
+                            <label id="search_label">Search name</label>
                             <input class="form-control" id="search_name" type="text" required="true" name="search_name">
+                            <div class="form-control-feedback text-danger" id="search_error"></div>
                         </div>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -278,7 +279,6 @@
      <script src="{% static 'plugins\country\js\countrySelect.min.js' %}"></script>
     <script>
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-        // $("#country").countrySelect();
     </script>
 
 

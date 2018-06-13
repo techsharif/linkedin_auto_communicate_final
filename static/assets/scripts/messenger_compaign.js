@@ -35,9 +35,12 @@ $('textarea').bind('input propertychange', function(e) {
 
 });
 
-function addText(e,val){
+function addText(e,text_val){
+
     $(e).parent().next('textarea').next('small').removeClass('text-danger');
-    $(e).parent().next('textarea').append(val);
+
+    $(e).parent().next('textarea').val( $(e).parent().next('textarea').val() + '' + text_val );
+
     var txt_count = $(e).parent().next('textarea').val().length ;
     if(parseInt(txt_count)>=300){
         $(e.target).next('small').text('Message is maxium 300 chars').addClass('text-danger');
@@ -46,6 +49,5 @@ function addText(e,val){
         var remain_count = 300 - parseInt(txt_count)
         $(e).parent().next('textarea').next('small').text('Chars ' + remain_count)   //.addClass('text-danger');
     }
-   //$(e).parent().next('textarea').next('small').text('Chars ' + txt_count).addClass('text-danger');
 
 }

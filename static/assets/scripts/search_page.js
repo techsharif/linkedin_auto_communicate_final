@@ -121,14 +121,20 @@ $(document).ready(function () {
 
 
     $("#add_search_task").click(function (event) {
-
         event.preventDefault();
+        $('#search_label').removeClass('text-danger');
+        $('#search_name').removeClass('border-danger');
+        $("#search_error").text("");
 
         error = 0
 
         if ($.trim($('#search_name')[0].value) == '') {
-            $('#search_name').parent().addClass('has-error');
+            // $('#search_name').parent().addClass('has-error');
             error = 1;
+            $('#search_label').addClass('text-danger');
+            $('#search_name').addClass('border-danger');
+            $("#search_error").text("Please enter a Search name");
+            return false
         } else {
             $('#search_name').parent().removeClass('has-error');
         }
@@ -163,9 +169,11 @@ $(document).ready(function () {
         if (error != 4) {
             $('#search_sales').parent().removeClass('has-error');
         }
-        if (error == 0)
+        if (error == 0){
             console.log('submiting')
             $('#add_search').submit();
+        }
+
         console.log(error)
 
     });
