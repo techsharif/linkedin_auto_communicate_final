@@ -538,6 +538,7 @@ class AccountMessengerDelete(AccountMixins, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         print('request')
+        self.get_object().contacts.filter(is_connected=False).delete()
         self.get_object().delete()
         payload = {'deleted': 'ok'}
         return JsonResponse(json.dumps(payload), safe=False)
