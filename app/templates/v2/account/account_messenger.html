@@ -9,24 +9,14 @@
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-
 {% endblock head %}
-
-
 {%block content%}
-
-
    	<div class="row mb-5">
         <div class="col-sm-4 col-md-3">
-            <a class="btn btn-primary btn-gradient waves-effect waves-light" href="{% url 'account-messenger-add' pk=pk %}">EXISTING CONNECTION CAMPAIGN</a>
+            <a class="btn btn-primary btn-gradient waves-effect waves-light" href="{% url 'account-messenger-add' pk=pk %}">ADD EXISTING CONNECTION CAMPAIGN</a>
         </div>
         <div class="col-sm-8 col-md-9">
-
-
             <div id="accordion" role="tablist" aria-multiselectable="true">
-
-
-
                 <div class="card">
                     <div class="card-header" role="tab" id="headingOne">
                         <h5 class="mb-0">
@@ -35,7 +25,6 @@
                             </a>
                         </h5>
                     </div>
-
                     <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                         <div class="card-body">
                             <ul>
@@ -45,20 +34,10 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
         </div>
-
     </div>
     {%include 'v2/account/campaign/messenger_list.html' with object_list=object_list %}
-
-
-
-
-<!-- /.box -->	</section>
-
 {% endblock %}
 
 {% block script %}

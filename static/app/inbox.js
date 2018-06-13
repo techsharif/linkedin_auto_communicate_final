@@ -168,7 +168,7 @@ $(document).ready(function() {
 			'<input type="checkbox" data-click="messenger">Show Messenger contacts</span>';
 		header_buttons+= '<span id="show_talking_contacts" class="btn btn-primary btn-gradient waves-effect waves-light">' +
 			'<input type="checkbox" data-click="talking">Show Talking contacts</span></div></div>';
-		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">ADD EXISTING CONNECTION CAMPAIGN</a></div>';
+		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
 	}
 	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
@@ -298,8 +298,6 @@ $(document).ready(function() {
 			var rows_selected = table.column(0).checkboxes.selected();
     	var contacts = [];
     	$.each(rows_selected, function(index, rowId){
-				console.log(index)
-				console.log(index)
     		contacts.push(rowId);
     		// find its row
     		var $row = $('td>span[data-contactid="'+ rowId + '"]').closest('tr');    	    // Get row data
@@ -361,10 +359,8 @@ $(document).ready(function() {
 		var camp_message = messenger.html();
 		if (camp_message === "" || camp_message.length < 5){
 			var url = messenger.data('url');
-
 			var text = 'Your selected campaign <b>' + campaign_name + '</b> has not had any message yet.';
 			text+= ' Please add some <a href="' + url +'">here</a>.';
-
 			show_camp_alert(text)
 			return;
 		}
@@ -383,7 +379,6 @@ $(document).ready(function() {
 				}
 
 			});
-
 			console.log('othercamps:', othercamps);
 			if (othercamps.length > 0){
 				// add move contacts button
@@ -417,23 +412,7 @@ $(document).ready(function() {
 		var form = that.closest('form');
 		do_post_action(form, function(){
 			$("#add2campaign").modal('hide');
-			var url = window.location.href;
-			url = url.replace('network', 'search');
-			let text = 'Your message has been saved successfully. <a style="color: blue;" href="'+url+'">' +
-				'Click HERE </a> to select search and contacts and start your campaign';
-			swal({
-			  title: "Congratulations!.",
-			  text: text,
-			  type: "success",
-			  confirmButtonColor: "#DD6B55",
-			  confirmButtonText: "Ok",
-			  html:　true
-			},
-			function(isConfirm){
-			  if (isConfirm) {
-			  	table.ajax.reload();
-			  }
-			});
+			table.ajax.reload();
 		});
 
 	}
