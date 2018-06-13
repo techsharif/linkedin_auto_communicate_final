@@ -58,7 +58,9 @@
                                             {% if search.result_status %}
                                                 <span class="text-muted float-right">{{ search.searchdate|timesince  }} ago</span>
                                             {% else %}
-                                                <span class="text-muted float-right">Waiting...</span>
+                                                <span class="text-muted float-right"><small>YOUR SEARCH IS SYNCING NOW. PLEASE BE PATIENT – THIS CAN TAKE UP TO 7-10 MINUTES. WHILE YOUR SEARCH RESULTS ARE SYNCING,
+                                                    YOU CAN NAVIGATE AWAY FROM THIS PAGE AND SYNC WILL CONTINUE. WHEN RETURNING TO THE PAGE,
+                                                    SIMPLY CLICK ON THE SEARCH AND REFRESH PAGE IF NEEDED</small></span>
                                             {% endif %}
                                         </div>
                                     </li>
