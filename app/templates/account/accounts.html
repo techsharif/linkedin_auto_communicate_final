@@ -18,6 +18,7 @@
                     <a href="/accounts/add/" class="btn btn-primary btn-gradient waves-effect waves-light pull-right add-account pull-right"
                                       data-toggle="tooltip" title="Add account">
                         <i class="batch-icon batch-icon-user-alt-add"></i>
+                        CLICK TO ADD ACCOUNT
                         </a>
                 </h3>
             <div class="card-table table-responsive">
@@ -39,9 +40,9 @@
                         </td>
                         <td class="text-right">
                             {% if item.login_status %}
-                                <a class="btn btn-primary btn-sm btn-gradient" href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip" data-original-title=""
+                                <a class="btn btn-primary btn-sm btn-gradient"  href="{% url 'account-detail' pk=item.id %}" data-toggle="tooltip" data-original-title=""
                                     title="">
-                                    <i class="batch-icon-settings batch-icon"></i>
+                                    Dashboard
                                 </a>
                             {% endif %}
                             <a href="#" title="Delete" data_id="{{ item.id }}" class="remove_account btn-danger btn btn-sm btn-gradient"
