@@ -42,6 +42,21 @@ function load_data() {
     });
 }
 
+function AddNewSearchModal(){
+    $('#advance_search_data').hide();
+    $('#search_keyword').value = '';
+    $('#search_location').value = '';
+    $('#search_industry').value = '';
+    $('#search_company').value = '';
+    $('#search_title').value = '';
+    $('#search_name').value = '';
+    $('#search_url').value = '';
+    $('#search_sales').value = '';
+    $('#add_search').modal('show');
+}
+
+
+
 $(document).ready(function () {
     console.log("ready!");
 
@@ -96,6 +111,7 @@ $(document).ready(function () {
 
 
     load_data();
+
 
 
     $("#new_search").click(function () {
