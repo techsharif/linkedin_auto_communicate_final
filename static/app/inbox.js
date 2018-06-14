@@ -251,7 +251,7 @@ function loadTable(page_count) {
 
     $(document).ready(function () {
 
-        loadTable(4);
+        loadTable(10);
 
 
 

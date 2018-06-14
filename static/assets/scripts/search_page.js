@@ -4,7 +4,6 @@ ACCOUNT_SEARCH_URL = ''
 function getDataNEW(search_id) {
     set_search_head(search_id);
     load_data();
-
     $(".search-item").removeClass('active');
     //$(e).addClass('active');
 }
@@ -31,6 +30,7 @@ function load_data() {
         type: "post",
         data: data,
         success: function (response) {
+            console.log(ACCOUNT_SEARCH_URL)
             $('#search_people').html(response);
 
         },
@@ -138,60 +138,64 @@ $(document).ready(function () {
 
     $("#add_search_task").click(function (event) {
         event.preventDefault();
+
         $('#search_label').removeClass('text-danger');
         $('#search_name').removeClass('border-danger');
         $("#search_error").text("");
-
         error = 0
-
         if ($.trim($('#search_name')[0].value) == '') {
+
             // $('#search_name').parent().addClass('has-error');
             error = 1;
             $('#search_label').addClass('text-danger');
             $('#search_name').addClass('border-danger');
             $("#search_error").text("Please enter a Search name");
+//             $('#search_input_error').css('color', 'red').html('if this field is empty, search is not saved!');
+            error = 1;
             return false
-        } else {
-            $('#search_name').parent().removeClass('has-error');
-        }
 
+
+        } else {
+            $('#search_input_error').html('');
+        }
 
         if ($('#search_keyword').is(":visible")) {
             if ($.trim($('#search_keyword')[0].value) == '') {
-                $('#search_keyword').parent().addClass('has-error');
+                $('#search_keyword_error').css('color', 'red');
                 error = 2;
+                return
             }
         }
         if (error != 2) {
-            $('#search_keyword').parent().removeClass('has-error');
+            $('#search_keyword_error').css('color', 'black');
         }
-
         if ($('#search_url_form').is(":visible")) {
             if (!isURL($.trim($('#search_url_form')[0].value))) {
-                $('#search_url_form').parent().addClass('has-error');
+                $('#search_url_form_error').css('color', 'red');
                 error = 3;
+                return
             }
         }
         if (error != 3) {
-            $('#search_url').parent().removeClass('has-error');
+            $('#search_url_form_error').css('color', 'black');
         }
 
         if ($('#sales_search').is(":visible")) {
             if (!isURL($.trim($('#sales_search')[0].value))) {
-                $('#sales_search').parent().addClass('has-error');
+                $('#sales_search_error').css('color', 'red');
                 error = 4;
+                return
             }
         }
         if (error != 4) {
-            $('#search_sales').parent().removeClass('has-error');
+            $('#sales_search_error').css('color', 'black');
         }
+
         if (error == 0){
-            console.log('submiting')
             $('#add_search').submit();
         }
 
         console.log(error)
-
     });
 
 

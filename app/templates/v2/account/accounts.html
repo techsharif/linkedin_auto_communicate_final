@@ -28,6 +28,7 @@
 
                     {% for item in object_list %}
 
+                        {% if item.is_deleted %}
                         <li class="list-group-item">
                             {% if item.login_status %}
                                 <a href="{% url 'account-detail' pk=item.id %}">{{ item.email }}</a>
@@ -45,6 +46,7 @@
                             <span class="float-right badge badge-{% if item.status %}success{% else %}warning{% endif %}">{% if item.status %}
                             Active{% else %}Inactive{% endif %}</span>
                         </li>
+                        {% endif %}
 
                     {% endfor %}
                 </ul>

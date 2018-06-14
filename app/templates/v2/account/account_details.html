@@ -7,6 +7,111 @@
 
 {% block content %}
     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                     <div class="card-title">NEW CONNECTION <br>CAMPAIGNS</div>
+                        <div class="header-btn-block" style="top: 15px;">
+                            <a href="{% url 'account-campaign-add' pk=pk %}"
+                               class="btn btn-primary btn-gradient waves-effect waves-light pull-right add-account pull-right"">
+                                <i class="batch-icon batch-icon-add"></i>
+                                BUILD CAMPAIGN
+                            </a>
+                        </div>
+                </div>
+                <div class="card-table table-responsive">
+                    {% if connectors %}
+                    <table class="table table-hover align-middle">
+                        <thead class="thead-light">
+                            <tr>
+                                <!-- <th>Member</th>
+                                <th>Email</th>
+                                <th class="text-center">Status</th>
+                                <th>Created</th>
+                                <th class="text-right">Action</th> -->
+
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Contacts</th>
+                                <th>Connected</th>
+                                <th>Replied to<br>connection message</th>
+                                <th>Replied to<br>other messages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mc in connectors %}
+                                <tr>
+                                    <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
+                                    <td>
+                                    <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
+                                        Active{% else %}Inactive{% endif %}</span>
+                                    </td>
+                                    <td>{{ mc.contacts.all | length }}</td>
+                                    <td>{{ mc.count_sends }}</td>
+                                    <td>{{ mc.count_replies }}</td>
+                                    <td>{{ mc.count_reply_other }}</td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <p>Currently you have no connector campaigns with this linkedin account</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                <div class="card-title">EXISTING CONNECTION <br>CAMPAIGNS</div>
+                <div class="header-btn-block" style="top: 15px;">
+                    <a href="{% url 'account-messenger-add' pk=pk %}"
+                       class="btn btn-primary btn-gradient waves-effect waves-light pull-right add-account pull-right">
+                        <i class="batch-icon batch-icon-add"></i>
+                        BUILD CAMPAIGN
+                    </a>
+                    </div>
+                </div>
+                <div class="card-table table-responsive">
+                    {% if messengers %}
+                    <table class="table table-hover align-middle">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Contacts</th>
+                                <th>Replied</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for mc in messengers %}
+                                <tr>
+                                    <td><a href="{% url 'messenger-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
+                                    <td>
+                                        <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
+                                            Active{% else %}Inactive{% endif %}</span>
+                                    </td>
+                                    <td>{{ mc.contacts.count }}</td>
+                                    <td>{{ mc.count_replies }}</td>
+                                </tr>
+                            {% endfor %}
+                           
+                           
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <p>Currently you have no existing campaigns with this linkedin account</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>     
+    </div>
+    </br>
+    </br>
+    <div class="row">
         <div class="col-md-6 col-lg-6 col-xl-3 mb-5">
             <div class="card card-tile card-xs bg-danger bg-gradient text-center">
                 <div class="card-body p-4">
@@ -178,113 +283,7 @@
         </div>
     </div>
     <br><br>
-    <div class="row">
-        <div class="col-md-5">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Existing Connections</div>
-                    <div class="header-btn-block" style="top: 15px;">
-                        <a href="{% url 'account-messenger-add' pk=pk %}"
-                           class="btn btn-primary waves-effect waves-light">
-                            <i class="batch-icon batch-icon-add"></i>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="card-body">
-                    {% if messengers %}
-                        <table class="table">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Contacts</th>
-                            <th>Replied</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-
-                        {% for mc in messengers %}
-                            <tr>
-                                <td><a href="{% url 'messenger-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
-                                <td>
-                                    <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
-                                        Active{% else %}Inactive{% endif %}</span>
-                                </td>
-                                <td>{{ mc.contacts.count }}</td>
-                                <td>{{ mc.count_replies }}</td>
-                            </tr>
-                        {% endfor %}
-
-                        </tbody>
-
-                    {% else %}
-                        <p>Currently you have no existing campaigns with this linkedin account</p>
-                    {% endif %}
-
-                    </table>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-md-7">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">New Connections</div>
-                    <div class="header-btn-block" style="top: 15px;">
-                        <a href="{% url 'account-campaign-add' pk=pk %}"
-                           class="btn btn-primary waves-effect waves-light">
-                            <i class="batch-icon batch-icon-add"></i>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="card-body">
-                    {% if connectors %}
-                        <table class="table">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Contacts</th>
-                            <th>Connected</th>
-                            <th>Replied to<br>connection message</th>
-                            <th>Replied to<br>other messages</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-
-                        {% for mc in connectors %}
-                            <tr>
-                                <td><a href="{% url 'connector-campaign' pk=mc.id %}">{{ mc.title }}</a></td>
-                                <td>
-                                <span class="badge badge-{% if mc.status %}success{% else %}danger{% endif %}">{% if mc.status %}
-                                    Active{% else %}Inactive{% endif %}</span>
-                                </td>
-                                <td>{{ mc.contacts.all | length }}</td>
-                                <td>{{ mc.count_sends }}</td>
-                                <td>{{ mc.count_replies }}</td>
-                                <td>{{ mc.count_reply_other }}</td>
-                            </tr>
-                        {% endfor %}
-
-                        </tbody>
-
-                    {% else %}
-                        <p>Currently you have no connector campaigns with this linkedin account</p>
-                    {% endif %}
-
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <br><br>
+    
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -354,7 +353,13 @@
 {% block script %}
     <script type="text/javascript" src="{% static 'assets/jvmap/maps/jquery.vmap.world.js' %}"></script>
     <script>
-        var sample_data = {{ map.map_data|safe }};
+        
+        {% if map.map_data %}
+            var sample_data = {{ map.map_data|safe }};
+        {% else %}
+             var sample_data = 0;
+        {% endif %}
+
     </script>
 
     <script>
@@ -409,8 +414,13 @@
 
 
     <script>
-        var step_size = {{ connection_stat.max }}
-            step_size = parseInt(step_size / 4) + 1
+        {% if connection_stat.max %}
+            var step_size = {{ connection_stat.max }}
+        {% else %}
+             var step_size = 1;
+        {% endif %}
+        
+        step_size = parseInt(step_size / 4) + 1
 
         var config = {
             type: 'line',

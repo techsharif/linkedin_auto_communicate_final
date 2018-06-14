@@ -4,11 +4,11 @@
 
 {% include 'v2/app/includes/campaigns/contact_list.html' with contacts=object.contacts.all %}
 
+{% include 'app/includes/datatable_pagefooter.html' %}
 
 </div>
 {%else%}
-
-		<h4>To get things going with this Messenger Campaign:</h4>
+    <h4>To get things going with this Messenger Campaign:</h4>
 	<p>1. Go to
 	{% if object.is_bulk %}
 		<a href="{%url 'account-network' pk=object.owner_id %}">My Network</a>
@@ -20,5 +20,9 @@
 	<p>3. Select and add people you would like to contact by clicking "Add Selected People to Messenger Campaign" or "Add All New People to Messenger Campaign" button.</p>
 
 {%endif%}
+<script>
+    $('#mark_as_read').hide();
+    $('#mark_as_un_read').hide();
+</script>
 
 </div>

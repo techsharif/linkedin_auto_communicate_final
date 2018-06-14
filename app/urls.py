@@ -66,7 +66,7 @@ urlpatterns = [
     url(r'^account/(?P<pk>[\d]+)/$', acc_views.AccountDetail.as_view(), name='account-detail'),
     url(r'^accounts/(?P<pk>[\d]+)/settings/$', acc_views.AccountSettings.as_view(), name='account-settings'),
     url(r'^accounts/add/$', acc_views.AccountAdd.as_view(), name='add-account'),
-    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name = 'remove-account'),
+    url(r'^accounts/remove/(?P<pk>[\d]+)$', acc_views.RemoveAccount.as_view(), name='remove-account'),
     # url(r'^accounts/pinverify/(?P<pk>[\d]+)$', acc_views.update_account, name='pinverify'),
     url(r'^account/(?P<pk>[\d]+)/network/$',
         acc_views.AccountNetwork.as_view(), name='account-network'),
@@ -88,18 +88,15 @@ urlpatterns = [
         acc_views.AccountCampaignCreate.as_view(), name='account-campaign-add'),
     url(r'^account/messenger/(?P<pk>[\d]+)$',
         acc_views.AccountMessengerDetailNEW.as_view(), name='messenger-campaign'),
-
-
     url(r'^account/messenger/followups/(?P<pk>[\d]+)$',
         acc_views.AccountFollowups.as_view(), name='messenger-followups'),
     url(r'^account/messenger/followup/$',
         acc_views.AccountFollowup.as_view(), name='messenger-followup'),
     url(r'^account/messenger/delete-followup/$',
-    acc_views.AccountFollowupDelete.as_view(), name='messenger-followup-delete'),
+        acc_views.AccountFollowupDelete.as_view(), name='messenger-followup-delete'),
     url(r'^account/messenger/new-followup/$',
         acc_views.AccountNewFollowup.as_view(), name='messenger-new-followup'),
     url(r'^account/campaigns/(?P<pk>[\d]+)$',
-
         acc_views.AccountCampaignDetail.as_view(), name='connector-campaign'),
     url(r'^account/bottask/(?P<pk>[\d]+)$',
         acc_views.AccountBotTask.as_view(), name='bottask'),

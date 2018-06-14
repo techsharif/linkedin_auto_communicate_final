@@ -83,8 +83,13 @@ def LoginView(request):
             # add membership only
             # profile = user.profile
             # if profile.day_to_live <= 0:
-            membership_type, created = MembershipType.objects.get_or_create(name='Free')
-            membership_add_subscription(USER, membership_type, True)
+            try:
+                is_membership = Membership.objects.get(user=USER)
+            except Membership.DoesNotExist:
+                membership_type, created = MembershipType.objects.get_or_create(name='Free')
+                membership_add_subscription(USER, membership_type, True)
+            except Exception as e:
+                print('---->', e)
             redirect_url = '/accounts'
             return HttpResponseRedirect(redirect_url)
         else:

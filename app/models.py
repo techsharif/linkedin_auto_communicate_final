@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 User = get_user_model()
+import pytz
+from datetime import datetime
 
 
 class BotTaskStatus:
@@ -58,9 +60,10 @@ class LinkedInUser(models.Model):
     start_to = models.IntegerField(default=12)
     message_limit_default = models.IntegerField(default=75)
     is_weekendwork = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    is_dev = models.BooleanField(default=False)
     # for bot ip
     bot_ip = models.GenericIPAddressField(blank=True, null=True)
-
     last_message_send_date = models.DateField(blank=True, null=True)
     message_count = models.IntegerField(default=0)
 
@@ -74,10 +77,16 @@ class LinkedInUser(models.Model):
         return xx
 
     def get_connector_campaigns(self):
-        return [x for x in self.messegercampaigns.all() if x.is_bulk]
+        return [x for x in self.messegercampaigns.all() if x.is_bulk == False]
 
     def is_now_campaign_active(self):
-        hour = timezone.now().hour
+        try:
+            tz = self.tz
+            account_timezone = pytz.timezone(tz)
+            account_time = timezone.now().astimezone(account_timezone)
+        except Exception as e:
+            account_time = timezone.now()
+        hour = account_time.hour
         print("self.start_from == ")
         print(self.start_from)
         print("hour === ")

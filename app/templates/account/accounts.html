@@ -18,12 +18,14 @@
                     <a href="/accounts/add/" class="btn btn-primary btn-gradient waves-effect waves-light pull-right add-account pull-right"
                                       data-toggle="tooltip" title="Add account">
                         <i class="batch-icon batch-icon-user-alt-add"></i>
+                        CLICK TO ADD ACCOUNT
                         </a>
                 </h3>
             <div class="card-table table-responsive">
                   <table class="table table-hover align-middle">
                 <tbody>
                 {% for item in object_list %}
+                   {% if not item.is_deleted %}
                     <tr>
                         <td>
                             {% if item.login_status %}
@@ -39,9 +41,9 @@
                         </td>
                         <td class="text-right">
                             {% if item.login_status %}
-                                <a class="btn btn-primary btn-sm btn-gradient" href="{% url 'account-settings' pk=item.id %}" data-toggle="tooltip" data-original-title=""
+                                <a class="btn btn-primary btn-sm btn-gradient"  href="{% url 'account-detail' pk=item.id %}" data-toggle="tooltip" data-original-title=""
                                     title="">
-                                    <i class="batch-icon-settings batch-icon"></i>
+                                    Dashboard
                                 </a>
                             {% endif %}
                             <a href="#" title="Delete" data_id="{{ item.id }}" class="remove_account btn-danger btn btn-sm btn-gradient"
@@ -49,6 +51,7 @@
                             </a>
                         </td>
                     </tr>
+                   {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
@@ -280,6 +283,7 @@
             $('body').on('click', '.remove_account', function (e) {
                 e.preventDefault();
                 linkedin_id = this.getAttribute('data_id');
+                console.log(linkedin_id);
                 $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
                 $('#remove_account').modal('show');
             });

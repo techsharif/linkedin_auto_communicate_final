@@ -93,6 +93,8 @@ class ContactDeleteView(AjaxHttpResponse, View):
 
         SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
                                     owner=contact.owner).delete()
+        ChatMessage.objects.filter(contact_id=contact.id).delete()
+
         print(contact)
         contact.delete()
 
@@ -149,8 +151,11 @@ class ContactChatMessageView(AjaxHttpResponse, CreateView):
     form_class = CreateChatMesgForm
 
     def form_valid(self, form):
+        
         chat = form.save(commit=False)
         contact = get_object_or_404(Inbox, pk=self.kwargs.get('pk'))
+        contact.status = ContactStatus.TALKING_N
+        contact.save()
         chat.send_message(contact)
         # place a taskscheduel record
         BotTask.make_bottask(owner=chat.owner, name=chat, extra_id=chat.id,
