@@ -49,7 +49,7 @@ class SearchResult(ContactField):
     search = models.ForeignKey(Search, related_name='results',
                                on_delete=models.CASCADE, default=1)
     # name = models.CharField(max_length=200)
-    connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
+    # connect_campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE, blank=True, null=True)
     status = models.IntegerField(choices=ContactStatus.search_result_statuses,
                               default=ContactStatus.CONNECT_REQ_N)
 
