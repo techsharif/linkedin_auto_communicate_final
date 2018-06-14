@@ -1,15 +1,11 @@
 {% extends 'account/base.html' %}
 {% load static %}
-
-
 {% block title %}Inbox{% endblock title %}
 {% block pagetitle %}
 Inbox
 {% endblock %}
-
 {%block content%}
 <section class="content">
-
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
@@ -18,22 +14,12 @@ Inbox
             </div>
         </div>
 	</div>
-
 	<div class="bg-white" id="uinfo_box">
 	</div>
-
-
 </div>
 </section>
-
 {%endblock%}
-
-
 {% block pagefooter%}
-
 {% include 'app/includes/datatable_pagefooter.html' %}
-
-
-
 {%endblock%}
 

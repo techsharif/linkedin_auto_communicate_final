@@ -87,13 +87,21 @@ class AccountList(ListView):
         qs = qs.filter(user=self.request.user)
         return qs
 
+
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
         linekedin_user = LinkedInUser.objects.get(id=pk)
         if linekedin_user.bot_ip:
             FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-        linekedin_user.delete()
+        if linekedin_user.is_dev:
+            linekedin_user.delete()
+            print('-----> ')
+        else:
+            linekedin_user.is_deleted = True
+            linekedin_user.save()
+            print(linekedin_user)
+
         return redirect('/accounts')
 
 
@@ -836,16 +844,6 @@ def can_add_account(user):
     pass
 
 
-@method_decorator(decorators, name='dispatch')
-class RemoveAccount(View):
-    def get(self, request, pk):
-        linekedin_user = LinkedInUser.objects.get(id=pk)
-        if linekedin_user.bot_ip:
-            FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-        linekedin_user.delete()
-        return redirect('accounts')
-
-
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
     def _clone_to_contact(self, qs, campaign):
@@ -949,13 +947,6 @@ class AccountNewFollowup(View):
         data['steps'] = STEP_TIMES
         return render(request, 'v2/messenger/data_new.html', data)
 
-@method_decorator(decorators, name='dispatch')
-class AccountMessengerActive(View):
-    def get(self, request, pk):
-        campaign = Campaign.objects.get(pk=pk)
-        campaign.status = int(request.GET['active'])
-        campaign.save()
-        return HttpResponse('done')
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountFollowupDelete(View):
