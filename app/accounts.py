@@ -615,6 +615,8 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
 
 
 
+
+
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'v2/account/accounts_messenger_update.html'
@@ -743,7 +745,11 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
 
                 return HttpResponse('{"ok":1}', content_type='application/json')
 
-
+    # def get(self, request, pk):
+    #     searches = Search.objects.filter(owner__pk=pk)
+    #
+    #     return render(request, self.template_name,
+    #                   {'searches': searches})
 
 
 
