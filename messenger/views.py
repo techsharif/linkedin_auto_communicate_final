@@ -151,8 +151,11 @@ class ContactChatMessageView(AjaxHttpResponse, CreateView):
     form_class = CreateChatMesgForm
 
     def form_valid(self, form):
+        
         chat = form.save(commit=False)
         contact = get_object_or_404(Inbox, pk=self.kwargs.get('pk'))
+        contact.status = ContactStatus.TALKING_N
+        contact.save()
         chat.send_message(contact)
         # place a taskscheduel record
         BotTask.make_bottask(owner=chat.owner, name=chat, extra_id=chat.id,
