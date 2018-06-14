@@ -880,12 +880,14 @@ class SearchResultView(View):
             item += [int(request.POST.get('selected_items'))]
         elif 'add_all_selected_item_button' in request.POST.keys():
             if 'campaign' in request.POST.keys():
+                
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
-                search_results = SearchResult.objects.filter(search=search, status=ContactStatus.CONNECT_REQ_N)
-                search_results.update(status=ContactStatus.IN_QUEUE_N, )
+                search_results = SearchResult.objects.filter(search_id=search.id, status=ContactStatus.CONNECT_REQ_N)
+               
+                # search_results.update(status=ContactStatus.IN_QUEUE_N, )
                 # connect_campaign=campaign
                 print('here', campaign)
-                # self._clone_to_contact(search_results, campaign)
+                self._clone_to_contact(search_results, campaign)
 
         if item:
             if 'campaign' in request.POST.keys():
