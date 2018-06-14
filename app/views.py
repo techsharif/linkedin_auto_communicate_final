@@ -18,6 +18,7 @@ from app.forms import UserRegisterForm
 from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
+from wordpress_auth.models import WpUsers
 from datetime import timedelta
 import datetime
 from django.conf import settings
@@ -31,6 +32,7 @@ def RegisterView(request):
     msg = ''
     email = ''
     password = ''
+    wp_user = WpUsers.objects.all()
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
