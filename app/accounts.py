@@ -671,6 +671,8 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
 
 
 
+
+
 @method_decorator(decorators, name='dispatch')
 class AccountMessengerDetail(AccountMixins, UpdateView):
     template_name = 'v2/account/accounts_messenger_update.html'
@@ -800,6 +802,7 @@ class AccountMessengerDetail(AccountMixins, UpdateView):
                 return HttpResponse('{"ok":1}', content_type='application/json')
 
 
+
 @method_decorator(decorators, name='dispatch')
 class AccountCampaignDetail(AccountMessengerDetailNEW):
     template_name = 'v2/account/accounts_campaign_update.html'
@@ -879,7 +882,8 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, status=ContactStatus.CONNECT_REQ_N)
-                search_results.update(status=ContactStatus.IN_QUEUE_N, connect_campaign=campaign)
+                search_results.update(status=ContactStatus.IN_QUEUE_N, )
+                # connect_campaign=campaign
                 print('here', campaign)
                 # self._clone_to_contact(search_results, campaign)
 
@@ -889,7 +893,8 @@ class SearchResultView(View):
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 # attache to a campagn
                 search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      connect_campaign=campaign,)
+                                      )
+                # connect_campaign=campaign,
                 self._clone_to_contact(search_results, campaign)
                 print('here', campaign)
 

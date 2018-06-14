@@ -2,10 +2,11 @@ ACCOUNT_SEARCH_URL = ''
 
 
 function getDataNEW(search_id) {
+
     set_search_head(search_id);
     load_data();
     $(".search-item").removeClass('active');
-    //$(e).addClass('active');
+
 }
 
 function set_ajax_data(data) {
@@ -41,6 +42,21 @@ function load_data() {
 
     });
 }
+
+function AddNewSearchModal(){
+    $('#advance_search_data').hide();
+    $('#search_keyword').value = '';
+    $('#search_location').value = '';
+    $('#search_industry').value = '';
+    $('#search_company').value = '';
+    $('#search_title').value = '';
+    $('#search_name').value = '';
+    $('#search_url').value = '';
+    $('#search_sales').value = '';
+    $('#add_search').modal('show');
+}
+
+
 
 $(document).ready(function () {
     console.log("ready!");
@@ -96,6 +112,7 @@ $(document).ready(function () {
 
 
     load_data();
+
 
 
     $("#new_search").click(function () {
