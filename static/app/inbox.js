@@ -146,8 +146,7 @@ $(document).ready(function() {
 
 	var header_buttons = '';
 	if(inboxPage){
-		console.log('------------------------------------inbox', path.indexOf('campaigns'))
-		if(path.indexOf('campaigns')>=0){
+		if(path.indexOf('campaigns')>=0||path.indexOf('messenger')>=0){
 			header_buttons+= '&nbsp;<button class="btn btn-red btn-gradient waves-effect waves-light" data-click="removeFromCampaign" data-cid="1">Delete</button>';
 
 		}else{
@@ -172,8 +171,9 @@ $(document).ready(function() {
 			'<input type="checkbox" data-click="talking">Show Talking contacts</span></div></div>';
 		header_buttons+= '<div class="col-md-5"><div class="row justify-content-end"><a class="btn pull-right btn-primary" id="add_selected" data-click="addSelected2Campaign">Add selected contacts to Messenger Campaign</a></div>';
 		header_buttons+= '<div class="row justify-content-end"><a class="btn btn-primary pull-right" id="add_allnew" data-click="addAll2Campaign">Add all filtered contacts to Messenger Campaign</a></div>';
+		header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
+
 	}
-	header_buttons+= '<div class="row justify-content-end"><button class="btn btn-default pull-right export-to-csv" title="Export contacts to CSV"><i class="fa fa-file-excel-o"></i></button></div></div>';
 	if(inboxPage){
 		$(".dataTables_filter").find('label').find('input').toggleClass('form-control-sm').addClass('col-md-3')
 	}else{
@@ -191,7 +191,6 @@ $(document).ready(function() {
 	$('#show_connector_contacts').click(function (e) {
 		let that = $(this).find('input');
 		let val = that.data('click');
-		console.log('---', val)
 		let column = table.column(7);
 		column.search( !that.is(':checked')? val:'' , false, true )
         .draw();

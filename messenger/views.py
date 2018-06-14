@@ -93,6 +93,8 @@ class ContactDeleteView(AjaxHttpResponse, View):
 
         SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
                                     owner=contact.owner).delete()
+        ChatMessage.objects.filter(contact_id=contact.id).delete()
+
         print(contact)
         contact.delete()
 
