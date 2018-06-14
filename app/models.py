@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 User = get_user_model()
+import pytz
+from datetime import datetime
 
 
 class BotTaskStatus:
@@ -77,7 +79,13 @@ class LinkedInUser(models.Model):
         return [x for x in self.messegercampaigns.all() if x.is_bulk]
 
     def is_now_campaign_active(self):
-        hour = timezone.now().hour
+        try:
+            tz = self.tz
+            account_timezone = pytz.timezone(tz)
+            account_time = datetime.now().astimezone(account_timezone)
+        except Exception as e:
+            account_time = datetime.now()
+        hour = account_time.hour
         print("self.start_from == ")
         print(self.start_from)
         print("hour === ")
