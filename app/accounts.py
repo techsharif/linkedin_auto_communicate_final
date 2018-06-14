@@ -951,13 +951,6 @@ class AccountNewFollowup(View):
         data['steps'] = STEP_TIMES
         return render(request, 'v2/messenger/data_new.html', data)
 
-@method_decorator(decorators, name='dispatch')
-class AccountMessengerActive(View):
-    def get(self, request, pk):
-        campaign = Campaign.objects.get(pk=pk)
-        campaign.status = int(request.GET['active'])
-        campaign.save()
-        return HttpResponse('done')
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class AccountFollowupDelete(View):
