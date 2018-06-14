@@ -2,10 +2,11 @@ ACCOUNT_SEARCH_URL = ''
 
 
 function getDataNEW(search_id) {
+
     set_search_head(search_id);
     load_data();
     $(".search-item").removeClass('active');
-    //$(e).addClass('active');
+
 }
 
 function set_ajax_data(data) {

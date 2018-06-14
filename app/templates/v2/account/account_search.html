@@ -257,12 +257,11 @@
      <script src="{% static 'plugins\country\js\countrySelect.min.js' %}"></script>
     <script>
         ACCOUNT_SEARCH_URL = "{% url  'account-search-result' %}";
-        {#var searches = "{{ searches|safe }}"#}
-        console.log(isSearchIDS)
-        {#alert(searches.length);#}
-        {#if(isSearchIDS.length >1) {#}
-        {#    setTimeout(function(){ getDataNEW(isSearchIDS[0]) }, 200);#}
-        {#}#}
+
+
+        if(isSearchIDS.length >1) {
+            setTimeout(function(){ getDataNEW(isSearchIDS[0]) }, 200);
+        }
 
     </script>
 
