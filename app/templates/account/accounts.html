@@ -25,6 +25,7 @@
                   <table class="table table-hover align-middle">
                 <tbody>
                 {% for item in object_list %}
+                   {% if not item.is_deleted %}
                     <tr>
                         <td>
                             {% if item.login_status %}
@@ -50,6 +51,7 @@
                             </a>
                         </td>
                     </tr>
+                   {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
@@ -281,6 +283,7 @@
             $('body').on('click', '.remove_account', function (e) {
                 e.preventDefault();
                 linkedin_id = this.getAttribute('data_id');
+                console.log(linkedin_id);
                 $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
                 $('#remove_account').modal('show');
             });

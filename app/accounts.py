@@ -87,13 +87,21 @@ class AccountList(ListView):
         qs = qs.filter(user=self.request.user)
         return qs
 
+
 @method_decorator(decorators, name='dispatch')
 class RemoveAccount(View):
     def get(self, request, pk):
         linekedin_user = LinkedInUser.objects.get(id=pk)
         if linekedin_user.bot_ip:
             FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-        linekedin_user.delete()
+        if linekedin_user.is_dev:
+            linekedin_user.delete()
+            print('-----> ')
+        else:
+            linekedin_user.is_deleted = True
+            linekedin_user.save()
+            print(linekedin_user)
+
         return redirect('/accounts')
 
 
@@ -838,16 +846,6 @@ class AccountBotTask(JSONDetailView):
 def can_add_account(user):
     # check if the current user can add more linked account
     pass
-
-
-@method_decorator(decorators, name='dispatch')
-class RemoveAccount(View):
-    def get(self, request, pk):
-        linekedin_user = LinkedInUser.objects.get(id=pk)
-        if linekedin_user.bot_ip:
-            FreeBotIP(bot_ip=linekedin_user.bot_ip).save()
-        linekedin_user.delete()
-        return redirect('accounts')
 
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
