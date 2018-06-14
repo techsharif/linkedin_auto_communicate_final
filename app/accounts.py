@@ -645,7 +645,7 @@ class AccountMessengerDetailNEW(AccountMixins, UpdateView):
                 print('campaignsteps:', campaignsteps)
                 if self.request.is_ajax():
                     payload = {'ok': True}
-                    return JsonRespaccount/campaignsonse(json.dumps(payload), safe=False)
+                    return JsonResponse(json.dumps(payload), safe=False)
             else:
 
                 if self.request.is_ajax():
