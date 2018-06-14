@@ -77,7 +77,7 @@ class LinkedInUser(models.Model):
         return xx
 
     def get_connector_campaigns(self):
-        return [x for x in self.messegercampaigns.all() if x.is_bulk]
+        return [x for x in self.messegercampaigns.all() if x.is_bulk == False]
 
     def is_now_campaign_active(self):
         try:
