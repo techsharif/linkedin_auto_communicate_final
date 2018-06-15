@@ -2,7 +2,6 @@
 {% if object.contacts.count > 0 %}
     <div class="row">
         {% include 'v2/account/campaign/messenger_people.html' with contacts=object.contacts.all %}
-        {% include 'app/includes/datatable_pagefooter.html' %}
     </div>
 {%else%}
     <h4>To get things going with this Messenger Campaign:</h4>

@@ -132,3 +132,24 @@
 tr{
   cursor: pointer !important;
 }
+
+
+#campaign_people_filter {
+    width:100% !important;
+    float: right !important;
+
+}
+#campaign_people_filter label {
+    width:40% !important;
+    max-width:40% !important;
+    float: right !important;
+
+
+}
+#campaign_people_filter label input {
+    width:100% !important;
+    max-width:100% !important;
+    float: right !important;
+
+
+}
