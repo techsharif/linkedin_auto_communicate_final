@@ -25,10 +25,10 @@
 
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link " id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
+                                    <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="steps-tab" onclick="loadTextCount()" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
+                                    <a class="nav-link" id="steps-tab" onclick="loadTextCount()" data-toggle="tab" href="#steps" role="tab" aria-controls="steps" aria-selected="false">Steps</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
@@ -67,5 +67,12 @@
 <script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
 <script src="{% static 'assets/scripts/messenger_compaign.js' %}"></script>
+
+<script type="text/javascript">
+   $(document).ready(function(){
+   $('#steps-tab')[0].click();
+   
+});
+</script>
 {% endblock %}
 
