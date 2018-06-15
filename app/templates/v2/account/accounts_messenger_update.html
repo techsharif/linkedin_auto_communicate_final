@@ -1,6 +1,7 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
 {% block head %}
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
 {% endblock %}
@@ -49,6 +50,7 @@
     </div>
 {% endblock %}
 {%  block script %}
+    {% include 'app/includes/datatable_pagefooter.html' %}
     {% include 'app/includes/campaigns/page_footer.html' %}
     <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
     <script src="{% static 'js/campaignformset.js' %}?v=16"></script>

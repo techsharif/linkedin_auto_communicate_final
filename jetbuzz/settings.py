@@ -61,7 +61,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'wordpress_auth.middleware.WordPressAuthMiddleware'
+    'wordpress_auth.middleware.WordPressAuthMiddleware',
+
+
 ]
 # must be insert 'from django.utils.deprecation import MiddlewareMixin' and class WordPressAuthMiddleware(MiddlewareMixin):
 # in wordpress.middleware
@@ -106,7 +108,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': 3306,
+        'PORT': '3306',
     }
 }
 

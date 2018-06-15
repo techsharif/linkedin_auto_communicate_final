@@ -9,7 +9,7 @@ function loadTextCount() {
             }
             else{
                 var remain_count = 300 - parseInt(txt_count)
-                $(this).next('small').text('Chars ' + remain_count);
+                $(this).next('small').text('Remained chars ' + remain_count);
             }
 
 
@@ -30,7 +30,7 @@ $('textarea').bind('input propertychange', function(e) {
     }
     else{
         var remain_count = 300 - parseInt(txt_count)
-        $(e.target).next('small').text('Chars ' + remain_count);
+        $(e.target).next('small').text('Remained chars ' + remain_count);
     }
 
 });
@@ -47,7 +47,7 @@ function addText(e,text_val){
         swal("alert!", 'Message is maxium 300 chars!', "error");
     }else{
         var remain_count = 300 - parseInt(txt_count)
-        $(e).parent().next('textarea').next('small').text('Chars ' + remain_count)   //.addClass('text-danger');
+        $(e).parent().next('textarea').next('small').text('Remained chars ' + remain_count)   //.addClass('text-danger');
     }
 
 }

@@ -31,7 +31,7 @@
                         <table id="datatable-1"  class="table table-datatable table-striped table-hover">
                             <thead>
                                 <tr style="cursor: pointer !important;">
-                                    <th style="width: 5%"></th>
+                                    <th  class="cursor-pointer no-sort" style="width: 5%" ><input id="select_all_items_th" type="checkbox" data-click="checkAll">&nbsp;</th>
                                     <th class="cursor-pointer">Name
                                         <div class="torder" data-click="table_order" data-col="name"></div>
                                     </th>
@@ -85,7 +85,10 @@
         </div>
     </div>
 <script>
-    $('.table').DataTable()
+    $('.table').DataTable({"columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,
+    } ]})
     $(document).ready(function () {
 
         $('#search_input_datatable').keyup(function () {
@@ -178,6 +181,9 @@
         });
         {##}
         $("#select_all_items").change(function () {
+            $('.select_items').prop('checked', this.checked);
+        });
+        $("#select_all_items_th").change(function () {
             $('.select_items').prop('checked', this.checked);
         });
         {##}

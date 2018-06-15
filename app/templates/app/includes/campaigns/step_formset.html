@@ -33,7 +33,7 @@
                                         <button type="button" onclick="addText(this, '{Location}')" class="note-btn btn btn-default btn-sm float-right" tabindex="-1">Location</button>
                         </div>
                         {% render_field form.message  maxlength="300" style="height: 8rem;" %}
-                        <small class="form-text text-muted" style="margin-top:-.50rem">Chars 300</small>
+                        <small class="form-text text-muted" style="margin-top:-.50rem">Remained chars 300</small>
                     </div>
 
                     
@@ -47,5 +47,12 @@
 
     <input type="submit" class="btn btn-primary btn-block btn-save bg-primary bg-gradient" style="width: 210px !important;" name="save" value="SAVE">
 	</div>            		
-            		
+
+<script>
+
+    var data_frm_len = {{ campaignsteps.forms|length }}
+        data_frm_len = data_frm_len-1
+
+    $('.campaignsteps-'+ data_frm_len +'-row').css( "display", "none" );
+</script>
     
