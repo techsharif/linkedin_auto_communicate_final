@@ -23,7 +23,7 @@ from django.utils import timezone
 from datetime import timedelta
 import datetime
 from django.conf import settings
-from wordpress_auth.utils import get_login_url
+# from wordpress_auth.utils import get_login_url
 
 
 User = get_user_model()
