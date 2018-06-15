@@ -18,12 +18,12 @@ from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
 
-# from wordpress_auth.models import WpUsers
+from wordpress_auth.models import WpUsers
 
 from datetime import timedelta
 import datetime
 from django.conf import settings
-# from wordpress_auth.utils import get_login_url
+from wordpress_auth.utils import get_login_url
 
 
 User = get_user_model()
