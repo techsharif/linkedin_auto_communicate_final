@@ -86,6 +86,11 @@ class LinkedInUser(models.Model):
             account_time = timezone.now().astimezone(account_timezone)
         except Exception as e:
             account_time = timezone.now()
+        # check weekends
+        if self.is_weekendwork == False:
+            if account_time.weekday() > 4:
+                return False
+            
         hour = account_time.hour
         print("self.start_from == ")
         print(self.start_from)

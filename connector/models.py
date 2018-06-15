@@ -108,7 +108,6 @@ class SearchResult(ContactField):
                              status=self.status,
                              last_name=self.last_name,
                              first_name=self.first_name,
-
                              countrycode=country_code,
 #                              countrycode=code,
                              owner=self.owner

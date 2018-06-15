@@ -257,7 +257,12 @@ class Campaign(TimeStampedModel):
         qs = self.contacts.exclude(connected_date=None).filter(is_connected=True)
         return qs.count()
         
-        
+    
+    def clone_search_rs_to_inbox(self, qs):
+        # is there a better way to do this??
+        qs.update(status=ContactStatus.IN_QUEUE_N,)
+        for row in qs.all():
+            row.attach_to_campaign(self)  
 
 
 class CampaignStepField(models.Model):
