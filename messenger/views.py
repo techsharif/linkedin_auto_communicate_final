@@ -91,8 +91,11 @@ class ContactDeleteView(AjaxHttpResponse, View):
             contact.change_status(ContactStatus.OLD_CONNECT_N)
             return
 
-        SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
-                                    owner=contact.owner).delete()
+        searchobj = SearchResult.objects.filter(linkedin_id=contact.linkedin_id,
+                                    owner=contact.owner)
+        for search in searchobj:
+            search.status = ContactStatus.CONNECT_REQ_N
+            search.save()
         ChatMessage.objects.filter(contact_id=contact.id).delete()
 
         print(contact)
