@@ -232,10 +232,17 @@
                         }, 10000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText == '400')
+                        if (jqXHR.responseText == '400'){
+                            swal({
+                              title: "Error!",
+                              text: "Account with this email is already exists!",
+                              icon: "error",
+                              button: "Ok",
+                            });
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> Account with this email is already exists </p>')
-                        else
+                        }else{
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> An error occur during add this acount. please reloade this page and try again </p>')
+                        }
                     }
                 });
             }

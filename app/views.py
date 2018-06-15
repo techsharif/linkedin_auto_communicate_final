@@ -6,7 +6,6 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
-
 from django.urls.base import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -22,17 +21,21 @@ from wordpress_auth.models import WpUsers
 from datetime import timedelta
 import datetime
 from django.conf import settings
+from wordpress_auth.utils import get_login_url
+
 
 User = get_user_model()
-
-
 # New views
+
 
 def RegisterView(request):
     msg = ''
     email = ''
     password = ''
-    wp_user = WpUsers.objects.all()
+    wp_users = WpUsers.objects.using('wordpress').all()
+    for wp_user in wp_users:
+        print(wp_user.password)
+    print(get_login_url())
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
