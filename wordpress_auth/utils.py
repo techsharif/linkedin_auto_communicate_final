@@ -21,6 +21,7 @@ def get_login_url():
 def get_wordpress_user(request):
     cookie_hash = hashlib.md5(force_bytes(get_site_url())).hexdigest()
     cookie = request.COOKIES.get('wordpress_logged_in_' + cookie_hash)
+    print(request.COOKIES)
 
     if cookie:
         cookie = unquote_plus(cookie)

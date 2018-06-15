@@ -17,24 +17,16 @@ from app.forms import UserRegisterForm
 from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
 from django.utils import timezone
-from wordpress_auth.models import WpUsers
-from wordpress_auth.utils import get_wordpress_user
 from datetime import timedelta
 import datetime
 from django.conf import settings
-from wordpress_auth.utils import get_login_url
 User = get_user_model()
-# New views
 
 
 def RegisterView(request):
     msg = ''
     email = ''
     password = ''
-    wp_users = WpUsers.objects.using('wordpress').all()
-    for wp_user in wp_users:
-        print(wp_user.password)
-    print('--->', get_wordpress_user(request))
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -76,17 +68,12 @@ def LoginView(request):
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(email)
-        print(password)
         USER = authenticate(username=email, password=password)
         print(USER)
         if USER is not None:
             USER.is_active = True
             USER.save()
             login(request, USER)
-            # add membership only
-            # profile = user.profile
-            # if profile.day_to_live <= 0:
             try:
                 is_membership = Membership.objects.get(user=USER)
             except Membership.DoesNotExist:
