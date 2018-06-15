@@ -1,10 +1,8 @@
 import hmac
 import hashlib
 from time import time
-
 from django.utils.six.moves.urllib.parse import urljoin, unquote_plus
 from django.utils.encoding import force_bytes
-
 from wordpress_auth import WORDPRESS_LOGGED_IN_KEY, WORDPRESS_LOGGED_IN_SALT
 from wordpress_auth.models import WpOptions, WpUsers
 

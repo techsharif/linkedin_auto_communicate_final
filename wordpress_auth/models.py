@@ -76,5 +76,4 @@ class WpUsers(models.Model):
         opt = self.meta.using('wordpress') \
             .get(meta_key='session_tokens').meta_value
 
-
         return phpserialize.loads(opt)
