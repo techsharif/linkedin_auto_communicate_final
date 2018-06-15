@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'connector',
     'messenger',
     'dashboard',
-    'wordpress_auth'
+    # 'wordpress_auth'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'wordpress_auth.middleware.WordPressAuthMiddleware'
+    # 'wordpress_auth.middleware.WordPressAuthMiddleware'
 ]
 
 ROOT_URLCONF = 'jetbuzz.urls'

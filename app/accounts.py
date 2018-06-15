@@ -853,10 +853,14 @@ def can_add_account(user):
 
 @method_decorator(csrf_exempt_decorators, name='dispatch')
 class SearchResultView(View):
+    """ moved into campaign as clone_search_rs_to_inbox
     def _clone_to_contact(self, qs, campaign):
         # is there a better way to do this??
+        qs.update(status=ContactStatus.IN_QUEUE_N,)
         for row in qs.all():
             row.attach_to_campaign(campaign)
+    """
+    
 
     def post(self, request):
         print(request.POST)
@@ -882,23 +886,28 @@ class SearchResultView(View):
             if 'campaign' in request.POST.keys():
                 
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
-                search_results = SearchResult.objects.filter(search_id=search.id, status=ContactStatus.CONNECT_REQ_N)
+                # search_results = SearchResult.objects.filter(search_id=search.id, status=ContactStatus.CONNECT_REQ_N)
+                search_results = SearchResult.objects.filter(search_id=search.id,)
                
                 # search_results.update(status=ContactStatus.IN_QUEUE_N, )
                 # connect_campaign=campaign
                 print('here', campaign)
-                self._clone_to_contact(search_results, campaign)
+                # self._clone_to_contact(search_results)
+                campaign.clone_search_rs_to_inbox(search_results)
 
         if item:
             if 'campaign' in request.POST.keys():
                 campaign = Campaign.objects.get(id=int(request.POST['campaign']))
                 search_results = SearchResult.objects.filter(search=search, pk__in=item)
                 # attache to a campagn
-                search_results.update(status=ContactStatus.IN_QUEUE_N,
-                                      )
+                # moved into _clone_to_contact
+                # search_results.update(status=ContactStatus.IN_QUEUE_N,
+                #                       )
                 # connect_campaign=campaign,
-                self._clone_to_contact(search_results, campaign)
-                print('here', campaign)
+                #self._clone_to_contact(search_results, campaign)
+                #print('here', campaign)
+                campaign.clone_search_rs_to_inbox(search_results)
+                
 
         search_results = SearchResult.objects.filter(search=search)
         return render(request, 'v2/account/search_render/search_render.html',
