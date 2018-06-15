@@ -40,7 +40,8 @@ class Search(CommonContactField):
         return False if self.resultcount == None else True
 
     def result_count(self):
-        return 0 if self.resultcount == None else self.resultcount
+        # return 0 if self.resultcount == None else self.resultcount
+        return self.results.count()
 
 
 class SearchResult(ContactField):
