@@ -228,6 +228,8 @@
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.responseText == '400')
+
+
                             $('#add_account_modal_results').html('Account with this email is already exists')
                         else
                             $('#add_account_modal_results').html('An error occur during add this acount. please reloade this page and try again')

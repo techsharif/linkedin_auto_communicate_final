@@ -166,7 +166,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # maximum campaign message per account
 MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
 
-
 WORDPRESS_LOGGED_IN_KEY = "H62pm%o3Zl!K@DBwS72i|83+dbfydlH+45Ylg?4Wk#V-ydZNYg@KA9N?7Thu>4j1"
 WORDPRESS_LOGGED_IN_SALT = "hY$~7/aR>5W[f(h6}k3GfaJ}qvg[Z:8FXvz(sa$Ok}$uv+-<O>[9[6&(^)S;Pn+B"
 
