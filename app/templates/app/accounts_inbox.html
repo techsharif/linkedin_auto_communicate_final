@@ -5,6 +5,7 @@
 
 {% block extra_head %}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+
 {% endblock extra_head %}
 <section class="content">
 <div class="row mb-4">
@@ -47,27 +48,31 @@
 </div>
 </section>
 <script>
+$("#campaign_people").DataTable();
 let toggle_chat =false;
 $(".fa-minus").click(function(){
-        $('.main-section').toggleClass("open-more");
-        if(!toggle_chat){
-            $('.input-chat-message').hide();
-            toggle_chat =true;
-        }else{
-            $('.input-chat-message').show();
-            toggle_chat =false;
-        }
-    });
-    $(".left-first-section").click(function(){
-        $('.main-section').toggleClass("open-more");
-         if(!toggle_chat){
-            $('.input-chat-message').hide();
-            toggle_chat =true;
-        }else{
-            $('.input-chat-message').show();
-            toggle_chat =false;
-        }
-    });
+    $('.main-section').toggleClass("open-more");
+    if(!toggle_chat){
+        $('.input-chat-message').hide();
+        toggle_chat =true;
+    }else{
+        $('.input-chat-message').show();
+        toggle_chat =false;
+    }
+});
+
+$(".left-first-section").click(function(){
+    $('.main-section').toggleClass("open-more");
+     if(!toggle_chat){
+        $('.input-chat-message').hide();
+        toggle_chat =true;
+    }else{
+        $('.input-chat-message').show();
+        toggle_chat =false;
+    }
+});
+
+
 </script>
 {%endblock%}
 {% block pagefooter%}

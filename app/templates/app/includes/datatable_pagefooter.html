@@ -28,7 +28,7 @@
                 $('#th_status').html('');
                 $('#th_status').html('Status<br/>');
                 loadTable(rowCount)
-                var sel ='<select style="width: 50px; margin-left:5px;" onchange="ChangePagePerRecord()" id="sel_page_rec" value="[val]" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control form-control-sm">'
+                var sel ='&nbsp;&nbsp;Show<br/><select style="width: 50px; margin-left:5px;" onchange="ChangePagePerRecord()" id="sel_page_rec" value="[val]" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control form-control-sm">'
                     if (rowCount == 10){
                         sel += '<option selected value="10">10</option>'
                     }else{
@@ -51,10 +51,10 @@
                     }
 
 
-                    sel += '</select>'
+                    sel += '</select>&nbsp;&nbsp;&nbsp;entries'
                 sel = sel.replace("[val]",rowCount)
                 {#setTimeout(function(){$( sel ).insertAfter( "#campaign_people_next" ); }, 1000);#}
-                setTimeout(function(){$("#campaign_people_info").append(sel); }, 1000);
+                setTimeout(function(){$("#campaign_people_filter").append(sel); }, 500);
 
             }
         </script>

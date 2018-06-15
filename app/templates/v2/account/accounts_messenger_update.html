@@ -1,6 +1,7 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
 {% block head %}
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
 {% endblock %}
@@ -13,7 +14,16 @@
                 <div class="card-body">
                     <div class="row mb-5">
                         <div class="col-md-12">
-                            <h2>Messenger Details</h2>
+                            <h2>
+                                Messenger Details
+                                <div class="float-right m0" style="margin:0px;">
+                                    <label class="switch pull-right m0" style="margin-top:6px">
+                                        {% include 'app/includes/campaigns/switch_button.html' with object=object %}
+                                    </label>
+                                    <span class="pt-3">{{object.title}}</span>
+                                </div>
+
+                            </h2>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="false">People</a>
@@ -49,6 +59,7 @@
     </div>
 {% endblock %}
 {%  block script %}
+    {% include 'app/includes/datatable_pagefooter.html' %}
     {% include 'app/includes/campaigns/page_footer.html' %}
     <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
     <script src="{% static 'js/campaignformset.js' %}?v=16"></script>
