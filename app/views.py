@@ -6,7 +6,6 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
-
 from django.urls.base import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -21,11 +20,8 @@ from django.utils import timezone
 from datetime import timedelta
 import datetime
 from django.conf import settings
-
 User = get_user_model()
 
-
-# New views
 
 def RegisterView(request):
     msg = ''
@@ -72,19 +68,19 @@ def LoginView(request):
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(email)
-        print(password)
         USER = authenticate(username=email, password=password)
         print(USER)
         if USER is not None:
             USER.is_active = True
             USER.save()
             login(request, USER)
-            # add membership only
-            # profile = user.profile
-            # if profile.day_to_live <= 0:
-            membership_type, created = MembershipType.objects.get_or_create(name='Free')
-            membership_add_subscription(USER, membership_type, True)
+            try:
+                is_membership = Membership.objects.get(user=USER)
+            except Membership.DoesNotExist:
+                membership_type, created = MembershipType.objects.get_or_create(name='Free')
+                membership_add_subscription(USER, membership_type, True)
+            except Exception as e:
+                print('---->', e)
             redirect_url = '/accounts'
             return HttpResponseRedirect(redirect_url)
         else:

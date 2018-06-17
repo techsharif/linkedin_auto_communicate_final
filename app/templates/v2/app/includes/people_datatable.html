@@ -16,7 +16,7 @@
 	  {%if campaign%}
 	  <td>{{contact.campaign}}</td>
 	  {%endif%}
-	  <td >{# how to deal with this #}
+	  <td >{# how to deal with this
 	  <span data-contactid="{{contact.id}}" class="btn btn-orange btn-gradient waves-effect waves-light btn-block" data-toggle="tooltip" data-popover-content="#popover{{pk}}"
 	  data-html="true" data-tooltip-content="<strong>angular develooper</strong><br>In Queue for Connection request">
 	  In Queue</span>
@@ -24,9 +24,6 @@
 	</tr>
 	{%endfor%}
 	</tbody>
-{#	<tfoot>#}
-{#	{% include 'app/includes/people_datatable_headrow.html'  with campaign=campaign %}#}
-{#	</tfoot>#}
 </table>
 </div>
 <form name="contacts-delete" action="{% url 'contacts-delete' %}" method="post">

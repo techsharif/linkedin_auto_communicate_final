@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'connector',
     'messenger',
     'dashboard',
+    'wordpress_auth'
 ]
 
 MIDDLEWARE = [
@@ -60,8 +61,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    'wordpress_auth.middleware.WordPressAuthMiddleware',
 
+
+]
+# must be insert 'from django.utils.deprecation import MiddlewareMixin' and class WordPressAuthMiddleware(MiddlewareMixin):
+# in wordpress.middleware
 ROOT_URLCONF = 'jetbuzz.urls'
 
 TEMPLATES = [
@@ -96,6 +101,14 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
+    },
+    'wordpress': {  # must be named 'wordpress'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'linked',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -122,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'EST'
+TIME_ZONE = 'America/Thule'
 
 USE_I18N = True
 
@@ -155,6 +168,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # maximum campaign message per account
 MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
+
+WORDPRESS_LOGGED_IN_KEY = "H62pm%o3Zl!K@DBwS72i|83+dbfydlH+45Ylg?4Wk#V-ydZNYg@KA9N?7Thu>4j1"
+WORDPRESS_LOGGED_IN_SALT = "hY$~7/aR>5W[f(h6}k3GfaJ}qvg[Z:8FXvz(sa$Ok}$uv+-<O>[9[6&(^)S;Pn+B"
 
 #text for  site_title tag 
 SITE_TITLE = "B2B Prospecting Tool"

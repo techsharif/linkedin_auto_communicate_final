@@ -52,7 +52,7 @@ $(function() {
 				var url = window.location.href;
 				var search_url = $('#__search_url__').val();
 				var network_url = $('#__my_network_url__').val();
-				console.log(search_url, network_url);
+				console.log(search_url, network_url)
 				url = search_url === undefined?network_url:search_url;
 				let text = 'Your message has been saved successfully. Click <a style="color: blue;" href="'+url+'">' +
 					'HERE </a> to select search and contacts and start your campaign';
@@ -106,10 +106,19 @@ $(function() {
 
     $('body').on('click', '#confirm_dialog >div #confirm_button', function(e){
     	var url = window.location.href;
+        debugger;
+        var camp = url.includes("campaigns")
+        if (camp == true ) {
+             var redirected = "/campaigns"
+        }
+        else{
+             var redirected = "/messenger"
+        }    
+
     	var data = $('body').find('form[name="campaign"]').serialize();
     	$.post(url+"/delete", data).done(function(res){
     		var accid = $("a[data-click='removeCampaign']").data('accid');
-    		var url2 = "/account/"+accid+"/messenger"
+    		var url2 = "/account/"+accid+redirected
     		window.location = url2;
     	});
 

@@ -28,7 +28,6 @@ def search(request):
         keyword = data.get('keyword')
         print(searchname)
         print(keyword)
-
         user = User.objects.all()
         user_account = user.get(email='va.jin1125@hotmail.com')
         user_email = user_account.email

@@ -236,14 +236,21 @@ class Campaign(TimeStampedModel):
         data['welcome_message'] = self.welcome_message
         data['welcome_time'] = self.welcome_time
         return json.dumps((data))
-
+    
+    def get_replied_queryset(self):
+        return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None)
+    
     def count_reply_other(self):
         #return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(replied_other_date=None))
-        return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(replied_other_date=None).count()
+        # return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).exclude(replied_other_date=None).count()
+        qs = self.get_replied_queryset()
+        return qs.exclude(campaignstep=None).count()
 
     def count_replies(self):
         #return len(ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None))
-        return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).count()
+        # return ChatMessage.objects.filter(campaign__pk=self.pk).exclude(replied_date=None).count()
+        qs = self.get_replied_queryset()
+        return qs.filter(campaignstep=None).count()
 
     def count_sends(self):
         #return len(ChatMessage.objects.filter(campaign__pk=self.pk, is_sent=True))
@@ -257,7 +264,12 @@ class Campaign(TimeStampedModel):
         qs = self.contacts.exclude(connected_date=None).filter(is_connected=True)
         return qs.count()
         
-        
+    
+    def clone_search_rs_to_inbox(self, qs):
+        # is there a better way to do this??
+        qs.update(status=ContactStatus.IN_QUEUE_N,)
+        for row in qs.all():
+            row.attach_to_campaign(self)  
 
 
 class CampaignStepField(models.Model):
@@ -308,11 +320,15 @@ class ChatMessage(MessageField):
     replied_date = models.DateTimeField(blank=True, null=True)
     replied_other_date = models.DateTimeField(blank=True, null=True)
 
-    parent = models.ForeignKey('self', related_name='previous', blank=True,
-                               null=True, on_delete=models.CASCADE)
+    #parent = models.ForeignKey('self', related_name='previous', blank=True,
+    #                           null=True, on_delete=models.CASCADE)
+    
     is_read = models.BooleanField(default=True)
     is_direct = models.BooleanField(default=True)
     is_sent = models.BooleanField(default=False)
+    
+    campaignstep = models.ForeignKey('CampaignStep', related_name='previous', blank=True,
+                               null=True, on_delete=models.CASCADE)
 
     class Meta():
         abstract = False

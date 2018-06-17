@@ -25,6 +25,7 @@
                   <table class="table table-hover align-middle">
                 <tbody>
                 {% for item in object_list %}
+                   {% if not item.is_deleted %}
                     <tr>
                         <td>
                             {% if item.login_status %}
@@ -50,6 +51,7 @@
                             </a>
                         </td>
                     </tr>
+                   {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
@@ -230,10 +232,17 @@
                         }, 10000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText == '400')
+                        if (jqXHR.responseText == '400'){
+                            swal({
+                              title: "Error!",
+                              text: "Account with this email is already exists!",
+                              icon: "error",
+                              button: "Ok",
+                            });
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> Account with this email is already exists </p>')
-                        else
+                        }else{
                             $('#add_account_modal_extra_results').html('<p class="text-danger"> An error occur during add this acount. please reloade this page and try again </p>')
+                        }
                     }
                 });
             }
@@ -281,6 +290,7 @@
             $('body').on('click', '.remove_account', function (e) {
                 e.preventDefault();
                 linkedin_id = this.getAttribute('data_id');
+                console.log(linkedin_id);
                 $('#account_delete_confirm')[0].href = '/accounts/remove/' + linkedin_id;
                 $('#remove_account').modal('show');
             });
