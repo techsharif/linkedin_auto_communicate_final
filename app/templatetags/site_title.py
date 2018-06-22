@@ -22,7 +22,11 @@ def get_plans():
 
 @register.simple_tag()
 def day_left(date, date2):
-    print(type(date), date, type(date2), date2)
-    delta = date2 - date
+    #print(type(date), date, type(date2), date2)
+    try:
+        delta = date2 - date
     
-    return delta.days
+        return delta.days
+    except:
+        pass
+    return 0
