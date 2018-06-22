@@ -8,8 +8,8 @@ from . import views
 
 urlpatterns = [
     # NEW URLS
-    url(r'^layout/styles/landing/$', views.new_landing),
-    url(r'^layout/styles/auth/$', views.new_auth),
+    # url(r'^layout/styles/landing/$', views.new_landing),
+    # url(r'^layout/styles/auth/$', views.new_auth),
     url(r'^register/$', views.RegisterView, name='register'),
     url(r'^login/$', views.LoginView, name='LoginView'),
     url(r'^$', views.HomeView.as_view(), name='home'),
@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^logout/$', auth_views.LogoutView.as_view(
         template_name='registration/logged_out.html', next_page='/'),
         name='logout'),
+    
+    # reset pw stuff
     url(r'^password_reset/$', auth_views.password_reset,{
         'template_name': 'v2/registration/password_reset_form.html',
         'email_template_name': 'v2/registration/password_reset_subject.txt',
@@ -49,11 +51,28 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(
             template_name='registration/page-password_reset_done.html'),
         name='password_reset_done'),
-
+    
+    # pw change
+    url(r'password_change_done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name='v2/app/password_change_done.html'),
+        name='password_change_done'),
+    url(r'password_change/', auth_views.PasswordChangeView.as_view(
+        template_name='v2/app/password_change_form.html'),
+        name='password_change'),
+    
+    
+    ## create subscriptions
+    url(r'subscription/create/$', views.SubsriptionCreateView.as_view(), 
+        name='subscription-create'),
+    url(r'^subscription/$', views.SubsriptionView.as_view(), 
+        name='subscription'),
+    
+    
+    # register
     url(r'^registered/$', views.TemplateView.as_view(template_name='registration/register_done.html'),
         name='register_done'),
 
-    url(r'^subscription/$', views.SubsriptionView.as_view(), name='subscription'),
+    
 
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
 
@@ -112,4 +131,6 @@ urlpatterns = [
         name='contact-status'),
     url(r'^account/(?P<pk>[\d]+)/report/$',
         acc_views.AccountReport.as_view(), name='account-report'),
+    
+   
 ]

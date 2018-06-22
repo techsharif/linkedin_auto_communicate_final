@@ -101,6 +101,8 @@ class LinkedInUser(models.Model):
         return self.start_from <= hour <= self.start_to
 
     def activate(self):
+        # not using this now
+        """
         membership = None
         try:
             membership = Membership.objects.get(user=self.user)
@@ -109,14 +111,17 @@ class LinkedInUser(models.Model):
             print('activate error:', err)
             # TODO, please check and add 'Free' membership if this is the first account
             # otherwise, show error and require add 'membership' by make payment
-
+        """
+        
         self.latest_login = timezone.now()
         self.status = True
         self.login_status = True
         self.save()
+        # not use this now
+        """
         if membership:
             self.membership.add(membership)
-
+        """
 
 class MembershipType(MemberShipField):
     name = models.CharField(max_length=50)

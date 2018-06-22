@@ -91,14 +91,8 @@
 {#                        </div>#}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-dropdown-navbar-profile">
-{#                        <li><a class="dropdown-item" href="#">Profile</a></li>#}
-{#                        <li>#}
-{#                            <a class="dropdown-item" href="#">#}
-{#                                Messages#}
-{#                                <span class="badge badge-danger badge-pill float-right">3</span>#}
-{#                            </a>#}
-{#                        </li>#}
-                        <li><a class="dropdown-item" href="{% if pk %} {% url 'account-settings' pk=pk %} {% endif %}">Settings</a></li>
+
+                        <li><a class="dropdown-item" href="{% if pk %} {% url 'user-settings' %} {% endif %}">Settings</a></li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </li>
