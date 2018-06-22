@@ -74,14 +74,8 @@
 {#                        </div>#}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-dropdown-navbar-profile">
-{#                        <li><a class="dropdown-item" href="#">Profile</a></li>#}
-{#                        <li>#}
-{#                            <a class="dropdown-item" href="#">#}
-{#                                Messages#}
-{#                                <span class="badge badge-danger badge-pill float-right">3</span>#}
-{#                            </a>#}
-{#                        </li>#}
-                        <li><a class="dropdown-item" href="{% if pk %} {% url 'account-settings' pk=pk %} {% endif %}">Settings</a></li>
+						<li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'pinax_stripe_subscription_list' %}">subscription</a></li>
                         <li onclick="___log_out()"><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </li>
@@ -104,30 +98,3 @@
     </div>
 </nav>
 
-{% block script %}
-    <script>
-    function ___log_out(){
-        $.confirm({
-            title: 'Are you sure sign out?',
-            icon:'fa fa-unlock',
-            theme:'material',
-            content: 'Are you sure Log out？',
-            autoClose: 'cancel|6000',
-            typeAnimated: true,
-            animationSpeed: 1000,
-            buttons: {
-                ok: {
-                    text: 'yes',
-                    action: function () {
-                        var strURL = "{% url 'logout' %}";
-                        window.location.href = strURL;
-                    }
-                },
-                cancel: {
-                    text: 'no'
-                }
-            }
-        });
-    }
-    </script>
-{% endblock script %}
