@@ -1,42 +1,27 @@
 {% load humanize  %}
 <div class="plan {%if current_sub.plan == price%}feature bg-primary{%endif%} col-md-4">
     <h3 class="plan-title">
-        
+
         Basic Team
-        
-        
+
+
     </h3>
-    
-    
-    
-    <div class="plan-cost"><span class="plan-price <span class="plan-price {%if current_sub.plan == price%} bg-warning{%endif%}">${{price.amount | floatformat:0 | intcomma}}</span><span class="plan-type">/ Monthly</span>
+
+
+
+    <div class="plan-cost">
+        <span class="plan-price <span class="plan-price {%if current_sub.plan == price%} bg-warning{%endif%}">${{price.amount | floatformat:0 | intcomma}}</span><span class="plan-type">/ Monthly</span>
     <br>
-    <small>
-    
-        User can add additional seat and will be billed $47 per additional seat (no free trial for additional seats)
-        
-        
-    
-    </small>
-    
-    
     </div>
     <ul class="plan-features">
-        <li><i class="ion-checkmark"> </i>Create campaign and add new leads</li>
-        <li><i class="ion-checkmark"> </i> Up to <b>750</b>  results per search</li>
-        <li><i class="ion-checkmark"> </i> Up to <b>50</b>  saved searches</li>
-        <li><i class="ion-checkmark"> </i> Up to <b>25</b>  campaigns</li>
-        <li><i class="ion-checkmark"> </i>2-way communication</li>
-        <li><i class="ion-checkmark"> </i> 
-            Welcome message</li>
-        <li><i class="ion-checkmark"> </i>
-            Custom connect message</li>
-        <li><i class="ion-checkmark"> </i>
-            Company &amp; title search filter</li>
-        <li><i class="ion-checkmark"> </i>
-            Withdraw invites</li>
-        
-        <li><i class="ion-checkmark"></i>-</li>
+        <li><i class="ion-checkmark"> </i>Add up to 5 Accounts Immediately</li>
+        <li><i class="ion-checkmark"> </i>Access to The B2B Prospecting Tool</li>
+        <li><i class="ion-checkmark"> </i>Complete Training</li>
+        <li><i class="ion-checkmark"> </i>Examples of Messages that work in every Niche</li>
+        <li><i class="ion-checkmark"> </i>7 days 'Full Refund Guarantee'</li>
+        <li><i class="ion-checkmark"> </i>Monthly Updates</li>
+        <li><i class="ion-checkmark"> </i>Private FB Group Access</li>
+        <li><i class="ion-checkmark"> </i>No Yearly Fees</li>
     </ul>
     {% include 'v2/app/includes/price_block_select.html' with price=price current_sub=current_sub %}
 </div>
