@@ -1,5 +1,5 @@
 {% extends "pinax/stripe/base.html" %}
-{% load static %}
+{% load static stripe %}
 
 
 
@@ -13,7 +13,7 @@
     {% url "pinax_stripe_subscription_create" as post_url %}
 {% endif %}
 
-<div class="pinax-stripe-subscriptions-container">
+<div class="pinax-stripe-subscriptions-container col-md-6">
     <h4>
         {% if object %}Change{% else %}Add{% endif %} Subscription
         <span class="current-plan">{% if object %}{{ object.plan.name }}{% endif %}</span>
@@ -23,7 +23,7 @@
             {{ errors }}
         </div>
     {% endif %}
-    <form id="payment-form" data-stripe-key="{{ PINAX_STRIPE_PUBLIC_KEY }}" data-card-mount-id="card-element" data-card-errors-id="card-errors" action="{{ post_url }}" method="post">
+    <form id="payment-form" data-stripe-key="{% stripe_public_key %}" data-card-mount-id="card-element" data-card-errors-id="card-errors" action="{{ post_url }}" method="post">
         {% csrf_token %}
         <div class="form-group">
         {{ form }}

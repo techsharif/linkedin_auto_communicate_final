@@ -4,7 +4,7 @@
 {% block body_class %}{{ block.super }} pinax-stripe-payment-methods{% endblock %}
 
 {% block content %}
-<div class="pinax-stripe-payment-method-update-container">
+<div class="pinax-stripe-payment-method-update-container col-md-6">
     <h4>
         Update Payment Method
     </h4>
@@ -15,24 +15,24 @@
         </div>
     {% endif %}
 
-    <form action="{% url "pinax_stripe_payment_method_update" object.pk %}" method="post">
+    <form action="{% url "pinax_stripe_payment_method_update" object.pk %}" method="post" class="form-inline">
         {% csrf_token %}
-        <div class="current-card">
+        <div class="current-card form-group">
             {{ object.brand }}
             {{ object.last4 }}
             Expires {{ object.exp_month }} / {{ object.exp_year }}
         </div>
-        <div class="card-expiration">
+        <div class="card-expiration form-group">
             <label for="expMonth">New Expiration</label>
             <div class="exp-month">
-                <input type="text" size="2" name="expMonth" />
+                <input type="text" size="2" name="expMonth" class="form-control mx-sm-2"/>
             </div>
             /
             <div class="exp-year">
-                <input type="text" size="4" name="expYear" />
+                <input type="text" size="4" name="expYear" class="form-control mx-sm-2" />
             </div>
         </div>
-        <div class="form-actions">
+        <div class="form-actions form-group">
             <button class="btn btn-info">Update</button>
         </div>
     </form>
