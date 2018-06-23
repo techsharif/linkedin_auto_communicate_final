@@ -25,7 +25,7 @@
 					</div>
 				</div>
 				<div class="text-right clearfix">
-					<div class="display-4">{{current_sub.status}}</div>
+					<div class="display-4" style="font-size: 2rem">{% if current_sub.status == 'trailing' %}7 days free trial is active{% else %}{{current_sub.status|title}}{% endif %}</div>
 					<div class="m-0">{% day_left  current_sub.current_period_start current_sub.current_period_end %} days left</div>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 					</div>
 				</div>
 				<div class="text-right clearfix">
-					<div class="display-4">Seats</div>
+					<div class="display-4" style="font-size: 2rem">Number of Active Users</div>
 					<div class="m-0">
 						<a href="#">1</a>
 					</div>
@@ -51,7 +51,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="col-md-4 col-lg-4 mb-5">
 		<div class="card card-sm bg-danger">
 			<div class="card-body">
@@ -64,13 +64,13 @@
 					</div>
 				</div>
 				<div class="text-right clearfix">
-					<div class="display-4">Cost</div>
+					<div class="display-4" style="font-size: 2rem">Subscription Plan {{current_sub.plan.name|title}}</div>
 					<div class="m-0">{{current_sub.plan.amount }}</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 
 
@@ -81,9 +81,9 @@
                         <i class="batch-icon batch-icon-add"></i>
                         Add Subscription
                         </span>
-           
+
         </a>
-        
+
 	<p>To select one of the plans, you need to add a payment method.</p>
 	<a href="{% url 'pinax_stripe_payment_method_list'%} " class="btn btn-primary waves-effect waves-light">Payment Methods</a>
     </h4>
@@ -106,11 +106,11 @@
 
 
 
-    
+
     <div class="text-center">
     <a href="{% url 'pinax_stripe_invoice_list' %}" class="btn btn-info">Invoices</a>
     </div>
-    
-    
-    
+
+
+
 {% endblock %}
