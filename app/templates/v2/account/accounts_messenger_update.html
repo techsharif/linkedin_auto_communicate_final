@@ -1,13 +1,16 @@
 {% extends 'v2/account/base.html' %}
 {% load static %}
+
+{% block title %}Messenger Details{% endblock title %}
 {% block head %}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.dataTables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables/css/responsive.bootstrap4.min.css' %}">
 {% endblock %}
-{% block title %}Messenger Details{% endblock title %}
+
 
 {% block content %}
+
     <div class="row mb-5">
         <div class="col-md-12">
             <div class="card">
@@ -57,12 +60,18 @@
             </div>
         </div>
     </div>
+
+
+
+
 {% endblock %}
+
 {%  block script %}
     {% include 'app/includes/datatable_pagefooter.html' %}
     {% include 'app/includes/campaigns/page_footer.html' %}
     <script src="{% static 'js/jquery.formset.js' %}?v=1"></script>
     <script src="{% static 'js/campaignformset.js' %}?v=16"></script>
+    <script type="text/javascript" src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/easypiechart/jquery.easypiechart.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
