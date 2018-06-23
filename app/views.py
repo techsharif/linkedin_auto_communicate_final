@@ -1,5 +1,8 @@
-from smtplib import SMTPException
+from datetime import timedelta
+import datetime
 
+from django.conf import settings
+from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -7,19 +10,23 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls.base import reverse_lazy, reverse
+from django.utils import timezone
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView
-from .models import AdminEmail
+from django.views.generic.edit import CreateView, UpdateView
+from pinax import stripe
+
 from app.forms import UserRegisterForm
 from app.models import MembershipType, Membership, LinkedInUser
 from app.tokens import account_activation_token
-from django.utils import timezone
-from datetime import timedelta
-import datetime
-from django.conf import settings
+from app.utils import get_main_plan, get_current_plan
+
+from .models import AdminEmail
+
+
+# from smtplib import SMTPException
 User = get_user_model()
 
 
@@ -27,10 +34,11 @@ def RegisterView(request):
     msg = ''
     email = ''
     password = ''
+    plan = ''
     if request.POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(email)
+        plan = request.POST.get('plan', settings.PINAX_STRIPE_DEFAULT_PLAN)
         user = User.objects.filter(email=email).first()
         if user is not None:
             msg="email_exists"
@@ -58,9 +66,17 @@ def RegisterView(request):
             msg = "register_success"
             # send activation link to the user
             user.email_user(subject, message)
-
+            
+            from pinax.stripe.actions import customers
+            customers.create(user=user, plan=plan)
+            return render(request, 'v2/registration/register_done.html', {
+                'msg': msg, 'email': email, 'password': password})
+            
+    plans = get_main_plan()
+    
     return render(request, 'v2/registration/register.html', {
-    'msg': msg, 'email': email, 'password': password})
+    'msg': msg, 'email': email, 'password': password,
+    'plan': plan, 'plans': plans})
 
 
 def LoginView(request):
@@ -126,14 +142,13 @@ class SubsriptionView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(SubsriptionView, self).get_context_data(**kwargs)
-        for x in MembershipType.objects.all():
-            ctx[x.name] = x
-
+        ctx['plans'] = get_main_plan()
+        ctx['current_plan'] = get_current_plan(self.request.user)
         return ctx
 
 
 class ProfileView(TemplateView):
-    template_name = 'app/profile.html'
+    template_name = 'v2/app/profile.html'
 
 
 def membership_add_subscription(user, membership_type, active=False):
@@ -183,8 +198,9 @@ class ActivateAccount(View):
             # add membership only
             # profile = user.profile
             # if profile.day_to_live <= 0:
-            membership_type, created = MembershipType.objects.get_or_create(name='Free')
-            membership_add_subscription(user, membership_type, True)
+            # not use these now
+            # membership_type, created = MembershipType.objects.get_or_create(name='Free')
+            # membership_add_subscription(user, membership_type, True)
 
             #    membership.membership_type.add(membership_type)
             #    profile.day_to_live = membership_type.day_to_live
@@ -192,3 +208,8 @@ class ActivateAccount(View):
             return HttpResponseRedirect(reverse('accounts'))
         else:
             return render(request, self.template_name)
+        
+
+class SubsriptionCreateView(TemplateView):
+    template_name = "v2/app/subscription_form.html"
+    

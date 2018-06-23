@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^connector/', include('connector.urls')),
     url(r'^messenger/', include('messenger.urls')),
+    url(r"^payments/", include("pinax.stripe.urls")),
     url(r'^', include('app.urls')),
+    
 ]
 

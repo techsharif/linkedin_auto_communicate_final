@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from django.conf.global_settings import DEFAULT_FROM_EMAIL
+from django.urls.base import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,13 +46,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sites',
     'widget_tweaks',
     'app',
     'connector',
     'messenger',
     'dashboard',
-    'wordpress_auth'
+    'pinax.stripe',
+    'pinax.templates',
 ]
+
+SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +67,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'wordpress_auth.middleware.WordPressAuthMiddleware',
 
 
 ]
@@ -169,11 +174,18 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # maximum campaign message per account
 MAXIMUM_CAMPAIGN_MESSAGE_PER_ACCOUNT = 125
 
-WORDPRESS_LOGGED_IN_KEY = "H62pm%o3Zl!K@DBwS72i|83+dbfydlH+45Ylg?4Wk#V-ydZNYg@KA9N?7Thu>4j1"
-WORDPRESS_LOGGED_IN_SALT = "hY$~7/aR>5W[f(h6}k3GfaJ}qvg[Z:8FXvz(sa$Ok}$uv+-<O>[9[6&(^)S;Pn+B"
 
 #text for  site_title tag 
 SITE_TITLE = "B2B Prospecting Tool"
+
+
+
+PINAX_STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_GDrodqflgU9H7vaOamPxyjr6")
+PINAX_STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_uNp5170764jngAR6TX8UpnY4")
+
+PINAX_STRIPE_DEFAULT_PLAN = 'plan_individual'
+
+PINAX_STRIPE_SUBSCRIPTION_REQUIRED_REDIRECT = reverse_lazy('subscription-create')
 
 try:
     from .local_settings import *
